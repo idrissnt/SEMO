@@ -1,0 +1,1201 @@
+DEBUG 2025-01-17 20:17:47,168 views 19492 9372 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 20:17:47,169 views 19492 9372 Fetching profile for user: idris@email.com
+INFO 2025-01-17 20:17:47,170 views 19492 9372 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 21:12:14,370 views 3292 31456 Received login GET request
+DEBUG 2025-01-17 21:12:14,384 views 3292 8752 Received login POST request from IP: 172.20.10.10
+DEBUG 2025-01-17 21:12:14,385 views 3292 8752 Request data: {'email': 'test@example.com', 'password': 'testpassword'}
+DEBUG 2025-01-17 21:13:20,789 views 3292 29208 Received login GET request
+DEBUG 2025-01-17 21:13:20,804 views 3292 5940 Received login POST request from IP: 172.20.10.10
+DEBUG 2025-01-17 21:13:20,809 views 3292 5940 Request data: {'email': 'test@example.com', 'password': 'testpassword'}
+DEBUG 2025-01-17 21:13:54,799 views 3292 30928 Received login GET request
+DEBUG 2025-01-17 21:13:54,818 views 3292 9988 Received login POST request from IP: 172.20.10.10
+DEBUG 2025-01-17 21:13:54,818 views 3292 9988 Request data: {'email': 'test@example.com', 'password': 'testpassword'}
+DEBUG 2025-01-17 21:15:46,727 views 27612 30568 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:15:46,731 views 27612 30568 Request data: {'email': 'jjjj', 'password': 'ghy'}
+WARNING 2025-01-17 21:15:46,988 views 27612 30568 Failed login attempt for email: jjjj
+DEBUG 2025-01-17 21:16:04,505 views 27612 12424 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:16:04,505 views 27612 12424 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-17 21:16:04,857 views 27612 29020 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 21:16:04,857 views 27612 29020 Server IP Addresses:
+DEBUG 2025-01-17 21:16:04,860 views 27612 29020  - 172.22.0.1
+DEBUG 2025-01-17 21:16:04,860 views 27612 29020  - 172.20.10.10
+DEBUG 2025-01-17 21:16:04,860 views 27612 29020 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:16:04,860 views 27612 29020 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTQ4NTY0LCJpYXQiOjE3MzcxNDQ5NjQsImp0aSI6IjViNWFhMTQ4NjM2ZTQ3MzY4Y2Q0YjFjNDQyZmRjNzRiIiwidXNlcl9pZCI6MX0.reNuZ43kMYVw5iJ9ulRVQEg1wEL3iKyngE1Mx7dvsVg', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 21:16:04,860 views 27612 29020 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 21:16:04,861 views 27612 29020 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 21:16:04,861 views 27612 29020 Server IP Addresses:
+DEBUG 2025-01-17 21:16:04,861 views 27612 29020  - 172.22.0.1
+DEBUG 2025-01-17 21:16:04,861 views 27612 29020  - 172.20.10.10
+DEBUG 2025-01-17 21:16:04,862 views 27612 29020 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:16:04,862 views 27612 29020 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTQ4NTY0LCJpYXQiOjE3MzcxNDQ5NjQsImp0aSI6IjViNWFhMTQ4NjM2ZTQ3MzY4Y2Q0YjFjNDQyZmRjNzRiIiwidXNlcl9pZCI6MX0.reNuZ43kMYVw5iJ9ulRVQEg1wEL3iKyngE1Mx7dvsVg', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 21:16:04,862 views 27612 29020 Fetching profile for user: idris@email.com
+INFO 2025-01-17 21:16:04,862 views 27612 29020 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 21:18:39,381 views 27612 31580 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 21:18:39,382 views 27612 31580 Server IP Addresses:
+DEBUG 2025-01-17 21:18:39,382 views 27612 31580  - 172.22.0.1
+DEBUG 2025-01-17 21:18:39,382 views 27612 31580  - 172.20.10.10
+DEBUG 2025-01-17 21:18:39,382 views 27612 31580 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:18:39,383 views 27612 31580 Request headers: {'Content-Length': '81', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 21:18:39,383 views 27612 31580 Received registration request with data: {'email': 'n@email.com', 'password': '123456', 'first_name': 'idi', 'last_name': 'jdjd'}
+DEBUG 2025-01-17 21:19:22,096 views 27612 7112 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 21:19:22,096 views 27612 7112 Server IP Addresses:
+DEBUG 2025-01-17 21:19:22,097 views 27612 7112  - 172.22.0.1
+DEBUG 2025-01-17 21:19:22,097 views 27612 7112  - 172.20.10.10
+DEBUG 2025-01-17 21:19:22,097 views 27612 7112 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:19:22,098 views 27612 7112 Request headers: {'Content-Length': '87', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 21:19:22,098 views 27612 7112 Received registration request with data: {'email': 'n@email.com', 'password': 'idrisjkdb357', 'first_name': 'idi', 'last_name': 'jdjd'}
+DEBUG 2025-01-17 21:19:32,611 views 27612 10464 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 21:19:32,611 views 27612 10464 Server IP Addresses:
+DEBUG 2025-01-17 21:19:32,612 views 27612 10464  - 172.22.0.1
+DEBUG 2025-01-17 21:19:32,612 views 27612 10464  - 172.20.10.10
+DEBUG 2025-01-17 21:19:32,612 views 27612 10464 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:19:32,613 views 27612 10464 Request headers: {'Content-Length': '91', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 21:19:32,613 views 27612 10464 Received registration request with data: {'email': 'alexn@email.com', 'password': 'idrisjkdb357', 'first_name': 'idi', 'last_name': 'jdjd'}
+DEBUG 2025-01-17 21:23:01,037 views 16284 23976 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 21:23:01,037 views 16284 23976 Server IP Addresses:
+DEBUG 2025-01-17 21:23:01,040 views 16284 23976  - 172.22.0.1
+DEBUG 2025-01-17 21:23:01,040 views 16284 23976  - 172.20.10.10
+DEBUG 2025-01-17 21:23:01,041 views 16284 23976 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 21:23:01,041 views 16284 23976 Request headers: {'Content-Length': '113', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 21:23:01,041 views 16284 23976 Received registration request with data: {'email': 'jdj@gjd.ci', 'password': 'jdjdj47jxbd', 'password2': 'jdjdj47jxbd', 'first_name': 'jdjd', 'last_name': 'bdjdk'}
+INFO 2025-01-17 21:23:01,052 serializers 16284 23976 Validating user registration data
+INFO 2025-01-17 21:23:01,053 serializers 16284 23976 Creating new user
+INFO 2025-01-17 21:23:01,310 serializers 16284 23976 Successfully created user with email: jdj@gjd.ci
+DEBUG 2025-01-17 22:35:55,289 views 32480 7740 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:35:55,290 views 32480 7740 Request data: {'email': 'idris@email.com', 'password': 'ideiss1234'}
+WARNING 2025-01-17 22:35:55,536 views 32480 7740 Failed login attempt for email: idris@email.com
+DEBUG 2025-01-17 22:36:08,385 views 32480 12564 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:36:08,385 views 32480 12564 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-17 22:36:08,731 views 32480 25216 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 22:36:08,731 views 32480 25216 Server IP Addresses:
+DEBUG 2025-01-17 22:36:08,734 views 32480 25216  - 172.22.0.1
+DEBUG 2025-01-17 22:36:08,735 views 32480 25216  - 172.20.10.10
+DEBUG 2025-01-17 22:36:08,735 views 32480 25216 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:36:08,735 views 32480 25216 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTUzMzY4LCJpYXQiOjE3MzcxNDk3NjgsImp0aSI6ImExZTQwZWYyZTM5MTQ3Nzc5Yjk2NWFiNjM2YTNkYTNiIiwidXNlcl9pZCI6MX0.sJ5fMEEvBD-YOf_gs5dZbD86NZCFqUuk5PliZ6NRFoU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 22:36:08,735 views 32480 25216 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 22:36:08,736 views 32480 25216 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 22:36:08,736 views 32480 25216 Server IP Addresses:
+DEBUG 2025-01-17 22:36:08,736 views 32480 25216  - 172.22.0.1
+DEBUG 2025-01-17 22:36:08,737 views 32480 25216  - 172.20.10.10
+DEBUG 2025-01-17 22:36:08,737 views 32480 25216 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:36:08,737 views 32480 25216 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTUzMzY4LCJpYXQiOjE3MzcxNDk3NjgsImp0aSI6ImExZTQwZWYyZTM5MTQ3Nzc5Yjk2NWFiNjM2YTNkYTNiIiwidXNlcl9pZCI6MX0.sJ5fMEEvBD-YOf_gs5dZbD86NZCFqUuk5PliZ6NRFoU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 22:36:08,737 views 32480 25216 Fetching profile for user: idris@email.com
+INFO 2025-01-17 22:36:08,737 views 32480 25216 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 22:37:22,567 views 27424 800 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 22:37:22,567 views 27424 800 Server IP Addresses:
+DEBUG 2025-01-17 22:37:22,569 views 27424 800  - 172.22.0.1
+DEBUG 2025-01-17 22:37:22,569 views 27424 800  - 172.20.10.10
+DEBUG 2025-01-17 22:37:22,570 views 27424 800 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:37:22,570 views 27424 800 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTUzMzY4LCJpYXQiOjE3MzcxNDk3NjgsImp0aSI6ImExZTQwZWYyZTM5MTQ3Nzc5Yjk2NWFiNjM2YTNkYTNiIiwidXNlcl9pZCI6MX0.sJ5fMEEvBD-YOf_gs5dZbD86NZCFqUuk5PliZ6NRFoU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 22:37:22,570 views 27424 800 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 22:37:22,570 views 27424 800 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 22:37:22,570 views 27424 800 Server IP Addresses:
+DEBUG 2025-01-17 22:37:22,571 views 27424 800  - 172.22.0.1
+DEBUG 2025-01-17 22:37:22,571 views 27424 800  - 172.20.10.10
+DEBUG 2025-01-17 22:37:22,571 views 27424 800 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:37:22,571 views 27424 800 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTUzMzY4LCJpYXQiOjE3MzcxNDk3NjgsImp0aSI6ImExZTQwZWYyZTM5MTQ3Nzc5Yjk2NWFiNjM2YTNkYTNiIiwidXNlcl9pZCI6MX0.sJ5fMEEvBD-YOf_gs5dZbD86NZCFqUuk5PliZ6NRFoU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 22:37:22,571 views 27424 800 Fetching profile for user: idris@email.com
+INFO 2025-01-17 22:37:22,572 views 27424 800 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 22:48:48,900 views 15912 12836 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:48:48,908 views 15912 12836 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-17 22:48:49,356 views 15912 13824 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 22:48:49,357 views 15912 13824 Server IP Addresses:
+DEBUG 2025-01-17 22:48:49,359 views 15912 13824  - 172.26.192.1
+DEBUG 2025-01-17 22:48:49,359 views 15912 13824  - 172.20.10.10
+DEBUG 2025-01-17 22:48:49,360 views 15912 13824 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:48:49,360 views 15912 13824 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0MTI5LCJpYXQiOjE3MzcxNTA1MjksImp0aSI6IjFjYjhhOWZlNTNjMTRkN2Q5MWIwOGFiNWI3OTM1ZWNmIiwidXNlcl9pZCI6MX0.3lHPLqr3inZZ5LaAZ99Mv-o-wYCD2CTj09hLIUWxGp8', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 22:48:49,360 views 15912 13824 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 22:48:49,361 views 15912 13824 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 22:48:49,361 views 15912 13824 Server IP Addresses:
+DEBUG 2025-01-17 22:48:49,361 views 15912 13824  - 172.26.192.1
+DEBUG 2025-01-17 22:48:49,361 views 15912 13824  - 172.20.10.10
+DEBUG 2025-01-17 22:48:49,362 views 15912 13824 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 22:48:49,362 views 15912 13824 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0MTI5LCJpYXQiOjE3MzcxNTA1MjksImp0aSI6IjFjYjhhOWZlNTNjMTRkN2Q5MWIwOGFiNWI3OTM1ZWNmIiwidXNlcl9pZCI6MX0.3lHPLqr3inZZ5LaAZ99Mv-o-wYCD2CTj09hLIUWxGp8', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 22:48:49,363 views 15912 13824 Fetching profile for user: idris@email.com
+INFO 2025-01-17 22:48:49,363 views 15912 13824 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:02:39,836 views 15912 6640 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:02:39,837 views 15912 6640 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-17 23:02:40,174 views 15912 2712 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:02:40,174 views 15912 2712 Server IP Addresses:
+DEBUG 2025-01-17 23:02:40,175 views 15912 2712  - 172.26.192.1
+DEBUG 2025-01-17 23:02:40,175 views 15912 2712  - 172.20.10.10
+DEBUG 2025-01-17 23:02:40,175 views 15912 2712 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:02:40,175 views 15912 2712 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:02:40,176 views 15912 2712 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:02:40,176 views 15912 2712 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:02:40,176 views 15912 2712 Server IP Addresses:
+DEBUG 2025-01-17 23:02:40,176 views 15912 2712  - 172.26.192.1
+DEBUG 2025-01-17 23:02:40,177 views 15912 2712  - 172.20.10.10
+DEBUG 2025-01-17 23:02:40,177 views 15912 2712 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:02:40,177 views 15912 2712 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:02:40,177 views 15912 2712 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:02:40,178 views 15912 2712 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:03:19,803 views 15912 17688 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:03:19,804 views 15912 17688 Server IP Addresses:
+DEBUG 2025-01-17 23:03:19,804 views 15912 17688  - 172.26.192.1
+DEBUG 2025-01-17 23:03:19,805 views 15912 17688  - 172.20.10.10
+DEBUG 2025-01-17 23:03:19,805 views 15912 17688 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:03:19,805 views 15912 17688 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:03:19,806 views 15912 17688 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:03:19,806 views 15912 17688 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:03:19,806 views 15912 17688 Server IP Addresses:
+DEBUG 2025-01-17 23:03:19,807 views 15912 17688  - 172.26.192.1
+DEBUG 2025-01-17 23:03:19,807 views 15912 17688  - 172.20.10.10
+DEBUG 2025-01-17 23:03:19,807 views 15912 17688 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:03:19,807 views 15912 17688 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:03:19,808 views 15912 17688 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:03:19,808 views 15912 17688 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:05:36,546 views 15912 13496 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:05:36,547 views 15912 13496 Server IP Addresses:
+DEBUG 2025-01-17 23:05:36,547 views 15912 13496  - 172.26.192.1
+DEBUG 2025-01-17 23:05:36,547 views 15912 13496  - 172.20.10.10
+DEBUG 2025-01-17 23:05:36,548 views 15912 13496 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:05:36,548 views 15912 13496 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:05:36,548 views 15912 13496 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:05:36,548 views 15912 13496 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:05:36,548 views 15912 13496 Server IP Addresses:
+DEBUG 2025-01-17 23:05:36,549 views 15912 13496  - 172.26.192.1
+DEBUG 2025-01-17 23:05:36,549 views 15912 13496  - 172.20.10.10
+DEBUG 2025-01-17 23:05:36,549 views 15912 13496 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:05:36,549 views 15912 13496 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:05:36,549 views 15912 13496 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:05:36,550 views 15912 13496 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:06:05,818 views 15912 10456 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:06:05,819 views 15912 10456 Server IP Addresses:
+DEBUG 2025-01-17 23:06:05,819 views 15912 10456  - 172.26.192.1
+DEBUG 2025-01-17 23:06:05,819 views 15912 10456  - 172.20.10.10
+DEBUG 2025-01-17 23:06:05,819 views 15912 10456 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:06:05,820 views 15912 10456 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:06:05,820 views 15912 10456 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:06:05,820 views 15912 10456 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:06:05,820 views 15912 10456 Server IP Addresses:
+DEBUG 2025-01-17 23:06:05,821 views 15912 10456  - 172.26.192.1
+DEBUG 2025-01-17 23:06:05,821 views 15912 10456  - 172.20.10.10
+DEBUG 2025-01-17 23:06:05,821 views 15912 10456 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:06:05,821 views 15912 10456 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:06:05,821 views 15912 10456 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:06:05,821 views 15912 10456 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:08:45,724 views 15912 16400 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:08:45,725 views 15912 16400 Server IP Addresses:
+DEBUG 2025-01-17 23:08:45,725 views 15912 16400  - 172.26.192.1
+DEBUG 2025-01-17 23:08:45,726 views 15912 16400  - 172.20.10.10
+DEBUG 2025-01-17 23:08:45,726 views 15912 16400 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:08:45,726 views 15912 16400 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:08:45,726 views 15912 16400 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:08:45,726 views 15912 16400 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:08:45,727 views 15912 16400 Server IP Addresses:
+DEBUG 2025-01-17 23:08:45,727 views 15912 16400  - 172.26.192.1
+DEBUG 2025-01-17 23:08:45,727 views 15912 16400  - 172.20.10.10
+DEBUG 2025-01-17 23:08:45,727 views 15912 16400 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:08:45,727 views 15912 16400 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:08:45,728 views 15912 16400 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:08:45,728 views 15912 16400 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:09:56,511 views 15912 23108 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:09:56,511 views 15912 23108 Server IP Addresses:
+DEBUG 2025-01-17 23:09:56,511 views 15912 23108  - 172.26.192.1
+DEBUG 2025-01-17 23:09:56,512 views 15912 23108  - 172.20.10.10
+DEBUG 2025-01-17 23:09:56,512 views 15912 23108 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:09:56,512 views 15912 23108 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:09:56,512 views 15912 23108 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:09:56,512 views 15912 23108 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:09:56,512 views 15912 23108 Server IP Addresses:
+DEBUG 2025-01-17 23:09:56,513 views 15912 23108  - 172.26.192.1
+DEBUG 2025-01-17 23:09:56,513 views 15912 23108  - 172.20.10.10
+DEBUG 2025-01-17 23:09:56,513 views 15912 23108 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:09:56,513 views 15912 23108 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:09:56,513 views 15912 23108 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:09:56,514 views 15912 23108 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:17:59,194 views 15912 12472 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:17:59,194 views 15912 12472 Server IP Addresses:
+DEBUG 2025-01-17 23:17:59,195 views 15912 12472  - 172.26.192.1
+DEBUG 2025-01-17 23:17:59,195 views 15912 12472  - 172.20.10.10
+DEBUG 2025-01-17 23:17:59,195 views 15912 12472 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:17:59,195 views 15912 12472 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:17:59,196 views 15912 12472 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:17:59,196 views 15912 12472 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:17:59,196 views 15912 12472 Server IP Addresses:
+DEBUG 2025-01-17 23:17:59,196 views 15912 12472  - 172.26.192.1
+DEBUG 2025-01-17 23:17:59,197 views 15912 12472  - 172.20.10.10
+DEBUG 2025-01-17 23:17:59,197 views 15912 12472 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:17:59,197 views 15912 12472 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:17:59,197 views 15912 12472 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:17:59,197 views 15912 12472 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:36:14,925 views 15912 22232 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:36:14,926 views 15912 22232 Server IP Addresses:
+DEBUG 2025-01-17 23:36:14,927 views 15912 22232  - 172.26.192.1
+DEBUG 2025-01-17 23:36:14,927 views 15912 22232  - 172.20.10.10
+DEBUG 2025-01-17 23:36:14,927 views 15912 22232 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:36:14,928 views 15912 22232 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:36:14,928 views 15912 22232 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:36:14,928 views 15912 22232 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:36:14,929 views 15912 22232 Server IP Addresses:
+DEBUG 2025-01-17 23:36:14,929 views 15912 22232  - 172.26.192.1
+DEBUG 2025-01-17 23:36:14,929 views 15912 22232  - 172.20.10.10
+DEBUG 2025-01-17 23:36:14,929 views 15912 22232 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:36:14,930 views 15912 22232 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:36:14,930 views 15912 22232 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:36:14,930 views 15912 22232 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-17 23:39:49,079 views 15912 2120 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:39:49,079 views 15912 2120 Server IP Addresses:
+DEBUG 2025-01-17 23:39:49,080 views 15912 2120  - 172.26.192.1
+DEBUG 2025-01-17 23:39:49,080 views 15912 2120  - 172.20.10.10
+DEBUG 2025-01-17 23:39:49,080 views 15912 2120 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:39:49,080 views 15912 2120 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:39:49,081 views 15912 2120 Fetching profile for user: idris@email.com
+DEBUG 2025-01-17 23:39:49,081 views 15912 2120 Server Hostname: Idriss-NT
+DEBUG 2025-01-17 23:39:49,081 views 15912 2120 Server IP Addresses:
+DEBUG 2025-01-17 23:39:49,082 views 15912 2120  - 172.26.192.1
+DEBUG 2025-01-17 23:39:49,082 views 15912 2120  - 172.20.10.10
+DEBUG 2025-01-17 23:39:49,082 views 15912 2120 Received request from IP: 172.20.10.4
+DEBUG 2025-01-17 23:39:49,082 views 15912 2120 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTU0OTYwLCJpYXQiOjE3MzcxNTEzNjAsImp0aSI6ImMzY2E4MDNkZjdmYzQ0MmJiNGYyMDY5YjUyYmFhOGU0IiwidXNlcl9pZCI6MX0.RpXfNJ4rw_wWsQkV_nFqvUaEIwAfowSPe9PE4Yc8PAM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-17 23:39:49,082 views 15912 2120 Fetching profile for user: idris@email.com
+INFO 2025-01-17 23:39:49,082 views 15912 2120 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 00:04:44,175 views 15912 16084 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 00:04:44,175 views 15912 16084 Server IP Addresses:
+DEBUG 2025-01-18 00:04:44,176 views 15912 16084  - 172.26.192.1
+DEBUG 2025-01-18 00:04:44,176 views 15912 16084  - 172.20.10.10
+DEBUG 2025-01-18 00:04:44,176 views 15912 16084 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 00:04:44,177 views 15912 16084 Request headers: {'Content-Length': '122', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 00:04:44,184 views 15912 16084 Received registration request with data: {'email': 'ngomseuidris10@gmail.com', 'password': '1234mete', 'password2': '1234mete', 'first_name': 'danick', 'last_name': 'mete'}
+INFO 2025-01-18 00:04:44,209 serializers 15912 16084 Validating user registration data
+INFO 2025-01-18 00:04:44,210 serializers 15912 16084 Creating new user
+INFO 2025-01-18 00:04:44,470 serializers 15912 16084 Successfully created user with email: ngomseuidris10@gmail.com
+DEBUG 2025-01-18 08:38:50,225 views 9144 22632 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:38:50,232 views 9144 22632 Server IP Addresses:
+DEBUG 2025-01-18 08:38:50,236 views 9144 22632  - 172.18.48.1
+DEBUG 2025-01-18 08:38:50,237 views 9144 22632  - 172.20.10.10
+DEBUG 2025-01-18 08:38:50,237 views 9144 22632 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:38:50,239 views 9144 22632 Request headers: {'Content-Length': '115', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:38:50,240 views 9144 22632 Received registration request with data: {'email': 'danic@email.com', 'password': 'dan&é"\'', 'password2': 'dan&é"\'', 'first_name': 'danick', 'last_name': 'mete'}
+DEBUG 2025-01-18 08:39:26,495 views 9144 15092 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:39:26,496 views 9144 15092 Server IP Addresses:
+DEBUG 2025-01-18 08:39:26,498 views 9144 15092  - 172.18.48.1
+DEBUG 2025-01-18 08:39:26,499 views 9144 15092  - 172.20.10.10
+DEBUG 2025-01-18 08:39:26,500 views 9144 15092 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:39:26,500 views 9144 15092 Request headers: {'Content-Length': '111', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:39:26,501 views 9144 15092 Received registration request with data: {'email': 'danic@email.com', 'password': 'dan1234', 'password2': 'dan1234', 'first_name': 'danick', 'last_name': 'mete'}
+DEBUG 2025-01-18 08:40:02,218 views 9144 15376 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:40:02,219 views 9144 15376 Server IP Addresses:
+DEBUG 2025-01-18 08:40:02,220 views 9144 15376  - 172.18.48.1
+DEBUG 2025-01-18 08:40:02,221 views 9144 15376  - 172.20.10.10
+DEBUG 2025-01-18 08:40:02,221 views 9144 15376 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:40:02,221 views 9144 15376 Request headers: {'Content-Length': '112', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:40:02,222 views 9144 15376 Received registration request with data: {'email': 'danick@email.com', 'password': 'dan1234', 'password2': 'dan1234', 'first_name': 'danick', 'last_name': 'mete'}
+DEBUG 2025-01-18 08:40:20,484 views 9144 11120 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:40:20,485 views 9144 11120 Request data: {'email': 'danick@email.com', 'password': 'dan1234'}
+WARNING 2025-01-18 08:40:20,934 views 9144 11120 Failed login attempt for email: danick@email.com
+DEBUG 2025-01-18 08:40:21,972 views 9144 9028 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:40:21,972 views 9144 9028 Request data: {'email': 'danick@email.com', 'password': 'dan1234'}
+WARNING 2025-01-18 08:40:22,402 views 9144 9028 Failed login attempt for email: danick@email.com
+DEBUG 2025-01-18 08:41:56,125 views 9144 22192 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:41:56,126 views 9144 22192 Request data: {'email': 'idris@email.com', 'password': 'idriss123'}
+WARNING 2025-01-18 08:41:56,835 views 9144 22192 Failed login attempt for email: idris@email.com
+DEBUG 2025-01-18 08:43:06,192 views 9144 22072 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:06,193 views 9144 22072 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:43:06,604 views 9144 13792 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:06,604 views 9144 13792 Server IP Addresses:
+DEBUG 2025-01-18 08:43:06,605 views 9144 13792  - 172.18.48.1
+DEBUG 2025-01-18 08:43:06,606 views 9144 13792  - 172.20.10.10
+DEBUG 2025-01-18 08:43:06,606 views 9144 13792 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:06,606 views 9144 13792 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg2LCJpYXQiOjE3MzcxODYxODYsImp0aSI6ImIyOTFhODRjNjM5MzRlODU4YzAyMjU3ZDI2N2I0MmY5IiwidXNlcl9pZCI6MX0.1w1wxe8A0acgT5DfURuSwhalyu6cTtxn9uaT083A2Hg', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:06,607 views 9144 13792 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:43:06,607 views 9144 13792 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:06,607 views 9144 13792 Server IP Addresses:
+DEBUG 2025-01-18 08:43:06,608 views 9144 13792  - 172.18.48.1
+DEBUG 2025-01-18 08:43:06,608 views 9144 13792  - 172.20.10.10
+DEBUG 2025-01-18 08:43:06,609 views 9144 13792 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:06,609 views 9144 13792 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg2LCJpYXQiOjE3MzcxODYxODYsImp0aSI6ImIyOTFhODRjNjM5MzRlODU4YzAyMjU3ZDI2N2I0MmY5IiwidXNlcl9pZCI6MX0.1w1wxe8A0acgT5DfURuSwhalyu6cTtxn9uaT083A2Hg', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:06,609 views 9144 13792 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:43:06,610 views 9144 13792 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:43:07,495 views 9144 15388 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:07,495 views 9144 15388 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:43:07,657 views 9144 22964 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:07,657 views 9144 22964 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:43:07,824 views 9144 8168 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:07,825 views 9144 8168 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:43:07,970 views 9144 18404 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:07,970 views 9144 18404 Server IP Addresses:
+DEBUG 2025-01-18 08:43:07,971 views 9144 18404  - 172.18.48.1
+DEBUG 2025-01-18 08:43:07,972 views 9144 18404  - 172.20.10.10
+DEBUG 2025-01-18 08:43:07,972 views 9144 18404 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:07,972 views 9144 18404 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg3LCJpYXQiOjE3MzcxODYxODcsImp0aSI6IjVkN2JmOTM0MTAwZTQ4NGZiYzYzYTJmYTM1ZDVkNTEzIiwidXNlcl9pZCI6MX0.jUbCyyuOk0o88R_mDqaLJGEdEi1-CBjeQwSFk8wWLAs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:07,973 views 9144 18404 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:43:07,973 views 9144 18404 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:07,974 views 9144 18404 Server IP Addresses:
+DEBUG 2025-01-18 08:43:07,975 views 9144 18404  - 172.18.48.1
+DEBUG 2025-01-18 08:43:07,976 views 9144 18404  - 172.20.10.10
+DEBUG 2025-01-18 08:43:07,977 views 9144 18404 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:07,977 views 9144 18404 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg3LCJpYXQiOjE3MzcxODYxODcsImp0aSI6IjVkN2JmOTM0MTAwZTQ4NGZiYzYzYTJmYTM1ZDVkNTEzIiwidXNlcl9pZCI6MX0.jUbCyyuOk0o88R_mDqaLJGEdEi1-CBjeQwSFk8wWLAs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:07,978 views 9144 18404 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:43:07,978 views 9144 18404 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:43:07,987 views 9144 10248 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:07,987 views 9144 10248 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:43:08,155 views 9144 12344 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:08,156 views 9144 12344 Server IP Addresses:
+DEBUG 2025-01-18 08:43:08,157 views 9144 12344  - 172.18.48.1
+DEBUG 2025-01-18 08:43:08,157 views 9144 12344  - 172.20.10.10
+DEBUG 2025-01-18 08:43:08,158 views 9144 12344 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:08,158 views 9144 12344 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg4LCJpYXQiOjE3MzcxODYxODgsImp0aSI6ImNlZTM0MjRiYTZjZDQ3N2E5NzE5ZDU4YjNkMzgyNzVlIiwidXNlcl9pZCI6MX0.FtCS3Iy3R0CGsZFWsU24956wilp1IC2CWoDvnFD_45c', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:08,158 views 9144 12344 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:43:08,159 views 9144 12344 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:08,159 views 9144 12344 Server IP Addresses:
+DEBUG 2025-01-18 08:43:08,160 views 9144 12344  - 172.18.48.1
+DEBUG 2025-01-18 08:43:08,161 views 9144 12344  - 172.20.10.10
+DEBUG 2025-01-18 08:43:08,161 views 9144 12344 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:08,162 views 9144 12344 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg4LCJpYXQiOjE3MzcxODYxODgsImp0aSI6ImNlZTM0MjRiYTZjZDQ3N2E5NzE5ZDU4YjNkMzgyNzVlIiwidXNlcl9pZCI6MX0.FtCS3Iy3R0CGsZFWsU24956wilp1IC2CWoDvnFD_45c', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:08,162 views 9144 12344 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:43:08,163 views 9144 12344 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:43:08,319 views 9144 21588 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:08,320 views 9144 21588 Server IP Addresses:
+DEBUG 2025-01-18 08:43:08,320 views 9144 21588  - 172.18.48.1
+DEBUG 2025-01-18 08:43:08,321 views 9144 21588  - 172.20.10.10
+DEBUG 2025-01-18 08:43:08,321 views 9144 21588 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:08,321 views 9144 21588 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg4LCJpYXQiOjE3MzcxODYxODgsImp0aSI6Ijk2ODU5ZjE0NTcwYTQ3OWVhMGZiMDI2YTg0Mzk3YWU3IiwidXNlcl9pZCI6MX0.1CgYpoU7iBYqYOv-109TYdF1cunVEq4hzT2RLsyb8aQ', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:08,322 views 9144 21588 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:43:08,322 views 9144 21588 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:08,322 views 9144 21588 Server IP Addresses:
+DEBUG 2025-01-18 08:43:08,323 views 9144 21588  - 172.18.48.1
+DEBUG 2025-01-18 08:43:08,323 views 9144 21588  - 172.20.10.10
+DEBUG 2025-01-18 08:43:08,324 views 9144 21588 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:08,324 views 9144 21588 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg4LCJpYXQiOjE3MzcxODYxODgsImp0aSI6Ijk2ODU5ZjE0NTcwYTQ3OWVhMGZiMDI2YTg0Mzk3YWU3IiwidXNlcl9pZCI6MX0.1CgYpoU7iBYqYOv-109TYdF1cunVEq4hzT2RLsyb8aQ', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:08,324 views 9144 21588 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:43:08,325 views 9144 21588 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:43:08,456 views 9144 1712 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:08,456 views 9144 1712 Server IP Addresses:
+DEBUG 2025-01-18 08:43:08,457 views 9144 1712  - 172.18.48.1
+DEBUG 2025-01-18 08:43:08,457 views 9144 1712  - 172.20.10.10
+DEBUG 2025-01-18 08:43:08,457 views 9144 1712 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:08,458 views 9144 1712 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg4LCJpYXQiOjE3MzcxODYxODgsImp0aSI6ImZkZTU0YjNiNzJhNjQwN2M4ZjE1OTE4NDExYjc3Nzg5IiwidXNlcl9pZCI6MX0.fBEvg8jN7lVLGCY1427oD-FLzkXjUZitcSMLA7IegJQ', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:08,458 views 9144 1712 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:43:08,458 views 9144 1712 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:08,459 views 9144 1712 Server IP Addresses:
+DEBUG 2025-01-18 08:43:08,459 views 9144 1712  - 172.18.48.1
+DEBUG 2025-01-18 08:43:08,459 views 9144 1712  - 172.20.10.10
+DEBUG 2025-01-18 08:43:08,460 views 9144 1712 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:08,460 views 9144 1712 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5Nzg4LCJpYXQiOjE3MzcxODYxODgsImp0aSI6ImZkZTU0YjNiNzJhNjQwN2M4ZjE1OTE4NDExYjc3Nzg5IiwidXNlcl9pZCI6MX0.fBEvg8jN7lVLGCY1427oD-FLzkXjUZitcSMLA7IegJQ', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:08,460 views 9144 1712 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:43:08,461 views 9144 1712 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:43:26,937 views 9144 3132 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:26,938 views 9144 3132 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:43:27,080 views 9144 23144 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:27,080 views 9144 23144 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:43:27,400 views 9144 1068 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:27,401 views 9144 1068 Server IP Addresses:
+DEBUG 2025-01-18 08:43:27,402 views 9144 1068  - 172.18.48.1
+DEBUG 2025-01-18 08:43:27,402 views 9144 1068  - 172.20.10.10
+DEBUG 2025-01-18 08:43:27,403 views 9144 1068 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:27,403 views 9144 1068 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6ImMxZTEyNzlhNzhjNDRlMzRhYjViOTE1ZDBlYWNiZjNmIiwidXNlcl9pZCI6MX0.FRiIdzxMXa8F2vi--RqVThQeQF8fxnEXGnQcd4ghgXA', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:27,403 views 9144 1068 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:43:27,404 views 9144 1068 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:27,404 views 9144 1068 Server IP Addresses:
+DEBUG 2025-01-18 08:43:27,405 views 9144 1068  - 172.18.48.1
+DEBUG 2025-01-18 08:43:27,405 views 9144 1068  - 172.20.10.10
+DEBUG 2025-01-18 08:43:27,405 views 9144 1068 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:27,406 views 9144 1068 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6ImMxZTEyNzlhNzhjNDRlMzRhYjViOTE1ZDBlYWNiZjNmIiwidXNlcl9pZCI6MX0.FRiIdzxMXa8F2vi--RqVThQeQF8fxnEXGnQcd4ghgXA', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:27,406 views 9144 1068 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:43:27,406 views 9144 1068 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:43:27,548 views 9144 16880 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:27,549 views 9144 16880 Server IP Addresses:
+DEBUG 2025-01-18 08:43:27,550 views 9144 16880  - 172.18.48.1
+DEBUG 2025-01-18 08:43:27,550 views 9144 16880  - 172.20.10.10
+DEBUG 2025-01-18 08:43:27,550 views 9144 16880 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:27,551 views 9144 16880 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6IjY3MGM0MjQwMzQxYjQzZDhiMWZhOTdmOTRiN2Y5YmRhIiwidXNlcl9pZCI6MX0.AsD-hc2zCz8zkDYE-TJIokpBzZLY1P0dXL3xwMHAZVs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:27,551 views 9144 16880 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:43:27,552 views 9144 16880 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:43:27,552 views 9144 16880 Server IP Addresses:
+DEBUG 2025-01-18 08:43:27,553 views 9144 16880  - 172.18.48.1
+DEBUG 2025-01-18 08:43:27,553 views 9144 16880  - 172.20.10.10
+DEBUG 2025-01-18 08:43:27,553 views 9144 16880 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 08:43:27,554 views 9144 16880 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6IjY3MGM0MjQwMzQxYjQzZDhiMWZhOTdmOTRiN2Y5YmRhIiwidXNlcl9pZCI6MX0.AsD-hc2zCz8zkDYE-TJIokpBzZLY1P0dXL3xwMHAZVs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 08:43:27,554 views 9144 16880 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:43:27,554 views 9144 16880 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:44:29,580 views 13640 22184 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:44:29,581 views 13640 22184 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:44:29,955 views 13640 1948 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:44:29,955 views 13640 1948 Server IP Addresses:
+DEBUG 2025-01-18 08:44:29,958 views 13640 1948  - 172.18.48.1
+DEBUG 2025-01-18 08:44:29,959 views 13640 1948  - 172.20.10.10
+DEBUG 2025-01-18 08:44:29,959 views 13640 1948 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:44:29,959 views 13640 1948 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODY5LCJpYXQiOjE3MzcxODYyNjksImp0aSI6Ijc3OGFmMmUxYTAwYjRjOWFiZDZlNWQxMjA0MWU0ZWQwIiwidXNlcl9pZCI6MX0.mWqHIkzlD-P799sHLeCiQG3JfYhyldq2tBtz3RsXkAU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:44:29,959 views 13640 1948 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:44:29,959 views 13640 1948 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:44:29,960 views 13640 1948 Server IP Addresses:
+DEBUG 2025-01-18 08:44:29,960 views 13640 1948  - 172.18.48.1
+DEBUG 2025-01-18 08:44:29,960 views 13640 1948  - 172.20.10.10
+DEBUG 2025-01-18 08:44:29,960 views 13640 1948 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:44:29,961 views 13640 1948 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODY5LCJpYXQiOjE3MzcxODYyNjksImp0aSI6Ijc3OGFmMmUxYTAwYjRjOWFiZDZlNWQxMjA0MWU0ZWQwIiwidXNlcl9pZCI6MX0.mWqHIkzlD-P799sHLeCiQG3JfYhyldq2tBtz3RsXkAU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:44:29,961 views 13640 1948 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:44:29,961 views 13640 1948 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:44:30,554 views 13640 14504 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:44:30,555 views 13640 14504 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:44:30,898 views 13640 12088 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:44:30,899 views 13640 12088 Server IP Addresses:
+DEBUG 2025-01-18 08:44:30,899 views 13640 12088  - 172.18.48.1
+DEBUG 2025-01-18 08:44:30,900 views 13640 12088  - 172.20.10.10
+DEBUG 2025-01-18 08:44:30,900 views 13640 12088 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:44:30,900 views 13640 12088 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODcwLCJpYXQiOjE3MzcxODYyNzAsImp0aSI6IjlmZjcyODYxYTU1ODQzODI5NTQwMmJlNDg2MjZhYjI5IiwidXNlcl9pZCI6MX0.q5b6OK9nwbaxYGuEERaSrTEyqbyYTUb2HRVmehKLCc0', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:44:30,900 views 13640 12088 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:44:30,901 views 13640 12088 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:44:30,901 views 13640 12088 Server IP Addresses:
+DEBUG 2025-01-18 08:44:30,901 views 13640 12088  - 172.18.48.1
+DEBUG 2025-01-18 08:44:30,902 views 13640 12088  - 172.20.10.10
+DEBUG 2025-01-18 08:44:30,902 views 13640 12088 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:44:30,902 views 13640 12088 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODcwLCJpYXQiOjE3MzcxODYyNzAsImp0aSI6IjlmZjcyODYxYTU1ODQzODI5NTQwMmJlNDg2MjZhYjI5IiwidXNlcl9pZCI6MX0.q5b6OK9nwbaxYGuEERaSrTEyqbyYTUb2HRVmehKLCc0', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:44:30,902 views 13640 12088 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:44:30,902 views 13640 12088 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:45:34,828 views 13640 2068 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:45:34,828 views 13640 2068 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:45:35,180 views 13640 1520 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:45:35,181 views 13640 1520 Server IP Addresses:
+DEBUG 2025-01-18 08:45:35,181 views 13640 1520  - 172.18.48.1
+DEBUG 2025-01-18 08:45:35,181 views 13640 1520  - 172.20.10.10
+DEBUG 2025-01-18 08:45:35,181 views 13640 1520 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:45:35,182 views 13640 1520 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5OTM1LCJpYXQiOjE3MzcxODYzMzUsImp0aSI6IjE3Nzc3NDJjY2E5MTQ3YTM4YTBmMDdiNzQ2OTRjYzQ5IiwidXNlcl9pZCI6MX0.TjsA08_RvtBfvOrZrQ6kCtWWUpSfzS4mYThNObjdCeE', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:45:35,182 views 13640 1520 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:45:35,182 views 13640 1520 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:45:35,182 views 13640 1520 Server IP Addresses:
+DEBUG 2025-01-18 08:45:35,183 views 13640 1520  - 172.18.48.1
+DEBUG 2025-01-18 08:45:35,183 views 13640 1520  - 172.20.10.10
+DEBUG 2025-01-18 08:45:35,183 views 13640 1520 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:45:35,183 views 13640 1520 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5OTM1LCJpYXQiOjE3MzcxODYzMzUsImp0aSI6IjE3Nzc3NDJjY2E5MTQ3YTM4YTBmMDdiNzQ2OTRjYzQ5IiwidXNlcl9pZCI6MX0.TjsA08_RvtBfvOrZrQ6kCtWWUpSfzS4mYThNObjdCeE', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:45:35,184 views 13640 1520 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:45:35,184 views 13640 1520 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:52:02,167 views 13640 25284 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:02,168 views 13640 25284 Server IP Addresses:
+DEBUG 2025-01-18 08:52:02,169 views 13640 25284  - 172.18.48.1
+DEBUG 2025-01-18 08:52:02,169 views 13640 25284  - 172.20.10.10
+DEBUG 2025-01-18 08:52:02,169 views 13640 25284 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:02,169 views 13640 25284 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5OTM1LCJpYXQiOjE3MzcxODYzMzUsImp0aSI6IjE3Nzc3NDJjY2E5MTQ3YTM4YTBmMDdiNzQ2OTRjYzQ5IiwidXNlcl9pZCI6MX0.TjsA08_RvtBfvOrZrQ6kCtWWUpSfzS4mYThNObjdCeE', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:02,169 views 13640 25284 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:52:02,170 views 13640 25284 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:02,170 views 13640 25284 Server IP Addresses:
+DEBUG 2025-01-18 08:52:02,170 views 13640 25284  - 172.18.48.1
+DEBUG 2025-01-18 08:52:02,170 views 13640 25284  - 172.20.10.10
+DEBUG 2025-01-18 08:52:02,171 views 13640 25284 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:02,171 views 13640 25284 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5OTM1LCJpYXQiOjE3MzcxODYzMzUsImp0aSI6IjE3Nzc3NDJjY2E5MTQ3YTM4YTBmMDdiNzQ2OTRjYzQ5IiwidXNlcl9pZCI6MX0.TjsA08_RvtBfvOrZrQ6kCtWWUpSfzS4mYThNObjdCeE', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:02,171 views 13640 25284 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:52:02,171 views 13640 25284 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:52:45,200 views 13640 18080 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:45,201 views 13640 18080 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:52:45,548 views 13640 21352 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:45,548 views 13640 21352 Server IP Addresses:
+DEBUG 2025-01-18 08:52:45,549 views 13640 21352  - 172.18.48.1
+DEBUG 2025-01-18 08:52:45,549 views 13640 21352  - 172.20.10.10
+DEBUG 2025-01-18 08:52:45,549 views 13640 21352 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:45,549 views 13640 21352 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY1LCJpYXQiOjE3MzcxODY3NjUsImp0aSI6IjMxN2M2NmM2NGJmZTRjYTRhN2Y0MTRkODJlMGNmNzcyIiwidXNlcl9pZCI6MX0.m2XRySiCmW815hcRkZis_NB198FDmKCH7JvQEk5IAIw', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:45,550 views 13640 21352 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:52:45,550 views 13640 21352 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:45,550 views 13640 21352 Server IP Addresses:
+DEBUG 2025-01-18 08:52:45,551 views 13640 21352  - 172.18.48.1
+DEBUG 2025-01-18 08:52:45,551 views 13640 21352  - 172.20.10.10
+DEBUG 2025-01-18 08:52:45,551 views 13640 21352 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:45,551 views 13640 21352 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY1LCJpYXQiOjE3MzcxODY3NjUsImp0aSI6IjMxN2M2NmM2NGJmZTRjYTRhN2Y0MTRkODJlMGNmNzcyIiwidXNlcl9pZCI6MX0.m2XRySiCmW815hcRkZis_NB198FDmKCH7JvQEk5IAIw', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:45,551 views 13640 21352 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:52:45,552 views 13640 21352 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:52:46,374 views 13640 10596 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:46,374 views 13640 10596 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:52:46,696 views 13640 248 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:46,696 views 13640 248 Server IP Addresses:
+DEBUG 2025-01-18 08:52:46,697 views 13640 248  - 172.18.48.1
+DEBUG 2025-01-18 08:52:46,697 views 13640 248  - 172.20.10.10
+DEBUG 2025-01-18 08:52:46,697 views 13640 248 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:46,698 views 13640 248 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY2LCJpYXQiOjE3MzcxODY3NjYsImp0aSI6IjM4OTQ5NDhhMjJjZDQxNTU5MTA3YTExN2QwNTEwYzg3IiwidXNlcl9pZCI6MX0.rwQ7vSXN_SeN5NKeKaKen4ssab7aIBUoXmKfLttNPGU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:46,698 views 13640 248 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:52:46,698 views 13640 248 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:46,698 views 13640 248 Server IP Addresses:
+DEBUG 2025-01-18 08:52:46,699 views 13640 248  - 172.18.48.1
+DEBUG 2025-01-18 08:52:46,699 views 13640 248  - 172.20.10.10
+DEBUG 2025-01-18 08:52:46,700 views 13640 248 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:46,700 views 13640 248 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY2LCJpYXQiOjE3MzcxODY3NjYsImp0aSI6IjM4OTQ5NDhhMjJjZDQxNTU5MTA3YTExN2QwNTEwYzg3IiwidXNlcl9pZCI6MX0.rwQ7vSXN_SeN5NKeKaKen4ssab7aIBUoXmKfLttNPGU', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:46,700 views 13640 248 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:52:46,700 views 13640 248 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:52:46,801 views 13640 13272 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:46,802 views 13640 13272 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:52:47,167 views 13640 17860 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,167 views 13640 17860 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,168 views 13640 17860  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,168 views 13640 17860  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,168 views 13640 17860 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,169 views 13640 17860 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6Ijc4ZjgwMWU1N2RlZjQyMTU4NmIzNjhlNDUzMGU2MTcwIiwidXNlcl9pZCI6MX0.xuT80ZnxUkT6_Dtq4HCzuDmcwV9iw2Nmno4shNT8pQ0', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,169 views 13640 17860 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:52:47,169 views 13640 17860 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,169 views 13640 17860 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,170 views 13640 17860  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,171 views 13640 17860  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,171 views 13640 17860 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,171 views 13640 17860 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6Ijc4ZjgwMWU1N2RlZjQyMTU4NmIzNjhlNDUzMGU2MTcwIiwidXNlcl9pZCI6MX0.xuT80ZnxUkT6_Dtq4HCzuDmcwV9iw2Nmno4shNT8pQ0', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,172 views 13640 17860 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:52:47,172 views 13640 17860 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:52:47,225 views 13640 22868 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,226 views 13640 22868 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:52:47,414 views 13640 24024 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,414 views 13640 24024 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:52:47,542 views 13640 24176 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,542 views 13640 24176 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,543 views 13640 24176  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,543 views 13640 24176  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,543 views 13640 24176 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,544 views 13640 24176 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6ImViZDA4NjExYWIxMzQ1YjRiNjRkZDQyM2ExYmZjMDBjIiwidXNlcl9pZCI6MX0.vbZfs3TrxnxAriOQhEALt88PGU0jdzo94Et7OMAhNaM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,544 views 13640 24176 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:52:47,544 views 13640 24176 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,544 views 13640 24176 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,545 views 13640 24176  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,545 views 13640 24176  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,545 views 13640 24176 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,546 views 13640 24176 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6ImViZDA4NjExYWIxMzQ1YjRiNjRkZDQyM2ExYmZjMDBjIiwidXNlcl9pZCI6MX0.vbZfs3TrxnxAriOQhEALt88PGU0jdzo94Et7OMAhNaM', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,546 views 13640 24176 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:52:47,546 views 13640 24176 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:52:47,615 views 13640 16536 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,616 views 13640 16536 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:52:47,789 views 13640 23620 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,789 views 13640 23620 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,790 views 13640 23620  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,790 views 13640 23620  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,791 views 13640 23620 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,791 views 13640 23620 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6ImY1MzE4MjA0Y2QzZDRkOGNiMjdhNTIzNjI0M2M4MmZlIiwidXNlcl9pZCI6MX0.kPdSDfEbtVBSwUiztrUDQ1qVxgFh_BYLc9ksHHNw43E', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,791 views 13640 23620 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:52:47,792 views 13640 23620 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,792 views 13640 23620 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,792 views 13640 23620  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,792 views 13640 23620  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,793 views 13640 23620 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,793 views 13640 23620 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6ImY1MzE4MjA0Y2QzZDRkOGNiMjdhNTIzNjI0M2M4MmZlIiwidXNlcl9pZCI6MX0.kPdSDfEbtVBSwUiztrUDQ1qVxgFh_BYLc9ksHHNw43E', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,793 views 13640 23620 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:52:47,793 views 13640 23620 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:52:47,993 views 13640 21832 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,993 views 13640 21832 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,994 views 13640 21832  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,994 views 13640 21832  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,994 views 13640 21832 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,995 views 13640 21832 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6ImFmN2FkMmZhODAwOTQ0ODBhNGQyZGEzZGUwZjFjNWExIiwidXNlcl9pZCI6MX0.6gLjki83Pj2f16gVaQrdQdFtjByTrpiEO93spFjA9Lc', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,995 views 13640 21832 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:52:47,995 views 13640 21832 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:52:47,995 views 13640 21832 Server IP Addresses:
+DEBUG 2025-01-18 08:52:47,996 views 13640 21832  - 172.18.48.1
+DEBUG 2025-01-18 08:52:47,996 views 13640 21832  - 172.20.10.10
+DEBUG 2025-01-18 08:52:47,996 views 13640 21832 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:52:47,997 views 13640 21832 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzY3LCJpYXQiOjE3MzcxODY3NjcsImp0aSI6ImFmN2FkMmZhODAwOTQ0ODBhNGQyZGEzZGUwZjFjNWExIiwidXNlcl9pZCI6MX0.6gLjki83Pj2f16gVaQrdQdFtjByTrpiEO93spFjA9Lc', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:52:47,997 views 13640 21832 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:52:47,997 views 13640 21832 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:53:00,518 views 13640 22208 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:53:00,518 views 13640 22208 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:53:00,881 views 13640 23476 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:53:00,881 views 13640 23476 Server IP Addresses:
+DEBUG 2025-01-18 08:53:00,882 views 13640 23476  - 172.18.48.1
+DEBUG 2025-01-18 08:53:00,882 views 13640 23476  - 172.20.10.10
+DEBUG 2025-01-18 08:53:00,883 views 13640 23476 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:53:00,883 views 13640 23476 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzgwLCJpYXQiOjE3MzcxODY3ODAsImp0aSI6IjAzOTFjN2JiZGNmNjQ2YjZiMjIyNjdmNTAyYTAxMzY2IiwidXNlcl9pZCI6MX0.wJsi6hekIOOXareH1xhOw3nuP1BVw7ZeimXoFwKdT10', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:53:00,883 views 13640 23476 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:53:00,883 views 13640 23476 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:53:00,883 views 13640 23476 Server IP Addresses:
+DEBUG 2025-01-18 08:53:00,884 views 13640 23476  - 172.18.48.1
+DEBUG 2025-01-18 08:53:00,884 views 13640 23476  - 172.20.10.10
+DEBUG 2025-01-18 08:53:00,884 views 13640 23476 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:53:00,885 views 13640 23476 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwMzgwLCJpYXQiOjE3MzcxODY3ODAsImp0aSI6IjAzOTFjN2JiZGNmNjQ2YjZiMjIyNjdmNTAyYTAxMzY2IiwidXNlcl9pZCI6MX0.wJsi6hekIOOXareH1xhOw3nuP1BVw7ZeimXoFwKdT10', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:53:00,885 views 13640 23476 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:53:00,885 views 13640 23476 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 08:55:28,359 views 13640 2944 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:55:28,359 views 13640 2944 Request data: {'email': 'idris@email.com', 'password': 'idriss123'}
+WARNING 2025-01-18 08:55:28,638 views 13640 2944 Failed login attempt for email: idris@email.com
+DEBUG 2025-01-18 08:55:32,672 views 13640 25088 Received login POST request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:55:32,673 views 13640 25088 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 08:55:33,036 views 13640 23944 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:55:33,036 views 13640 23944 Server IP Addresses:
+DEBUG 2025-01-18 08:55:33,037 views 13640 23944  - 172.18.48.1
+DEBUG 2025-01-18 08:55:33,037 views 13640 23944  - 172.20.10.10
+DEBUG 2025-01-18 08:55:33,037 views 13640 23944 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:55:33,037 views 13640 23944 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwNTMyLCJpYXQiOjE3MzcxODY5MzIsImp0aSI6IjA2ZTJlYzhkZTM3YjRkMzE4MWFiMjJlOTEzNzhiZDRjIiwidXNlcl9pZCI6MX0.if6wd4P-5hOcge78hkrsKKRzYRUMSbHOmkVoG4prAP8', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:55:33,038 views 13640 23944 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 08:55:33,038 views 13640 23944 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 08:55:33,038 views 13640 23944 Server IP Addresses:
+DEBUG 2025-01-18 08:55:33,039 views 13640 23944  - 172.18.48.1
+DEBUG 2025-01-18 08:55:33,039 views 13640 23944  - 172.20.10.10
+DEBUG 2025-01-18 08:55:33,039 views 13640 23944 Received request from IP: 172.20.10.4
+DEBUG 2025-01-18 08:55:33,039 views 13640 23944 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkwNTMyLCJpYXQiOjE3MzcxODY5MzIsImp0aSI6IjA2ZTJlYzhkZTM3YjRkMzE4MWFiMjJlOTEzNzhiZDRjIiwidXNlcl9pZCI6MX0.if6wd4P-5hOcge78hkrsKKRzYRUMSbHOmkVoG4prAP8', 'Host': '172.20.10.10:8000'}
+DEBUG 2025-01-18 08:55:33,039 views 13640 23944 Fetching profile for user: idris@email.com
+INFO 2025-01-18 08:55:33,040 views 13640 23944 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:00:20,089 views 23888 23360 Received login GET request
+DEBUG 2025-01-18 09:00:45,610 views 23888 23360 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:00:45,610 views 23888 23360 Request data: {}
+DEBUG 2025-01-18 09:06:23,327 views 24264 25592 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:06:23,328 views 24264 25592 Server IP Addresses:
+DEBUG 2025-01-18 09:06:23,331 views 24264 25592  - 172.18.48.1
+DEBUG 2025-01-18 09:06:23,332 views 24264 25592  - 172.20.10.10
+DEBUG 2025-01-18 09:06:23,332 views 24264 25592 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:06:23,332 views 24264 25592 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6IjY3MGM0MjQwMzQxYjQzZDhiMWZhOTdmOTRiN2Y5YmRhIiwidXNlcl9pZCI6MX0.AsD-hc2zCz8zkDYE-TJIokpBzZLY1P0dXL3xwMHAZVs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:06:23,332 views 24264 25592 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:06:23,332 views 24264 25592 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:06:23,333 views 24264 25592 Server IP Addresses:
+DEBUG 2025-01-18 09:06:23,333 views 24264 25592  - 172.18.48.1
+DEBUG 2025-01-18 09:06:23,333 views 24264 25592  - 172.20.10.10
+DEBUG 2025-01-18 09:06:23,334 views 24264 25592 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:06:23,334 views 24264 25592 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6IjY3MGM0MjQwMzQxYjQzZDhiMWZhOTdmOTRiN2Y5YmRhIiwidXNlcl9pZCI6MX0.AsD-hc2zCz8zkDYE-TJIokpBzZLY1P0dXL3xwMHAZVs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:06:23,334 views 24264 25592 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:06:23,334 views 24264 25592 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:10:46,233 views 24264 16696 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:10:46,234 views 24264 16696 Server IP Addresses:
+DEBUG 2025-01-18 09:10:46,235 views 24264 16696  - 172.18.48.1
+DEBUG 2025-01-18 09:10:46,235 views 24264 16696  - 172.20.10.10
+DEBUG 2025-01-18 09:10:46,235 views 24264 16696 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:10:46,235 views 24264 16696 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6IjY3MGM0MjQwMzQxYjQzZDhiMWZhOTdmOTRiN2Y5YmRhIiwidXNlcl9pZCI6MX0.AsD-hc2zCz8zkDYE-TJIokpBzZLY1P0dXL3xwMHAZVs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:10:46,235 views 24264 16696 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:10:46,235 views 24264 16696 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:10:46,235 views 24264 16696 Server IP Addresses:
+DEBUG 2025-01-18 09:10:46,236 views 24264 16696  - 172.18.48.1
+DEBUG 2025-01-18 09:10:46,236 views 24264 16696  - 172.20.10.10
+DEBUG 2025-01-18 09:10:46,236 views 24264 16696 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:10:46,236 views 24264 16696 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTg5ODA3LCJpYXQiOjE3MzcxODYyMDcsImp0aSI6IjY3MGM0MjQwMzQxYjQzZDhiMWZhOTdmOTRiN2Y5YmRhIiwidXNlcl9pZCI6MX0.AsD-hc2zCz8zkDYE-TJIokpBzZLY1P0dXL3xwMHAZVs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:10:46,236 views 24264 16696 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:10:46,236 views 24264 16696 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:12:11,605 views 24264 16176 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:11,605 views 24264 16176 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:12:12,055 views 24264 9360 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:12,055 views 24264 9360 Server IP Addresses:
+DEBUG 2025-01-18 09:12:12,056 views 24264 9360  - 172.18.48.1
+DEBUG 2025-01-18 09:12:12,056 views 24264 9360  - 172.20.10.10
+DEBUG 2025-01-18 09:12:12,057 views 24264 9360 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,057 views 24264 9360 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMxLCJpYXQiOjE3MzcxODc5MzEsImp0aSI6Ijk0NTkzODU0YzFkYjQ3Njk5OGJkMWZlOGEzMzIxMDI1IiwidXNlcl9pZCI6MX0.x21jwO6r_-VMiFtMGfcbFh9rSp18hRlLATCYP7YbZoQ', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:12,057 views 24264 9360 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:12:12,057 views 24264 9360 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:12,057 views 24264 9360 Server IP Addresses:
+DEBUG 2025-01-18 09:12:12,058 views 24264 9360  - 172.18.48.1
+DEBUG 2025-01-18 09:12:12,058 views 24264 9360  - 172.20.10.10
+DEBUG 2025-01-18 09:12:12,058 views 24264 9360 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,058 views 24264 9360 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMxLCJpYXQiOjE3MzcxODc5MzEsImp0aSI6Ijk0NTkzODU0YzFkYjQ3Njk5OGJkMWZlOGEzMzIxMDI1IiwidXNlcl9pZCI6MX0.x21jwO6r_-VMiFtMGfcbFh9rSp18hRlLATCYP7YbZoQ', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:12,058 views 24264 9360 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:12:12,059 views 24264 9360 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:12:12,198 views 24264 18576 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,199 views 24264 18576 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:12:12,483 views 24264 22424 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,483 views 24264 22424 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:12:12,660 views 24264 24320 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,660 views 24264 24320 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:12:12,698 views 24264 3612 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:12,699 views 24264 3612 Server IP Addresses:
+DEBUG 2025-01-18 09:12:12,700 views 24264 3612  - 172.18.48.1
+DEBUG 2025-01-18 09:12:12,700 views 24264 3612  - 172.20.10.10
+DEBUG 2025-01-18 09:12:12,700 views 24264 3612 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,700 views 24264 3612 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMyLCJpYXQiOjE3MzcxODc5MzIsImp0aSI6ImNiMDkzODVlNzI3NjQ2ZTJiOTEzZDcxNWE1M2RlNWM2IiwidXNlcl9pZCI6MX0.UeDOIDDcp7D0zVGtn7KFy94ovFzzrj7fqR0qk8pwpLU', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:12,701 views 24264 3612 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:12:12,701 views 24264 3612 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:12,701 views 24264 3612 Server IP Addresses:
+DEBUG 2025-01-18 09:12:12,702 views 24264 3612  - 172.18.48.1
+DEBUG 2025-01-18 09:12:12,702 views 24264 3612  - 172.20.10.10
+DEBUG 2025-01-18 09:12:12,703 views 24264 3612 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,703 views 24264 3612 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMyLCJpYXQiOjE3MzcxODc5MzIsImp0aSI6ImNiMDkzODVlNzI3NjQ2ZTJiOTEzZDcxNWE1M2RlNWM2IiwidXNlcl9pZCI6MX0.UeDOIDDcp7D0zVGtn7KFy94ovFzzrj7fqR0qk8pwpLU', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:12,703 views 24264 3612 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:12:12,703 views 24264 3612 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:12:12,847 views 24264 7728 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,849 views 24264 7728 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:12:12,949 views 24264 4072 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:12,950 views 24264 4072 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:12:13,087 views 24264 17892 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,088 views 24264 17892 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,089 views 24264 17892  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,090 views 24264 17892  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,090 views 24264 17892 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,090 views 24264 17892 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMyLCJpYXQiOjE3MzcxODc5MzIsImp0aSI6ImM0ZGQyYjlkMjkyMTRjYWJhNTBkOTUyNmVkYTMxODg5IiwidXNlcl9pZCI6MX0.eTqvg5HR_5Gz-PRzRyVnY3OO9vfYuI1bve-ceBLOMGc', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,091 views 24264 17892 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:12:13,091 views 24264 17892 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,091 views 24264 17892 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,092 views 24264 17892  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,092 views 24264 17892  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,092 views 24264 17892 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,093 views 24264 17892 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMyLCJpYXQiOjE3MzcxODc5MzIsImp0aSI6ImM0ZGQyYjlkMjkyMTRjYWJhNTBkOTUyNmVkYTMxODg5IiwidXNlcl9pZCI6MX0.eTqvg5HR_5Gz-PRzRyVnY3OO9vfYuI1bve-ceBLOMGc', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,093 views 24264 17892 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:12:13,093 views 24264 17892 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:12:13,314 views 24264 2712 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,314 views 24264 2712 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,315 views 24264 2712  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,315 views 24264 2712  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,315 views 24264 2712 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,316 views 24264 2712 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMzLCJpYXQiOjE3MzcxODc5MzMsImp0aSI6IjU1YWY5OTI3YTNkOTRhNjk4MGE1ODQxNWU3ZmI2NjAxIiwidXNlcl9pZCI6MX0.wvVL9doTlfLT-qs_OjcGK2i0rCUVuWIWNQHBoqEv17A', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,316 views 24264 2712 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:12:13,316 views 24264 2712 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,316 views 24264 2712 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,317 views 24264 2712  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,317 views 24264 2712  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,317 views 24264 2712 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,317 views 24264 2712 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMzLCJpYXQiOjE3MzcxODc5MzMsImp0aSI6IjU1YWY5OTI3YTNkOTRhNjk4MGE1ODQxNWU3ZmI2NjAxIiwidXNlcl9pZCI6MX0.wvVL9doTlfLT-qs_OjcGK2i0rCUVuWIWNQHBoqEv17A', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,317 views 24264 2712 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:12:13,318 views 24264 2712 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:12:13,543 views 24264 10596 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,543 views 24264 10596 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,544 views 24264 10596  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,544 views 24264 10596  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,544 views 24264 10596 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,544 views 24264 10596 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMzLCJpYXQiOjE3MzcxODc5MzMsImp0aSI6ImU4NWU0YzZlNjU2ODQzYThhNjY5ODBmZjMyM2MzODkzIiwidXNlcl9pZCI6MX0.kWY-sByzvq6RwP_2fFjYFdZEoW-US8iHVV9YhYL1L1M', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,544 views 24264 10596 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:12:13,545 views 24264 10596 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,545 views 24264 10596 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,545 views 24264 10596  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,545 views 24264 10596  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,546 views 24264 10596 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,546 views 24264 10596 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMzLCJpYXQiOjE3MzcxODc5MzMsImp0aSI6ImU4NWU0YzZlNjU2ODQzYThhNjY5ODBmZjMyM2MzODkzIiwidXNlcl9pZCI6MX0.kWY-sByzvq6RwP_2fFjYFdZEoW-US8iHVV9YhYL1L1M', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,546 views 24264 10596 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:12:13,546 views 24264 10596 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:12:13,663 views 24264 21448 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,665 views 24264 21448 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,666 views 24264 21448  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,666 views 24264 21448  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,667 views 24264 21448 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,667 views 24264 21448 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMzLCJpYXQiOjE3MzcxODc5MzMsImp0aSI6Ijc0NjNlYjQ3MmQ3MzQzNDdhYzc3NjhjZDM1ZGE3ZDU3IiwidXNlcl9pZCI6MX0.z2cEn2l_FbgM8w37GUNxG-pcT8YdjRj4gcsN0Mfjegg', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,667 views 24264 21448 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:12:13,667 views 24264 21448 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:12:13,667 views 24264 21448 Server IP Addresses:
+DEBUG 2025-01-18 09:12:13,668 views 24264 21448  - 172.18.48.1
+DEBUG 2025-01-18 09:12:13,668 views 24264 21448  - 172.20.10.10
+DEBUG 2025-01-18 09:12:13,668 views 24264 21448 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:12:13,669 views 24264 21448 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkxNTMzLCJpYXQiOjE3MzcxODc5MzMsImp0aSI6Ijc0NjNlYjQ3MmQ3MzQzNDdhYzc3NjhjZDM1ZGE3ZDU3IiwidXNlcl9pZCI6MX0.z2cEn2l_FbgM8w37GUNxG-pcT8YdjRj4gcsN0Mfjegg', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:12:13,669 views 24264 21448 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:12:13,669 views 24264 21448 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:25:33,624 views 24264 25468 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:25:33,625 views 24264 25468 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:25:34,071 views 24264 22156 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:25:34,071 views 24264 22156 Server IP Addresses:
+DEBUG 2025-01-18 09:25:34,072 views 24264 22156  - 172.18.48.1
+DEBUG 2025-01-18 09:25:34,072 views 24264 22156  - 172.20.10.10
+DEBUG 2025-01-18 09:25:34,072 views 24264 22156 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:25:34,073 views 24264 22156 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyMzM0LCJpYXQiOjE3MzcxODg3MzQsImp0aSI6IjQ4MzIzZWM2MTI2ZTQyOGFiY2M5ODZiNmJkZmRkYTFjIiwidXNlcl9pZCI6MX0.W4VBQTHXV_p2TJpoRoAo4vjUHKncyQkUAI-kAUQcRnM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:25:34,073 views 24264 22156 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:25:34,073 views 24264 22156 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:25:34,074 views 24264 22156 Server IP Addresses:
+DEBUG 2025-01-18 09:25:34,075 views 24264 22156  - 172.18.48.1
+DEBUG 2025-01-18 09:25:34,075 views 24264 22156  - 172.20.10.10
+DEBUG 2025-01-18 09:25:34,075 views 24264 22156 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:25:34,075 views 24264 22156 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyMzM0LCJpYXQiOjE3MzcxODg3MzQsImp0aSI6IjQ4MzIzZWM2MTI2ZTQyOGFiY2M5ODZiNmJkZmRkYTFjIiwidXNlcl9pZCI6MX0.W4VBQTHXV_p2TJpoRoAo4vjUHKncyQkUAI-kAUQcRnM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:25:34,075 views 24264 22156 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:25:34,076 views 24264 22156 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:25:41,516 views 24264 25332 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:25:41,516 views 24264 25332 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:25:42,000 views 24264 24772 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:25:42,000 views 24264 24772 Server IP Addresses:
+DEBUG 2025-01-18 09:25:42,001 views 24264 24772  - 172.18.48.1
+DEBUG 2025-01-18 09:25:42,001 views 24264 24772  - 172.20.10.10
+DEBUG 2025-01-18 09:25:42,001 views 24264 24772 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:25:42,001 views 24264 24772 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyMzQxLCJpYXQiOjE3MzcxODg3NDEsImp0aSI6IjFhYTgxMjk4NTEyNjQzMWFhZWJjZGEyODBkNTNlNDViIiwidXNlcl9pZCI6MX0.UcRlsTvJOfH4d8Owv9PYZhpJi_pZ3Dsvz8rbFd0WN9I', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:25:42,001 views 24264 24772 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:25:42,001 views 24264 24772 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:25:42,001 views 24264 24772 Server IP Addresses:
+DEBUG 2025-01-18 09:25:42,002 views 24264 24772  - 172.18.48.1
+DEBUG 2025-01-18 09:25:42,002 views 24264 24772  - 172.20.10.10
+DEBUG 2025-01-18 09:25:42,003 views 24264 24772 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:25:42,003 views 24264 24772 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyMzQxLCJpYXQiOjE3MzcxODg3NDEsImp0aSI6IjFhYTgxMjk4NTEyNjQzMWFhZWJjZGEyODBkNTNlNDViIiwidXNlcl9pZCI6MX0.UcRlsTvJOfH4d8Owv9PYZhpJi_pZ3Dsvz8rbFd0WN9I', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:25:42,003 views 24264 24772 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:25:42,003 views 24264 24772 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:26:27,323 views 24264 8964 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:26:27,324 views 24264 8964 Server IP Addresses:
+DEBUG 2025-01-18 09:26:27,324 views 24264 8964  - 172.18.48.1
+DEBUG 2025-01-18 09:26:27,324 views 24264 8964  - 172.20.10.10
+DEBUG 2025-01-18 09:26:27,324 views 24264 8964 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:26:27,325 views 24264 8964 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyMzQxLCJpYXQiOjE3MzcxODg3NDEsImp0aSI6IjFhYTgxMjk4NTEyNjQzMWFhZWJjZGEyODBkNTNlNDViIiwidXNlcl9pZCI6MX0.UcRlsTvJOfH4d8Owv9PYZhpJi_pZ3Dsvz8rbFd0WN9I', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:26:27,325 views 24264 8964 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:26:27,325 views 24264 8964 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:26:27,325 views 24264 8964 Server IP Addresses:
+DEBUG 2025-01-18 09:26:27,325 views 24264 8964  - 172.18.48.1
+DEBUG 2025-01-18 09:26:27,325 views 24264 8964  - 172.20.10.10
+DEBUG 2025-01-18 09:26:27,326 views 24264 8964 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:26:27,326 views 24264 8964 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyMzQxLCJpYXQiOjE3MzcxODg3NDEsImp0aSI6IjFhYTgxMjk4NTEyNjQzMWFhZWJjZGEyODBkNTNlNDViIiwidXNlcl9pZCI6MX0.UcRlsTvJOfH4d8Owv9PYZhpJi_pZ3Dsvz8rbFd0WN9I', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:26:27,326 views 24264 8964 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:26:27,326 views 24264 8964 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:28:24,364 views 24264 10428 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:28:24,364 views 24264 10428 Request data: {'email': 'rezfzry@ryg.hu', 'password': 'tgrjeryk'}
+WARNING 2025-01-18 09:28:24,771 views 24264 10428 Failed login attempt for email: rezfzry@ryg.hu
+DEBUG 2025-01-18 09:29:01,415 views 24264 24868 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:29:01,416 views 24264 24868 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 09:29:01,971 views 24264 15628 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:29:01,971 views 24264 15628 Server IP Addresses:
+DEBUG 2025-01-18 09:29:01,972 views 24264 15628  - 172.18.48.1
+DEBUG 2025-01-18 09:29:01,972 views 24264 15628  - 172.20.10.10
+DEBUG 2025-01-18 09:29:01,972 views 24264 15628 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:29:01,973 views 24264 15628 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyNTQxLCJpYXQiOjE3MzcxODg5NDEsImp0aSI6IjY4OTg0Y2UzNzcyZDQ0MDk4YmFkYWMxNGU2NDE4OTdhIiwidXNlcl9pZCI6MX0.PTYa_GaJUyomHynctSPkB08oY6t9burJdcN1o4JZkEM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:29:01,973 views 24264 15628 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:29:01,973 views 24264 15628 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:29:01,973 views 24264 15628 Server IP Addresses:
+DEBUG 2025-01-18 09:29:01,974 views 24264 15628  - 172.18.48.1
+DEBUG 2025-01-18 09:29:01,974 views 24264 15628  - 172.20.10.10
+DEBUG 2025-01-18 09:29:01,974 views 24264 15628 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:29:01,974 views 24264 15628 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyNTQxLCJpYXQiOjE3MzcxODg5NDEsImp0aSI6IjY4OTg0Y2UzNzcyZDQ0MDk4YmFkYWMxNGU2NDE4OTdhIiwidXNlcl9pZCI6MX0.PTYa_GaJUyomHynctSPkB08oY6t9burJdcN1o4JZkEM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:29:01,974 views 24264 15628 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:29:01,975 views 24264 15628 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 09:51:31,802 views 24264 25204 Received login GET request
+DEBUG 2025-01-18 09:52:28,464 views 24264 25204 Received login GET request
+DEBUG 2025-01-18 09:52:29,728 views 24264 25204 Received login GET request
+DEBUG 2025-01-18 09:52:37,516 views 24264 25204 Received login GET request
+DEBUG 2025-01-18 09:52:50,501 views 24264 25204 Received login GET request
+DEBUG 2025-01-18 09:52:59,233 views 24264 25204 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:52:59,233 views 24264 25204 Request data: {}
+DEBUG 2025-01-18 09:54:01,491 views 24264 10600 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:54:01,491 views 24264 10600 Server IP Addresses:
+DEBUG 2025-01-18 09:54:01,491 views 24264 10600  - 172.18.48.1
+DEBUG 2025-01-18 09:54:01,491 views 24264 10600  - 172.20.10.10
+DEBUG 2025-01-18 09:54:01,491 views 24264 10600 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyNTQxLCJpYXQiOjE3MzcxODg5NDEsImp0aSI6IjY4OTg0Y2UzNzcyZDQ0MDk4YmFkYWMxNGU2NDE4OTdhIiwidXNlcl9pZCI6MX0.PTYa_GaJUyomHynctSPkB08oY6t9burJdcN1o4JZkEM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600 Server IP Addresses:
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600  - 172.18.48.1
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600  - 172.20.10.10
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTkyNTQxLCJpYXQiOjE3MzcxODg5NDEsImp0aSI6IjY4OTg0Y2UzNzcyZDQ0MDk4YmFkYWMxNGU2NDE4OTdhIiwidXNlcl9pZCI6MX0.PTYa_GaJUyomHynctSPkB08oY6t9burJdcN1o4JZkEM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 09:54:01,492 views 24264 10600 Fetching profile for user: idris@email.com
+INFO 2025-01-18 09:54:01,493 views 24264 10600 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:02:06,237 views 24264 22344 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:06,241 views 24264 22344 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:02:06,596 views 24264 18360 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:06,596 views 24264 18360 Server IP Addresses:
+DEBUG 2025-01-18 10:02:06,596 views 24264 18360  - 172.18.48.1
+DEBUG 2025-01-18 10:02:06,597 views 24264 18360  - 172.20.10.10
+DEBUG 2025-01-18 10:02:06,597 views 24264 18360 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:06,597 views 24264 18360 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTI2LCJpYXQiOjE3MzcxOTA5MjYsImp0aSI6Ijg0MjhjMzYxOGY1ZTQyYmVhN2M2NTlkZDA0Njc3YzY5IiwidXNlcl9pZCI6MX0.6cpg8aR_oaByMxuS2rS-pnqyT_-qS4iUBeqnHRg_jY0', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:06,597 views 24264 18360 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:02:06,597 views 24264 18360 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:06,597 views 24264 18360 Server IP Addresses:
+DEBUG 2025-01-18 10:02:06,598 views 24264 18360  - 172.18.48.1
+DEBUG 2025-01-18 10:02:06,598 views 24264 18360  - 172.20.10.10
+DEBUG 2025-01-18 10:02:06,598 views 24264 18360 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:06,598 views 24264 18360 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTI2LCJpYXQiOjE3MzcxOTA5MjYsImp0aSI6Ijg0MjhjMzYxOGY1ZTQyYmVhN2M2NTlkZDA0Njc3YzY5IiwidXNlcl9pZCI6MX0.6cpg8aR_oaByMxuS2rS-pnqyT_-qS4iUBeqnHRg_jY0', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:06,598 views 24264 18360 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:02:06,598 views 24264 18360 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:02:13,699 views 24264 11228 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:13,699 views 24264 11228 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:02:14,066 views 24264 25052 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:14,066 views 24264 25052 Server IP Addresses:
+DEBUG 2025-01-18 10:02:14,067 views 24264 25052  - 172.18.48.1
+DEBUG 2025-01-18 10:02:14,067 views 24264 25052  - 172.20.10.10
+DEBUG 2025-01-18 10:02:14,067 views 24264 25052 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:14,067 views 24264 25052 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM0LCJpYXQiOjE3MzcxOTA5MzQsImp0aSI6ImIwN2MzMTQyOTE2ZDQzMGE5ZmI1YThlOGFhOTg4YzE1IiwidXNlcl9pZCI6MX0.ZEaix4vZ0bai6a-cTH5OvUMnTnwJ2Muet8LLQldgKhU', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:14,067 views 24264 25052 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:02:14,067 views 24264 25052 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:14,068 views 24264 25052 Server IP Addresses:
+DEBUG 2025-01-18 10:02:14,068 views 24264 25052  - 172.18.48.1
+DEBUG 2025-01-18 10:02:14,068 views 24264 25052  - 172.20.10.10
+DEBUG 2025-01-18 10:02:14,068 views 24264 25052 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:14,068 views 24264 25052 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM0LCJpYXQiOjE3MzcxOTA5MzQsImp0aSI6ImIwN2MzMTQyOTE2ZDQzMGE5ZmI1YThlOGFhOTg4YzE1IiwidXNlcl9pZCI6MX0.ZEaix4vZ0bai6a-cTH5OvUMnTnwJ2Muet8LLQldgKhU', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:14,069 views 24264 25052 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:02:14,069 views 24264 25052 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:02:14,559 views 24264 23096 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:14,560 views 24264 23096 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:02:14,762 views 24264 21668 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:14,763 views 24264 21668 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:02:14,951 views 24264 6496 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:14,952 views 24264 6496 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:02:14,968 views 24264 12836 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:14,968 views 24264 12836 Server IP Addresses:
+DEBUG 2025-01-18 10:02:14,969 views 24264 12836  - 172.18.48.1
+DEBUG 2025-01-18 10:02:14,969 views 24264 12836  - 172.20.10.10
+DEBUG 2025-01-18 10:02:14,969 views 24264 12836 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:14,969 views 24264 12836 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM0LCJpYXQiOjE3MzcxOTA5MzQsImp0aSI6ImQ1NTliMzVmMDI1NzQ4YjQ4NjY5YmFmMGYzNDkwNzg3IiwidXNlcl9pZCI6MX0.yRNqXlj2vSmMrQBzJzdBK35ero-IfeQomTTq1lep3S8', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:14,969 views 24264 12836 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:02:14,969 views 24264 12836 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:14,969 views 24264 12836 Server IP Addresses:
+DEBUG 2025-01-18 10:02:14,970 views 24264 12836  - 172.18.48.1
+DEBUG 2025-01-18 10:02:14,970 views 24264 12836  - 172.20.10.10
+DEBUG 2025-01-18 10:02:14,970 views 24264 12836 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:14,970 views 24264 12836 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM0LCJpYXQiOjE3MzcxOTA5MzQsImp0aSI6ImQ1NTliMzVmMDI1NzQ4YjQ4NjY5YmFmMGYzNDkwNzg3IiwidXNlcl9pZCI6MX0.yRNqXlj2vSmMrQBzJzdBK35ero-IfeQomTTq1lep3S8', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:14,970 views 24264 12836 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:02:14,971 views 24264 12836 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,113 views 24264 23972 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,114 views 24264 23972 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:02:15,191 views 24264 15540 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,191 views 24264 15540 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,192 views 24264 15540  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,192 views 24264 15540  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,192 views 24264 15540 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,192 views 24264 15540 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6IjI5MjkyYzMwN2E2ZjQ1MTY4NzEzYWYyYWQ4MTIyMGZmIiwidXNlcl9pZCI6MX0.4iXaRYwWruIyVKFzq5VAXniD7h1rbHvY_iwEnhCVOjs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,192 views 24264 15540 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,193 views 24264 15540 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,193 views 24264 15540 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,193 views 24264 15540  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,193 views 24264 15540  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,193 views 24264 15540 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,193 views 24264 15540 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6IjI5MjkyYzMwN2E2ZjQ1MTY4NzEzYWYyYWQ4MTIyMGZmIiwidXNlcl9pZCI6MX0.4iXaRYwWruIyVKFzq5VAXniD7h1rbHvY_iwEnhCVOjs', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,193 views 24264 15540 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:02:15,193 views 24264 15540 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,363 views 24264 24096 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,363 views 24264 24096 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:02:15,400 views 24264 24464 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,400 views 24264 24464 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,401 views 24264 24464  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,401 views 24264 24464  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,401 views 24264 24464 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,401 views 24264 24464 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6ImYzM2VmMzUyNDUyNjRlOWNhOThkMWM2OTNhNTRiNjgyIiwidXNlcl9pZCI6MX0.Lmt0WUYKadeCYDVinv7lyiwZCaTJTJ1Bog41k--KVqY', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6ImYzM2VmMzUyNDUyNjRlOWNhOThkMWM2OTNhNTRiNjgyIiwidXNlcl9pZCI6MX0.Lmt0WUYKadeCYDVinv7lyiwZCaTJTJ1Bog41k--KVqY', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,402 views 24264 24464 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:02:15,402 views 24264 24464 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,487 views 24264 13764 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,487 views 24264 13764 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,488 views 24264 13764  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,488 views 24264 13764  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,488 views 24264 13764 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,488 views 24264 13764 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6IjhhYTc2NzE2MDY0ZjRmODhhNjc1ODAyMGFiMjUzMWJkIiwidXNlcl9pZCI6MX0.EHB1zdkBedu9FTjfEOhp55MuB1RPO71WX3EzVpHHxZk', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,488 views 24264 13764 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,488 views 24264 13764 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,488 views 24264 13764 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,489 views 24264 13764  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,489 views 24264 13764  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,489 views 24264 13764 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,489 views 24264 13764 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6IjhhYTc2NzE2MDY0ZjRmODhhNjc1ODAyMGFiMjUzMWJkIiwidXNlcl9pZCI6MX0.EHB1zdkBedu9FTjfEOhp55MuB1RPO71WX3EzVpHHxZk', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,489 views 24264 13764 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:02:15,489 views 24264 13764 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,744 views 24264 2980 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,745 views 24264 2980 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,745 views 24264 2980  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,745 views 24264 2980  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,745 views 24264 2980 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,745 views 24264 2980 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6ImEyYjhiNTVhMGUwOTRhYWM5MDk0NmNiY2MzODMyNzg4IiwidXNlcl9pZCI6MX0.go3zcmzr74oT9of9NyNeTkCmADsTr5sXsw5mbBFYfMI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,745 views 24264 2980 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:02:15,745 views 24264 2980 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:02:15,746 views 24264 2980 Server IP Addresses:
+DEBUG 2025-01-18 10:02:15,746 views 24264 2980  - 172.18.48.1
+DEBUG 2025-01-18 10:02:15,746 views 24264 2980  - 172.20.10.10
+DEBUG 2025-01-18 10:02:15,746 views 24264 2980 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:02:15,746 views 24264 2980 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6ImEyYjhiNTVhMGUwOTRhYWM5MDk0NmNiY2MzODMyNzg4IiwidXNlcl9pZCI6MX0.go3zcmzr74oT9of9NyNeTkCmADsTr5sXsw5mbBFYfMI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:02:15,746 views 24264 2980 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:02:15,746 views 24264 2980 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:06:26,875 views 24264 1096 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:06:26,875 views 24264 1096 Server IP Addresses:
+DEBUG 2025-01-18 10:06:26,875 views 24264 1096  - 172.18.48.1
+DEBUG 2025-01-18 10:06:26,875 views 24264 1096  - 172.20.10.10
+DEBUG 2025-01-18 10:06:26,875 views 24264 1096 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:06:26,875 views 24264 1096 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6ImEyYjhiNTVhMGUwOTRhYWM5MDk0NmNiY2MzODMyNzg4IiwidXNlcl9pZCI6MX0.go3zcmzr74oT9of9NyNeTkCmADsTr5sXsw5mbBFYfMI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096 Server IP Addresses:
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096  - 172.18.48.1
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096  - 172.20.10.10
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0NTM1LCJpYXQiOjE3MzcxOTA5MzUsImp0aSI6ImEyYjhiNTVhMGUwOTRhYWM5MDk0NmNiY2MzODMyNzg4IiwidXNlcl9pZCI6MX0.go3zcmzr74oT9of9NyNeTkCmADsTr5sXsw5mbBFYfMI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:06:26,876 views 24264 1096 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:06:26,876 views 24264 1096 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:06:59,273 views 24264 25052 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:06:59,274 views 24264 25052 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:06:59,626 views 24264 9824 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:06:59,626 views 24264 9824 Server IP Addresses:
+DEBUG 2025-01-18 10:06:59,627 views 24264 9824  - 172.18.48.1
+DEBUG 2025-01-18 10:06:59,627 views 24264 9824  - 172.20.10.10
+DEBUG 2025-01-18 10:06:59,627 views 24264 9824 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:06:59,628 views 24264 9824 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0ODE5LCJpYXQiOjE3MzcxOTEyMTksImp0aSI6IjNiNmEwY2VjMjkyMjQxNzI4MjI1NDRkNzk2ZTRlZWFiIiwidXNlcl9pZCI6MX0.KOP7OR-G2EE4T5KD_ef-cbH_FOe0v9a27dmULYq6L70', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:06:59,628 views 24264 9824 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:06:59,628 views 24264 9824 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:06:59,628 views 24264 9824 Server IP Addresses:
+DEBUG 2025-01-18 10:06:59,629 views 24264 9824  - 172.18.48.1
+DEBUG 2025-01-18 10:06:59,629 views 24264 9824  - 172.20.10.10
+DEBUG 2025-01-18 10:06:59,629 views 24264 9824 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:06:59,629 views 24264 9824 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk0ODE5LCJpYXQiOjE3MzcxOTEyMTksImp0aSI6IjNiNmEwY2VjMjkyMjQxNzI4MjI1NDRkNzk2ZTRlZWFiIiwidXNlcl9pZCI6MX0.KOP7OR-G2EE4T5KD_ef-cbH_FOe0v9a27dmULYq6L70', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:06:59,629 views 24264 9824 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:06:59,629 views 24264 9824 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:09:24,099 views 24264 21936 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:09:24,099 views 24264 21936 Server IP Addresses:
+DEBUG 2025-01-18 10:09:24,100 views 24264 21936  - 172.18.48.1
+DEBUG 2025-01-18 10:09:24,100 views 24264 21936  - 172.20.10.10
+DEBUG 2025-01-18 10:09:24,100 views 24264 21936 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:09:24,100 views 24264 21936 Request headers: {'Content-Length': '108', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:09:24,100 views 24264 21936 Received registration request with data: {'email': 'dan@email.com', 'password': 'dan1234', 'password2': 'dan1234', 'first_name': 'fggh', 'last_name': 'dgfhh'}
+DEBUG 2025-01-18 10:14:49,194 views 24264 18372 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:14:49,195 views 24264 18372 Server IP Addresses:
+DEBUG 2025-01-18 10:14:49,195 views 24264 18372  - 172.18.48.1
+DEBUG 2025-01-18 10:14:49,195 views 24264 18372  - 172.20.10.10
+DEBUG 2025-01-18 10:14:49,195 views 24264 18372 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:14:49,195 views 24264 18372 Request headers: {'Content-Length': '106', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:14:49,198 views 24264 18372 Received registration request with data: {'email': 'dan@email.com', 'password': 'dan1234', 'password2': 'dan1234', 'first_name': 'dan', 'last_name': 'mete'}
+DEBUG 2025-01-18 10:14:51,696 views 24264 22276 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:14:51,697 views 24264 22276 Server IP Addresses:
+DEBUG 2025-01-18 10:14:51,697 views 24264 22276  - 172.18.48.1
+DEBUG 2025-01-18 10:14:51,697 views 24264 22276  - 172.20.10.10
+DEBUG 2025-01-18 10:14:51,697 views 24264 22276 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:14:51,698 views 24264 22276 Request headers: {'Content-Length': '106', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:14:51,698 views 24264 22276 Received registration request with data: {'email': 'dan@email.com', 'password': 'dan1234', 'password2': 'dan1234', 'first_name': 'dan', 'last_name': 'mete'}
+DEBUG 2025-01-18 10:15:40,316 views 24264 21320 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:15:40,316 views 24264 21320 Server IP Addresses:
+DEBUG 2025-01-18 10:15:40,317 views 24264 21320  - 172.18.48.1
+DEBUG 2025-01-18 10:15:40,317 views 24264 21320  - 172.20.10.10
+DEBUG 2025-01-18 10:15:40,317 views 24264 21320 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:15:40,317 views 24264 21320 Request headers: {'Content-Length': '108', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:15:40,318 views 24264 21320 Received registration request with data: {'email': 'dan@email.com', 'password': 'dani1234', 'password2': 'dani1234', 'first_name': 'dan', 'last_name': 'mete'}
+INFO 2025-01-18 10:15:40,320 serializers 24264 21320 Validating user registration data
+INFO 2025-01-18 10:15:40,320 serializers 24264 21320 Creating new user
+INFO 2025-01-18 10:15:40,611 serializers 24264 21320 Successfully created user with email: dan@email.com
+DEBUG 2025-01-18 10:15:40,653 views 24264 22124 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:15:40,654 views 24264 22124 Request data: {'email': 'dan@email.com', 'password': 'dani1234'}
+DEBUG 2025-01-18 10:15:40,971 views 24264 19032 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:15:40,972 views 24264 19032 Server IP Addresses:
+DEBUG 2025-01-18 10:15:40,972 views 24264 19032  - 172.18.48.1
+DEBUG 2025-01-18 10:15:40,972 views 24264 19032  - 172.20.10.10
+DEBUG 2025-01-18 10:15:40,972 views 24264 19032 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:15:40,972 views 24264 19032 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1MzQwLCJpYXQiOjE3MzcxOTE3NDAsImp0aSI6ImUxZDU2YzU3MTI2NzRkZGI5MGY4MmVkODk4ZGJiYTJkIiwidXNlcl9pZCI6NX0.wkVDvjw725EjLt7MLsar2GTvqJlXCyOJSj-nCjVgjT4', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:15:40,972 views 24264 19032 Fetching profile for user: dan@email.com
+DEBUG 2025-01-18 10:15:40,973 views 24264 19032 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:15:40,973 views 24264 19032 Server IP Addresses:
+DEBUG 2025-01-18 10:15:40,973 views 24264 19032  - 172.18.48.1
+DEBUG 2025-01-18 10:15:40,973 views 24264 19032  - 172.20.10.10
+DEBUG 2025-01-18 10:15:40,973 views 24264 19032 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:15:40,973 views 24264 19032 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1MzQwLCJpYXQiOjE3MzcxOTE3NDAsImp0aSI6ImUxZDU2YzU3MTI2NzRkZGI5MGY4MmVkODk4ZGJiYTJkIiwidXNlcl9pZCI6NX0.wkVDvjw725EjLt7MLsar2GTvqJlXCyOJSj-nCjVgjT4', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:15:40,973 views 24264 19032 Fetching profile for user: dan@email.com
+INFO 2025-01-18 10:15:40,973 views 24264 19032 Profile fetched successfully for user: dan@email.com
+DEBUG 2025-01-18 10:17:42,181 views 24264 6228 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:17:42,181 views 24264 6228 Server IP Addresses:
+DEBUG 2025-01-18 10:17:42,182 views 24264 6228  - 172.18.48.1
+DEBUG 2025-01-18 10:17:42,182 views 24264 6228  - 172.20.10.10
+DEBUG 2025-01-18 10:17:42,182 views 24264 6228 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:17:42,182 views 24264 6228 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1MzQwLCJpYXQiOjE3MzcxOTE3NDAsImp0aSI6ImUxZDU2YzU3MTI2NzRkZGI5MGY4MmVkODk4ZGJiYTJkIiwidXNlcl9pZCI6NX0.wkVDvjw725EjLt7MLsar2GTvqJlXCyOJSj-nCjVgjT4', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:17:42,182 views 24264 6228 Fetching profile for user: dan@email.com
+DEBUG 2025-01-18 10:17:42,182 views 24264 6228 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:17:42,182 views 24264 6228 Server IP Addresses:
+DEBUG 2025-01-18 10:17:42,183 views 24264 6228  - 172.18.48.1
+DEBUG 2025-01-18 10:17:42,183 views 24264 6228  - 172.20.10.10
+DEBUG 2025-01-18 10:17:42,183 views 24264 6228 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:17:42,183 views 24264 6228 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1MzQwLCJpYXQiOjE3MzcxOTE3NDAsImp0aSI6ImUxZDU2YzU3MTI2NzRkZGI5MGY4MmVkODk4ZGJiYTJkIiwidXNlcl9pZCI6NX0.wkVDvjw725EjLt7MLsar2GTvqJlXCyOJSj-nCjVgjT4', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:17:42,183 views 24264 6228 Fetching profile for user: dan@email.com
+INFO 2025-01-18 10:17:42,183 views 24264 6228 Profile fetched successfully for user: dan@email.com
+DEBUG 2025-01-18 10:18:15,989 views 24264 16732 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:18:15,989 views 24264 16732 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:18:16,333 views 24264 24892 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:18:16,333 views 24264 24892 Server IP Addresses:
+DEBUG 2025-01-18 10:18:16,334 views 24264 24892  - 172.18.48.1
+DEBUG 2025-01-18 10:18:16,334 views 24264 24892  - 172.20.10.10
+DEBUG 2025-01-18 10:18:16,334 views 24264 24892 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:18:16,334 views 24264 24892 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1NDk2LCJpYXQiOjE3MzcxOTE4OTYsImp0aSI6ImJhZjAwOTBlM2E5OTRhMzc5M2MyZGRjMDdlMzkwMGEwIiwidXNlcl9pZCI6MX0.MXBdrxWqGMmO3bYONR0eSjuoHV0pueqlasNhsu411E0', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:18:16,335 views 24264 24892 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:18:16,335 views 24264 24892 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:18:16,335 views 24264 24892 Server IP Addresses:
+DEBUG 2025-01-18 10:18:16,336 views 24264 24892  - 172.18.48.1
+DEBUG 2025-01-18 10:18:16,336 views 24264 24892  - 172.20.10.10
+DEBUG 2025-01-18 10:18:16,336 views 24264 24892 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:18:16,336 views 24264 24892 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1NDk2LCJpYXQiOjE3MzcxOTE4OTYsImp0aSI6ImJhZjAwOTBlM2E5OTRhMzc5M2MyZGRjMDdlMzkwMGEwIiwidXNlcl9pZCI6MX0.MXBdrxWqGMmO3bYONR0eSjuoHV0pueqlasNhsu411E0', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:18:16,337 views 24264 24892 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:18:16,337 views 24264 24892 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:19:26,320 views 24264 21708 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:19:26,320 views 24264 21708 Server IP Addresses:
+DEBUG 2025-01-18 10:19:26,321 views 24264 21708  - 172.18.48.1
+DEBUG 2025-01-18 10:19:26,321 views 24264 21708  - 172.20.10.10
+DEBUG 2025-01-18 10:19:26,321 views 24264 21708 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:19:26,321 views 24264 21708 Request headers: {'Content-Length': '100', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:19:26,321 views 24264 21708 Received registration request with data: {'email': 'me@email.com', 'password': 'me1234', 'password2': 'me1234', 'first_name': 'yo', 'last_name': 'me'}
+DEBUG 2025-01-18 10:19:27,408 views 24264 21988 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:19:27,408 views 24264 21988 Server IP Addresses:
+DEBUG 2025-01-18 10:19:27,409 views 24264 21988  - 172.18.48.1
+DEBUG 2025-01-18 10:19:27,409 views 24264 21988  - 172.20.10.10
+DEBUG 2025-01-18 10:19:27,409 views 24264 21988 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:19:27,409 views 24264 21988 Request headers: {'Content-Length': '100', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:19:27,409 views 24264 21988 Received registration request with data: {'email': 'me@email.com', 'password': 'me1234', 'password2': 'me1234', 'first_name': 'yo', 'last_name': 'me'}
+DEBUG 2025-01-18 10:19:28,061 views 24264 17768 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:19:28,061 views 24264 17768 Server IP Addresses:
+DEBUG 2025-01-18 10:19:28,062 views 24264 17768  - 172.18.48.1
+DEBUG 2025-01-18 10:19:28,062 views 24264 17768  - 172.20.10.10
+DEBUG 2025-01-18 10:19:28,062 views 24264 17768 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:19:28,062 views 24264 17768 Request headers: {'Content-Length': '100', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:19:28,063 views 24264 17768 Received registration request with data: {'email': 'me@email.com', 'password': 'me1234', 'password2': 'me1234', 'first_name': 'yo', 'last_name': 'me'}
+DEBUG 2025-01-18 10:19:28,498 views 24264 20028 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:19:28,498 views 24264 20028 Server IP Addresses:
+DEBUG 2025-01-18 10:19:28,499 views 24264 20028  - 172.18.48.1
+DEBUG 2025-01-18 10:19:28,499 views 24264 20028  - 172.20.10.10
+DEBUG 2025-01-18 10:19:28,499 views 24264 20028 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:19:28,500 views 24264 20028 Request headers: {'Content-Length': '100', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:19:28,500 views 24264 20028 Received registration request with data: {'email': 'me@email.com', 'password': 'me1234', 'password2': 'me1234', 'first_name': 'yo', 'last_name': 'me'}
+DEBUG 2025-01-18 10:19:29,458 views 24264 23768 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:19:29,459 views 24264 23768 Server IP Addresses:
+DEBUG 2025-01-18 10:19:29,459 views 24264 23768  - 172.18.48.1
+DEBUG 2025-01-18 10:19:29,459 views 24264 23768  - 172.20.10.10
+DEBUG 2025-01-18 10:19:29,460 views 24264 23768 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:19:29,460 views 24264 23768 Request headers: {'Content-Length': '100', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:19:29,460 views 24264 23768 Received registration request with data: {'email': 'me@email.com', 'password': 'me1234', 'password2': 'me1234', 'first_name': 'yo', 'last_name': 'me'}
+DEBUG 2025-01-18 10:20:16,344 views 24264 21276 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:20:16,345 views 24264 21276 Server IP Addresses:
+DEBUG 2025-01-18 10:20:16,345 views 24264 21276  - 172.18.48.1
+DEBUG 2025-01-18 10:20:16,345 views 24264 21276  - 172.20.10.10
+DEBUG 2025-01-18 10:20:16,345 views 24264 21276 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:20:16,345 views 24264 21276 Request headers: {'Content-Length': '102', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:20:16,346 views 24264 21276 Received registration request with data: {'email': 'me@email.com', 'password': 'me12345', 'password2': 'me12345', 'first_name': 'yo', 'last_name': 'me'}
+DEBUG 2025-01-18 10:20:25,041 views 24264 3032 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:20:25,041 views 24264 3032 Server IP Addresses:
+DEBUG 2025-01-18 10:20:25,042 views 24264 3032  - 172.18.48.1
+DEBUG 2025-01-18 10:20:25,042 views 24264 3032  - 172.20.10.10
+DEBUG 2025-01-18 10:20:25,042 views 24264 3032 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:20:25,042 views 24264 3032 Request headers: {'Content-Length': '104', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:20:25,042 views 24264 3032 Received registration request with data: {'email': 'me@email.com', 'password': 'me123456', 'password2': 'me123456', 'first_name': 'yo', 'last_name': 'me'}
+INFO 2025-01-18 10:20:25,044 serializers 24264 3032 Validating user registration data
+INFO 2025-01-18 10:20:25,044 serializers 24264 3032 Creating new user
+INFO 2025-01-18 10:20:25,330 serializers 24264 3032 Successfully created user with email: me@email.com
+DEBUG 2025-01-18 10:20:25,381 views 24264 1720 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:20:25,382 views 24264 1720 Request data: {'email': 'me@email.com', 'password': 'me123456'}
+DEBUG 2025-01-18 10:20:25,721 views 24264 16408 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:20:25,721 views 24264 16408 Server IP Addresses:
+DEBUG 2025-01-18 10:20:25,722 views 24264 16408  - 172.18.48.1
+DEBUG 2025-01-18 10:20:25,722 views 24264 16408  - 172.20.10.10
+DEBUG 2025-01-18 10:20:25,722 views 24264 16408 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:20:25,722 views 24264 16408 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1NjI1LCJpYXQiOjE3MzcxOTIwMjUsImp0aSI6Ijk0MWU3YzM3NmY0NzQzNTM5YTgxZGM4NjYxZmQ2MTFiIiwidXNlcl9pZCI6Nn0.D92gbHWwvbujeP_xbhsQ7UOL0CKxt3JrMTDxK85-_dI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:20:25,722 views 24264 16408 Fetching profile for user: me@email.com
+DEBUG 2025-01-18 10:20:25,722 views 24264 16408 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:20:25,722 views 24264 16408 Server IP Addresses:
+DEBUG 2025-01-18 10:20:25,723 views 24264 16408  - 172.18.48.1
+DEBUG 2025-01-18 10:20:25,723 views 24264 16408  - 172.20.10.10
+DEBUG 2025-01-18 10:20:25,723 views 24264 16408 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:20:25,723 views 24264 16408 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1NjI1LCJpYXQiOjE3MzcxOTIwMjUsImp0aSI6Ijk0MWU3YzM3NmY0NzQzNTM5YTgxZGM4NjYxZmQ2MTFiIiwidXNlcl9pZCI6Nn0.D92gbHWwvbujeP_xbhsQ7UOL0CKxt3JrMTDxK85-_dI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:20:25,723 views 24264 16408 Fetching profile for user: me@email.com
+INFO 2025-01-18 10:20:25,723 views 24264 16408 Profile fetched successfully for user: me@email.com
+DEBUG 2025-01-18 10:22:19,182 views 24264 12864 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:22:19,182 views 24264 12864 Server IP Addresses:
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864  - 172.18.48.1
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864  - 172.20.10.10
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1NjI1LCJpYXQiOjE3MzcxOTIwMjUsImp0aSI6Ijk0MWU3YzM3NmY0NzQzNTM5YTgxZGM4NjYxZmQ2MTFiIiwidXNlcl9pZCI6Nn0.D92gbHWwvbujeP_xbhsQ7UOL0CKxt3JrMTDxK85-_dI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864 Fetching profile for user: me@email.com
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864 Server IP Addresses:
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864  - 172.18.48.1
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864  - 172.20.10.10
+DEBUG 2025-01-18 10:22:19,183 views 24264 12864 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:22:19,184 views 24264 12864 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk1NjI1LCJpYXQiOjE3MzcxOTIwMjUsImp0aSI6Ijk0MWU3YzM3NmY0NzQzNTM5YTgxZGM4NjYxZmQ2MTFiIiwidXNlcl9pZCI6Nn0.D92gbHWwvbujeP_xbhsQ7UOL0CKxt3JrMTDxK85-_dI', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:22:19,184 views 24264 12864 Fetching profile for user: me@email.com
+INFO 2025-01-18 10:22:19,184 views 24264 12864 Profile fetched successfully for user: me@email.com
+DEBUG 2025-01-18 10:29:23,008 views 24264 12488 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:29:23,010 views 24264 12488 Request data: {'email': 'idris@email.com', 'password': 'idriss1234'}
+DEBUG 2025-01-18 10:29:23,567 views 24264 22944 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:29:23,567 views 24264 22944 Server IP Addresses:
+DEBUG 2025-01-18 10:29:23,568 views 24264 22944  - 172.18.48.1
+DEBUG 2025-01-18 10:29:23,568 views 24264 22944  - 172.20.10.10
+DEBUG 2025-01-18 10:29:23,568 views 24264 22944 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:29:23,568 views 24264 22944 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk2MTYzLCJpYXQiOjE3MzcxOTI1NjMsImp0aSI6IjEyOTIwMDhhYmFhZjQ0ZmZiZDYwNTg5OTc1NWE4ZTRhIiwidXNlcl9pZCI6MX0.GSEEheUZQT6x5Qe1cy5rOoBstdB2DpClhCVDCgQ_i0k', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:29:23,568 views 24264 22944 Fetching profile for user: idris@email.com
+DEBUG 2025-01-18 10:29:23,569 views 24264 22944 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:29:23,569 views 24264 22944 Server IP Addresses:
+DEBUG 2025-01-18 10:29:23,569 views 24264 22944  - 172.18.48.1
+DEBUG 2025-01-18 10:29:23,569 views 24264 22944  - 172.20.10.10
+DEBUG 2025-01-18 10:29:23,570 views 24264 22944 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:29:23,570 views 24264 22944 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk2MTYzLCJpYXQiOjE3MzcxOTI1NjMsImp0aSI6IjEyOTIwMDhhYmFhZjQ0ZmZiZDYwNTg5OTc1NWE4ZTRhIiwidXNlcl9pZCI6MX0.GSEEheUZQT6x5Qe1cy5rOoBstdB2DpClhCVDCgQ_i0k', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:29:23,570 views 24264 22944 Fetching profile for user: idris@email.com
+INFO 2025-01-18 10:29:23,570 views 24264 22944 Profile fetched successfully for user: idris@email.com
+DEBUG 2025-01-18 10:30:24,186 views 24264 16584 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:30:24,186 views 24264 16584 Server IP Addresses:
+DEBUG 2025-01-18 10:30:24,187 views 24264 16584  - 172.18.48.1
+DEBUG 2025-01-18 10:30:24,187 views 24264 16584  - 172.20.10.10
+DEBUG 2025-01-18 10:30:24,187 views 24264 16584 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:30:24,187 views 24264 16584 Request headers: {'Content-Length': '108', 'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:30:24,187 views 24264 16584 Received registration request with data: {'email': 'mete@email.com', 'password': 'met12345', 'password2': 'met12345', 'first_name': 'dan', 'last_name': 'met'}
+INFO 2025-01-18 10:30:24,191 serializers 24264 16584 Validating user registration data
+INFO 2025-01-18 10:30:24,191 serializers 24264 16584 Creating new user
+INFO 2025-01-18 10:30:24,662 serializers 24264 16584 Successfully created user with email: mete@email.com
+DEBUG 2025-01-18 10:30:24,761 views 24264 24852 Received login POST request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:30:24,761 views 24264 24852 Request data: {'email': 'mete@email.com', 'password': 'met12345'}
+DEBUG 2025-01-18 10:30:25,262 views 24264 24032 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:30:25,262 views 24264 24032 Server IP Addresses:
+DEBUG 2025-01-18 10:30:25,263 views 24264 24032  - 172.18.48.1
+DEBUG 2025-01-18 10:30:25,263 views 24264 24032  - 172.20.10.10
+DEBUG 2025-01-18 10:30:25,263 views 24264 24032 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:30:25,263 views 24264 24032 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk2MjI1LCJpYXQiOjE3MzcxOTI2MjUsImp0aSI6IjJiYmZiZjEyMTBjNzRkZWNhNzE4MDYwMzY1MDg5ZDQ4IiwidXNlcl9pZCI6N30.8v3UaBM1yX0O9oBdRr6L1GmCcoDoOUZXdCMMJv0DQnM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:30:25,263 views 24264 24032 Fetching profile for user: mete@email.com
+DEBUG 2025-01-18 10:30:25,263 views 24264 24032 Server Hostname: Idriss-NT
+DEBUG 2025-01-18 10:30:25,264 views 24264 24032 Server IP Addresses:
+DEBUG 2025-01-18 10:30:25,264 views 24264 24032  - 172.18.48.1
+DEBUG 2025-01-18 10:30:25,264 views 24264 24032  - 172.20.10.10
+DEBUG 2025-01-18 10:30:25,264 views 24264 24032 Received request from IP: 127.0.0.1
+DEBUG 2025-01-18 10:30:25,265 views 24264 24032 Request headers: {'Content-Length': '', 'Content-Type': 'text/plain', 'User-Agent': 'Dart/3.3 (dart:io)', 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3MTk2MjI1LCJpYXQiOjE3MzcxOTI2MjUsImp0aSI6IjJiYmZiZjEyMTBjNzRkZWNhNzE4MDYwMzY1MDg5ZDQ4IiwidXNlcl9pZCI6N30.8v3UaBM1yX0O9oBdRr6L1GmCcoDoOUZXdCMMJv0DQnM', 'Host': '10.0.2.2:8000'}
+DEBUG 2025-01-18 10:30:25,265 views 24264 24032 Fetching profile for user: mete@email.com
+INFO 2025-01-18 10:30:25,265 views 24264 24032 Profile fetched successfully for user: mete@email.com
