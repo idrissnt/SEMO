@@ -13,23 +13,26 @@ dependencies:
   flutter_bloc: ^8.1.3
   equatable: ^2.0.5
   http: ^1.1.0
-  shared_preferences: ^2.2.2
-  google_fonts: ^6.1.0
-  smooth_page_indicator: ^1.1.0
-  logging: ^1.2.0
   flutter_secure_storage: ^9.0.0
-  jwt_decoder: ^2.0.1
+  shared_preferences: ^2.2.1
+  google_fonts: ^6.1.0
+  logging: ^1.2.0
+  get_it: ^7.6.4
+  json_annotation: ^4.8.1
+  intl: ^0.18.1
+  cached_network_image: ^3.3.0
+  shimmer: ^3.0.0
+  url_launcher: ^6.2.1
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
 
 flutter: 
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/images/task_posting.jpg
-    - assets/images/make_groceries_shopping.jpg
-    - assets/images/secure_payment.jpg
-    - assets/images/earn_money.png
+    # - assets/icons/

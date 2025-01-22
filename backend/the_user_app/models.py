@@ -38,3 +38,33 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class LogoutEvent(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    device_info = models.CharField(max_length=255)
+    ip_address = models.GenericIPAddressField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['user', '-created_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.user.email} - {self.created_at}"
+
+class BlacklistedToken(models.Model):
+    token = models.CharField(max_length=500)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    blacklisted_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['token']),
+            models.Index(fields=['user', '-blacklisted_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.user.email} - {self.blacklisted_at}"
