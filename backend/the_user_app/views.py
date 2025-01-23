@@ -1,28 +1,21 @@
-# Django and DRF Imports
-from django.contrib.auth import authenticate, get_user_model
-from django.core.exceptions import ValidationError
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from django.utils import timezone
-from .models import LogoutEvent
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+from django.contrib.auth import get_user_model
 from .serializers import (
-    UserSerializer,
+    UserSerializer, 
     UserProfileSerializer,
     CustomTokenObtainPairSerializer
 )
-
-# Python standard library
+from .services import AuthService, UserService
+from .models import LogoutEvent
+from django.utils import timezone
 import logging
 import socket
 
-# Local imports
-
-# Configure logger
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
@@ -36,60 +29,43 @@ def log_network_details(request):
     logger.debug(f"Request headers: {request.headers}")
 
 # Create your views here.
-class RegisterView(generics.CreateAPIView):
+@extend_schema(tags=['Authentication'])
+class RegisterView(APIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
-    def post(self, request, *args, **kwargs):
-        log_network_details(request)
-        logger.debug(f"Received registration request with data: {request.data}")
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
+    @extend_schema(
+        request=UserSerializer,
+        responses={201: UserSerializer, 400: OpenApiResponse(description='Bad Request')},
+        description='Register a new user'
+    )
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
             user = serializer.save()
-            
-            # Generate tokens for the new user
-            refresh = RefreshToken.for_user(user)
-            
-            return Response({
-                'user': serializer.data,
-                'refresh': str(refresh),
-                'access': str(refresh.access_token)
-            }, status=status.HTTP_201_CREATED)
-        except ValidationError as e:
-            logger.error(f"Registration validation error: {e}")
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(tags=['Authentication'])
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        request={"application/json": {"example": {"email": "string", "password": "string"}}},
+        responses={200: {"example": {"access": "string", "refresh": "string"}}, 401: OpenApiResponse(description='Unauthorized')},
+        description='Login user and obtain JWT token'
+    )
     def post(self, request):
-        logger.debug(f"Received login POST request from IP: {request.META.get('REMOTE_ADDR')}")
-        logger.debug(f"Request data: {request.data}")
-        
         email = request.data.get('email')
         password = request.data.get('password')
         
-        if not email or not password:
+        result, error = AuthService.login_user(email, password)
+        if result:
             return Response({
-                'error': 'Both email and password are required'
-            }, status=status.HTTP_400_BAD_REQUEST)
-        
-        user = authenticate(request, username=email, password=password)
-        
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'user_id': user.id,
-                'email': user.email
-            }, status=status.HTTP_200_OK)
-        else:
-            logger.warning(f"Failed login attempt for email: {email}")
-            return Response({
-                'error': 'Invalid credentials'
-            }, status=status.HTTP_401_UNAUTHORIZED)
+                'access': result['access'],
+                'refresh': result['refresh']
+            })
+        return Response({'error': error}, status=status.HTTP_401_UNAUTHORIZED)
 
     def get(self, request):
         # Helpful debug method for testing connectivity
@@ -99,75 +75,55 @@ class LoginView(APIView):
             'allowed_methods': ['POST']
         }, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-class UserProfileView(generics.RetrieveUpdateAPIView):
+@extend_schema(tags=['User'])
+class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserProfileSerializer
 
-    def get_object(self):
-        log_network_details(self.request)
-        logger.debug(f"Fetching profile for user: {self.request.user.email}")
-        return self.request.user
+    @extend_schema(
+        responses={200: UserProfileSerializer},
+        description='Get user profile'
+    )
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data)
 
-    def get(self, request, *args, **kwargs):
-        log_network_details(request)
-        logger.debug(f"Fetching profile for user: {request.user.email}")
-        try:
-            instance = self.get_object()
-            serializer = self.get_serializer(instance)
-            logger.info(f"Profile fetched successfully for user: {request.user.email}")
-            return Response(serializer.data)
-        except Exception as e:
-            logger.exception("Error fetching user profile")
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    @extend_schema(
+        request=UserProfileSerializer,
+        responses={200: UserProfileSerializer, 400: OpenApiResponse(description='Bad Request')},
+        description='Update user profile'
+    )
+    def put(self, request):
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(UserProfileSerializer(user).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, *args, **kwargs):
-        log_network_details(request)
-        logger.debug(f"Updating profile for user: {request.user.email}")
-        try:
-            instance = self.get_object()
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                logger.info(f"Profile updated successfully for user: {request.user.email}")
-                return Response(serializer.data)
-            logger.error(f"Profile update validation failed: {serializer.errors}")
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            logger.exception("Error updating user profile")
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-
+@extend_schema(tags=['Authentication'])
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request={"application/json": {"example": {"refresh_token": "string"}}},
+        responses={200: OpenApiResponse(description='Successfully logged out'), 
+                  400: OpenApiResponse(description='Bad Request')},
+        description='Logout user and blacklist refresh token'
+    )
     def post(self, request):
-        try:
-            refresh_token = request.data.get('refresh_token')
-            if refresh_token:
-                # Blacklist the refresh token
-                token = RefreshToken(refresh_token)
-                token.blacklist()
-            
+        refresh_token = request.data.get('refresh_token')
+        success, error = AuthService.logout_user(request.user, refresh_token)
+        
+        if success:
             # Log the logout event
             LogoutEvent.objects.create(
                 user=request.user,
                 device_info=request.META.get('HTTP_USER_AGENT', ''),
-                ip_address=request.META.get('REMOTE_ADDR', '')
+                ip_address=request.META.get('REMOTE_ADDR', '127.0.0.1')
             )
+            return Response({'message': 'Successfully logged out'})
+        return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({
-                "detail": "Successfully logged out",
-                "logout_time": timezone.now()
-            }, status=status.HTTP_200_OK)
-
-        except TokenError as e:
-            return Response({
-                "detail": str(e)
-            }, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            logger.error(f"Logout error: {e}")
-            return Response({
-                "detail": "Error processing logout"
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+@extend_schema(tags=['Authentication'])
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
