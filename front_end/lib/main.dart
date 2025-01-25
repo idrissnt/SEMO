@@ -1,60 +1,84 @@
 // ignore_for_file: avoid_print
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'core/config/app_config.dart';
-import 'core/config/theme.dart';
 import 'core/config/routes.dart';
-import 'core/di/service_locator.dart';
+import 'core/config/theme.dart';
+import 'data/repositories/auth_repository_impl.dart';
+import 'data/repositories/store_repository_impl.dart';
+import 'data/repositories/recipe_repository_impl.dart';
+import 'data/repositories/product_repository_impl.dart';
+import 'domain/repositories/auth_repository.dart';
+import 'domain/usecases/get_home_data_usecase.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_event.dart';
 import 'presentation/blocs/auth/auth_state.dart';
+import 'presentation/blocs/home/home_bloc.dart';
 import 'presentation/screens/auth/login_screen.dart';
-import 'presentation/screens/home/home_screen.dart';
+// import 'presentation/screens/home/home_screen.dart';
 import 'presentation/screens/onboarding/onboarding_screen.dart';
+import 'presentation/screens/main/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize service locator
-  await setupServiceLocator();
-
-  // Initialize shared preferences
   final prefs = await SharedPreferences.getInstance();
   final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
 
-  // Initialize logging
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((record) {
-    debugPrint(
-      '${record.level.name}: ${record.time}: '
-      '${record.loggerName}: '
-      '${record.message}',
-    );
-  });
+  final client = http.Client();
+  const secureStorage = FlutterSecureStorage();
 
-  if (!kDebugMode) {
-    debugPrint = (String? message, {int? wrapWidth}) {};
-  }
+  // Initialize repositories
+  final authRepository = AuthRepositoryImpl(
+    client: client,
+    storage: secureStorage,
+  );
+  final storeRepository = StoreRepositoryImpl(client: client);
+  final recipeRepository = RecipeRepositoryImpl(client: client);
+  final productRepository = ProductRepositoryImpl(client: client);
+
+  // Initialize use case
+  final getHomeDataUseCase = GetHomeDataUseCase(
+    storeRepository: storeRepository,
+    recipeRepository: recipeRepository,
+    productRepository: productRepository,
+  );
 
   runApp(
-    MultiBlocProvider(
+    MultiRepositoryProvider(
       providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) {
-            print('Creating AuthBloc and triggering auth check');
-            final bloc = getIt<AuthBloc>();
-            // Explicitly trigger auth check
-            bloc.add(AuthCheckRequested());
-            return bloc;
-          },
-        ),
+        RepositoryProvider<http.Client>.value(value: client),
+        RepositoryProvider<AuthRepository>.value(value: authRepository),
+        RepositoryProvider<StoreRepositoryImpl>.value(value: storeRepository),
+        RepositoryProvider<RecipeRepositoryImpl>.value(value: recipeRepository),
+        RepositoryProvider<ProductRepositoryImpl>.value(
+            value: productRepository),
+        RepositoryProvider<GetHomeDataUseCase>.value(value: getHomeDataUseCase),
       ],
-      child: MyApp(hasSeenOnboarding: hasSeenOnboarding),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (context) {
+              final bloc = AuthBloc(
+                authRepository: context.read<AuthRepository>(),
+              );
+              if (hasSeenOnboarding) {
+                bloc.add(AuthCheckRequested());
+              }
+              return bloc;
+            },
+          ),
+          BlocProvider<HomeBloc>(
+            create: (context) => HomeBloc(
+              getHomeDataUseCase: context.read<GetHomeDataUseCase>(),
+            ),
+          ),
+        ],
+        child: MyApp(hasSeenOnboarding: hasSeenOnboarding),
+      ),
     ),
   );
 }
@@ -70,36 +94,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: AppConfig.appName,
+      title: 'SEMO',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
+      theme: ThemeData(
+        primaryColor: AppTheme.primaryColor,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: AppTheme.primaryColor),
+          titleTextStyle: TextStyle(
+            color: AppTheme.primaryColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      initialRoute: hasSeenOnboarding ? AppRoutes.login : AppRoutes.onboarding,
+      onGenerateRoute: AppRoutes.generateRoute,
       home: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          print('Current AuthState: $state');
-
-          // Show splash screen while checking authentication
-          if (state is AuthInitial || state is AuthLoading) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+          if (!hasSeenOnboarding) {
+            return const OnboardingScreen();
           }
 
-          // If authenticated, show home screen
           if (state is AuthAuthenticated) {
-            print('User is authenticated, showing home screen');
-            return const HomeScreen();
+            return const MainScreen();
           }
 
-          // Otherwise show login or onboarding
-          print('User is not authenticated, showing login/onboarding');
-          return hasSeenOnboarding
-              ? const LoginScreen()
-              : const OnboardingScreen();
+          return const LoginScreen();
         },
       ),
-      routes: AppRoutes.routes,
     );
   }
 }

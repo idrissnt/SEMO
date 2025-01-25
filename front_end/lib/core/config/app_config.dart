@@ -1,7 +1,12 @@
 class AppConfig {
   static const String apiBaseUrl =
+      // 'http://10.0.2.2:8000/api/v1'; // For physical device
       'http://172.20.10.10:8000/api/v1'; // For physical device
   // static const String apiBaseUrl = 'http://localhost:8000/api';  // For iOS Simulator
+  
+  // Base URL for media files (images)
+  static const String mediaBaseUrl = 'http://172.20.10.10:8000';
+  
   static const int apiTimeout = 30000; // milliseconds
 
   // API Endpoints
@@ -9,7 +14,7 @@ class AppConfig {
   static const String registerEndpoint = '/auth/register/';
   static const String profileEndpoint = '/auth/profile/';
   static const String refreshTokenEndpoint = '/auth/refresh/';
-  static const String logoutEndpoint = '/auth/logout/';  // Added logout endpoint
+  static const String logoutEndpoint = '/auth/logout/'; // Added logout endpoint
 
   // App settings
   static const String appName = 'SEMO';

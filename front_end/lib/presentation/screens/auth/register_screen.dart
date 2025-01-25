@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/googleFonts.dart';
 import '../../../core/config/theme.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
@@ -59,8 +59,8 @@ class _RegisterScreenState extends State<RegisterScreen>
       listener: (context, state) {
         print('Registration State: $state');
         if (state is AuthAuthenticated) {
-          print('Navigating to home screen');
-          Navigator.pushReplacementNamed(context, '/home');
+          print('Navigating to main screen');
+          Navigator.pushReplacementNamed(context, '/main');
         }
       },
       child: Scaffold(
@@ -307,6 +307,27 @@ class _RegisterScreenState extends State<RegisterScreen>
                                           : () {
                                               if (_formKey.currentState!
                                                   .validate()) {
+                                                // Check if passwords match
+                                                if (_passwordController.text !=
+                                                    _confirmPasswordController
+                                                        .text) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passwords do not match',
+                                                        style: AppTheme.bodyMedium
+                                                            .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                    ),
+                                                  );
+                                                  return;
+                                                }
+
                                                 context.read<AuthBloc>().add(
                                                       AuthRegisterRequested(
                                                         firstName:
@@ -317,9 +338,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                                             _lastNameController
                                                                 .text
                                                                 .trim(),
-                                                        email: _emailController
-                                                            .text
-                                                            .trim(),
+                                                        email:
+                                                            _emailController.text
+                                                                .trim(),
                                                         password:
                                                             _passwordController
                                                                 .text,
@@ -330,30 +351,27 @@ class _RegisterScreenState extends State<RegisterScreen>
                                                     );
                                               }
                                             },
-                                      child: Padding(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: AppTheme.primaryColor,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 16),
-                                        child: state is AuthLoading
-                                            ? const SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                          Color>(Colors.white),
-                                                ),
-                                              )
-                                            : Text(
-                                                'Register',
-                                                style:
-                                                    AppTheme.bodyLarge.copyWith(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
+                                      child: state is AuthLoading
+                                          ? const CircularProgressIndicator(
+                                              color: AppTheme.primaryColor,
+                                            )
+                                          : Text(
+                                              'Register',
+                                              style: AppTheme.bodyLarge.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: AppTheme.primaryColor,
+                                              ),
+                                            ),
                                     ),
                                   ),
                                 ],

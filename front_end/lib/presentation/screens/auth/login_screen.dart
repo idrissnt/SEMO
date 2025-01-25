@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:google_fonts/google_fonts.dart';
@@ -52,8 +54,8 @@ class _LoginScreenState extends State<LoginScreen>
       listener: (context, state) {
         print('Login State: $state');
         if (state is AuthAuthenticated) {
-          print('Navigating to home screen');
-          Navigator.pushReplacementNamed(context, '/home');
+          print('Navigating to main screen');
+          Navigator.pushReplacementNamed(context, '/main');
         }
       },
       child: Scaffold(
@@ -235,19 +237,21 @@ class _LoginScreenState extends State<LoginScreen>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Don't have an account? ",
+                              'Don\'t have an account? ',
                               style: AppTheme.bodyMedium.copyWith(
-                                color: Colors.white70,
+                                color: Colors.white.withOpacity(0.8),
                               ),
                             ),
-                            TextButton(
-                              onPressed: () => Navigator.pushReplacementNamed(
-                                  context, '/register'),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, '/register');
+                              },
                               child: Text(
                                 'Register',
                                 style: AppTheme.bodyMedium.copyWith(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
                                 ),
                               ),
                             ),

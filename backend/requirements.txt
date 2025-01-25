@@ -5,6 +5,7 @@ django-cors-headers==4.3.1
 python-dotenv==1.0.0
 drf-spectacular==0.27.0
 gunicorn==21.2.0
+pillow==11.1.0
 
 # Optional: Required only for PostgreSQL database
 # psycopg2-binary==2.9.9
