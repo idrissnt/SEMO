@@ -2,3 +2,10 @@
 *.log
 *.sqlite3
 /front_end/lib/README_.md
+/back_end/media/
+/back_end/static/
+# Ignore all migration files
+**/migrations/*
+!**/migrations/__init__.py
+*.pyc
+*.png
