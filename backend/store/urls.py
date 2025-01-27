@@ -1,10 +1,12 @@
-from django.urls import path
-from .views import StoreListView, PopularStoresView, NearbyStoresView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import StoreViewSet
 
 app_name = 'store'
 
+router = DefaultRouter()
+router.register('', StoreViewSet, basename='store')
+
 urlpatterns = [
-    path('', StoreListView.as_view(), name='store-list'),
-    path('popular/', PopularStoresView.as_view(), name='popular-stores'),
-    path('nearby/', NearbyStoresView.as_view(), name='nearby-stores'),
+    path('', include(router.urls)),
 ]
