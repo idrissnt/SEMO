@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Store
+from product.serializers import ProductCategorySerializer
+from product.serializers import ProductListSerializer
 
 class StoreListSerializer(serializers.ModelSerializer):
     """Serializer for listing stores with essential information"""
@@ -69,12 +71,10 @@ class StoreDetailSerializer(serializers.ModelSerializer):
         return obj.products.count()
     
     def get_main_categories(self, obj):
-        from product.serializers import ProductCategorySerializer
         categories = obj.categories.filter(parent_category__isnull=True)
         return ProductCategorySerializer(categories, many=True).data
     
     def get_popular_products(self, obj):
-        from product.serializers import ProductListSerializer
         products = obj.get_popular_products(limit=10)
         return ProductListSerializer(products, many=True, context=self.context).data
     

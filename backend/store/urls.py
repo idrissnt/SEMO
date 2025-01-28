@@ -5,7 +5,7 @@ from .views import StoreViewSet
 app_name = 'store'
 
 router = DefaultRouter()
-router.register('', StoreViewSet, basename='store')
+router.register(r'', StoreViewSet, basename='store')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -4,14 +4,33 @@ from store.models import Store
 import uuid
 from django.utils import timezone
 
+class StoreCategoryAssociation(models.Model):
+    """
+    Through model for store-category relationships
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='category_associations')
+    category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE, related_name='store_associations')
+    is_primary = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('store', 'category')
+        verbose_name = 'Store Category Association'
+        verbose_name_plural = 'Store Category Associations'
+        
+    def __str__(self):
+        return f"{self.store.name} - {self.category.name}"
+
 class ProductCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    store = models.ForeignKey(
+    stores = models.ManyToManyField(
         Store, 
-        on_delete=models.CASCADE,
-        related_name='categories' # enable accessing a store's categories via store.categories
+        through='StoreCategoryAssociation',
+        related_name='categories',
+        blank=True
     )
     parent_category = models.ForeignKey(
         'self', 
@@ -25,17 +44,27 @@ class ProductCategory(models.Model):
     
     class Meta:
         verbose_name_plural = 'Product Categories'
-        unique_together = ('name', 'store', 'parent_category')
         ordering = ['name']
-
+    
     def __str__(self):
         if self.parent_category:
             return f"{self.parent_category.name} → {self.name}"
         return self.name
 
     def clean(self):
-        if self.parent_category and self.parent_category.store != self.store:
-            raise ValidationError("Parent category must belong to the same store")
+        if self.parent_category:
+            parent_stores = set(self.parent_category.stores.values_list('id', flat=True))
+            if self.pk:  # If editing existing category
+                current_stores = set(self.stores.values_list('id', flat=True))
+            else:  # If creating new category
+                current_stores = set()  # Will be validated in form
+            
+            print("parent_stores", parent_stores)
+            print("current_stores", current_stores)
+            if current_stores and not parent_stores & current_stores:
+                raise ValidationError(
+                    "Subcategory must share at least one store with its parent category"
+                )
 
     def get_full_path(self):
         """Returns the full category path (e.g., 'Fruits → Citrus → Oranges')"""
@@ -45,13 +74,20 @@ class ProductCategory(models.Model):
             current = current.parent_category
             path.append(current.name)
         return " → ".join(reversed(path))
-
-    def get_all_subcategories(self, include_self=True):
-        """Returns all subcategories recursively"""
+    
+    def get_all_subcategories(self, include_self=False):
+        """Recursively get all subcategories"""
         categories = [self] if include_self else []
         for subcategory in self.subcategories.all():
-            categories.extend(subcategory.get_all_subcategories())
+            categories.extend(subcategory.get_all_subcategories(include_self=True))
         return categories
+
+    def get_all_stores(self, include_self=True):
+        """Returns all stores recursively"""
+        stores = list(self.stores.all()) if include_self else []
+        for subcategory in self.subcategories.all():
+            stores.extend(subcategory.get_all_stores())
+        return stores
 
     @property
     def total_products(self):
@@ -144,9 +180,6 @@ class Product(models.Model):
         min_price, _ = self.get_price_range()
         return min_price
 
-# this helps to add additional Metadata
-# instead of just creating class Product(models.Model):
-#                                stores = models.ManyToManyField(Store)
 class StoreProduct(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
