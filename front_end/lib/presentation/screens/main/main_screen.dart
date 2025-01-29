@@ -1,18 +1,11 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../blocs/home/home_bloc.dart';
-import '../../blocs/home/home_event.dart';
-import '../../blocs/home/home_state.dart';
-import '../../widgets/store_card.dart';
-import '../../widgets/product_card.dart';
-import '../../widgets/address_bar.dart';
-import '../../widgets/custom_search_bar.dart';
 import '../mission/mission_screen.dart';
 import '../earn/earn_screen.dart';
 import '../message/message_screen.dart';
 import '../semo_ai/semo_ai_screen.dart';
+import '../../widgets/app_bars/custom_home_app_bar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -23,80 +16,52 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+
   final List<Widget> _screens = [
-    _HomeTab(),
+    const _HomeTab(),
     const MissionScreen(),
-    const SemoAIScreen(),
     const EarnScreen(),
     const MessageScreen(),
+    const SemoAIScreen(),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<HomeBloc>().add(HomeLoadRequested());
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex == 0 ? null : AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          _selectedIndex == 1 ? 'Missions' :
-          _selectedIndex == 2 ? 'SEMO AI' :
-          _selectedIndex == 3 ? 'Earn' : 'Messages',
-          style: const TextStyle(color: Colors.black),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.shopping_cart, color: Colors.black),
-            onPressed: () {
-              // TODO: Navigate to cart when implemented
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cart coming soon!')),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.person, color: Colors.black),
-            onPressed: () {
-              Navigator.pushNamed(context, '/profile');
-            },
-          ),
-        ],
-      ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
           });
         },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).primaryColor,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Missions',
+            icon: Icon(Icons.assignment_outlined),
+            activeIcon: Icon(Icons.assignment),
+            label: 'Mission',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.smart_toy),
-            label: 'SEMO AI',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on),
+            icon: Icon(Icons.monetization_on_outlined),
+            activeIcon: Icon(Icons.monetization_on),
             label: 'Earn',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Messages',
+            icon: Icon(Icons.message_outlined),
+            activeIcon: Icon(Icons.message),
+            label: 'Message',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.psychology_outlined),
+            activeIcon: Icon(Icons.psychology),
+            label: 'SEMO AI',
           ),
         ],
       ),
@@ -105,166 +70,140 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class _HomeTab extends StatefulWidget {
+  const _HomeTab({Key? key}) : super(key: key);
+
   @override
-  State<_HomeTab> createState() => _HomeTabState();
+  _HomeTabState createState() => _HomeTabState();
 }
 
 class _HomeTabState extends State<_HomeTab> {
-  bool _isScrolled = false;
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.offset > 50 && !_isScrolled) {
-      setState(() => _isScrolled = true);
-    } else if (_scrollController.offset <= 50 && _isScrolled) {
-      setState(() => _isScrolled = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (context, state) {
-        if (state is HomeLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is HomeLoaded) {
-          return NotificationListener<ScrollNotification>(
-            onNotification: (scrollNotification) {
-              // You can add logic here if needed in the future
-              return false;
-            },
-            child: RefreshIndicator(
-              onRefresh: () async {
-                context.read<HomeBloc>().add(HomeLoadRequested());
-              },
-              child: CustomScrollView(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverAppBar(
-                    pinned: true,
-                    floating: false,
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                    title: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      child: _isScrolled
-                          ? const CustomSearchBar(key: ValueKey('search'))
-                          : const AddressBar(key: ValueKey('address')),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          return false;
+        },
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverAppBar(
+                  expandedHeight: kToolbarHeight * 2.45,
+                  collapsedHeight: kToolbarHeight,
+                  toolbarHeight: kToolbarHeight,
+                  pinned: true,
+                  primary: true,
+                  stretch: true,
+                  stretchTriggerOffset: 30.0,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Container(color: Colors.white),
+                    collapseMode: CollapseMode.pin,
+                    expandedTitleScale: 1.0,
+                    titlePadding: EdgeInsets.zero,
+                    title: LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        final top = constraints.biggest.height;
+                        final scrolledRatio =
+                            ((top - kToolbarHeight) / (kToolbarHeight * 1.45))
+                                .clamp(0.0, 1.0);
+                        final isCollapsed = scrolledRatio < 0.5;
+                        return CustomHomeAppBar(
+                          isCollapsed: isCollapsed,
+                          scrolledRatio: scrolledRatio,
+                        );
+                      },
                     ),
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.shopping_cart, color: Colors.black),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Cart coming soon!')),
-                          );
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.person, color: Colors.black),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/profile');
-                        },
-                      ),
-                    ],
-                    automaticallyImplyLeading: false,
                   ),
-                  SliverToBoxAdapter(
-                    child: !_isScrolled ? const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: CustomSearchBar(),
-                    ) : const SizedBox.shrink(),
+                ),
+              ),
+            ];
+          },
+          body: Builder(
+            builder: (context) {
+              return CustomScrollView(
+                slivers: [
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16.0),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate([
-                        // Nearby Stores
-                        Text(
-                          'Nearby Stores',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          height: 200,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: state.nearbyStores
-                                  .map((store) => StoreCard(
-                                        store: store,
-                                        isNearby: true,
-                                      ))
-                                  .toList(),
-                            ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Container(
+                          margin: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Popular Stores
-                        Text(
-                          'Popular Stores',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          height: 200,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: state.popularStores
-                                  .map((store) => StoreCard(
-                                        store: store,
-                                        isNearby: false,
-                                      ))
-                                  .toList(),
-                            ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[100],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${index + 1}',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue[900],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Test Item ${index + 1}',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      'This is a test description for item ${index + 1} to demonstrate scrolling behavior',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Seasonal Products
-                        Text(
-                          'Seasonal Products',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          height: 220,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: state.seasonalProducts
-                                  .map((product) => ProductCard(product: product))
-                                  .toList(),
-                            ),
-                          ),
-                        ),
-                      ]),
+                        );
+                      },
+                      childCount: 20,
                     ),
                   ),
                 ],
-              ),
-            ),
-          );
-        } else if (state is HomeError) {
-          return Center(child: Text(state.message));
-        }
-        return const Center(child: Text('Something went wrong'));
-      },
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
