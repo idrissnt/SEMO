@@ -3,55 +3,39 @@ import 'package:http/http.dart' as http;
 
 import '../../core/config/app_config.dart';
 import '../../core/error/exceptions.dart';
+import '../../domain/entities/category.dart';
 import '../../domain/entities/product.dart';
-import '../../domain/repositories/product_repository.dart';
+import '../../domain/repositories/category_repository.dart';
+import '../models/category_model.dart';
 import '../models/product_model.dart';
 
-class ProductRepositoryImpl implements ProductRepository {
+class CategoryRepositoryImpl implements CategoryRepository {
   final http.Client client;
 
-  ProductRepositoryImpl({
+  CategoryRepositoryImpl({
     required this.client,
   });
 
   @override
-  Future<List<Product>> getProducts({
+  Future<List<Category>> getCategories({
     String? storeId,
-    String? categoryId,
-    String? parentCategoryId,
-    String? search,
-    double? minPrice,
-    double? maxPrice,
-    bool? isAvailable,
-    bool? isSeasonal,
+    bool? rootOnly,
   }) async {
     try {
       final queryParams = <String, String>{};
       if (storeId != null) queryParams['store_id'] = storeId;
-      if (categoryId != null) queryParams['category_id'] = categoryId;
-      if (parentCategoryId != null) {
-        queryParams['parent_category_id'] = parentCategoryId;
-      }
-      if (search != null) queryParams['search'] = search;
-      if (minPrice != null) queryParams['min_price'] = minPrice.toString();
-      if (maxPrice != null) queryParams['max_price'] = maxPrice.toString();
-      if (isAvailable != null) {
-        queryParams['is_available'] = isAvailable.toString();
-      }
-      if (isSeasonal != null) {
-        queryParams['is_seasonal'] = isSeasonal.toString();
-      }
+      if (rootOnly != null) queryParams['root_only'] = rootOnly.toString();
 
-      final uri = Uri.parse('${AppConfig.apiBaseUrl}/products/')
+      final uri = Uri.parse('${AppConfig.apiBaseUrl}/products/categories/')
           .replace(queryParameters: queryParams);
       final response = await client.get(uri);
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = json.decode(response.body);
-        return jsonList.map((json) => ProductModel.fromJson(json)).toList();
+        return jsonList.map((json) => CategoryModel.fromJson(json)).toList();
       } else {
         throw ServerException(
-          message: 'Failed to load products',
+          message: 'Failed to load categories',
           statusCode: response.statusCode,
         );
       }
@@ -63,17 +47,17 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Product> getProductById(String id) async {
+  Future<Category> getCategoryById(String id) async {
     try {
       final response = await client.get(
-        Uri.parse('${AppConfig.apiBaseUrl}/products/$id/'),
+        Uri.parse('${AppConfig.apiBaseUrl}/products/categories/$id/'),
       );
 
       if (response.statusCode == 200) {
-        return ProductModel.fromJson(json.decode(response.body));
+        return CategoryModel.fromJson(json.decode(response.body));
       } else {
         throw ServerException(
-          message: 'Failed to load product details',
+          message: 'Failed to load category details',
           statusCode: response.statusCode,
         );
       }
@@ -85,33 +69,10 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<List<Product>> getProductAvailability(String productId) async {
+  Future<List<Product>> getCategoryProducts(String categoryId) async {
     try {
       final response = await client.get(
-        Uri.parse('${AppConfig.apiBaseUrl}/products/$productId/availability/'),
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonList = json.decode(response.body);
-        return jsonList.map((json) => ProductModel.fromJson(json)).toList();
-      } else {
-        throw ServerException(
-          message: 'Failed to load product availability',
-          statusCode: response.statusCode,
-        );
-      }
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<List<Product>> getSeasonalProducts() async {
-    try {
-      final response = await client.get(
-        Uri.parse('${AppConfig.apiBaseUrl}/products/seasonal/'),
+        Uri.parse('${AppConfig.apiBaseUrl}/products/categories/$categoryId/products/'),
       );
 
       if (response.statusCode == 200) {
@@ -119,7 +80,30 @@ class ProductRepositoryImpl implements ProductRepository {
         return jsonList.map((json) => ProductModel.fromJson(json)).toList();
       } else {
         throw ServerException(
-          message: 'Failed to load seasonal products',
+          message: 'Failed to load category products',
+          statusCode: response.statusCode,
+        );
+      }
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<List<Category>> getCategorySubcategories(String categoryId) async {
+    try {
+      final response = await client.get(
+        Uri.parse('${AppConfig.apiBaseUrl}/products/categories/$categoryId/subcategories/'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonList = json.decode(response.body);
+        return jsonList.map((json) => CategoryModel.fromJson(json)).toList();
+      } else {
+        throw ServerException(
+          message: 'Failed to load category subcategories',
           statusCode: response.statusCode,
         );
       }

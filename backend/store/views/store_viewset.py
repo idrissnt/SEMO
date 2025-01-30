@@ -18,7 +18,7 @@ class StoreViewSet(viewsets.ModelViewSet, ProductAvailabilityMixin, DeliveryMixi
         total_products=Count('products', distinct=True)
     )
     serializer_class = StoreListSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self) -> StoreListSerializer:
         """Dynamic serializer selection with type hints"""

@@ -1,17 +1,31 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers, sized_box_for_whitespace, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../data/models/product_model.dart';
+import '../../../data/models/store_model.dart';
+import '../../blocs/home/home_event.dart';
+import '../../blocs/product/product_event.dart';
+import '../../blocs/product/product_state.dart';
+import '../../blocs/store/store_event.dart';
 import '../mission/mission_screen.dart';
 import '../earn/earn_screen.dart';
 import '../message/message_screen.dart';
 import '../semo_ai/semo_ai_screen.dart';
+import '../../blocs/home/home_bloc.dart';
+import '../../blocs/home/home_state.dart';
+import '../../blocs/store/store_bloc.dart';
+import '../../blocs/product/product_bloc.dart';
 import '../../widgets/app_bars/custom_home_app_bar.dart';
+import './widgets/store_cards.dart';
+import 'widgets/product_card.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  // ignore: library_private_types_in_public_api
+  _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -24,6 +38,19 @@ class _MainScreenState extends State<MainScreen> {
     const MessageScreen(),
     const SemoAIScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch stores and products when the screen initializes
+    try {
+      context.read<StoreBloc>().add(LoadAllStores());
+      context.read<ProductBloc>().add(LoadProducts());
+    } catch (e) {
+      print('Error initializing MainScreen: $e');
+      // Optionally show a snackbar or handle the error
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +105,14 @@ class _HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<_HomeTab> {
   @override
+  void initState() {
+    super.initState();
+    // Trigger home data loading
+    context.read<HomeBloc>().add(LoadHomeData());
+    context.read<ProductBloc>().add(LoadProducts());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -107,7 +142,8 @@ class _HomeTabState extends State<_HomeTab> {
                     expandedTitleScale: 1.0,
                     titlePadding: EdgeInsets.zero,
                     title: LayoutBuilder(
-                      builder: (BuildContext context, BoxConstraints constraints) {
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
                         final top = constraints.biggest.height;
                         final scrolledRatio =
                             ((top - kToolbarHeight) / (kToolbarHeight * 1.45))
@@ -124,82 +160,129 @@ class _HomeTabState extends State<_HomeTab> {
               ),
             ];
           },
-          body: Builder(
-            builder: (context) {
-              return CustomScrollView(
-                slivers: [
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return Container(
-                          margin: EdgeInsets.all(16),
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 10,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue[100],
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '${index + 1}',
-                                    style: TextStyle(
-                                      fontSize: 20,
+          body: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              if (state is HomeLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (state is HomeLoaded) {
+                return BlocBuilder<ProductBloc, ProductState>(
+                  builder: (context, productState) {
+                    if (productState is ProductsLoaded) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                                height: 100), // Add space after the search bar
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Big Stores",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.blue[900],
+                                    ),
+                              ),
+                            ),
+                            Container(
+                              height: 160,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                itemCount: state.bigStores.length,
+                                itemBuilder: (context, index) {
+                                  return BigStoreCard(
+                                    store: StoreModel.fromEntity(
+                                        state.bigStores[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Small Stores",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                            Container(
+                              height: 140,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                itemCount: state.smallStores.length,
+                                itemBuilder: (context, index) {
+                                  return SmallStoreCard(
+                                    store: StoreModel.fromEntity(
+                                        state.smallStores[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            ...productState.productCategories.entries
+                                .map((entry) {
+                              final categoryName =
+                                  entry.key.replaceAll('_', ' ');
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Text(
+                                      categoryName.toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Test Item ${index + 1}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  Container(
+                                    height: 220,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      itemCount: entry.value.length,
+                                      itemBuilder: (context, index) {
+                                        return ProductCard(
+                                          product: entry.value[index]
+                                              as ProductModel,
+                                        );
+                                      },
                                     ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      'This is a test description for item ${index + 1} to demonstrate scrolling behavior',
-                                      style: TextStyle(
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      childCount: 20,
-                    ),
-                  ),
-                ],
-              );
+                                  ),
+                                  SizedBox(height: 16),
+                                ],
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                );
+              }
+
+              if (state is HomeError) {
+                return Center(
+                  child: Text('Error loading home data: ${state.message}'),
+                );
+              }
+
+              return Center(child: Text('Unexpected state'));
             },
           ),
         ),

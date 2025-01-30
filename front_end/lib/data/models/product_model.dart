@@ -2,32 +2,50 @@ import '../../domain/entities/product.dart';
 
 class ProductModel extends Product {
   ProductModel({
-    required int id,
+    required String id,
     required String name,
     required String imageUrl,
-    required double price,
+    required List<double> priceRange,
     required bool isSeasonalProduct,
-    String? season,
+    required String categoryName,
+    required Map<String, dynamic>? parentCategory,
+    required int availableStoreCount,
+    required List<Map<String, dynamic>> stores,
     required String description,
+    required String unit,
   }) : super(
           id: id,
           name: name,
           imageUrl: imageUrl,
-          price: price,
+          priceRange: priceRange,
           isSeasonalProduct: isSeasonalProduct,
-          season: season,
+          categoryName: categoryName,
+          parentCategory: parentCategory,
+          availableStoreCount: availableStoreCount,
+          stores: stores,
           description: description,
+          unit: unit,
         );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'] ?? 0,
+      id: json['id'] ?? '',
       name: json['name'] ?? 'Unknown Product',
       imageUrl: json['image_url'] ?? '',
-      price: double.parse(json['price']?.toString() ?? '0.0'),
+      priceRange: (json['price_range'] as List<dynamic>?)
+              ?.map((e) => double.parse(e.toString()))
+              .toList() ??
+          [0.0, 0.0],
       isSeasonalProduct: json['is_seasonal'] ?? false,
-      season: json['category'], // Using category as season since season is not provided
+      categoryName: json['category_name'] ?? '',
+      parentCategory: json['parent_category'],
+      availableStoreCount: json['available_store_count'] ?? 0,
+      stores: (json['stores'] as List<dynamic>?)
+              ?.map((e) => e as Map<String, dynamic>)
+              .toList() ??
+          [],
       description: json['description'] ?? '',
+      unit: json['unit'] ?? '',
     );
   }
 
@@ -36,10 +54,14 @@ class ProductModel extends Product {
       'id': id,
       'name': name,
       'image_url': imageUrl,
-      'price': price,
-      'is_seasonal_product': isSeasonalProduct,
-      'season': season ?? '',
+      'price_range': priceRange,
+      'is_seasonal': isSeasonalProduct,
+      'category_name': categoryName,
+      'parent_category': parentCategory,
+      'available_store_count': availableStoreCount,
+      'stores': stores,
       'description': description,
+      'unit': unit,
     };
   }
 }

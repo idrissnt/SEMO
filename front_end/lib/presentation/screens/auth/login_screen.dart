@@ -220,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen>
                                                 'Login',
                                                 style:
                                                     AppTheme.bodyLarge.copyWith(
-                                                  color: Colors.white,
+                                                  color: Colors.black,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),

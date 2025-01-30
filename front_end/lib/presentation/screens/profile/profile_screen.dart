@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, library_private_types_in_public_api, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/config/theme.dart';
@@ -20,12 +22,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Check if we're already authenticated
     final currentState = context.read<AuthBloc>().state;
     print('ProfileScreen: Current auth state: $currentState');
-    
+
     if (currentState is! AuthAuthenticated) {
       print('ProfileScreen: Requesting auth check');
       context.read<AuthBloc>().add(AuthCheckRequested());
     } else {
-      print('ProfileScreen: Already authenticated as: ${currentState.user.email}');
+      print(
+          'ProfileScreen: Already authenticated as: ${currentState.user.email}');
     }
   }
 
@@ -146,29 +149,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   String _getInitials(String? firstName, String? lastName) {
     String initials = '';
-    
+
     if (firstName != null && firstName.isNotEmpty) {
       initials += firstName[0].toUpperCase();
     }
-    
+
     if (lastName != null && lastName.isNotEmpty) {
       initials += lastName[0].toUpperCase();
     }
-    
+
     return initials.isEmpty ? '?' : initials;
   }
 
   String _getFullName(String? firstName, String? lastName) {
     final parts = <String>[];
-    
+
     if (firstName != null && firstName.isNotEmpty) {
       parts.add(firstName);
     }
-    
+
     if (lastName != null && lastName.isNotEmpty) {
       parts.add(lastName);
     }
-    
+
     return parts.isEmpty ? 'User' : parts.join(' ');
   }
 

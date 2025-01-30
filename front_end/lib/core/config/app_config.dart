@@ -1,12 +1,12 @@
 class AppConfig {
   static const String apiBaseUrl =
-      // 'http://10.0.2.2:8000/api/v1'; // For physical device
+      // 'http://10.0.2.2:8000/api/v1'; // For emulator
       'http://172.20.10.10:8000/api/v1'; // For physical device
   // static const String apiBaseUrl = 'http://localhost:8000/api';  // For iOS Simulator
-  
+
   // Base URL for media files (images)
   static const String mediaBaseUrl = 'http://172.20.10.10:8000';
-  
+
   static const int apiTimeout = 30000; // milliseconds
 
   // API Endpoints

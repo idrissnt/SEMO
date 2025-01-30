@@ -1,150 +1,168 @@
-// ignore_for_file: avoid_print
-
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 import '../../core/config/app_config.dart';
+import '../../core/error/exceptions.dart';
 import '../../domain/entities/store.dart';
+import '../../domain/entities/product.dart';
+import '../../domain/entities/category.dart';
 import '../../domain/repositories/store_repository.dart';
-import '../../domain/services/auth_service.dart';
 import '../models/store_model.dart';
+import '../models/product_model.dart';
+import '../models/category_model.dart';
 
 class StoreRepositoryImpl implements StoreRepository {
   final http.Client client;
-  final AuthService? authService;
+  final String baseUrl = AppConfig.apiBaseUrl;
 
   StoreRepositoryImpl({
     required this.client,
-    this.authService,
   });
 
   Future<Map<String, String>> _getHeaders() async {
-    final baseHeaders = {'Content-Type': 'application/json'};
-
-    if (authService != null) {
-      try {
-        final token = await authService!.getAccessToken();
-        if (token != null && token.isNotEmpty) {
-          return {
-            ...baseHeaders,
-            'Authorization': 'Bearer $token',
-          };
-        }
-      } catch (e) {
-        print('Error getting auth token: $e');
-      }
-    }
-
-    return baseHeaders;
+    return {'Content-Type': 'application/json'};
   }
 
   @override
-  Future<List<Store>> getNearbyStores() async {
+  Future<List<Store>> getStores({
+    String? search,
+    bool? isOpen,
+    double? minRating,
+    bool? isBigStore,
+  }) async {
     try {
-      final headers = await _getHeaders();
-      final url = '${AppConfig.apiBaseUrl}/stores/nearby/';
-      print('Fetching Nearby Stores URL: $url');
-      print('Nearby Stores Headers: $headers');
+      final queryParams = {
+        if (search != null) 'search': search,
+        if (isOpen != null) 'is_open': isOpen.toString(),
+        if (minRating != null) 'min_rating': minRating.toString(),
+        if (isBigStore != null) 'is_big_store': isBigStore.toString(),
+      };
 
+      final uri =
+          Uri.parse('$baseUrl/stores/').replace(queryParameters: queryParams);
       final response = await client.get(
-        Uri.parse(url),
-        headers: headers,
+        uri,
+        headers: await _getHeaders(),
       );
-
-      print('Nearby Stores Response Status: ${response.statusCode}');
-      print('Nearby Stores Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonList = json.decode(response.body);
-        return jsonList.map((json) => StoreModel.fromJson(json)).toList();
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => StoreModel.fromJson(json)).toList();
+      } else if (response.statusCode == 401) {
+        throw const UnauthorizedException('Unauthorized access');
+      } else if (response.statusCode == 404) {
+        throw const NotFoundException('Stores not found');
       } else {
-        throw Exception('Failed to load nearby stores: ${response.body}');
+        throw const ServerException(message: 'Failed to load stores');
       }
+    } on SocketException {
+      throw const NetworkException('No internet connection');
     } catch (e) {
-      print('Error in getNearbyStores: $e');
-      throw Exception('Failed to load nearby stores: $e');
+      throw UnexpectedException(e.toString());
     }
   }
 
   @override
-  Future<List<Store>> getPopularStores() async {
+  Future<Store> getStoreById(String id) async {
     try {
-      final headers = await _getHeaders();
-      final url = '${AppConfig.apiBaseUrl}/stores/popular/';
-      print('Fetching Popular Stores URL: $url');
-      print('Popular Stores Headers: $headers');
-
+      final uri = Uri.parse('$baseUrl/stores/$id/');
       final response = await client.get(
-        Uri.parse(url),
-        headers: headers,
+        uri,
+        headers: await _getHeaders(),
       );
-
-      print('Popular Stores Response Status: ${response.statusCode}');
-      print('Popular Stores Response Body: ${response.body}');
-
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonList = json.decode(response.body);
-        return jsonList.map((json) => StoreModel.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load popular stores: ${response.body}');
-      }
-    } catch (e) {
-      print('Error in getPopularStores: $e');
-      throw Exception('Failed to load popular stores: $e');
-    }
-  }
-
-  @override
-  Future<Store> getStoreById(int id) async {
-    try {
-      final headers = await _getHeaders();
-      final url = '${AppConfig.apiBaseUrl}/stores/$id/';
-      print('Fetching Store by ID URL: $url');
-      print('Store by ID Headers: $headers');
-
-      final response = await client.get(
-        Uri.parse(url),
-        headers: headers,
-      );
-
-      print('Store by ID Response Status: ${response.statusCode}');
-      print('Store by ID Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
         return StoreModel.fromJson(json.decode(response.body));
+      } else if (response.statusCode == 401) {
+        throw const UnauthorizedException('Unauthorized access');
+      } else if (response.statusCode == 404) {
+        throw const NotFoundException('Store not found');
       } else {
-        throw Exception('Failed to load store: ${response.body}');
+        throw const ServerException(message: 'Failed to load store details');
       }
+    } on SocketException {
+      throw const NetworkException('No internet connection');
     } catch (e) {
-      print('Error in getStoreById: $e');
-      throw Exception('Failed to load store: $e');
+      throw UnexpectedException(e.toString());
     }
   }
 
   @override
-  Future<List<Store>> searchStores(String query) async {
+  Future<List<Product>> getStoreProducts(String storeId) async {
     try {
-      final headers = await _getHeaders();
-      final url = '${AppConfig.apiBaseUrl}/stores/search/?q=$query';
-      print('Searching Stores URL: $url');
-      print('Searching Stores Headers: $headers');
-
+      final uri = Uri.parse('$baseUrl/stores/$storeId/products/');
       final response = await client.get(
-        Uri.parse(url),
-        headers: headers,
+        uri,
+        headers: await _getHeaders(),
       );
 
-      print('Searching Stores Response Status: ${response.statusCode}');
-      print('Searching Stores Response Body: ${response.body}');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => ProductModel.fromJson(json)).toList();
+      } else if (response.statusCode == 401) {
+        throw const UnauthorizedException('Unauthorized access');
+      } else if (response.statusCode == 404) {
+        throw const NotFoundException('Products not found');
+      } else {
+        throw const ServerException(message: 'Failed to load store products');
+      }
+    } on SocketException {
+      throw const NetworkException('No internet connection');
+    } catch (e) {
+      throw UnexpectedException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<Category>> getStoreCategories(String storeId) async {
+    try {
+      final uri = Uri.parse('$baseUrl/stores/$storeId/categories/');
+      final response = await client.get(
+        uri,
+        headers: await _getHeaders(),
+      );
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonList = json.decode(response.body);
-        return jsonList.map((json) => StoreModel.fromJson(json)).toList();
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => CategoryModel.fromJson(json)).toList();
+      } else if (response.statusCode == 401) {
+        throw const UnauthorizedException('Unauthorized access');
+      } else if (response.statusCode == 404) {
+        throw const NotFoundException('Categories not found');
       } else {
-        throw Exception('Failed to search stores: ${response.body}');
+        throw const ServerException(message: 'Failed to load store categories');
       }
+    } on SocketException {
+      throw const NetworkException('No internet connection');
     } catch (e) {
-      print('Error in searchStores: $e');
-      throw Exception('Failed to search stores: $e');
+      throw UnexpectedException(e.toString());
+    }
+  }
+
+  @override
+  Future<Store> rateStore(String storeId, double rating) async {
+    try {
+      final uri = Uri.parse('$baseUrl/stores/$storeId/rate/');
+      final response = await client.post(
+        uri,
+        body: json.encode({'rating': rating}),
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        return StoreModel.fromJson(json.decode(response.body));
+      } else if (response.statusCode == 401) {
+        throw const UnauthorizedException('Unauthorized access');
+      } else if (response.statusCode == 404) {
+        throw const NotFoundException('Store not found');
+      } else {
+        throw const ServerException(message: 'Failed to rate store');
+      }
+    } on SocketException {
+      throw const NetworkException('No internet connection');
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 }

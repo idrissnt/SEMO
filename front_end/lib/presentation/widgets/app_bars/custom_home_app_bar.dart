@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 
@@ -95,12 +95,13 @@ class CustomHomeAppBar extends StatelessWidget {
                 curve: Curves.easeInOut,
                 top: isCollapsed ? 8 : kToolbarHeight - 8,
                 left: size.width * 0.04,
-                right: isCollapsed ? size.width * 0.15 : size.width * 0.04,
+                right: isCollapsed ? size.width * 0.04 : size.width * 0.04,
                 height: 48,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
+                      flex: 8, // Increase the flex to make search bar larger
                       child: _buildSearchBar(context, isCollapsed),
                     ),
                     if (isCollapsed)

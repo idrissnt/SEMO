@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/custom_search_bar.dart';
-
 class MissionScreen extends StatelessWidget {
   const MissionScreen({Key? key}) : super(key: key);
 
@@ -18,7 +16,7 @@ class MissionScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomSearchBar(),
+            // const CustomSearchBar(),
             const SizedBox(height: 24),
             Text(
               'Available Missions',

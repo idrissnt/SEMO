@@ -6,17 +6,23 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/config/routes.dart';
-import 'core/config/theme.dart';
+import 'core/theme/app_colors.dart';
 import 'data/repositories/auth_repository_impl.dart';
 import 'data/repositories/store_repository_impl.dart';
 import 'data/repositories/recipe_repository_impl.dart';
 import 'data/repositories/product_repository_impl.dart';
 import 'domain/repositories/auth_repository.dart';
+import 'domain/repositories/store_repository.dart';
+import 'domain/repositories/product_repository.dart';
 import 'domain/usecases/get_home_data_usecase.dart';
+import 'domain/usecases/get_stores_usecase.dart';
+import 'domain/usecases/get_products_usecase.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_event.dart';
 import 'presentation/blocs/auth/auth_state.dart';
 import 'presentation/blocs/home/home_bloc.dart';
+import 'presentation/blocs/store/store_bloc.dart';
+import 'presentation/blocs/product/product_bloc.dart';
 import 'presentation/screens/auth/login_screen.dart';
 // import 'presentation/screens/home/home_screen.dart';
 import 'presentation/screens/onboarding/onboarding_screen.dart';
@@ -43,7 +49,6 @@ void main() async {
   // Initialize use case
   final getHomeDataUseCase = GetHomeDataUseCase(
     storeRepository: storeRepository,
-    recipeRepository: recipeRepository,
     productRepository: productRepository,
   );
 
@@ -52,10 +57,9 @@ void main() async {
       providers: [
         RepositoryProvider<http.Client>.value(value: client),
         RepositoryProvider<AuthRepository>.value(value: authRepository),
-        RepositoryProvider<StoreRepositoryImpl>.value(value: storeRepository),
+        RepositoryProvider<StoreRepository>.value(value: storeRepository),
         RepositoryProvider<RecipeRepositoryImpl>.value(value: recipeRepository),
-        RepositoryProvider<ProductRepositoryImpl>.value(
-            value: productRepository),
+        RepositoryProvider<ProductRepository>.value(value: productRepository),
         RepositoryProvider<GetHomeDataUseCase>.value(value: getHomeDataUseCase),
       ],
       child: MultiBlocProvider(
@@ -71,9 +75,23 @@ void main() async {
               return bloc;
             },
           ),
+          BlocProvider<StoreBloc>(
+            create: (context) => StoreBloc(
+              getStoresUseCase: GetStoresUseCase(
+                storeRepository: context.read<StoreRepository>(),
+              ),
+            ),
+          ),
+          BlocProvider<ProductBloc>(
+            create: (context) => ProductBloc(
+              getProductsUseCase:
+                  GetProductsUseCase(context.read<ProductRepository>()),
+            ),
+          ),
           BlocProvider<HomeBloc>(
             create: (context) => HomeBloc(
-              getHomeDataUseCase: context.read<GetHomeDataUseCase>(),
+              storeBloc: context.read<StoreBloc>(),
+              productBloc: context.read<ProductBloc>(),
             ),
           ),
         ],
@@ -97,14 +115,14 @@ class MyApp extends StatelessWidget {
       title: 'SEMO',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: AppTheme.primaryColor,
+        primaryColor: AppColors.primaryColor,
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
-          iconTheme: IconThemeData(color: AppTheme.primaryColor),
+          iconTheme: IconThemeData(color: AppColors.primaryColor),
           titleTextStyle: TextStyle(
-            color: AppTheme.primaryColor,
+            color: AppColors.primaryColor,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
