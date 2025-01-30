@@ -8,6 +8,8 @@ import '../../blocs/home/home_event.dart';
 import '../../blocs/product/product_event.dart';
 import '../../blocs/product/product_state.dart';
 import '../../blocs/store/store_event.dart';
+import '../../widgets/homescreen/product_card.dart';
+import '../../widgets/homescreen/store_cards.dart';
 import '../mission/mission_screen.dart';
 import '../earn/earn_screen.dart';
 import '../message/message_screen.dart';
@@ -17,8 +19,6 @@ import '../../blocs/home/home_state.dart';
 import '../../blocs/store/store_bloc.dart';
 import '../../blocs/product/product_bloc.dart';
 import '../../widgets/app_bars/custom_home_app_bar.dart';
-import './widgets/store_cards.dart';
-import 'widgets/product_card.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
