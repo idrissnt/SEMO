@@ -45,7 +45,7 @@ class StoreModel extends Store {
   })  : cachedAt = cachedAt ?? DateTime.now(),
         super(
           id: id ?? '',
-          name: name ?? 'Unnamed Store',
+          name: name,
           description: description ?? '',
           rating: rating ?? 0.0,
           isOpen: isOpen ?? false,
