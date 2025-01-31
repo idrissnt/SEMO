@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/config/theme.dart';
+import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
@@ -15,19 +16,25 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final AppLogger _logger = AppLogger();
+
   @override
   void initState() {
     super.initState();
-    print('ProfileScreen: Initializing');
-    // Check if we're already authenticated
-    final currentState = context.read<AuthBloc>().state;
-    print('ProfileScreen: Current auth state: $currentState');
+
+    _logger.debug('ProfileScreen: Initializing');
+
+    final authBloc = context.read<AuthBloc>();
+    final currentState = authBloc.state;
+
+    _logger.debug('ProfileScreen: Current auth state',
+        error: {'state': currentState});
 
     if (currentState is! AuthAuthenticated) {
-      print('ProfileScreen: Requesting auth check');
-      context.read<AuthBloc>().add(AuthCheckRequested());
+      _logger.debug('ProfileScreen: Requesting auth check');
+      authBloc.add(AuthCheckRequested());
     } else {
-      print(
+      _logger.debug(
           'ProfileScreen: Already authenticated as: ${currentState.user.email}');
     }
   }

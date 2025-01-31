@@ -1,7 +1,7 @@
 import '../../domain/entities/category.dart';
 
 class CategoryModel extends Category {
-  CategoryModel({
+  const CategoryModel({
     required String id,
     required String name,
     required String description,
@@ -47,8 +47,10 @@ class CategoryModel extends Category {
               ?.map((e) => e as Map<String, dynamic>)
               .toList() ??
           [],
-      createdAt: DateTime.parse(json['created_at'] ?? DateTime.now().toIso8601String()),
-      updatedAt: DateTime.parse(json['updated_at'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+          json['created_at'] ?? DateTime.now().toIso8601String()),
+      updatedAt: DateTime.parse(
+          json['updated_at'] ?? DateTime.now().toIso8601String()),
     );
   }
 

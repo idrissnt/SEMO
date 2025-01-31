@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers, sized_box_for_whitespace, avoid_print
 
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/utils/logger.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/store_model.dart';
 import '../../blocs/home/home_event.dart';
@@ -24,11 +27,11 @@ class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final AppLogger _logger = AppLogger();
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
@@ -44,11 +47,12 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     // Fetch stores and products when the screen initializes
     try {
+      _logger.debug('MainScreen: Initializing and loading stores and products');
       context.read<StoreBloc>().add(LoadAllStores());
       context.read<ProductBloc>().add(LoadProducts());
-    } catch (e) {
-      print('Error initializing MainScreen: $e');
-      // Optionally show a snackbar or handle the error
+    } catch (e, stackTrace) {
+      _logger.error('Error initializing MainScreen',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -62,6 +66,7 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
+            _logger.debug('Navigation tab changed to index: $index');
           });
         },
         items: const [
@@ -104,9 +109,27 @@ class _HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<_HomeTab> {
+  final AppLogger _logger = AppLogger();
+
+  void _printLogFilePath() async {
+    final logger = AppLogger();
+    print('Current Log File Path: ${logger.logFilePath}');
+
+    // Copy log to app's documents directory
+    await logger.copyLogToDownloads();
+
+    // Print log contents
+    await logger.printLogContents();
+  }
+
   @override
   void initState() {
     super.initState();
+    _logger.debug('HomeTab: Initializing');
+
+    // Print log file path
+    _printLogFilePath();
+
     // Trigger home data loading
     context.read<HomeBloc>().add(LoadHomeData());
     context.read<ProductBloc>().add(LoadProducts());
@@ -192,7 +215,7 @@ class _HomeTabState extends State<_HomeTab> {
                               height: 160,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                padding: EdgeInsets.symmetric(horizontal: 4),
                                 itemCount: state.bigStores.length,
                                 itemBuilder: (context, index) {
                                   return BigStoreCard(
@@ -218,7 +241,7 @@ class _HomeTabState extends State<_HomeTab> {
                               height: 140,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                padding: EdgeInsets.symmetric(horizontal: 4),
                                 itemCount: state.smallStores.length,
                                 itemBuilder: (context, index) {
                                   return SmallStoreCard(

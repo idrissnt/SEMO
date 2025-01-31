@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/googleFonts.dart';
 import '../../../core/config/theme.dart';
+import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
@@ -17,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
+  final AppLogger _logger = AppLogger();
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -27,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
+    _logger.debug('LoginScreen: Initializing animation controllers');
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -42,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
+    _logger.debug('LoginScreen: Disposing controllers');
     _emailController.dispose();
     _passwordController.dispose();
     _animationController.dispose();
@@ -52,9 +56,12 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        print('Login State: $state');
+        _logger.debug(
+          'Login State',
+          error: {'state': state},
+        );
         if (state is AuthAuthenticated) {
-          print('Navigating to main screen');
+          _logger.info('Navigating to main screen');
           Navigator.pushReplacementNamed(context, '/main');
         }
       },
@@ -189,6 +196,8 @@ class _LoginScreenState extends State<LoginScreen>
                                           : () {
                                               if (_formKey.currentState!
                                                   .validate()) {
+                                                _logger.info(
+                                                    'Login attempt for email: ${_emailController.text.trim()}');
                                                 context.read<AuthBloc>().add(
                                                       AuthLoginRequested(
                                                         email: _emailController
@@ -199,6 +208,9 @@ class _LoginScreenState extends State<LoginScreen>
                                                                 .text,
                                                       ),
                                                     );
+                                              } else {
+                                                _logger.warning(
+                                                    'Login form validation failed');
                                               }
                                             },
                                       child: Padding(

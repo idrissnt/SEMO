@@ -1,7 +1,8 @@
+import '../../core/config/app_config.dart';
 import '../../domain/entities/product.dart';
 
 class ProductModel extends Product {
-  ProductModel({
+  const ProductModel({
     required String id,
     required String name,
     required String imageUrl,
@@ -28,10 +29,15 @@ class ProductModel extends Product {
         );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    String imageUrl = json['image_url']?.toString() ?? '';
+    if (imageUrl.isNotEmpty && !imageUrl.startsWith('http')) {
+      imageUrl = '${AppConfig.mediaBaseUrl}$imageUrl';
+    }
+
     return ProductModel(
       id: json['id'] ?? '',
       name: json['name'] ?? 'Unknown Product',
-      imageUrl: json['image_url'] ?? '',
+      imageUrl: imageUrl,
       priceRange: (json['price_range'] as List<dynamic>?)
               ?.map((e) => double.parse(e.toString()))
               .toList() ??

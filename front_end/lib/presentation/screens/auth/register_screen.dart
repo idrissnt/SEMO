@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:google_fonts/googleFonts.dart';
 import '../../../core/config/theme.dart';
+import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
@@ -15,6 +15,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen>
     with SingleTickerProviderStateMixin {
+  final AppLogger _logger = AppLogger();
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -29,6 +30,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void initState() {
     super.initState();
+    _logger.debug('RegisterScreen: Initializing animation controllers');
+    
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -44,6 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   @override
   void dispose() {
+    _logger.debug('RegisterScreen: Disposing controllers');
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
@@ -53,14 +57,69 @@ class _RegisterScreenState extends State<RegisterScreen>
     super.dispose();
   }
 
+  void _togglePasswordVisibility(bool isConfirmPassword) {
+    setState(() {
+      if (isConfirmPassword) {
+        _obscureConfirmPassword = !_obscureConfirmPassword;
+        _logger.debug('Confirm password visibility toggled: $_obscureConfirmPassword');
+      } else {
+        _obscurePassword = !_obscurePassword;
+        _logger.debug('Password visibility toggled: $_obscurePassword');
+      }
+    });
+  }
+
+  void _register() {
+    if (_formKey.currentState!.validate()) {
+      final firstName = _firstNameController.text.trim();
+      final lastName = _lastNameController.text.trim();
+      final email = _emailController.text.trim();
+      final password = _passwordController.text;
+      final confirmPassword = _confirmPasswordController.text;
+
+      _logger.info('Registration attempt for email: $email');
+
+      if (password != confirmPassword) {
+        _logger.warning('Password and confirm password do not match');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return;
+      }
+
+      try {
+        context.read<AuthBloc>().add(
+              AuthRegisterRequested(
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                password2: confirmPassword,
+              ),
+            );
+      } catch (e, stackTrace) {
+        _logger.error('Registration error', error: e, stackTrace: stackTrace);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: ${e.toString()}')),
+        );
+      }
+    } else {
+      _logger.warning('Registration form validation failed');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        print('Registration State: $state');
         if (state is AuthAuthenticated) {
-          print('Navigating to main screen');
+          _logger.info('User registered and authenticated successfully');
           Navigator.pushReplacementNamed(context, '/main');
+        } else if (state is AuthFailure) {
+          _logger.error('Registration error: ${state.error}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.error)),
+          );
         }
       },
       child: Scaffold(
@@ -304,53 +363,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     child: ElevatedButton(
                                       onPressed: state is AuthLoading
                                           ? null
-                                          : () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                // Check if passwords match
-                                                if (_passwordController.text !=
-                                                    _confirmPasswordController
-                                                        .text) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        'Passwords do not match',
-                                                        style: AppTheme.bodyMedium
-                                                            .copyWith(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                      backgroundColor:
-                                                          Colors.red,
-                                                    ),
-                                                  );
-                                                  return;
-                                                }
-
-                                                context.read<AuthBloc>().add(
-                                                      AuthRegisterRequested(
-                                                        firstName:
-                                                            _firstNameController
-                                                                .text
-                                                                .trim(),
-                                                        lastName:
-                                                            _lastNameController
-                                                                .text
-                                                                .trim(),
-                                                        email:
-                                                            _emailController.text
-                                                                .trim(),
-                                                        password:
-                                                            _passwordController
-                                                                .text,
-                                                        password2:
-                                                            _confirmPasswordController
-                                                                .text,
-                                                      ),
-                                                    );
-                                              }
-                                            },
+                                          : _register,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,
                                         foregroundColor: AppTheme.primaryColor,
@@ -367,7 +380,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                             )
                                           : Text(
                                               'Register',
-                                              style: AppTheme.bodyLarge.copyWith(
+                                              style:
+                                                  AppTheme.bodyLarge.copyWith(
                                                 fontWeight: FontWeight.bold,
                                                 color: AppTheme.primaryColor,
                                               ),

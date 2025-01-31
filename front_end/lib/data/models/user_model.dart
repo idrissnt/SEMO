@@ -1,6 +1,9 @@
 import '../../domain/entities/user.dart';
+import '../../core/utils/logger.dart';
 
 class UserModel extends User {
+  static final AppLogger _logger = AppLogger();
+
   UserModel({
     required String id,
     required String email,
@@ -18,7 +21,7 @@ class UserModel extends User {
         );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    print('Creating UserModel from JSON: $json');
+    _logger.debug('Creating UserModel from JSON: $json');
     // Check if user data is nested
     final userData = json['user'] ?? json;
 

@@ -5,10 +5,12 @@ import '../../domain/entities/recipe.dart';
 import '../../domain/repositories/recipe_repository.dart';
 import '../../domain/services/auth_service.dart';
 import '../models/recipe_model.dart';
+import '../../core/utils/logger.dart';
 
 class RecipeRepositoryImpl implements RecipeRepository {
   final http.Client client;
   final AuthService? authService;
+  final AppLogger _logger = AppLogger();
 
   RecipeRepositoryImpl({
     required this.client,
@@ -28,7 +30,7 @@ class RecipeRepositoryImpl implements RecipeRepository {
           };
         }
       } catch (e) {
-        print('Error getting auth token: $e');
+        _logger.error('Error getting auth token: $e');
       }
     }
 
@@ -51,7 +53,8 @@ class RecipeRepositoryImpl implements RecipeRepository {
         throw Exception('Failed to load popular recipes');
       }
     } catch (e) {
-      throw Exception('Failed to load popular recipes: $e');
+      _logger.error('Error fetching popular recipes: $e');
+      rethrow;
     }
   }
 
@@ -70,7 +73,8 @@ class RecipeRepositoryImpl implements RecipeRepository {
         throw Exception('Failed to load recipe');
       }
     } catch (e) {
-      throw Exception('Failed to load recipe: $e');
+      _logger.error('Error fetching recipe by id: $e');
+      rethrow;
     }
   }
 
@@ -90,7 +94,8 @@ class RecipeRepositoryImpl implements RecipeRepository {
         throw Exception('Failed to search recipes');
       }
     } catch (e) {
-      throw Exception('Failed to search recipes: $e');
+      _logger.error('Error searching recipes: $e');
+      rethrow;
     }
   }
 
@@ -110,7 +115,8 @@ class RecipeRepositoryImpl implements RecipeRepository {
         throw Exception('Failed to load seasonal recipes');
       }
     } catch (e) {
-      throw Exception('Failed to load seasonal recipes: $e');
+      _logger.error('Error fetching seasonal recipes: $e');
+      rethrow;
     }
   }
 }

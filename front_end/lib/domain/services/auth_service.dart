@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../core/utils/logger.dart';
 
 class AuthService {
   final FlutterSecureStorage storage;
+  final AppLogger _logger = AppLogger();
 
   AuthService({required this.storage});
 
@@ -11,7 +13,7 @@ class AuthService {
     try {
       return await storage.read(key: 'access_token');
     } catch (e) {
-      print('Error retrieving access token: $e');
+      _logger.error('Error retrieving access token', error: e);
       return null;
     }
   }
@@ -20,7 +22,7 @@ class AuthService {
     try {
       return await storage.read(key: 'refresh_token');
     } catch (e) {
-      print('Error retrieving refresh token: $e');
+      _logger.error('Error retrieving refresh token', error: e);
       return null;
     }
   }
@@ -34,8 +36,9 @@ class AuthService {
     try {
       await storage.delete(key: 'access_token');
       await storage.delete(key: 'refresh_token');
+      _logger.info('Tokens cleared successfully');
     } catch (e) {
-      print('Error clearing tokens: $e');
+      _logger.error('Error clearing tokens', error: e);
     }
   }
 }

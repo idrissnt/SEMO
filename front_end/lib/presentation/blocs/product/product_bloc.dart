@@ -1,43 +1,49 @@
-// ignore_for_file: avoid_print
-
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/utils/logger.dart';
 import '../../../../domain/usecases/get_products_usecase.dart';
 import 'product_event.dart';
 import 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetProductsUseCase getProductsUseCase;
+  final AppLogger _logger = AppLogger();
 
   ProductBloc({required this.getProductsUseCase}) : super(ProductInitial()) {
     on<LoadProducts>(_onLoadProducts);
     on<LoadProductsByCategory>(_onLoadProductsByCategory);
   }
 
-  void _onLoadProducts(LoadProducts event, Emitter<ProductState> emit) async {
-    print('ProductBloc: Loading all products');
-    emit(ProductLoading());
+  Future<void> _onLoadProducts(
+    LoadProducts event,
+    Emitter<ProductState> emit,
+  ) async {
     try {
+      _logger.info('Loading all products');
+      emit(ProductLoading());
       final products = await getProductsUseCase.getAllProducts();
-      print('ProductBloc: Loaded ${products.length} products');
+      
+      _logger.debug('Loaded ${products.length} products');
       emit(ProductsLoaded(products));
     } catch (e) {
-      print('ProductBloc: Error loading products - $e');
+      _logger.error('Error loading products: $e');
       emit(ProductError(e.toString()));
     }
   }
 
-  void _onLoadProductsByCategory(
-      LoadProductsByCategory event, Emitter<ProductState> emit) async {
-    print('ProductBloc: Loading products for category ${event.category}');
-    emit(ProductLoading());
+  Future<void> _onLoadProductsByCategory(
+    LoadProductsByCategory event,
+    Emitter<ProductState> emit,
+  ) async {
     try {
-      final products =
-          await getProductsUseCase.getProductsByCategory(event.category);
-      print(
-          'ProductBloc: Loaded ${products.length} products for category ${event.category}');
+      _logger.info('Loading products for category: ${event.category}');
+      emit(ProductLoading());
+      final products = await getProductsUseCase.getProductsByCategory(event.category);
+      
+      _logger.debug('Loaded ${products.length} products for category ${event.category}');
       emit(ProductsByCategoryLoaded(event.category, products));
     } catch (e) {
-      print('ProductBloc: Error loading products by category - $e');
+      _logger.error('Error loading products for category ${event.category}: $e');
       emit(ProductError(e.toString()));
     }
   }

@@ -42,7 +42,7 @@ class ProductsByCategoryLoaded extends ProductState {
   final String category;
   final List<Product> products;
 
-  ProductsByCategoryLoaded(this.category, this.products);
+  const ProductsByCategoryLoaded(this.category, this.products);
 
   @override
   List<Object> get props => [category, products];
@@ -51,7 +51,7 @@ class ProductsByCategoryLoaded extends ProductState {
 class ProductError extends ProductState {
   final String message;
 
-  ProductError(this.message);
+  const ProductError(this.message);
 
   @override
   List<Object> get props => [message];

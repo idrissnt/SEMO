@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import '../../core/config/app_config.dart';
+import '../../core/utils/logger.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../models/user_model.dart';
@@ -10,6 +11,7 @@ import '../models/user_model.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final http.Client _client;
   final FlutterSecureStorage _secureStorage;
+  final AppLogger _logger = AppLogger();
   static const String _tokenKey = 'access_token';
 
   AuthRepositoryImpl({
@@ -33,32 +35,32 @@ class AuthRepositoryImpl implements AuthRepository {
         }),
       );
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      _logger.debug('Response status: ${response.statusCode}');
+      _logger.debug('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print('Login successful. Response data: $data');
+        _logger.debug('Login successful. Response data: $data');
 
         // Save both access and refresh tokens
         if (data['access'] != null) {
-          print('Saving access token');
+          _logger.debug('Saving access token');
           await saveAccessToken(data['access']);
         } else {
-          print('Warning: No access token in response');
+          _logger.warning('No access token in response');
         }
 
         if (data['refresh'] != null) {
-          print('Saving refresh token');
+          _logger.debug('Saving refresh token');
           await _secureStorage.write(
               key: 'refresh_token', value: data['refresh']);
         } else {
-          print('Warning: No refresh token in response');
+          _logger.warning('No refresh token in response');
         }
 
         // Create user from response data
         final user = UserModel.fromJson(data);
-        print('Created user model: ${user.email}');
+        _logger.debug('Created user model: ${user.email}');
         return user;
       } else if (response.statusCode == 400) {
         final data = json.decode(response.body);
@@ -66,17 +68,22 @@ class AuthRepositoryImpl implements AuthRepository {
             data['message'] ??
             data['error'] ??
             'Invalid credentials';
+        _logger.error('Login failed', error: errorMessage);
         throw Exception(errorMessage);
       } else if (response.statusCode == 401) {
+        _logger.error('Invalid credentials');
         throw Exception('Invalid credentials');
       } else {
+        _logger.error('Server error: ${response.statusCode}');
         throw Exception('Server error: ${response.statusCode}');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (e.toString().contains('Connection refused')) {
+        _logger.error('Could not connect to server. Please check your internet connection.');
         throw Exception(
             'Could not connect to server. Please check your internet connection.');
       }
+      _logger.error('Error during login', error: e, stackTrace: stackTrace);
       throw Exception(e.toString().replaceAll('Exception: ', ''));
     }
   }
@@ -102,12 +109,12 @@ class AuthRepositoryImpl implements AuthRepository {
         }),
       );
 
-      print('Register Response status: ${response.statusCode}');
-      print('Register Response body: ${response.body}');
+      _logger.debug('Register Response status: ${response.statusCode}');
+      _logger.debug('Register Response body: ${response.body}');
 
       if (response.statusCode == 201) {
         final data = json.decode(response.body);
-        print('Register Decoded data: $data');
+        _logger.debug('Register Decoded data: $data');
 
         // Save both access and refresh tokens if provided
         if (data['access'] != null) {
@@ -146,13 +153,16 @@ class AuthRepositoryImpl implements AuthRepository {
           }
         }
 
+        _logger.error('Registration failed', error: errorMessage);
         throw Exception(errorMessage);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (e.toString().contains('Connection refused')) {
+        _logger.error('Could not connect to server. Please check your internet connection.');
         throw Exception(
             'Could not connect to server. Please check your internet connection.');
       }
+      _logger.error('Error during registration', error: e, stackTrace: stackTrace);
       throw Exception(e.toString().replaceAll('Exception: ', ''));
     }
   }
@@ -160,7 +170,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> logout() async {
     try {
-      print('Starting logout process');
+      _logger.debug('Starting logout process');
       final token = await getAccessToken();
       
       if (token != null) {
@@ -175,18 +185,18 @@ class AuthRepositoryImpl implements AuthRepository {
           ).timeout(
             const Duration(seconds: 10),
             onTimeout: () {
-              print('Logout request timed out');
+              _logger.error('Logout request timed out');
               throw TimeoutException('Connection to server timed out');
             },
           );
 
-          print('Server logout response: ${response.statusCode}');
+          _logger.debug('Server logout response: ${response.statusCode}');
           if (response.statusCode != 200) {
-            print('Server logout failed: ${response.body}');
+            _logger.error('Server logout failed: ${response.body}');
           }
-        } catch (e) {
+        } catch (e, stackTrace) {
           // Log but continue with local logout
-          print('Server logout failed, continuing with local logout: $e');
+          _logger.error('Server logout failed, continuing with local logout', error: e, stackTrace: stackTrace);
         }
       }
 
@@ -195,9 +205,9 @@ class AuthRepositoryImpl implements AuthRepository {
         deleteAccessToken(),
         _secureStorage.delete(key: 'refresh_token'),
       ]);
-      print('Successfully cleared all tokens');
-    } catch (e) {
-      print('Error during logout: $e');
+      _logger.debug('Successfully cleared all tokens');
+    } catch (e, stackTrace) {
+      _logger.error('Error during logout', error: e, stackTrace: stackTrace);
       throw Exception('Failed to logout');
     }
   }
@@ -206,15 +216,15 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> hasValidToken() async {
     try {
       final token = await getAccessToken();
-      print('Starting token validation check');
-      print('API URL: ${AppConfig.apiBaseUrl}${AppConfig.profileEndpoint}');
+      _logger.debug('Starting token validation check');
+      _logger.debug('API URL: ${AppConfig.apiBaseUrl}${AppConfig.profileEndpoint}');
 
       if (token == null) {
-        print('No token found in storage');
+        _logger.debug('No token found in storage');
         return false;
       }
 
-      print('Found token, attempting to validate with backend');
+      _logger.debug('Found token, attempting to validate with backend');
       // Try to get user profile to verify token
       final response = await _client.get(
         Uri.parse('${AppConfig.apiBaseUrl}${AppConfig.profileEndpoint}'),
@@ -225,30 +235,30 @@ class AuthRepositoryImpl implements AuthRepository {
       ).timeout(
         const Duration(seconds: 10),
         onTimeout: () {
-          print('Token validation request timed out');
+          _logger.error('Token validation request timed out');
           throw TimeoutException('Connection to server timed out');
         },
       );
 
-      print('Token validation response: ${response.statusCode}');
-      print('Token validation response body: ${response.body}');
+      _logger.debug('Token validation response: ${response.statusCode}');
+      _logger.debug('Token validation response body: ${response.body}');
 
       if (response.statusCode == 200) {
-        print('Token is valid, user is authenticated');
+        _logger.debug('Token is valid, user is authenticated');
         return true;
       } else if (response.statusCode == 401) {
-        print('Token expired, attempting refresh');
+        _logger.debug('Token expired, attempting refresh');
         return refreshToken();
       } else {
-        print('Unexpected status code: ${response.statusCode}');
+        _logger.error('Unexpected status code: ${response.statusCode}');
       }
 
       return false;
-    } catch (e) {
-      print('Error during token validation: $e');
+    } catch (e, stackTrace) {
+      _logger.error('Error during token validation', error: e, stackTrace: stackTrace);
       if (e.toString().contains('SocketException') ||
           e.toString().contains('Connection refused')) {
-        print('Could not connect to server. Is the backend running?');
+        _logger.error('Could not connect to server. Is the backend running?');
       }
       return false;
     }
@@ -259,7 +269,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final refreshToken = await _secureStorage.read(key: 'refresh_token');
       if (refreshToken == null) {
-        print('No refresh token found');
+        _logger.debug('No refresh token found');
         return false;
       }
 
@@ -272,7 +282,7 @@ class AuthRepositoryImpl implements AuthRepository {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data['access'] != null) {
-          print('Token refresh successful');
+          _logger.debug('Token refresh successful');
           await saveAccessToken(data['access']);
           return true;
         }
@@ -284,10 +294,10 @@ class AuthRepositoryImpl implements AuthRepository {
         _secureStorage.delete(key: 'refresh_token'),
       ]);
 
-      print('Token refresh failed: ${response.statusCode}');
+      _logger.error('Token refresh failed: ${response.statusCode}');
       return false;
-    } catch (e) {
-      print('Error refreshing token: $e');
+    } catch (e, stackTrace) {
+      _logger.error('Error refreshing token', error: e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -296,10 +306,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<User?> getCurrentUser() async {
     try {
       final token = await getAccessToken();
-      print('Current access token: $token');
+      _logger.debug('Current access token: $token');
 
       if (token == null) {
-        print('No access token found');
+        _logger.debug('No access token found');
         return null;
       }
 
@@ -311,16 +321,16 @@ class AuthRepositoryImpl implements AuthRepository {
         },
       );
 
-      print('Get current user response status: ${response.statusCode}');
-      print('Get current user response body: ${response.body}');
+      _logger.debug('Get current user response status: ${response.statusCode}');
+      _logger.debug('Get current user response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final user = UserModel.fromJson(data);
-        print('Successfully got current user: ${user.email}');
+        _logger.debug('Successfully got current user: ${user.email}');
         return user;
       } else if (response.statusCode == 401) {
-        print('Token expired or invalid');
+        _logger.debug('Token expired or invalid');
         final refreshed = await refreshToken();
         if (refreshed) {
           // Retry the request with new token
@@ -329,11 +339,11 @@ class AuthRepositoryImpl implements AuthRepository {
         await deleteAccessToken();
         return null;
       } else {
-        print('Failed to get user profile: ${response.statusCode}');
+        _logger.error('Failed to get user profile: ${response.statusCode}');
         throw Exception('Failed to get user profile');
       }
-    } catch (e) {
-      print('Error getting current user: $e');
+    } catch (e, stackTrace) {
+      _logger.error('Error getting current user', error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -342,11 +352,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<String?> getAccessToken() async {
     try {
       final token = await _secureStorage.read(key: _tokenKey);
-      print(
+      _logger.debug(
           'Retrieved access token from secure storage: ${token != null ? 'Token exists' : 'No token'}');
       return token;
-    } catch (e) {
-      print('Error reading access token: $e');
+    } catch (e, stackTrace) {
+      _logger.error('Error reading access token', error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -355,9 +365,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> saveAccessToken(String token) async {
     try {
       await _secureStorage.write(key: _tokenKey, value: token);
-      print('Access token saved successfully');
-    } catch (e) {
-      print('Error saving access token: $e');
+      _logger.debug('Access token saved successfully');
+    } catch (e, stackTrace) {
+      _logger.error('Error saving access token', error: e, stackTrace: stackTrace);
       throw Exception('Failed to save access token');
     }
   }
@@ -366,9 +376,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> deleteAccessToken() async {
     try {
       await _secureStorage.delete(key: _tokenKey);
-      print('Access token deleted successfully');
-    } catch (e) {
-      print('Error deleting access token: $e');
+      _logger.debug('Access token deleted successfully');
+    } catch (e, stackTrace) {
+      _logger.error('Error deleting access token', error: e, stackTrace: stackTrace);
     }
   }
 }

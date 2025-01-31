@@ -82,7 +82,7 @@ class AppTextStyles {
   );
 
   // Card Styles
-  static TextStyle cardTitle = TextStyle(
+  static TextStyle cardTitle = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: Colors.white,
@@ -95,7 +95,7 @@ class AppTextStyles {
     ],
   );
 
-  static TextStyle cardSubtitle = TextStyle(
+  static TextStyle cardSubtitle = const TextStyle(
     fontSize: 12,
     color: Colors.white70,
     shadows: [
@@ -108,7 +108,7 @@ class AppTextStyles {
   );
 
   // Badge Styles
-  static TextStyle badgeText = TextStyle(
+  static TextStyle badgeText = const TextStyle(
     fontSize: 10,
     fontWeight: FontWeight.bold,
     color: Colors.white,

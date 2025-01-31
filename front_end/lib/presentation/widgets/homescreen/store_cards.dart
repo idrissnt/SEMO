@@ -38,10 +38,44 @@ class BigStoreCard extends StatelessWidget {
                   ],
                 ),
                 child: ClipOval(
-                  child: Image.network(
-                    store.logoUrl!,
-                    fit: BoxFit.cover,
-                  ),
+                  child: store.logoUrl != null
+                      ? Image.network(
+                          store.logoUrl!,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              color: Colors.grey[100],
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            print('Error loading store image: $error');
+                            return Container(
+                              color: Colors.grey[200],
+                              child: Icon(
+                                Icons.store,
+                                size: 40,
+                                color: Colors.grey[400],
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          color: Colors.grey[200],
+                          child: Icon(
+                            Icons.store,
+                            size: 40,
+                            color: Colors.grey[400],
+                          ),
+                        ),
                 ),
               ),
               SizedBox(height: 12),
@@ -98,10 +132,44 @@ class SmallStoreCard extends StatelessWidget {
                   ],
                 ),
                 child: ClipOval(
-                  child: Image.network(
-                    store.logoUrl!,
-                    fit: BoxFit.cover,
-                  ),
+                  child: store.logoUrl != null
+                      ? Image.network(
+                          store.logoUrl!,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              color: Colors.grey[100],
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            print('Error loading store image: $error');
+                            return Container(
+                              color: Colors.grey[200],
+                              child: Icon(
+                                Icons.store,
+                                size: 30,
+                                color: Colors.grey[400],
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          color: Colors.grey[200],
+                          child: Icon(
+                            Icons.store,
+                            size: 30,
+                            color: Colors.grey[400],
+                          ),
+                        ),
                 ),
               ),
               SizedBox(height: 12),

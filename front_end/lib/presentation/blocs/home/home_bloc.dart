@@ -1,8 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/error/exceptions.dart';
+import '../../../core/utils/logger.dart';
 import '../../../domain/entities/product.dart';
 import '../../../domain/entities/store.dart';
 import '../product/product_event.dart';
@@ -24,9 +22,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   StoreState? _latestStoreState;
   ProductState? _latestProductState;
 
+  // Create a logger instance
+  final AppLogger _logger = AppLogger();
+
   HomeBloc({required this.storeBloc, required this.productBloc})
       : super(HomeInitial()) {
-    print('HomeBloc initialized with storeBloc and productBloc');
+    _logger.debug('HomeBloc initialized with storeBloc and productBloc');
 
     on<LoadHomeData>(_onLoadHomeData);
     on<HomeStoreStateChanged>(_onStoreStateChanged);
@@ -34,13 +35,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // Listen to store and product bloc states
     _storeSubscription = storeBloc.stream.listen((storeState) {
-      print('HomeBloc received store state: $storeState');
+      _logger.debug('HomeBloc received store state: $storeState');
       _latestStoreState = storeState;
       add(HomeStoreStateChanged(storeState));
     });
 
     _productSubscription = productBloc.stream.listen((productState) {
-      print('HomeBloc received product state: $productState');
+      _logger.debug('HomeBloc received product state: $productState');
       _latestProductState = productState;
       add(HomeProductStateChanged(productState));
     });
@@ -50,7 +51,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _loadInitialData() {
-    print('HomeBloc triggering initial load');
+    _logger.info('HomeBloc triggering initial load');
     if (storeBloc.state is StoreInitial) {
       storeBloc.add(LoadAllStores());
     }
@@ -60,7 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _onLoadHomeData(LoadHomeData event, Emitter<HomeState> emit) async {
-    print('HomeBloc handling LoadHomeData event');
+    _logger.debug('HomeBloc handling LoadHomeData event');
     emit(HomeLoading());
     _loadInitialData(); // Reload data if explicitly requested
   }
@@ -69,7 +70,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeStoreStateChanged event,
     Emitter<HomeState> emit,
   ) {
-    print('HomeBloc handling StoreStateChanged: ${event.storeState}');
+    _logger.debug('HomeBloc handling StoreStateChanged: ${event.storeState}');
     _tryEmitLoadedState(emit);
   }
 
@@ -77,14 +78,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeProductStateChanged event,
     Emitter<HomeState> emit,
   ) {
-    print('HomeBloc handling ProductStateChanged: ${event.productState}');
+    _logger.debug('HomeBloc handling ProductStateChanged: ${event.productState}');
     _tryEmitLoadedState(emit);
   }
 
   void _tryEmitLoadedState(Emitter<HomeState> emit) {
-    print('HomeBloc trying to emit loaded state');
-    print('Current store state: $_latestStoreState');
-    print('Current product state: $_latestProductState');
+    _logger.debug('HomeBloc trying to emit loaded state');
+    _logger.debug('Current store state: $_latestStoreState');
+    _logger.debug('Current product state: $_latestProductState');
 
     final storeState = _latestStoreState;
     final productState = _latestProductState;
@@ -96,13 +97,40 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // Extract stores based on state type
     if (storeState is StoreLoaded) {
+      // Only include stores that have a valid isBigStore value
+      var validStores =
+          storeState.stores.where((store) => store.isBigStore != null).toList();
+
       // Properly categorize stores based on isBigStore flag
-      bigStores = storeState.stores.where((store) => store.isBigStore == true).toList();
-      smallStores = storeState.stores.where((store) => store.isBigStore == false).toList();
-      
-      print('Categorized stores - Big: ${bigStores.length}, Small: ${smallStores.length}');
-      
-      // Ensure stores are properly sorted
+      bigStores =
+          validStores.where((store) => store.isBigStore == true).toList();
+      smallStores =
+          validStores.where((store) => store.isBigStore == false).toList();
+
+      _logger.debug(
+        'Store categorization details',
+        error: {
+          'Total valid stores': validStores.length,
+          'Big stores': bigStores.length,
+          'Small stores': smallStores.length,
+        },
+      );
+
+      // Log any stores with null isBigStore value
+      var invalidStores =
+          storeState.stores.where((store) => store.isBigStore == null).toList();
+      if (invalidStores.isNotEmpty) {
+        _logger.warning(
+          'Warning: Found stores with null isBigStore value',
+          error: {
+            'Invalid stores count': invalidStores.length,
+            'Invalid store names':
+                invalidStores.map((store) => store.name).toList(),
+          },
+        );
+      }
+
+      // Sort stores by name
       bigStores.sort((a, b) => a.name.compareTo(b.name));
       smallStores.sort((a, b) => a.name.compareTo(b.name));
     }
@@ -113,36 +141,50 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       productCategories = productState.productCategories;
     }
 
-    print('BigStores count: ${bigStores.length}');
-    print('SmallStores count: ${smallStores.length}');
-    print('Products count: ${products.length}');
-    print('Product categories count: ${productCategories.length}');
-
     // Only emit if we have valid data
-    if ((bigStores.isNotEmpty || smallStores.isNotEmpty) && !_hasInvalidStoreData(bigStores, smallStores)) {
-      print('Emitting HomeLoaded state with valid store data');
+    if (storeState is StoreLoaded &&
+        !_hasInvalidStoreData(bigStores, smallStores)) {
+      _logger.debug(
+        'Emitting HomeLoaded state',
+        error: {
+          'Big stores count': bigStores.length,
+          'Small stores count': smallStores.length,
+          'Products count': products.length,
+          'Product categories count': productCategories.length,
+        },
+      );
+
       emit(HomeLoaded(
         bigStores: bigStores,
         smallStores: smallStores,
         products: products,
         productCategories: productCategories,
       ));
-    } else {
-      print('Not emitting HomeLoaded state - invalid or no data available');
-      print('bigStores count: ${bigStores.length}');
-      print('smallStores count: ${smallStores.length}');
-      print('products count: ${products.length}');
+    } else if (storeState is StoreError) {
+      emit(HomeError(storeState.message));
     }
   }
 
   // Helper method to validate store data
   bool _hasInvalidStoreData(List<Store> bigStores, List<Store> smallStores) {
     // Check for stores that might be miscategorized
-    bool hasInvalidBigStores = bigStores.any((store) => store.isBigStore == false);
-    bool hasInvalidSmallStores = smallStores.any((store) => store.isBigStore == true);
-    
+    bool hasInvalidBigStores =
+        bigStores.any((store) => store.isBigStore != true);
+    bool hasInvalidSmallStores =
+        smallStores.any((store) => store.isBigStore != false);
+
     if (hasInvalidBigStores || hasInvalidSmallStores) {
-      print('Warning: Found miscategorized stores!');
+      _logger.warning('Warning: Found miscategorized stores!');
+      if (hasInvalidBigStores) {
+        _logger.warning(
+          'Found stores in bigStores with isBigStore != true',
+        );
+      }
+      if (hasInvalidSmallStores) {
+        _logger.warning(
+          'Found stores in smallStores with isBigStore != false',
+        );
+      }
       return true;
     }
     return false;
@@ -150,20 +192,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   Future<void> close() {
+    _logger.info('Closing HomeBloc');
     _storeSubscription.cancel();
     _productSubscription.cancel();
     return super.close();
-  }
-
-  String _mapErrorToMessage(dynamic error) {
-    if (error is NetworkException) {
-      return 'Please check your internet connection';
-    } else if (error is UnauthorizedException) {
-      return 'Session expired. Please login again';
-    } else if (error is ServerException) {
-      return 'Server error: ${error.message}';
-    } else {
-      return 'An unexpected error occurred';
-    }
   }
 }

@@ -4,10 +4,12 @@ import '../entities/store.dart';
 import '../entities/product.dart';
 import '../repositories/store_repository.dart';
 import '../repositories/product_repository.dart';
+import '../../core/utils/logger.dart';
 
 class GetHomeDataUseCase {
   final StoreRepository storeRepository;
   final ProductRepository productRepository;
+  final AppLogger _logger = AppLogger();
 
   GetHomeDataUseCase({
     required this.storeRepository,
@@ -18,7 +20,7 @@ class GetHomeDataUseCase {
     try {
       // Fetch all stores
       final allStores = await storeRepository.getStores().catchError((e) {
-        print('Error fetching all stores: $e');
+        _logger.error('Error fetching all stores', error: e);
         return <Store>[];
       });
 
@@ -34,6 +36,12 @@ class GetHomeDataUseCase {
       final bigStores = _findBigStores(allStores);
       final smallStores = _findSmallStores(allStores);
 
+      _logger.debug('Home data loaded', error: {
+        'Big stores count': bigStores.length,
+        'Small stores count': smallStores.length,
+        'Store products count': storeProducts.length,
+      });
+
       return HomeData(
         bigStores: bigStores,
         smallStores: smallStores,
@@ -41,7 +49,7 @@ class GetHomeDataUseCase {
         allStores: allStores,
       );
     } catch (e) {
-      print('Error in GetHomeDataUseCase: $e');
+      _logger.error('Error in GetHomeDataUseCase', error: e);
       // Return empty lists if there's an error
       return HomeData(
         bigStores: [],

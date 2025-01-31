@@ -1,12 +1,26 @@
-// ignore_for_file: prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 
+import 'package:hive/hive.dart';
+import '../../core/config/app_config.dart';
 import '../../domain/entities/store.dart';
+import '../../core/utils/logger.dart';
 
+part 'store_model.g.dart';
+
+@HiveType(typeId: 0)
 class StoreModel extends Store {
+  static final AppLogger _logger = AppLogger();
+
+  @override
+  @HiveField(0)
+  // ignore: overridden_fields
   final String? logoUrl;
 
+  @HiveField(1)
+  final DateTime cachedAt;
+
   StoreModel({
-    required String id,
+    String? id,
     required String name,
     String? description,
     double? rating,
@@ -18,7 +32,6 @@ class StoreModel extends Store {
     List<Map<String, dynamic>>? products,
     DateTime? createdAt,
     DateTime? updatedAt,
-    // New fields from backend
     int? totalProducts,
     bool? isBigStore,
     String? deliveryType,
@@ -28,76 +41,91 @@ class StoreModel extends Store {
     double? freeDeliveryThreshold,
     int? totalReviews,
     this.logoUrl,
-  }) : super(
-          id: id,
-          name: name,
-          description: description,
-          rating: rating,
-          isOpen: isOpen,
-          distance: distance,
-          estimatedTime: estimatedTime,
-          address: address,
-          categories: categories,
-          products: products,
+    DateTime? cachedAt,
+  })  : cachedAt = cachedAt ?? DateTime.now(),
+        super(
+          id: id ?? '',
+          name: name ?? 'Unnamed Store',
+          description: description ?? '',
+          rating: rating ?? 0.0,
+          isOpen: isOpen ?? false,
+          distance: distance ?? 0.0,
+          estimatedTime: estimatedTime ?? 0,
+          address: address ?? '',
+          categories: categories ?? [],
+          products: products ?? [],
           createdAt: createdAt,
           updatedAt: updatedAt,
-          // Additional fields
-          totalProducts: totalProducts,
-          isBigStore: isBigStore,
-          deliveryType: deliveryType,
-          isCurrentlyOpen: isCurrentlyOpen,
-          deliveryFee: deliveryFee,
-          minimumOrder: minimumOrder,
-          freeDeliveryThreshold: freeDeliveryThreshold,
-          totalReviews: totalReviews,
+          totalProducts: totalProducts ?? 0,
+          isBigStore: isBigStore ?? false,
+          deliveryType: deliveryType ?? '',
+          isCurrentlyOpen: isCurrentlyOpen ?? false,
+          deliveryFee: deliveryFee ?? 0.0,
+          minimumOrder: minimumOrder ?? 0.0,
+          freeDeliveryThreshold: freeDeliveryThreshold ?? 0.0,
+          totalReviews: totalReviews ?? 0,
         );
 
+  static dynamic parseNumeric(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value;
+    try {
+      return num.tryParse(value.toString());
+    } catch (e) {
+      _logger.warning('Failed to parse numeric value: $value');
+      return null;
+    }
+  }
+
   factory StoreModel.fromJson(Map<String, dynamic> json) {
-    return StoreModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? 'Unknown Store',
-      description: json['description'],
-      rating: json['rating'] != null
-          ? double.parse(json['rating'].toString())
-          : null,
-      isOpen: json['is_open'],
-      distance: json['distance'] != null
-          ? double.parse(json['distance'].toString())
-          : null,
-      estimatedTime: json['estimated_time'],
-      address: json['address'],
-      categories: (json['categories'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList(),
-      products: (json['products'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList(),
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
-          : null,
-      // New fields from backend
-      totalProducts: json['total_products'],
-      isBigStore: json['is_big_store'],
-      deliveryType: json['delivery_type'],
-      isCurrentlyOpen: json['is_currently_open'],
-      deliveryFee: json['delivery_fee'] != null
-          ? double.parse(json['delivery_fee'].toString())
-          : null,
-      minimumOrder: json['minimum_order'] != null
-          ? double.parse(json['minimum_order'].toString())
-          : null,
-      freeDeliveryThreshold: json['free_delivery_threshold'] != null
-          ? double.parse(json['free_delivery_threshold'].toString())
-          : null,
-      totalReviews: json['total_reviews'],
-      logoUrl: json['logo_url'],
-    );
+    try {
+      String? logoUrl = json['logo_url']?.toString();
+      if (logoUrl != null && !logoUrl.startsWith('http')) {
+        logoUrl = '${AppConfig.mediaBaseUrl}$logoUrl';
+      }
+
+      return StoreModel(
+        id: json['id']?.toString() ?? '',
+        name: json['name']?.toString() ?? '',
+        description: json['description']?.toString(),
+        rating: parseNumeric(json['rating'])?.toDouble(),
+        isOpen: (json['is_open']?.toString().toLowerCase() == 'true'),
+        distance: parseNumeric(json['distance'])?.toDouble(),
+        estimatedTime: parseNumeric(json['estimated_time'])?.toInt(),
+        address: json['address']?.toString(),
+        categories: (json['categories'] as List?)
+            ?.map((e) => e as Map<String, dynamic>)
+            .toList(),
+        products: (json['products'] as List?)
+            ?.map((e) => e as Map<String, dynamic>)
+            .toList(),
+        createdAt: DateTime.tryParse(json['created_at']?.toString() ?? ''),
+        updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? ''),
+        totalProducts: parseNumeric(json['total_products'])?.toInt(),
+        isBigStore: (json['is_big_store']?.toString().toLowerCase() == 'true'),
+        deliveryType: json['delivery_type']?.toString(),
+        isCurrentlyOpen:
+            (json['is_currently_open']?.toString().toLowerCase() == 'true'),
+        deliveryFee: parseNumeric(json['delivery_fee'])?.toDouble(),
+        minimumOrder: parseNumeric(json['minimum_order'])?.toDouble(),
+        freeDeliveryThreshold:
+            parseNumeric(json['free_delivery_threshold'])?.toDouble(),
+        logoUrl: logoUrl,
+        cachedAt: DateTime.now(),
+      );
+    } catch (e, stackTrace) {
+      _logger.error(
+        'Error parsing StoreModel from JSON',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
   }
 
   factory StoreModel.fromEntity(Store store) {
+    _logger.debug('Converting Store entity to StoreModel: ${store.name}');
+
     if (store is StoreModel) {
       return store;
     }
@@ -124,10 +152,12 @@ class StoreModel extends Store {
       freeDeliveryThreshold: store.freeDeliveryThreshold,
       totalReviews: store.totalReviews,
       logoUrl: store is StoreModel ? store.logoUrl : null,
+      cachedAt: DateTime.now(),
     );
   }
 
   factory StoreModel.toModel(Store store) {
+    _logger.debug('Converting Store to StoreModel: ${store.name}');
     return StoreModel(
       id: store.id,
       name: store.name,
@@ -149,33 +179,8 @@ class StoreModel extends Store {
       minimumOrder: store.minimumOrder,
       freeDeliveryThreshold: store.freeDeliveryThreshold,
       totalReviews: store.totalReviews,
-      logoUrl: store.logoUrl,
-    );
-  }
-
-  factory StoreModel.fromStore(Store store) {
-    return StoreModel(
-      id: store.id,
-      name: store.name,
-      description: store.description,
-      logoUrl: store.logoUrl,
-      rating: store.rating,
-      isOpen: store.isOpen,
-      distance: store.distance,
-      estimatedTime: store.estimatedTime,
-      address: store.address,
-      categories: store.categories,
-      products: store.products,
-      createdAt: store.createdAt,
-      updatedAt: store.updatedAt,
-      totalProducts: store.totalProducts,
-      isBigStore: store.isBigStore,
-      deliveryType: store.deliveryType,
-      isCurrentlyOpen: store.isCurrentlyOpen,
-      deliveryFee: store.deliveryFee,
-      minimumOrder: store.minimumOrder,
-      freeDeliveryThreshold: store.freeDeliveryThreshold,
-      totalReviews: store.totalReviews,
+      logoUrl: store is StoreModel ? store.logoUrl : null,
+      cachedAt: DateTime.now(),
     );
   }
 
@@ -215,6 +220,12 @@ class StoreModel extends Store {
       // Timestamps
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
+      'cached_at': cachedAt.toIso8601String(),
     };
+  }
+
+  @override
+  String toString() {
+    return 'StoreModel(id: $id, name: $name, rating: $rating, isOpen: $isOpen)';
   }
 }
