@@ -190,6 +190,7 @@ class StoreViewSet(viewsets.ModelViewSet, ProductAvailabilityMixin, DeliveryMixi
                 'rating': str(store.rating),
                 'total_reviews': store.total_reviews,
                 'is_open': store.is_open,
+                'is_big_store': store.is_big_store,
                 'is_currently_open': store.is_currently_open(),
                 'delivery_type': store.delivery_type,
                 'delivery_fee': float(store.delivery_fee),

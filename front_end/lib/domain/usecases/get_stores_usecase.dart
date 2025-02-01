@@ -5,40 +5,30 @@ import '../../core/utils/logger.dart';
 
 class GetStoresUseCase {
   final StoreRepository storeRepository;
+  // ignore: unused_field
   final AppLogger _logger = AppLogger();
 
   GetStoresUseCase({required this.storeRepository});
 
-  Future<List<StoreModel>> getBigStores() async {
-    List<Store> stores = await storeRepository.getStores(isBigStore: true);
-    return stores.map(StoreModel.fromEntity).toList();
-  }
+  Future<Map<String, List<StoreModel>>> getStoresData() async {
+    Map<String, List<Store>> storesMap =
+        await storeRepository.getStores(isBigStore: true, name: 'carrefour');
 
-  Future<List<StoreModel>> getSmallStores() async {
-    List<Store> stores = await storeRepository.getStores(isBigStore: false);
-    return stores.map(StoreModel.fromEntity).toList();
-  }
+    // Convert the stores map to StoreModel map
+    final Map<String, List<StoreModel>> storeModelMap = {
+      'bigStores':
+          (storesMap['bigStores'] ?? []).map(StoreModel.fromEntity).toList(),
+      'smallStores':
+          (storesMap['smallStores'] ?? []).map(StoreModel.fromEntity).toList(),
+      'storesByName':
+          (storesMap['storesByName'] ?? []).map(StoreModel.fromEntity).toList(),
+    };
 
-  Future<List<StoreModel>> getAllStores() async {
-    try {
-      List<Store> stores = await storeRepository.getStores();
+    _logger.debug('GetStoresUseCase: Retrieved stores for home screen - '
+        'big: ${storeModelMap['bigStores']?.length}, '
+        'small: ${storeModelMap['smallStores']?.length}, '
+        'byName: ${storeModelMap['storesByName']?.length}');
 
-      // Enhanced logging
-      _logger.debug(
-          'GetStoresUseCase: Total stores from repository: ${stores.length}');
-
-      // for (var store in stores) {
-      //   _logger.debug('Store in getAllStores:', error: {
-      //     'Name': store.name,
-      //     'Is Big Store': store.isBigStore,
-      //     'Logo URL': store.logoUrl,
-      //   });
-      // }
-
-      return stores.map((store) => StoreModel.fromEntity(store)).toList();
-    } catch (e) {
-      _logger.error('GetStoresUseCase: Error getting all stores: $e');
-      rethrow;
-    }
+    return storeModelMap;
   }
 }

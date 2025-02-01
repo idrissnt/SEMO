@@ -5,15 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../data/models/store_model.dart';
 import '../../core/config/app_config.dart';
 import '../../data/repositories/auth_repository_impl.dart';
-import '../../data/repositories/store_repository_impl.dart';
-import '../../data/repositories/product_repository_impl.dart';
-import '../../data/repositories/recipe_repository_impl.dart';
-import '../../data/repositories/category_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../domain/repositories/store_repository.dart';
-import '../../domain/repositories/product_repository.dart';
-import '../../domain/repositories/recipe_repository.dart';
-import '../../domain/repositories/category_repository.dart';
 import '../../presentation/blocs/auth/auth_bloc.dart';
 import '../../domain/services/auth_service.dart';
 import 'dart:developer' as developer;
@@ -71,32 +63,6 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<AuthService>(
       () => AuthService(
         storage: getIt<FlutterSecureStorage>(),
-      ),
-    );
-
-    // Register repositories
-    getIt.registerLazySingleton<StoreRepository>(
-      () => StoreRepositoryImpl(
-        client: getIt<http.Client>(),
-        storeBox: getIt<Box<StoreModel>>(),
-      ),
-    );
-
-    getIt.registerLazySingleton<ProductRepository>(
-      () => ProductRepositoryImpl(
-        client: getIt<http.Client>(),
-      ),
-    );
-
-    getIt.registerLazySingleton<CategoryRepository>(
-      () => CategoryRepositoryImpl(
-        client: getIt<http.Client>(),
-      ),
-    );
-
-    getIt.registerLazySingleton<RecipeRepository>(
-      () => RecipeRepositoryImpl(
-        client: getIt<http.Client>(),
       ),
     );
 

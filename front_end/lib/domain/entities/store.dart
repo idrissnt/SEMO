@@ -10,8 +10,8 @@ class Store extends Equatable {
   final double? distance;
   final int? estimatedTime;
   final String? address;
-  final List<Map<String, dynamic>>? categories;
-  final List<Map<String, dynamic>>? products;
+  final List<Map<String, dynamic>> categories;
+  final List<Map<String, dynamic>> products;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -35,8 +35,8 @@ class Store extends Equatable {
     this.distance,
     this.estimatedTime,
     this.address,
-    this.categories,
-    this.products,
+    required this.categories,
+    required this.products,
     this.createdAt,
     this.updatedAt,
     // New fields

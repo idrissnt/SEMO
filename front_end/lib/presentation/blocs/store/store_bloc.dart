@@ -1,7 +1,8 @@
-// ignore_for_file: unused_catch_clause, avoid_print
+// ignore_for_file: unused_catch_clause
 
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/error/exceptions.dart';
+
 import '../../../core/utils/logger.dart';
 import '../../../domain/usecases/get_stores_usecase.dart';
 import 'store_event.dart';
@@ -11,39 +12,70 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
   final GetStoresUseCase getStoresUseCase;
   final AppLogger _logger = AppLogger();
 
+  // Stores data fetched once and used across methods
+  Map<String, dynamic>? _storesData;
+  bool _isLoading = false;
+
   StoreBloc({required this.getStoresUseCase}) : super(StoreInitial()) {
-    on<LoadAllStores>(_onLoadAllStores);
+    on<LoadAllStoresEvent>(_onLoadAllStores);
   }
 
-  void _onLoadAllStores(LoadAllStores event, Emitter<StoreState> emit) async {
+  Future<Map<String, dynamic>> _fetchStoresData() async {
+    // Prevent multiple simultaneous API calls
+    if (_isLoading) {
+      // Wait for the ongoing fetch to complete
+      while (_isLoading) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      return _storesData!;
+    }
+
+    // If data is already loaded, return it
+    if (_storesData != null) {
+      return _storesData!;
+    }
+
+    try {
+      _isLoading = true;
+      _logger.debug('Fetching stores data');
+      
+      final storesData = await getStoresUseCase.getStoresData();
+      
+      _storesData = storesData;
+      _logger.debug('Initialized stores data: '
+          'big=${storesData['bigStores']?.length}, '
+          'small=${storesData['smallStores']?.length}, '
+          'byName=${storesData['storesByName']?.length}');
+      
+      return storesData;
+    } catch (e, stackTrace) {
+      _logger.error('Error fetching stores data',
+          error: e, stackTrace: stackTrace);
+      rethrow;
+    } finally {
+      _isLoading = false;
+    }
+  }
+
+  Future<void> _onLoadAllStores(
+      LoadAllStoresEvent event, Emitter<StoreState> emit) async {
     _logger.debug('Loading all stores');
     emit(StoreLoading());
+
     try {
-      final stores = await getStoresUseCase.getAllStores();
+      final storesData = await _fetchStoresData();
+      
+      emit(AllStoresLoaded(
+        bigStores: storesData['bigStores'] ?? [],
+        smallStores: storesData['smallStores'] ?? [],
+        storesByName: storesData['storesByName'] ?? [],
+      ));
 
-      // Enhanced logging for store details
-      _logger.info('Total stores loaded: ${stores.length}');
-      for (var store in stores) {
-        // _logger.debug('Store Details: '
-        //     'Name=${store.name}, '
-        //     'Is Big Store=${store.isBigStore}, '
-        //     'Logo URL=${store.logoUrl}, '
-        //     'Rating=${store.rating}');
-
-        if (store.isBigStore == null) {
-          _logger.warning('Store ${store.name} has null isBigStore value');
-        }
-      }
-
-      emit(StoreLoaded(stores));
-    } on NetworkException catch (e, stackTrace) {
-      _logger.error('Network error while loading stores',
-          error: e, stackTrace: stackTrace);
-      emit(StoreError('Failed to load stores: ${e.message}'));
+      _logger.debug('Successfully loaded all stores');
     } catch (e, stackTrace) {
-      _logger.error('Unexpected error while loading stores',
+      _logger.error('Error loading stores',
           error: e, stackTrace: stackTrace);
-      emit(const StoreError('An unexpected error occurred'));
+      emit(StoreError('Failed to load stores: ${e.toString()}'));
     }
   }
 }

@@ -4,24 +4,24 @@ class Product extends Equatable {
   final String id;
   final String name;
   final String imageUrl;
-  final List<double> priceRange;
+  final List<double>? priceRange;
   final bool isSeasonalProduct;
   final String categoryName;
   final Map<String, dynamic>? parentCategory;
-  final int availableStoreCount;
+  final int? availableStoreCount;
   final List<Map<String, dynamic>> stores;
   final String description;
-  final String unit;
+  final String? unit;
 
   const Product({
     required this.id,
     required this.name,
     required this.imageUrl,
-    required this.priceRange,
+    this.priceRange,
     required this.isSeasonalProduct,
     required this.categoryName,
     required this.parentCategory,
-    required this.availableStoreCount,
+    this.availableStoreCount,
     required this.stores,
     required this.description,
     required this.unit,

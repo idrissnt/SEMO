@@ -5,18 +5,14 @@ import '../../core/config/app_config.dart';
 import '../../domain/entities/store.dart';
 import '../../core/utils/logger.dart';
 
-part 'store_model.g.dart';
-
 @HiveType(typeId: 0)
 class StoreModel extends Store {
   static final AppLogger _logger = AppLogger();
 
   @override
-  @HiveField(0)
   // ignore: overridden_fields
   final String? logoUrl;
 
-  @HiveField(1)
   final DateTime cachedAt;
 
   StoreModel({

@@ -1,30 +1,25 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers, sized_box_for_whitespace, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../core/utils/logger.dart';
-import '../../../data/models/product_model.dart';
-import '../../../data/models/store_model.dart';
-import '../../blocs/home/home_event.dart';
-import '../../blocs/product/product_event.dart';
-import '../../blocs/product/product_state.dart';
+import '../../blocs/store/store_bloc.dart';
 import '../../blocs/store/store_event.dart';
-import '../../widgets/homescreen/product_card.dart';
-import '../../widgets/homescreen/store_cards.dart';
+import '../../blocs/store/store_state.dart';
+import '../../widgets/homescreen/store_section.dart';
+import '../../widgets/homescreen/custom_home_app_bar.dart';
+import '../../widgets/common/error_view.dart';
+import '../../widgets/common/loading_view.dart';
+// import '../../widgets/store/store_products_section.dart';
 import '../mission/mission_screen.dart';
 import '../earn/earn_screen.dart';
 import '../message/message_screen.dart';
 import '../semo_ai/semo_ai_screen.dart';
-import '../../blocs/home/home_bloc.dart';
-import '../../blocs/home/home_state.dart';
-import '../../blocs/store/store_bloc.dart';
-import '../../blocs/product/product_bloc.dart';
-import '../../widgets/app_bars/custom_home_app_bar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _MainScreenState createState() => _MainScreenState();
 }
 
@@ -43,14 +38,17 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch stores and products when the screen initializes
+    _logger.debug('MainScreen: Initializing');
+    _loadInitialData(context);
+  }
+
+  void _loadInitialData(BuildContext context) {
     try {
-      _logger.debug('MainScreen: Initializing and loading stores and products');
-      context.read<StoreBloc>().add(LoadAllStores());
-      context.read<ProductBloc>().add(LoadProducts());
-    } catch (e, stackTrace) {
-      _logger.error('Error initializing MainScreen',
-          error: e, stackTrace: stackTrace);
+      _logger.debug('MainScreen: Loading data');
+      // Single event to load all stores
+      context.read<StoreBloc>().add(LoadAllStoresEvent());
+    } catch (e) {
+      _logger.error('Error in MainScreen._loadInitialData', error: e);
     }
   }
 
@@ -107,204 +105,131 @@ class _HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<_HomeTab> {
-  final AppLogger _logger = AppLogger();
-
-  void _printLogFilePath() async {
-    final logger = AppLogger();
-    print('Current Log File Path: ${logger.logFilePath}');
-
-    // Copy log to app's documents directory
-    await logger.copyLogToDownloads();
-
-    // Print log contents
-    await logger.printLogContents();
-  }
+  final ScrollController _scrollController = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
-    _logger.debug('HomeTab: Initializing');
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-    // Print log file path
-    _printLogFilePath();
-
-    // Trigger home data loading
-    context.read<HomeBloc>().add(LoadHomeData());
-    context.read<ProductBloc>().add(LoadProducts());
+  Future<void> _refreshData() {
+    final storeBloc = context.read<StoreBloc>();
+    storeBloc.add(LoadAllStoresEvent());
+    // Return a completed future to satisfy RefreshIndicator
+    return Future.delayed(const Duration(seconds: 2));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          return false;
-        },
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverAppBar(
-                  expandedHeight: kToolbarHeight * 2.45,
-                  collapsedHeight: kToolbarHeight,
-                  toolbarHeight: kToolbarHeight,
-                  pinned: true,
-                  primary: true,
-                  stretch: true,
-                  stretchTriggerOffset: 30.0,
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Container(color: Colors.white),
-                    collapseMode: CollapseMode.pin,
-                    expandedTitleScale: 1.0,
-                    titlePadding: EdgeInsets.zero,
-                    title: LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        final top = constraints.biggest.height;
-                        final scrolledRatio =
-                            ((top - kToolbarHeight) / (kToolbarHeight * 1.45))
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<StoreBloc, StoreState>(
+            listener: (context, state) {
+              if (state is StoreError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
+              }
+            },
+          ),
+        ],
+        child: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              // Handle scroll notifications if needed
+              return false;
+            },
+            child: NestedScrollView(
+              controller: _scrollController,
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      context,
+                    ),
+                    sliver: SliverAppBar(
+                      expandedHeight: kToolbarHeight * 2.45,
+                      collapsedHeight: kToolbarHeight,
+                      toolbarHeight: kToolbarHeight,
+                      pinned: true,
+                      primary: true,
+                      stretch: true,
+                      stretchTriggerOffset: 30.0,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Container(color: Colors.white),
+                        collapseMode: CollapseMode.pin,
+                        expandedTitleScale: 1.0,
+                        titlePadding: EdgeInsets.zero,
+                        title: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final top = constraints.biggest.height;
+                            final scrolledRatio = ((top - kToolbarHeight) /
+                                    (kToolbarHeight * 1.45))
                                 .clamp(0.0, 1.0);
-                        final isCollapsed = scrolledRatio < 0.5;
-                        return CustomHomeAppBar(
-                          isCollapsed: isCollapsed,
-                          scrolledRatio: scrolledRatio,
-                        );
-                      },
+                            final isCollapsed = scrolledRatio < 0.5;
+                            return CustomHomeAppBar(
+                              isCollapsed: isCollapsed,
+                              scrolledRatio: scrolledRatio,
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
+                ];
+              },
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: kToolbarHeight * 2),
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BlocBuilder<StoreBloc, StoreState>(
+                      buildWhen: (previous, current) =>
+                          current is AllStoresLoaded ||
+                          current is StoreLoading ||
+                          current is StoreError,
+                      builder: (context, state) {
+                        if (state is StoreLoading) {
+                          return const LoadingView();
+                        } else if (state is StoreError) {
+                          return ErrorView(message: state.message);
+                        } else if (state is AllStoresLoaded) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (state.bigStores.isNotEmpty)
+                                StoreSection(
+                                  title: 'Big Stores',
+                                  stores: state.bigStores,
+                                  isLarge: true,
+                                ),
+                              if (state.smallStores.isNotEmpty)
+                                StoreSection(
+                                  title: 'Small Stores',
+                                  stores: state.smallStores,
+                                  isLarge: false,
+                                ),
+                            ],
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                    // Featured Products Section
+                    // const StoreProductsSection(
+                    //   storeName: 'Carrefour', // Primary store name
+                    // ),
+                  ],
                 ),
               ),
-            ];
-          },
-          body: BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, state) {
-              if (state is HomeLoading) {
-                return Center(child: CircularProgressIndicator());
-              }
-
-              if (state is HomeLoaded) {
-                return BlocBuilder<ProductBloc, ProductState>(
-                  builder: (context, productState) {
-                    if (productState is ProductsLoaded) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                                height: 100), // Add space after the search bar
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Big Stores",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                            Container(
-                              height: 160,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.symmetric(horizontal: 4),
-                                itemCount: state.bigStores.length,
-                                itemBuilder: (context, index) {
-                                  return BigStoreCard(
-                                    store: StoreModel.fromEntity(
-                                        state.bigStores[index]),
-                                  );
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Small Stores",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                            Container(
-                              height: 140,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.symmetric(horizontal: 4),
-                                itemCount: state.smallStores.length,
-                                itemBuilder: (context, index) {
-                                  return SmallStoreCard(
-                                    store: StoreModel.fromEntity(
-                                        state.smallStores[index]),
-                                  );
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 16),
-                            ...productState.productCategories.entries
-                                .map((entry) {
-                              final categoryName =
-                                  entry.key.replaceAll('_', ' ');
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Text(
-                                      categoryName.toUpperCase(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 220,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      itemCount: entry.value.length,
-                                      itemBuilder: (context, index) {
-                                        return ProductCard(
-                                          product: entry.value[index]
-                                              as ProductModel,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(height: 16),
-                                ],
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      );
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  },
-                );
-              }
-
-              if (state is HomeError) {
-                return Center(
-                  child: Text('Error loading home data: ${state.message}'),
-                );
-              }
-
-              return Center(child: Text('Unexpected state'));
-            },
+            ),
           ),
         ),
       ),

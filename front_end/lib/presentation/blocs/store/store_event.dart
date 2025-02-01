@@ -7,8 +7,4 @@ abstract class StoreEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadBigStores extends StoreEvent {}
-
-class LoadSmallStores extends StoreEvent {}
-
-class LoadAllStores extends StoreEvent {}
+class LoadAllStoresEvent extends StoreEvent {}
