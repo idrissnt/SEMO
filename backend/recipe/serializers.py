@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from .models import Recipe
-from product.serializers import ProductSerializer
+from store.serializers import ArticleSerializer
 
 class RecipeSerializer(serializers.ModelSerializer):
-    ingredients = ProductSerializer(many=True, read_only=True)
+    ingredients = ArticleSerializer(many=True, read_only=True)
     image_url = serializers.SerializerMethodField()
 
     class Meta:

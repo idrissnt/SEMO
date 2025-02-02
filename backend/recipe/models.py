@@ -1,5 +1,5 @@
 from django.db import models
-from product.models import Product
+from store.models import Article
 
 # Create your models here.
 
@@ -15,7 +15,7 @@ class Recipe(models.Model):
         ('MEDIUM', 'Medium'),
         ('HARD', 'Hard')
     ])
-    ingredients = models.ManyToManyField(Product, related_name='recipes')
+    ingredients = models.ManyToManyField(Article, related_name='recipes')
     instructions = models.TextField()
     is_popular = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
