@@ -7,7 +7,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = Recipe
+        model = Recipe  
         fields = '__all__'
 
     def get_image_url(self, obj):

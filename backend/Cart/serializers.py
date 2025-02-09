@@ -14,3 +14,9 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ['id', 'items']
+    def  get_items(self,instance) :
+        queryset = instance.items.all()
+        serializer = CartItemSerializer(queryset, many=True)
+        # la propriété '.data' est le rendu de notre serializer que nous retournons ici
+        return serializer.data 
+

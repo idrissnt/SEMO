@@ -6,6 +6,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
+from Mission.views import TaskViewSet
 
 from store.views import ShopStoreList, CategoryList, productList, articleList
 
@@ -22,6 +23,7 @@ router.register(r'shopstore', ShopStoreList, basename='store')
 router.register(r'category', CategoryList, basename='category')
 router.register(r'product', productList, basename='product')
 router.register(r'article', articleList, basename='article')
+router.register(r'tasks', TaskViewSet)
 
 app_name = 'store'
 
@@ -32,7 +34,8 @@ router.register(r'cart', CartViewSet, basename='add_to_cart')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
-     path('api/v1/', include(router.urls)),
+    path('api/v1/', include(router.urls)),
+    
     # API URLs
     path('api/v1', include([
        path('', include('the_user_app.urls')),

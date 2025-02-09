@@ -1,9 +1,21 @@
 from django.db import models
-
-# Create your models here.
+from django.utils import timezone
+import uuid
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Store(models.Model):
     image=models.ImageField()
+
+    IMAGE_MAX_SIZE = (800, 800)
+
+    def resize_image(self):
+        image = Image.open(self.image)
+        image.thumbnail(self.IMAGE_MAX_SIZE)
+        image.save(self.image.path)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.resize_image()
     class Name (models.TextChoices) :
         AUCHAN= 'Auchan'
         LIDL = 'Lidl'
@@ -18,12 +30,13 @@ class Store(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ['-rating', 'name']
-        indexes = [
-            models.Index(fields=['rating']),
-            models.Index(fields=['is_popular']),
-        ]
+    # class Meta:
+    #     ordering = ['-rating', 'name']
+    #     indexes = [
+    #         models.Index(fields=['rating']),
+    #         models.Index(fields=['is_open']),
+    #         models.Index(fields=['delivery_type']),
+        # ]
 
     def __str__(self):
         return self.name
