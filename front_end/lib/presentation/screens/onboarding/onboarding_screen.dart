@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/utils/logger.dart';
 
@@ -56,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
         if (mounted) {
           _logger.debug('Navigating to welcome screen');
-          Navigator.pushReplacementNamed(context, '/welcome');
+          context.go('/welcome');
         }
       } else {
         _logger.debug('Moving to next onboarding page');
@@ -79,7 +80,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
       if (mounted) {
         _logger.debug('Navigating to welcome screen after skipping');
-        Navigator.pushReplacementNamed(context, '/welcome');
+        context.go('/welcome');
       }
     } catch (e, stackTrace) {
       _logger.error('Error skipping onboarding',

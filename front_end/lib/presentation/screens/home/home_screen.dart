@@ -9,91 +9,53 @@ import '../../widgets/homescreen/store_section.dart';
 import '../../widgets/homescreen/custom_home_app_bar.dart';
 import '../../widgets/common/error_view.dart';
 import '../../widgets/common/loading_view.dart';
-// import '../../widgets/store/store_products_section.dart';
-import '../mission/mission_screen.dart';
-import '../earn/earn_screen.dart';
-import '../message/message_screen.dart';
-import '../semo_ai/semo_ai_screen.dart';
+// import '../../widgets/homescreen/quick_actions_section.dart';
+import '../../widgets/homescreen/task_suggestions_section.dart';
+import '../../widgets/homescreen/earn_tasks_section.dart';
+import '../../widgets/homescreen/weekly_recipes_section.dart';
+import '../../widgets/common/section_separator.dart';
+import '../../widgets/homescreen/product_category_section.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  final int initialIndex;
+  final Widget? child;
+
+  const HomeScreen({
+    Key? key,
+    this.initialIndex = 0,
+    this.child,
+  }) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _MainScreenState createState() => _MainScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final AppLogger _logger = AppLogger();
-  int _selectedIndex = 0;
-
-  final List<Widget> _screens = [
-    const _HomeTab(),
-    const MissionScreen(),
-    const EarnScreen(),
-    const MessageScreen(),
-    const SemoAIScreen(),
-  ];
 
   @override
   void initState() {
     super.initState();
-    _logger.debug('MainScreen: Initializing');
+    _logger.debug('HomeScreen: Initializing');
     _loadInitialData(context);
   }
 
   void _loadInitialData(BuildContext context) {
     try {
-      _logger.debug('MainScreen: Loading data');
+      _logger.debug('HomeScreen: Loading data');
+
       // Single event to load all stores
       context.read<StoreBloc>().add(LoadAllStoresEvent());
+      //
     } catch (e) {
-      _logger.error('Error in MainScreen._loadInitialData', error: e);
+      _logger.error('Error in HomeScreen._loadInitialData', error: e);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-            _logger.debug('Navigation tab changed to index: $index');
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_outlined),
-            activeIcon: Icon(Icons.assignment),
-            label: 'Mission',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on_outlined),
-            activeIcon: Icon(Icons.monetization_on),
-            label: 'Earn',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined),
-            activeIcon: Icon(Icons.message),
-            label: 'Message',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.psychology_outlined),
-            activeIcon: Icon(Icons.psychology),
-            label: 'SEMO AI',
-          ),
-        ],
-      ),
-    );
+    return const _HomeTab();
   }
 }
 
@@ -185,7 +147,7 @@ class _HomeTabState extends State<_HomeTab> {
                 ];
               },
               body: SingleChildScrollView(
-                padding: const EdgeInsets.only(top: kToolbarHeight * 2),
+                padding: const EdgeInsets.only(top: kToolbarHeight * 1.6),
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,16 +168,49 @@ class _HomeTabState extends State<_HomeTab> {
                             children: [
                               if (state.bigStores.isNotEmpty)
                                 StoreSection(
-                                  title: 'Big Stores',
+                                  title: 'Fais tes courses chez :',
                                   stores: state.bigStores,
                                   isLarge: true,
                                 ),
-                              if (state.smallStores.isNotEmpty)
-                                StoreSection(
-                                  title: 'Small Stores',
-                                  stores: state.smallStores,
-                                  isLarge: false,
+                              const SectionSeparator(),
+                              // Add Task Suggestions Section
+                              TaskSuggestionsSection(
+                                title: 'Besoin d\'un coup de main ?',
+                                taskSuggestions: getSampleTaskSuggestions(),
+                              ),
+                              const SectionSeparator(),
+                              // Add Earn Tasks Section
+                              EarnTasksSection(
+                                // title: 'Dispo et motivé ? Y\'a du boulot !',
+                                // title: 'Dispo = Money. Simple, non ?',
+                                title: 'Dispo et motivé ? Fais du fric !',
+                                earnTasks: getSampleEarnTasks(),
+                              ),
+                              const SectionSeparator(),
+                              // Add Earn when going to store Section
+                              EarnTasksSection(
+                                title: 'Tu vas au magasin ? Fais du fric ! ',
+                                earnTasks: getSampleEarnTasks(),
+                              ),
+                              const SectionSeparator(),
+                              // Add Weekly Recipes Section
+                              WeeklyRecipesSection(
+                                title: 'Recettes de la semaine',
+                                recipes: getSampleRecipes(),
+                              ),
+                              const SectionSeparator(),
+
+                              // Add Product Category Section for Lidl
+                              if (state.bigStores.isNotEmpty) ...[
+                                ...ProductCategorySection.forStoreMultiple(
+                                  stores: state.bigStores,
+                                  storeName: 'Lidl',
+                                  context: context,
+                                  maxSections:
+                                      3, // Display up to 3 subcategories
                                 ),
+                                const SectionSeparator(),
+                              ],
                             ],
                           );
                         }

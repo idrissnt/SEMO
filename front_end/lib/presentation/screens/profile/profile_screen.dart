@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/config/theme.dart';
 import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
@@ -101,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/login');
+                      context.go('/login');
                     },
                     child: const Text('Login'),
                   ),
@@ -217,11 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // Wait a moment for the logout to process
           await Future.delayed(const Duration(milliseconds: 100));
           if (!context.mounted) return;
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/login',
-            (route) => false,
-          );
+          context.go('/login');
         },
       },
     ];

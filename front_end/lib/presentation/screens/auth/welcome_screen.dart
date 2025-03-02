@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/config/theme.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -43,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 64),
                 ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/login'),
+                  onPressed: () => context.go('/login'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: Colors.white,
@@ -58,7 +59,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 OutlinedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/register'),
+                  onPressed: () => context.go('/register'),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: const BorderSide(color: Colors.white),

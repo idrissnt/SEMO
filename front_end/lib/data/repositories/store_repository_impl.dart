@@ -91,6 +91,9 @@ class StoreRepositoryImpl implements StoreRepository {
         };
 
         _logger.debug(
+            'BigStores details: ${bigStores.map((store) => store.categories).join(', ')}');
+
+        _logger.debug(
             '[store_repository_impl.dart] Returning stores: big=${bigStores.length}, small=${smallStores.length}, byName=${storesByName.length}');
 
         return storesMap;

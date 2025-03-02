@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 // import 'package:google_fonts/googleFonts.dart';
 import '../../../core/config/theme.dart';
 import '../../../core/utils/logger.dart';
@@ -62,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen>
         );
         if (state is AuthAuthenticated) {
           _logger.info('Navigating to main screen');
-          Navigator.pushReplacementNamed(context, '/main');
+          context.go('/');
         }
       },
       child: Scaffold(
@@ -92,8 +93,7 @@ class _LoginScreenState extends State<LoginScreen>
                         IconButton(
                           icon: const Icon(Icons.arrow_back_ios,
                               color: Colors.white),
-                          onPressed: () => Navigator.pushReplacementNamed(
-                              context, '/welcome'),
+                          onPressed: () => context.go('/welcome'),
                         ),
                         const SizedBox(height: 32),
                         Text(
@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.pushNamed(context, '/register');
+                                context.go('/register');
                               },
                               child: Text(
                                 'Register',

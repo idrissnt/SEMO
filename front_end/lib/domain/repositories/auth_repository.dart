@@ -27,4 +27,7 @@ abstract class AuthRepository {
   // New methods for persistent auth
   Future<bool> hasValidToken();
   Future<bool> refreshToken();
+  Future<String?> getRefreshToken();
+  Future<void> saveRefreshToken(String token);
+  Future<void> deleteRefreshToken();
 }

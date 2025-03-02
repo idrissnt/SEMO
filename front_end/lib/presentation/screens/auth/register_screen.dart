@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/config/theme.dart';
 import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
@@ -114,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       listener: (context, state) {
         if (state is AuthAuthenticated) {
           _logger.info('User registered and authenticated successfully');
-          Navigator.pushReplacementNamed(context, '/main');
+          context.go('/');
         } else if (state is AuthFailure) {
           _logger.error('Registration error: ${state.error}');
           ScaffoldMessenger.of(context).showSnackBar(
@@ -149,8 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         IconButton(
                           icon: const Icon(Icons.arrow_back_ios,
                               color: Colors.white),
-                          onPressed: () => Navigator.pushReplacementNamed(
-                              context, '/welcome'),
+                          onPressed: () => context.go('/welcome'),
                         ),
                         const SizedBox(height: 32),
                         Text(
@@ -404,8 +404,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               ),
                             ),
                             TextButton(
-                              onPressed: () => Navigator.pushReplacementNamed(
-                                  context, '/login'),
+                              onPressed: () => context.go('/login'),
                               child: Text(
                                 'Login',
                                 style: AppTheme.bodyMedium.copyWith(

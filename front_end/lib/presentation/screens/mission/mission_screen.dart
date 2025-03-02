@@ -1,21 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/utils/logger.dart';
 
 class MissionScreen extends StatefulWidget {
   const MissionScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _MissionScreenState createState() => _MissionScreenState();
 }
 
 class _MissionScreenState extends State<MissionScreen> {
   final AppLogger _logger = AppLogger();
   final List<Map<String, dynamic>> _missions = [
-    {'id': 1, 'title': 'Complete Profile', 'description': 'Fill out your profile details', 'points': 50},
-    {'id': 2, 'title': 'First Purchase', 'description': 'Make your first purchase', 'points': 100},
-    {'id': 3, 'title': 'Refer a Friend', 'description': 'Invite a friend to the app', 'points': 75},
-    {'id': 4, 'title': 'Write a Review', 'description': 'Write a review for a product', 'points': 25},
-    {'id': 5, 'title': 'Share on Social Media', 'description': 'Share app on social platforms', 'points': 40},
+    {
+      'id': 1,
+      'title': 'Complete Profile',
+      'description': 'Fill out your profile details',
+      'points': 50
+    },
+    {
+      'id': 2,
+      'title': 'First Purchase',
+      'description': 'Make your first purchase',
+      'points': 100
+    },
+    {
+      'id': 3,
+      'title': 'Refer a Friend',
+      'description': 'Invite a friend to the app',
+      'points': 75
+    },
+    {
+      'id': 4,
+      'title': 'Write a Review',
+      'description': 'Write a review for a product',
+      'points': 25
+    },
+    {
+      'id': 5,
+      'title': 'Share on Social Media',
+      'description': 'Share app on social platforms',
+      'points': 40
+    },
   ];
 
   @override
@@ -27,10 +54,9 @@ class _MissionScreenState extends State<MissionScreen> {
 
   void _startMission(Map<String, dynamic> mission) {
     _logger.info('User started mission: ${mission['title']}');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Mission "${mission['title']}" started. Earn ${mission['points']} points!'))
-    );
-    // TODO: Implement actual mission start logic
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            'Mission "${mission['title']}" started. Earn ${mission['points']} points!')));
   }
 
   @override
@@ -51,16 +77,21 @@ class _MissionScreenState extends State<MissionScreen> {
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text('Missions Info'),
-                    content: const Text('Complete missions to earn points and rewards!'),
+                    content: const Text(
+                        'Complete missions to earn points and rewards!'),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () => context.pop(),
                         child: const Text('Close'),
                       ),
                     ],
                   ),
                 );
               },
+            ),
+            IconButton(
+              icon: const Icon(Icons.home),
+              onPressed: () => context.go('/'), // Navigate back to home tab
             ),
           ],
         ),
@@ -103,7 +134,8 @@ class _MissionScreenState extends State<MissionScreen> {
         ),
       );
     } catch (e, stackTrace) {
-      _logger.error('Error building MissionScreen', error: e, stackTrace: stackTrace);
+      _logger.error('Error building MissionScreen',
+          error: e, stackTrace: stackTrace);
       return Scaffold(
         body: Center(
           child: Text('Error: ${e.toString()}'),

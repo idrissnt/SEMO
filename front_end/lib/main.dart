@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'core/config/routes.dart';
 import 'core/theme/app_colors.dart';
 import 'core/utils/logger.dart';
@@ -15,11 +14,7 @@ import 'domain/repositories/store_repository.dart';
 import 'domain/usecases/get_stores_usecase.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_event.dart';
-import 'presentation/blocs/auth/auth_state.dart';
 import 'presentation/blocs/store/store_bloc.dart';
-import 'presentation/screens/auth/login_screen.dart';
-import 'presentation/screens/onboarding/onboarding_screen.dart';
-import 'presentation/screens/main/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,9 +26,6 @@ void main() async {
   try {
     // Initialize services
     logger.debug('Initializing other services');
-    final prefs = await SharedPreferences.getInstance();
-    final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
-
     final client = http.Client();
     const secureStorage = FlutterSecureStorage();
 
@@ -62,9 +54,7 @@ void main() async {
                 final bloc = AuthBloc(
                   authRepository: context.read<AuthRepository>(),
                 );
-                if (hasSeenOnboarding) {
-                  bloc.add(AuthCheckRequested());
-                }
+                bloc.add(AuthCheckRequested());
                 return bloc;
               },
             ),
@@ -76,70 +66,36 @@ void main() async {
               ),
             ),
           ],
-          child: MyApp(hasSeenOnboarding: hasSeenOnboarding),
+          child: const MyApp(),
         ),
       ),
     );
   } catch (e, stackTrace) {
-    logger.error('Error during initialization: $e',
-        error: e, stackTrace: stackTrace);
-    // Re-throw to prevent app from starting in a broken state
+    logger.error('Error in main()', error: e, stackTrace: stackTrace);
     rethrow;
   }
 }
 
 class MyApp extends StatelessWidget {
-  final bool hasSeenOnboarding;
-
-  const MyApp({
-    Key? key,
-    required this.hasSeenOnboarding,
-  }) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    try {
-      final logger = AppLogger();
-      logger.debug('Building MyApp widget');
-
-      return MaterialApp(
-        title: 'SEMO',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: AppColors.primaryColor,
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            iconTheme: IconThemeData(color: AppColors.primaryColor),
-            titleTextStyle: TextStyle(
-              color: AppColors.primaryColor,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
+    return MaterialApp.router(
+      title: 'SEMO',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: AppColors.background,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black,
           ),
         ),
-        initialRoute:
-            hasSeenOnboarding ? AppRoutes.login : AppRoutes.onboarding,
-        onGenerateRoute: AppRoutes.generateRoute,
-        home: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (!hasSeenOnboarding) {
-              return const OnboardingScreen();
-            }
-
-            if (state is AuthAuthenticated) {
-              return const MainScreen();
-            }
-
-            return const LoginScreen();
-          },
-        ),
-      );
-    } catch (e, stackTrace) {
-      final logger = AppLogger();
-      logger.error('Error building MyApp', error: e, stackTrace: stackTrace);
-      rethrow;
-    }
+      ),
+      routerConfig: AppRouter.router,
+    );
   }
 }

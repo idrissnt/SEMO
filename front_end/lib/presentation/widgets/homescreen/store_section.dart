@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:front_end/core/utils/logger.dart';
 
 import '../../../domain/entities/store.dart';
 
@@ -9,7 +10,9 @@ class StoreSection extends StatelessWidget {
   final List<Store> stores;
   final bool isLarge;
 
-  const StoreSection({
+  final AppLogger _logger = AppLogger();
+
+  StoreSection({
     Key? key,
     required this.title,
     required this.stores,
@@ -23,7 +26,11 @@ class StoreSection extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.white,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: const [Colors.blueAccent, Colors.purpleAccent],
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -32,45 +39,54 @@ class StoreSection extends StatelessWidget {
           ),
         ],
       ),
-      child: ClipOval(
-        child: store.logoUrl != null
-            ? Image.network(
-                store.logoUrl!,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: Colors.grey[100],
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  print('Error loading store image: $error');
-                  return Container(
+      child: Padding(
+        padding: EdgeInsets.all(3.0),
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
+          child: ClipOval(
+            child: store.logoUrl != null
+                ? Image.network(
+                    store.logoUrl!,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        color: Colors.grey[100],
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      _logger.error('Error loading store image: $error');
+                      return Container(
+                        color: Colors.grey[200],
+                        child: Icon(
+                          Icons.store,
+                          size: size * 0.4,
+                          color: Colors.grey[400],
+                        ),
+                      );
+                    },
+                  )
+                : Container(
                     color: Colors.grey[200],
                     child: Icon(
                       Icons.store,
                       size: size * 0.4,
                       color: Colors.grey[400],
                     ),
-                  );
-                },
-              )
-            : Container(
-                color: Colors.grey[200],
-                child: Icon(
-                  Icons.store,
-                  size: size * 0.4,
-                  color: Colors.grey[400],
-                ),
-              ),
+                  ),
+          ),
+        ),
       ),
     );
   }
@@ -85,31 +101,33 @@ class StoreSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(left: 16.0),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
         ),
         SizedBox(
-          height: isLarge ? 160 : 140,
+          height: isLarge ? 140 : 140, // before: 160 : 140
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             itemCount: stores.length,
             itemBuilder: (context, index) {
               final store = stores[index];
               return Container(
-                width: isLarge ? 120 : 100,
-                margin: EdgeInsets.symmetric(horizontal: 8),
+                width: isLarge ? 105 : 100,
+                margin: EdgeInsets.symmetric(horizontal: 2),
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      // TODO: Implement store details navigation
-                      print('Tapped store: ${store.name}');
+                      // todo: Implement store details navigation
+                      _logger.info('Tapped store: ${store.name}');
                     },
                     borderRadius: BorderRadius.circular(12),
                     child: Column(

@@ -13,6 +13,7 @@ class AuthRepositoryImpl implements AuthRepository {
   final FlutterSecureStorage _secureStorage;
   final AppLogger _logger = AppLogger();
   static const String _tokenKey = 'access_token';
+  static const String _refreshTokenKey = 'refresh_token';
 
   AuthRepositoryImpl({
     required http.Client client,
@@ -52,8 +53,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
         if (data['refresh'] != null) {
           _logger.debug('Saving refresh token');
-          await _secureStorage.write(
-              key: 'refresh_token', value: data['refresh']);
+          await saveRefreshToken(data['refresh']);
         } else {
           _logger.warning('No refresh token in response');
         }
@@ -121,8 +121,7 @@ class AuthRepositoryImpl implements AuthRepository {
           await saveAccessToken(data['access']);
         }
         if (data['refresh'] != null) {
-          await _secureStorage.write(
-              key: 'refresh_token', value: data['refresh']);
+          await saveRefreshToken(data['refresh']);
         }
 
         // Create user from response data
@@ -170,40 +169,20 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> logout() async {
     try {
-      _logger.debug('Starting logout process');
-      final token = await getAccessToken();
-      
-      if (token != null) {
-        try {
-          // Attempt server-side logout
-          final response = await _client.post(
-            Uri.parse('${AppConfig.apiBaseUrl}${AppConfig.logoutEndpoint}'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $token',
-            },
-          ).timeout(
-            const Duration(seconds: 10),
-            onTimeout: () {
-              _logger.error('Logout request timed out');
-              throw TimeoutException('Connection to server timed out');
-            },
-          );
-
-          _logger.debug('Server logout response: ${response.statusCode}');
-          if (response.statusCode != 200) {
-            _logger.error('Server logout failed: ${response.body}');
-          }
-        } catch (e, stackTrace) {
-          // Log but continue with local logout
-          _logger.error('Server logout failed, continuing with local logout', error: e, stackTrace: stackTrace);
-        }
+      // Attempt to invalidate the refresh token on the server
+      final refreshToken = await getRefreshToken();
+      if (refreshToken != null) {
+        await _client.post(
+          Uri.parse('${AppConfig.apiBaseUrl}${AppConfig.logoutEndpoint}'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'refresh_token': refreshToken}),
+        );
       }
 
       // Always clear local tokens
       await Future.wait([
         deleteAccessToken(),
-        _secureStorage.delete(key: 'refresh_token'),
+        deleteRefreshToken(),
       ]);
       _logger.debug('Successfully cleared all tokens');
     } catch (e, stackTrace) {
@@ -267,7 +246,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> refreshToken() async {
     try {
-      final refreshToken = await _secureStorage.read(key: 'refresh_token');
+      final refreshToken = await getRefreshToken();
       if (refreshToken == null) {
         _logger.debug('No refresh token found');
         return false;
@@ -284,6 +263,12 @@ class AuthRepositoryImpl implements AuthRepository {
         if (data['access'] != null) {
           _logger.debug('Token refresh successful');
           await saveAccessToken(data['access']);
+          
+          // If a new refresh token is provided, save it
+          if (data['refresh'] != null) {
+            await saveRefreshToken(data['refresh']);
+          }
+          
           return true;
         }
       }
@@ -291,7 +276,7 @@ class AuthRepositoryImpl implements AuthRepository {
       // If refresh failed, clear tokens
       await Future.wait([
         deleteAccessToken(),
-        _secureStorage.delete(key: 'refresh_token'),
+        deleteRefreshToken(),
       ]);
 
       _logger.error('Token refresh failed: ${response.statusCode}');
@@ -362,6 +347,19 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<String?> getRefreshToken() async {
+    try {
+      final token = await _secureStorage.read(key: _refreshTokenKey);
+      _logger.debug(
+          'Retrieved refresh token from secure storage: ${token != null ? 'Token exists' : 'No token'}');
+      return token;
+    } catch (e, stackTrace) {
+      _logger.error('Error reading refresh token', error: e, stackTrace: stackTrace);
+      return null;
+    }
+  }
+
+  @override
   Future<void> saveAccessToken(String token) async {
     try {
       await _secureStorage.write(key: _tokenKey, value: token);
@@ -373,12 +371,33 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> saveRefreshToken(String token) async {
+    try {
+      await _secureStorage.write(key: _refreshTokenKey, value: token);
+      _logger.debug('Refresh token saved successfully');
+    } catch (e, stackTrace) {
+      _logger.error('Error saving refresh token', error: e, stackTrace: stackTrace);
+      throw Exception('Failed to save refresh token');
+    }
+  }
+
+  @override
   Future<void> deleteAccessToken() async {
     try {
       await _secureStorage.delete(key: _tokenKey);
       _logger.debug('Access token deleted successfully');
     } catch (e, stackTrace) {
       _logger.error('Error deleting access token', error: e, stackTrace: stackTrace);
+    }
+  }
+
+  @override
+  Future<void> deleteRefreshToken() async {
+    try {
+      await _secureStorage.delete(key: _refreshTokenKey);
+      _logger.debug('Refresh token deleted successfully');
+    } catch (e, stackTrace) {
+      _logger.error('Error deleting refresh token', error: e, stackTrace: stackTrace);
     }
   }
 }

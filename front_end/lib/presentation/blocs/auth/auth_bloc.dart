@@ -86,14 +86,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       // First, log all available tokens
       final accessToken = await _authRepository.getAccessToken();
+      final refreshToken = await _authRepository.getRefreshToken();
       _logger.info('Access Token Status: ${accessToken != null ? 'EXISTS' : 'NULL'}');
+      _logger.info('Refresh Token Status: ${refreshToken != null ? 'EXISTS' : 'NULL'}');
 
-      // Check if we have a valid token
-      final hasToken = await _authRepository.hasValidToken();
-      _logger.info('Token Validity Check: $hasToken');
+      // If no refresh token, user must log in
+      if (refreshToken == null) {
+        _logger.info('No refresh token found. Emitting Unauthenticated state.');
+        emit(AuthUnauthenticated());
+        return;
+      }
 
-      if (!hasToken) {
-        _logger.info('No valid token found. Emitting Unauthenticated state.');
+      // Try to refresh the token
+      final tokenRefreshed = await _authRepository.refreshToken();
+      _logger.info('Token Refresh Attempt: $tokenRefreshed');
+
+      if (!tokenRefreshed) {
+        _logger.info('Token refresh failed. Emitting Unauthenticated state.');
         emit(AuthUnauthenticated());
         return;
       }

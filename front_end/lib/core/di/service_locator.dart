@@ -63,6 +63,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<AuthService>(
       () => AuthService(
         storage: getIt<FlutterSecureStorage>(),
+        logger: logger,
       ),
     );
 
