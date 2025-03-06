@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:front_end/core/extensions/responsive_extension.dart';
-import 'package:front_end/core/utils/responsive_utils.dart';
+import 'package:semo/core/extensions/responsive_extension.dart';
+import 'package:semo/core/utils/responsive_utils.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
   final bool isCollapsed;

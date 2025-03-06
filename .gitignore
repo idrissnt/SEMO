@@ -12,3 +12,5 @@
 *.jpg
 *.jpeg
 *.gif
+backend/venv/
+front_end/lib/setup.ps1

@@ -1,0 +1,2 @@
+/Users/idrissnt/Documents/django_flutter_2/front_end/android/app/.cxx/Debug/12604p67/x86_64/CMakeFiles/edit_cache.dir
+/Users/idrissnt/Documents/django_flutter_2/front_end/android/app/.cxx/Debug/12604p67/x86_64/CMakeFiles/rebuild_cache.dir

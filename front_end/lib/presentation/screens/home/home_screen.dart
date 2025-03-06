@@ -5,16 +5,16 @@ import '../../../core/utils/logger.dart';
 import '../../blocs/store/store_bloc.dart';
 import '../../blocs/store/store_event.dart';
 import '../../blocs/store/store_state.dart';
+
 import '../../widgets/homescreen/store_section.dart';
 import '../../widgets/homescreen/custom_home_app_bar.dart';
 import '../../widgets/common/error_view.dart';
 import '../../widgets/common/loading_view.dart';
-// import '../../widgets/homescreen/quick_actions_section.dart';
 import '../../widgets/homescreen/task_suggestions_section.dart';
 import '../../widgets/homescreen/earn_tasks_section.dart';
 import '../../widgets/homescreen/weekly_recipes_section.dart';
 import '../../widgets/common/section_separator.dart';
-import '../../widgets/homescreen/product_category_section.dart';
+// import '../../widgets/homescreen/store_product_category_section.dart';
 
 class HomeScreen extends StatefulWidget {
   final int initialIndex;
@@ -200,17 +200,14 @@ class _HomeTabState extends State<_HomeTab> {
                               ),
                               const SectionSeparator(),
 
-                              // Add Product Category Section for Lidl
-                              if (state.bigStores.isNotEmpty) ...[
-                                ...ProductCategorySection.forStoreMultiple(
-                                  stores: state.bigStores,
-                                  storeName: 'Lidl',
-                                  context: context,
-                                  maxSections:
-                                      3, // Display up to 3 subcategories
-                                ),
-                                const SectionSeparator(),
-                              ],
+                              // Add Product Category Section for Lidl - with dedicated widget
+                              // if (state.bigStores.isNotEmpty)
+                              //   StoreProductCategorySection(
+                              //     storeName: 'Lidl',
+                              //     initialStores: state.bigStores,
+                              //     maxSections: 3,
+                              //   ),
+                              const SectionSeparator(),
                             ],
                           );
                         }

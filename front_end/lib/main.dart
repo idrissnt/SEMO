@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'core/config/routes.dart';
+import 'core/config/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/utils/logger.dart';
 import 'data/repositories/auth_repository_impl.dart';
@@ -63,6 +63,7 @@ void main() async {
                 getStoresUseCase: GetStoresUseCase(
                   storeRepository: context.read<StoreRepository>(),
                 ),
+                storeRepository: context.read<StoreRepository>(),
               ),
             ),
           ],
@@ -93,6 +94,13 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(
             color: Colors.black,
           ),
+        ),
+        // Add platform-specific gesture settings
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          },
         ),
       ),
       routerConfig: AppRouter.router,

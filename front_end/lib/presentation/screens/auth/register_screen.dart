@@ -115,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       listener: (context, state) {
         if (state is AuthAuthenticated) {
           _logger.info('User registered and authenticated successfully');
-          context.go('/');
+          context.go('/homeScreen');
         } else if (state is AuthFailure) {
           _logger.error('Registration error: ${state.error}');
           ScaffoldMessenger.of(context).showSnackBar(

@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen>
         );
         if (state is AuthAuthenticated) {
           _logger.info('Navigating to main screen');
-          context.go('/');
+          context.go('/homeScreen');
         }
       },
       child: Scaffold(

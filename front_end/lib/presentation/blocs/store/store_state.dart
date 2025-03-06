@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../../data/models/store_model.dart';
+import '../../../domain/entities/store.dart';
 
 abstract class StoreState extends Equatable {
   const StoreState();
@@ -25,6 +26,15 @@ class AllStoresLoaded extends StoreState {
 
   @override
   List<Object> get props => [bigStores, smallStores, storesByName];
+}
+
+class StoreLoaded extends StoreState {
+  final Store store;
+
+  const StoreLoaded(this.store);
+
+  @override
+  List<Object> get props => [store];
 }
 
 class StoreError extends StoreState {

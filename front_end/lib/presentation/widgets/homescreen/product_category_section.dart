@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/store_model.dart';
 import '../../../core/utils/logger.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductCategorySection extends StatelessWidget {
   final String categoryTitle;
@@ -29,36 +30,48 @@ class ProductCategorySection extends StatelessWidget {
     required List<StoreModel> stores,
     required String storeName,
     required BuildContext context,
-    int subcategoryIndex = 0, // Added parameter to select which subcategory to display
+    int subcategoryIndex =
+        0, // Added parameter to select which subcategory to display
   }) {
     final logger = AppLogger();
-    
-    logger.debug('ProductCategorySection.forStore called for store: $storeName, subcategoryIndex: $subcategoryIndex');
+
+    logger.debug(
+        'ProductCategorySection.forStore called for store: $storeName, subcategoryIndex: $subcategoryIndex');
     logger.debug('Available stores: ${stores.map((s) => s.name).join(", ")}');
 
-    // Find the store by name
+    if (stores.isEmpty) {
+      logger.debug('No stores available to display');
+      return const SizedBox.shrink();
+    }
+
+    // Log store types
+    logger.debug('Store isBigStore values: ${stores.map((s) => '${s.name}: ${s.isBigStore}').join(", ")}');
+
+    // Find the store by name with more flexible matching
     final store = stores.firstWhere(
-      (store) => store.name.toLowerCase().contains(storeName.toLowerCase()),
+      (store) => store.name.toLowerCase().contains(storeName.toLowerCase()) || 
+                 storeName.toLowerCase().contains(store.name.toLowerCase()),
       orElse: () {
-        logger.debug('Store $storeName not found, using first available store');
+        logger.debug('Store $storeName not found, using first available store: ${stores.first.name}');
         return stores.first;
       },
     );
-    
+
     logger.debug('Selected store: ${store.name} (ID: ${store.id})');
-    
+
     // Safely access categories
     final categories = store.categories;
     logger.debug('Store categories count: ${categories.length}');
     if (categories.isNotEmpty) {
-      logger.debug('Store categories: ${categories.map((c) => c['name']).join(", ")}');
+      logger.debug(
+          'Store categories: ${categories.map((c) => c['name']).join(", ")}');
     }
 
     // Get the first category from the store if available
     final categoryName = categories.isNotEmpty
         ? categories.first['name']?.toString() ?? 'Meat and seafood'
         : 'Meat and seafood';
-        
+
     logger.debug('Selected category: $categoryName');
 
     // Find the selected category
@@ -71,16 +84,16 @@ class ProductCategorySection extends StatelessWidget {
     if (selectedCategory.isNotEmpty &&
         selectedCategory.containsKey('subcategories')) {
       final subcategories = selectedCategory['subcategories'];
-      
-      logger.debug('Found ${subcategories?.length ?? 0} subcategories in category $categoryName');
+
+      logger.debug(
+          'Found ${subcategories?.length ?? 0} subcategories in category $categoryName');
 
       if (subcategories != null &&
           subcategories is List &&
           subcategories.isNotEmpty) {
-        
         // Get all subcategories with products
         List<Map<String, dynamic>> subcategoriesWithProducts = [];
-        
+
         for (var subcategory in subcategories) {
           if (subcategory is Map<String, dynamic> &&
               subcategory.containsKey('products')) {
@@ -89,29 +102,33 @@ class ProductCategorySection extends StatelessWidget {
             if (subcategoryProducts != null &&
                 subcategoryProducts is List &&
                 subcategoryProducts.isNotEmpty) {
-              logger.debug('Found ${subcategoryProducts.length} products in subcategory ${subcategory['name']}');
+              logger.debug(
+                  'Found ${subcategoryProducts.length} products in subcategory ${subcategory['name']}');
               subcategoriesWithProducts.add(subcategory);
             }
           }
         }
-        
-        logger.debug('Found ${subcategoriesWithProducts.length} subcategories with products');
-        
+
+        logger.debug(
+            'Found ${subcategoriesWithProducts.length} subcategories with products');
+
         // Check if the requested subcategory index exists
-        if (subcategoriesWithProducts.isNotEmpty && 
+        if (subcategoriesWithProducts.isNotEmpty &&
             subcategoryIndex < subcategoriesWithProducts.length) {
-          
           // Get the subcategory at the specified index
-          final selectedSubcategory = subcategoriesWithProducts[subcategoryIndex];
-          logger.debug('Selected subcategory at index $subcategoryIndex: ${selectedSubcategory['name']}');
-          
+          final selectedSubcategory =
+              subcategoriesWithProducts[subcategoryIndex];
+          logger.debug(
+              'Selected subcategory at index $subcategoryIndex: ${selectedSubcategory['name']}');
+
           final subcategoryProducts = selectedSubcategory['products'];
           List<Map<String, dynamic>> categoryProducts = [];
-          
+
           // Process products from the selected subcategory
           if (subcategoryProducts != null && subcategoryProducts is List) {
-            logger.debug('Processing ${subcategoryProducts.length} products from subcategory ${selectedSubcategory['name']}');
-            
+            logger.debug(
+                'Processing ${subcategoryProducts.length} products from subcategory ${selectedSubcategory['name']}');
+
             for (var product in subcategoryProducts) {
               if (product is Map<String, dynamic>) {
                 // Add store details to the product if available
@@ -122,7 +139,8 @@ class ProductCategorySection extends StatelessWidget {
                     // Copy price from store_details to the main product
                     if (storeDetails.containsKey('price')) {
                       product['price'] = storeDetails['price'];
-                      logger.debug('Extracted price ${storeDetails['price']} for product ${product['name']}');
+                      logger.debug(
+                          'Extracted price ${storeDetails['price']} for product ${product['name']}');
                     }
                   }
                 }
@@ -130,8 +148,9 @@ class ProductCategorySection extends StatelessWidget {
                 categoryProducts.add(Map<String, dynamic>.from(product));
               }
             }
-            
-            logger.debug('Processed ${categoryProducts.length} products for display');
+
+            logger.debug(
+                'Processed ${categoryProducts.length} products for display');
           }
 
           // If we found products, return the widget
@@ -139,8 +158,9 @@ class ProductCategorySection extends StatelessWidget {
             // Get the subcategory name to use as title
             final subcategoryName =
                 selectedSubcategory['name']?.toString() ?? categoryName;
-            
-            logger.debug('Creating ProductCategorySection with title: $subcategoryName and ${categoryProducts.length} products');
+
+            logger.debug(
+                'Creating ProductCategorySection with title: $subcategoryName and ${categoryProducts.length} products');
 
             return ProductCategorySection(
               categoryTitle: subcategoryName,
@@ -158,10 +178,12 @@ class ProductCategorySection extends StatelessWidget {
               },
             );
           } else {
-            logger.debug('No products found in subcategory ${selectedSubcategory['name']}');
+            logger.debug(
+                'No products found in subcategory ${selectedSubcategory['name']}');
           }
         } else {
-          logger.debug('Requested subcategory index $subcategoryIndex is out of range (max: ${subcategoriesWithProducts.length - 1})');
+          logger.debug(
+              'Requested subcategory index $subcategoryIndex is out of range (max: ${subcategoriesWithProducts.length - 1})');
         }
       } else {
         logger.debug('No valid subcategories found in category $categoryName');
@@ -170,11 +192,12 @@ class ProductCategorySection extends StatelessWidget {
       logger.debug('Category $categoryName has no subcategories');
     }
 
-    logger.debug('Returning empty widget as no valid subcategory or products were found');
+    logger.debug(
+        'Returning empty widget as no valid subcategory or products were found');
     // If no subcategory with products was found, return an empty widget
     return const SizedBox.shrink();
   }
-  
+
   /// Creates multiple ProductCategorySection widgets for a specific store
   static List<Widget> forStoreMultiple({
     required List<StoreModel> stores,
@@ -183,20 +206,41 @@ class ProductCategorySection extends StatelessWidget {
     int maxSections = 3, // Maximum number of sections to display
   }) {
     final logger = AppLogger();
-    logger.debug('forStoreMultiple called for store: $storeName, maxSections: $maxSections');
+    logger.debug(
+        'forStoreMultiple called for store: $storeName, maxSections: $maxSections');
+    logger.debug('Available stores count: ${stores.length}');
     
+    if (stores.isEmpty) {
+      logger.debug('No stores available');
+      return [];
+    }
+
+    // Try to find matching stores with more flexibility
+    List<StoreModel> matchingStores = stores.where(
+      (s) => s.name.toLowerCase().contains(storeName.toLowerCase()) || 
+             storeName.toLowerCase().contains(s.name.toLowerCase())
+    ).toList();
+    
+    // If no matching stores found, use all available stores
+    if (matchingStores.isEmpty) {
+      logger.debug('No matching stores found for $storeName, using all available stores');
+      matchingStores = stores;
+    } else {
+      logger.debug('Found ${matchingStores.length} matching stores for $storeName');
+    }
+
     final List<Widget> sections = [];
-    
+
     // Try to create sections for different subcategories
     for (int i = 0; i < maxSections; i++) {
       logger.debug('Attempting to create section for subcategory index: $i');
       final section = forStore(
-        stores: stores,
+        stores: matchingStores,
         storeName: storeName,
         context: context,
         subcategoryIndex: i,
       );
-      
+
       // Only add non-empty sections
       if (section is! SizedBox) {
         logger.debug('Adding section for subcategory index: $i');
@@ -205,7 +249,7 @@ class ProductCategorySection extends StatelessWidget {
         logger.debug('No valid section found for subcategory index: $i');
       }
     }
-    
+
     logger.debug('Created ${sections.length} sections for store: $storeName');
     return sections;
   }
@@ -232,76 +276,84 @@ class ProductCategorySection extends StatelessWidget {
     _logger.debug('Building header for ${store.name} - $categoryTitle');
     _logger.debug('Store logo URL: ${store.logoUrl}');
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        children: [
-          // Store logo
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: ClipOval(
-              child: store.logoUrl != null && store.logoUrl!.isNotEmpty
-                  ? Image.network(
-                      store.logoUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        _logger.warning('Failed to load store logo: $error');
-                        return const Icon(Icons.store, color: Colors.grey);
-                      },
-                    )
-                  : const Icon(Icons.store, color: Colors.grey),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Category title and store name
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  categoryTitle,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+    return GestureDetector(
+      onTap: () {
+        _logger.debug(
+            'Header tapped, navigating to store with category: $categoryTitle');
+        // Use Go Router instead of Navigator.push
+        context.go('/store/${store.id}?category=$categoryTitle');
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          children: [
+            // Store logo
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
                   ),
-                ),
-                Text(
-                  'From ${store.name}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
+                ],
+              ),
+              child: ClipOval(
+                child: store.logoUrl != null && store.logoUrl!.isNotEmpty
+                    ? Image.network(
+                        store.logoUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          _logger.warning('Failed to load store logo: $error');
+                          return const Icon(Icons.store, color: Colors.grey);
+                        },
+                      )
+                    : const Icon(Icons.store, color: Colors.grey),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Category title and store name
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    categoryTitle,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-              ],
+                  Text(
+                    'From ${store.name}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          // Arrow icon
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey.withOpacity(0.1),
+            // Arrow icon
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey.withOpacity(0.1),
+              ),
+              child: const Icon(
+                Icons.arrow_forward,
+                color: Colors.black,
+              ),
             ),
-            child: const Icon(
-              Icons.arrow_forward,
-              color: Colors.black,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

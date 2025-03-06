@@ -4,78 +4,66 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/utils/logger.dart';
+import '../../../domain/repositories/store_repository.dart';
 import '../../../domain/usecases/get_stores_usecase.dart';
 import 'store_event.dart';
 import 'store_state.dart';
 
 class StoreBloc extends Bloc<StoreEvent, StoreState> {
   final GetStoresUseCase getStoresUseCase;
+  final StoreRepository storeRepository;
   final AppLogger _logger = AppLogger();
 
-  // Stores data fetched once and used across methods
-  Map<String, dynamic>? _storesData;
-  bool _isLoading = false;
-
-  StoreBloc({required this.getStoresUseCase}) : super(StoreInitial()) {
+  StoreBloc({
+    required this.getStoresUseCase,
+    required this.storeRepository,
+  }) : super(StoreInitial()) {
     on<LoadAllStoresEvent>(_onLoadAllStores);
-  }
-
-  Future<Map<String, dynamic>> _fetchStoresData() async {
-    // Prevent multiple simultaneous API calls
-    if (_isLoading) {
-      // Wait for the ongoing fetch to complete
-      while (_isLoading) {
-        await Future.delayed(const Duration(milliseconds: 100));
-      }
-      return _storesData!;
-    }
-
-    // If data is already loaded, return it
-    if (_storesData != null) {
-      return _storesData!;
-    }
-
-    try {
-      _isLoading = true;
-      _logger.debug('Fetching stores data');
-      
-      final storesData = await getStoresUseCase.getStoresData();
-      
-      _storesData = storesData;
-      _logger.debug('Initialized stores data: '
-          'big=${storesData['bigStores']?.length}, '
-          'small=${storesData['smallStores']?.length}, '
-          'byName=${storesData['storesByName']?.length}');
-      
-      return storesData;
-    } catch (e, stackTrace) {
-      _logger.error('Error fetching stores data',
-          error: e, stackTrace: stackTrace);
-      rethrow;
-    } finally {
-      _isLoading = false;
-    }
+    on<LoadStoreByIdEvent>(_onLoadStoreById);
   }
 
   Future<void> _onLoadAllStores(
       LoadAllStoresEvent event, Emitter<StoreState> emit) async {
-    _logger.debug('Loading all stores');
+    _logger.debug('Loading all stores (lightweight)');
     emit(StoreLoading());
 
     try {
-      final storesData = await _fetchStoresData();
-      
+      // Get lightweight store data for home screen
+      final storesData = await getStoresUseCase.getStoresData();
+
       emit(AllStoresLoaded(
         bigStores: storesData['bigStores'] ?? [],
         smallStores: storesData['smallStores'] ?? [],
         storesByName: storesData['storesByName'] ?? [],
       ));
 
-      _logger.debug('Successfully loaded all stores');
+      _logger.debug('Successfully loaded all stores (lightweight)');
     } catch (e, stackTrace) {
-      _logger.error('Error loading stores',
-          error: e, stackTrace: stackTrace);
+      _logger.error('Error loading stores', error: e, stackTrace: stackTrace);
       emit(StoreError('Failed to load stores: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onLoadStoreById(
+      LoadStoreByIdEvent event, Emitter<StoreState> emit) async {
+    _logger.debug('Loading store by ID (full details): ${event.storeId}');
+    emit(StoreLoading());
+
+    try {
+      // Get full store details directly from repository
+      final store = await storeRepository.getStoreById(event.storeId);
+
+      if (store != null) {
+        emit(StoreLoaded(store));
+        _logger.debug(
+            'Successfully loaded store details: ${store.name} (ID: ${store.id})');
+      } else {
+        throw Exception('Store not found with ID: ${event.storeId}');
+      }
+    } catch (e, stackTrace) {
+      _logger.error('Error loading store by ID',
+          error: e, stackTrace: stackTrace);
+      emit(StoreError('Failed to load store: ${e.toString()}'));
     }
   }
 }

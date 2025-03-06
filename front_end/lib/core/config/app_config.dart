@@ -14,7 +14,9 @@ class AppConfig {
   static const String registerEndpoint = '/auth/register/';
   static const String profileEndpoint = '/auth/profile/';
   static const String refreshTokenEndpoint = '/auth/refresh/';
-  static const String logoutEndpoint = '/auth/logout/'; // Added logout endpoint
+  static const String logoutEndpoint = '/auth/logout/';
+  static const String allStores = '/stores/';
+  static const String storesFullDetails = '/stores/full_details/';
 
   // App settings
   static const String appName = 'SEMO';

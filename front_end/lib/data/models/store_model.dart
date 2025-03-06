@@ -98,7 +98,9 @@ class StoreModel extends Store {
         createdAt: DateTime.tryParse(json['created_at']?.toString() ?? ''),
         updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? ''),
         totalProducts: parseNumeric(json['total_products'])?.toInt(),
-        isBigStore: (json['is_big_store']?.toString().toLowerCase() == 'true'),
+        isBigStore: json['is_big_store'] == true ||
+            json['is_big_store'] == 1 ||
+            json['is_big_store']?.toString().toLowerCase() == 'true',
         deliveryType: json['delivery_type']?.toString(),
         isCurrentlyOpen:
             (json['is_currently_open']?.toString().toLowerCase() == 'true'),

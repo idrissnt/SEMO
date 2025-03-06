@@ -1,0 +1,1 @@
+/Users/idrissnt/Documents/django_flutter_2/front_end/build/app/intermediates/cxx/Debug/12604p67/obj/arm64-v8a

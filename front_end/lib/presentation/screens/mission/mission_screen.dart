@@ -91,7 +91,7 @@ class _MissionScreenState extends State<MissionScreen> {
             ),
             IconButton(
               icon: const Icon(Icons.home),
-              onPressed: () => context.go('/'), // Navigate back to home tab
+              onPressed: () => context.go('/homeScreen'), // Navigate back to home tab
             ),
           ],
         ),
