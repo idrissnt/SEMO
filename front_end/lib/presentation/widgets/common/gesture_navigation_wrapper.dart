@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+/// A widget that adds iOS-style edge swipe navigation to its child.
+///
+/// This wrapper enables the native iOS-style swipe from left edge to go back
+/// navigation gesture throughout the app.
 class GestureNavigationWrapper extends StatefulWidget {
   final Widget child;
-  final bool enableHomeGesture;
   final bool enableBackGesture;
-  final VoidCallback? onHomeGesture;
   final VoidCallback? onBackGesture;
 
   const GestureNavigationWrapper({
     Key? key,
     required this.child,
-    this.enableHomeGesture = true,
     this.enableBackGesture = true,
-    this.onHomeGesture,
     this.onBackGesture,
   }) : super(key: key);
 
@@ -25,93 +25,155 @@ class GestureNavigationWrapper extends StatefulWidget {
 class _GestureNavigationWrapperState extends State<GestureNavigationWrapper> {
   bool _isDraggingBack = false;
   double _startX = 0;
+  double _currentDragDistance = 0;
+
+  // Constants for gesture detection
+  static const double _edgeSwipeThreshold =
+      20.0; // How close to the edge to start the gesture
+  static const double _triggerThreshold =
+      80.0; // How far to drag to trigger navigation
+  static const double _dragOpacityFactor =
+      0.003; // Factor for opacity calculation during drag
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onVerticalDragUpdate: widget.enableHomeGesture
-          ? (details) {
-              if (details.primaryDelta! < -20) {
-                if (widget.onHomeGesture != null) {
-                  widget.onHomeGesture!();
-                } else {
-                  context.go('/homeScreen');
-                }
-              }
-            }
-          : null,
+    if (!widget.enableBackGesture) {
+      return widget.child;
+    }
 
-      // Back gesture - Track initial touch position
-      onHorizontalDragStart: widget.enableBackGesture
-          ? (details) {
+    return Stack(
+      children: [
+        // Main content
+        widget.child,
+
+        // Gesture detector for edge swipe
+        Positioned.fill(
+          child: GestureDetector(
+            // Detect when touch starts near the left edge
+            onHorizontalDragStart: (details) {
               _startX = details.localPosition.dx;
-              if (_startX < 20) {
-                // Check if touch starts within 20 pixels from left edge
-                _isDraggingBack = true;
+              if (_startX < _edgeSwipeThreshold) {
+                setState(() {
+                  _isDraggingBack = true;
+                  _currentDragDistance = 0;
+                });
               }
-            }
-          : null,
+            },
 
-      // Back gesture - Handle drag
-      onHorizontalDragUpdate: widget.enableBackGesture
-          ? (details) {
-              if (_isDraggingBack && details.primaryDelta! > 0) {
-                final dragDistance = details.localPosition.dx - _startX;
-                if (dragDistance > 50) {
-                  // Trigger after dragging 50 pixels to the right
-                  _isDraggingBack = false;
-                  if (widget.onBackGesture != null) {
-                    widget.onBackGesture!();
-                  } else {
-                    Navigator.maybePop(context);
-                  }
+            // Track the drag movement
+            onHorizontalDragUpdate: (details) {
+              if (_isDraggingBack) {
+                setState(() {
+                  _currentDragDistance = (details.localPosition.dx - _startX)
+                      .clamp(0.0, _triggerThreshold * 1.5);
+                });
+
+                // Trigger back navigation if dragged far enough
+                if (_currentDragDistance > _triggerThreshold) {
+                  _executeBackNavigation();
                 }
               }
-            }
-          : null,
+            },
 
-      onHorizontalDragEnd: widget.enableBackGesture
-          ? (details) {
-              _isDraggingBack = false;
-            }
-          : null,
+            // Handle drag end
+            onHorizontalDragEnd: (details) {
+              if (_isDraggingBack) {
+                // Check if the gesture was quick enough (swipe velocity)
+                if (details.primaryVelocity != null &&
+                    details.primaryVelocity! > 300) {
+                  _executeBackNavigation();
+                } else if (_currentDragDistance > _triggerThreshold / 2) {
+                  // Or if dragged more than half the threshold
+                  _executeBackNavigation();
+                }
 
-      onHorizontalDragCancel: widget.enableBackGesture
-          ? () {
-              _isDraggingBack = false;
-            }
-          : null,
+                setState(() {
+                  _isDraggingBack = false;
+                  _currentDragDistance = 0;
+                });
+              }
+            },
 
-      child: widget.child,
+            // Reset on cancel
+            onHorizontalDragCancel: () {
+              setState(() {
+                _isDraggingBack = false;
+                _currentDragDistance = 0;
+              });
+            },
+
+            // Make the gesture detector transparent to touch events when not dragging
+            behavior: HitTestBehavior.translucent,
+          ),
+        ),
+
+        // Visual feedback during drag (optional)
+        if (_isDraggingBack)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AnimatedOpacity(
+                opacity: _currentDragDistance * _dragOpacityFactor,
+                duration: const Duration(milliseconds: 100),
+                child: Container(
+                  color: Colors.black12,
+                  alignment: Alignment.centerLeft,
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
+  }
+
+  void _executeBackNavigation() {
+    if (widget.onBackGesture != null) {
+      widget.onBackGesture!();
+    } else {
+      // Try to use the Navigator first, fallback to GoRouter
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      } else {
+        context.pop();
+      }
+    }
+
+    setState(() {
+      _isDraggingBack = false;
+      _currentDragDistance = 0;
+    });
   }
 }
 
-// Example of a screen using gestures
+/// A screen widget that includes the gesture navigation wrapper.
+/// Use this as a convenient way to wrap your screens with gesture navigation.
 class GestureNavigationScreen extends StatelessWidget {
   final Widget child;
+  final VoidCallback? onBackGesture;
 
   const GestureNavigationScreen({
     Key? key,
     required this.child,
+    this.onBackGesture,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureNavigationWrapper(
+      onBackGesture: onBackGesture ??
+          () {
+            // Try to pop the current route first, if not possible, go back using go_router
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              context.pop();
+            }
+          },
       child: child,
-      onHomeGesture: () {
-        // Custom home gesture behavior
-        context.go('/homeScreen');
-      },
-      onBackGesture: () {
-        // Try to pop the current route first, if not possible, go back using go_router
-        if (!Navigator.canPop(context)) {
-          context.pop();
-        } else {
-          Navigator.pop(context);
-        }
-      },
     );
   }
 }

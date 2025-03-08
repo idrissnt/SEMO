@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/logger.dart';
-import '../../../../data/models/product_model.dart';
+import '../../../../data/models/store/product_model.dart';
 import '../../../widgets/storescreen/store_aisles_screen/product_card.dart';
 
 class CategoryProductsScreen extends StatefulWidget {
@@ -160,6 +160,8 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen>
 
   @override
   Widget build(BuildContext context) {
+    // We don't need to wrap this screen with GestureNavigationWrapper here
+    // because it's already wrapped in the store_shell_route.dart when navigating
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.categoryName),

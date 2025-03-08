@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../../../data/models/store_model.dart';
-import '../../../domain/entities/store.dart';
+import '../../../data/models/store/store_model.dart';
+import '../../../domain/entities/stores/store.dart';
 
 abstract class StoreState extends Equatable {
   const StoreState();

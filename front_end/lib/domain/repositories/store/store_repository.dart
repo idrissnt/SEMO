@@ -1,4 +1,4 @@
-import '../entities/store.dart';
+import '../../entities/stores/store.dart';
 
 abstract class StoreRepository {
   // Get lightweight list of all stores
@@ -6,7 +6,7 @@ abstract class StoreRepository {
     String? name,
     bool? isBigStore,
   });
-  
+
   // Get full details for a specific store by ID
   Future<Store?> getStoreById(String storeId);
 }

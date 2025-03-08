@@ -5,7 +5,7 @@ import '../../../../core/utils/logger.dart';
 import '../../../blocs/store/store_bloc.dart';
 import '../../../blocs/store/store_event.dart';
 import '../../../blocs/store/store_state.dart';
-import '../../../../data/models/store_model.dart';
+import '../../../../data/models/store/store_model.dart';
 import '../../../widgets/common/loading_view.dart';
 import '../../../widgets/common/error_view.dart';
 import '../../../widgets/storescreen/store_search_bar.dart';

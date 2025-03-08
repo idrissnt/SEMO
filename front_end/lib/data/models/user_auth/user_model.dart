@@ -1,5 +1,5 @@
-import '../../domain/entities/user.dart';
-import '../../core/utils/logger.dart';
+import '../../../domain/entities/user_auth/user.dart';
+import '../../../core/utils/logger.dart';
 
 class UserModel extends User {
   static final AppLogger _logger = AppLogger();

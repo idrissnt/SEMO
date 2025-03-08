@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/config/theme.dart';
+import 'package:semo/core/extensions/theme_extension.dart';
 import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   void initState() {
     super.initState();
     _logger.debug('RegisterScreen: Initializing animation controllers');
-    
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -56,18 +56,6 @@ class _RegisterScreenState extends State<RegisterScreen>
     _confirmPasswordController.dispose();
     _animationController.dispose();
     super.dispose();
-  }
-
-  void _togglePasswordVisibility(bool isConfirmPassword) {
-    setState(() {
-      if (isConfirmPassword) {
-        _obscureConfirmPassword = !_obscureConfirmPassword;
-        _logger.debug('Confirm password visibility toggled: $_obscureConfirmPassword');
-      } else {
-        _obscurePassword = !_obscurePassword;
-        _logger.debug('Password visibility toggled: $_obscurePassword');
-      }
-    });
   }
 
   void _register() {
@@ -127,13 +115,13 @@ class _RegisterScreenState extends State<RegisterScreen>
         body: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    AppTheme.primaryColor,
-                    AppTheme.secondaryColor,
+                    context.primaryColor,
+                    context.secondaryColor,
                   ],
                 ),
               ),
@@ -155,15 +143,13 @@ class _RegisterScreenState extends State<RegisterScreen>
                         const SizedBox(height: 32),
                         Text(
                           'Create\nAccount',
-                          style: AppTheme.headingLarge.copyWith(
-                            color: Colors.white,
-                            height: 1.2,
-                          ),
+                          style: context.headline1,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Sign up to get started',
-                          style: AppTheme.bodyLarge.copyWith(
+                          style: context.bodyLarge.copyWith(
+                            // ignore: deprecated_member_use
                             color: Colors.white.withOpacity(0.9),
                           ),
                         ),
@@ -178,20 +164,19 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   TextFormField(
                                     controller: _firstNameController,
                                     enabled: state is! AuthLoading,
-                                    style: AppTheme.bodyLarge
+                                    style: context.bodyLarge
                                         .copyWith(color: Colors.black87),
                                     decoration: InputDecoration(
                                       labelText: 'First Name',
                                       hintText: 'Enter your first name',
-                                      prefixIcon: const Icon(
-                                          Icons.person_outline,
-                                          color: AppTheme.primaryColor),
-                                      labelStyle: AppTheme.bodyMedium
+                                      prefixIcon: Icon(Icons.person_outline,
+                                          color: context.primaryColor),
+                                      labelStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[700]),
-                                      hintStyle: AppTheme.bodyMedium
+                                      hintStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[400]),
                                       helperText: 'Enter your legal first name',
-                                      helperStyle: AppTheme.bodySmall
+                                      helperStyle: context.bodySmall
                                           .copyWith(color: Colors.grey[600]),
                                     ),
                                     validator: (value) {
@@ -208,20 +193,19 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   TextFormField(
                                     controller: _lastNameController,
                                     enabled: state is! AuthLoading,
-                                    style: AppTheme.bodyLarge
+                                    style: context.bodyLarge
                                         .copyWith(color: Colors.black87),
                                     decoration: InputDecoration(
                                       labelText: 'Last Name',
                                       hintText: 'Enter your last name',
-                                      prefixIcon: const Icon(
-                                          Icons.person_outline,
-                                          color: AppTheme.primaryColor),
-                                      labelStyle: AppTheme.bodyMedium
+                                      prefixIcon: Icon(Icons.person_outline,
+                                          color: context.primaryColor),
+                                      labelStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[700]),
-                                      hintStyle: AppTheme.bodyMedium
+                                      hintStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[400]),
                                       helperText: 'Enter your legal last name',
-                                      helperStyle: AppTheme.bodySmall
+                                      helperStyle: context.bodySmall
                                           .copyWith(color: Colors.grey[600]),
                                     ),
                                     validator: (value) {
@@ -239,21 +223,20 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     controller: _emailController,
                                     enabled: state is! AuthLoading,
                                     keyboardType: TextInputType.emailAddress,
-                                    style: AppTheme.bodyLarge
+                                    style: context.bodyLarge
                                         .copyWith(color: Colors.black87),
                                     decoration: InputDecoration(
                                       labelText: 'Email',
                                       hintText: 'Enter your email',
-                                      prefixIcon: const Icon(
-                                          Icons.email_outlined,
-                                          color: AppTheme.primaryColor),
-                                      labelStyle: AppTheme.bodyMedium
+                                      prefixIcon: Icon(Icons.email_outlined,
+                                          color: context.primaryColor),
+                                      labelStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[700]),
-                                      hintStyle: AppTheme.bodyMedium
+                                      hintStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[400]),
                                       helperText:
                                           'Use a valid email address (e.g., name@example.com)',
-                                      helperStyle: AppTheme.bodySmall
+                                      helperStyle: context.bodySmall
                                           .copyWith(color: Colors.grey[600]),
                                     ),
                                     validator: (value) {
@@ -273,19 +256,19 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     controller: _passwordController,
                                     enabled: state is! AuthLoading,
                                     obscureText: _obscurePassword,
-                                    style: AppTheme.bodyLarge
+                                    style: context.bodyLarge
                                         .copyWith(color: Colors.black87),
                                     decoration: InputDecoration(
                                       labelText: 'Password',
                                       hintText: 'Enter your password',
-                                      prefixIcon: const Icon(Icons.lock_outline,
-                                          color: AppTheme.primaryColor),
+                                      prefixIcon: Icon(Icons.lock_outline,
+                                          color: context.primaryColor),
                                       suffixIcon: IconButton(
                                         icon: Icon(
                                           _obscurePassword
                                               ? Icons.visibility_off
                                               : Icons.visibility,
-                                          color: AppTheme.primaryColor,
+                                          color: context.primaryColor,
                                         ),
                                         onPressed: () {
                                           setState(() {
@@ -294,12 +277,12 @@ class _RegisterScreenState extends State<RegisterScreen>
                                           });
                                         },
                                       ),
-                                      labelStyle: AppTheme.bodyMedium
+                                      labelStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[700]),
-                                      hintStyle: AppTheme.bodyMedium
+                                      hintStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[400]),
                                       helperText: 'At least 6 characters',
-                                      helperStyle: AppTheme.bodySmall
+                                      helperStyle: context.bodySmall
                                           .copyWith(color: Colors.grey[600]),
                                     ),
                                     validator: (value) {
@@ -317,19 +300,19 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     controller: _confirmPasswordController,
                                     enabled: state is! AuthLoading,
                                     obscureText: _obscureConfirmPassword,
-                                    style: AppTheme.bodyLarge
+                                    style: context.bodyLarge
                                         .copyWith(color: Colors.black87),
                                     decoration: InputDecoration(
                                       labelText: 'Confirm Password',
                                       hintText: 'Confirm your password',
-                                      prefixIcon: const Icon(Icons.lock_outline,
-                                          color: AppTheme.primaryColor),
+                                      prefixIcon: Icon(Icons.lock_outline,
+                                          color: context.primaryColor),
                                       suffixIcon: IconButton(
                                         icon: Icon(
                                           _obscureConfirmPassword
                                               ? Icons.visibility_off
                                               : Icons.visibility,
-                                          color: AppTheme.primaryColor,
+                                          color: context.primaryColor,
                                         ),
                                         onPressed: () {
                                           setState(() {
@@ -338,13 +321,13 @@ class _RegisterScreenState extends State<RegisterScreen>
                                           });
                                         },
                                       ),
-                                      labelStyle: AppTheme.bodyMedium
+                                      labelStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[700]),
-                                      hintStyle: AppTheme.bodyMedium
+                                      hintStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[400]),
                                       helperText:
                                           'Re-enter your password to confirm',
-                                      helperStyle: AppTheme.bodySmall
+                                      helperStyle: context.bodySmall
                                           .copyWith(color: Colors.grey[600]),
                                     ),
                                     validator: (value) {
@@ -366,7 +349,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                           : _register,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,
-                                        foregroundColor: AppTheme.primaryColor,
+                                        foregroundColor: context.primaryColor,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 16),
                                         shape: RoundedRectangleBorder(
@@ -375,15 +358,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                                         ),
                                       ),
                                       child: state is AuthLoading
-                                          ? const CircularProgressIndicator(
-                                              color: AppTheme.primaryColor,
+                                          ? CircularProgressIndicator(
+                                              color: context.primaryColor,
                                             )
                                           : Text(
                                               'Register',
-                                              style:
-                                                  AppTheme.bodyLarge.copyWith(
+                                              style: context.bodyLarge.copyWith(
                                                 fontWeight: FontWeight.bold,
-                                                color: AppTheme.primaryColor,
+                                                color: context.primaryColor,
                                               ),
                                             ),
                                     ),
@@ -399,7 +381,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                           children: [
                             Text(
                               "Already have an account? ",
-                              style: AppTheme.bodyMedium.copyWith(
+                              style: context.bodyMedium.copyWith(
                                 color: Colors.white70,
                               ),
                             ),
@@ -407,7 +389,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                               onPressed: () => context.go('/login'),
                               child: Text(
                                 'Login',
-                                style: AppTheme.bodyMedium.copyWith(
+                                style: context.bodyMedium.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -453,7 +435,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                           Expanded(
                             child: Text(
                               state.error,
-                              style: AppTheme.bodyMedium.copyWith(
+                              style: context.bodyMedium.copyWith(
                                 color: Colors.red.shade700,
                                 height: 1.2,
                               ),

@@ -237,7 +237,7 @@ List<EarnTask> getSampleEarnTasks() {
     EarnTask(
       id: '1',
       title: 'Livraison de repas',
-      description: 'Livrer des repas à domicile',
+      description: 'Livrer des repas',
       payment: '12€/h',
       location: 'Paris 11e',
       icon: FontAwesomeIcons.utensils,
@@ -255,7 +255,7 @@ List<EarnTask> getSampleEarnTasks() {
     EarnTask(
       id: '3',
       title: 'Distribution de flyers',
-      description: 'Distribuer des flyers publicitaires',
+      description: 'Distribuer des flyers',
       payment: '11€/h',
       location: 'Paris 9e',
       icon: FontAwesomeIcons.fileLines,
@@ -264,7 +264,7 @@ List<EarnTask> getSampleEarnTasks() {
     EarnTask(
       id: '4',
       title: 'Inventaire magasin',
-      description: 'Réaliser un inventaire en boutique',
+      description: 'Réaliser inventaire',
       payment: '14€/h',
       location: 'Paris 2e',
       icon: FontAwesomeIcons.clipboardList,
@@ -273,7 +273,7 @@ List<EarnTask> getSampleEarnTasks() {
     EarnTask(
       id: '5',
       title: 'Saisie de données',
-      description: 'Saisir des données sur Excel',
+      description: 'Saisir des données',
       payment: '13€/h',
       location: 'Télétravail',
       icon: FontAwesomeIcons.keyboard,

@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../domain/services/auth_service.dart';
-import '../../../presentation/screens/profile/profile_screen.dart';
 import '../../../presentation/blocs/auth/auth_bloc.dart';
 import '../../../presentation/blocs/auth/auth_state.dart';
 import '../../utils/logger.dart';
@@ -77,10 +76,6 @@ class AppRouter {
       ...getAuthRoutes(),
       getMainShellRoute(),
       getStoreShellRoute(),
-      GoRoute(
-        path: '/profile',
-        builder: (context, state) => const ProfileScreen(),
-      ),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(

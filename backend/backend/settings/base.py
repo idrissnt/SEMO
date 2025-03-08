@@ -140,7 +140,9 @@ SIMPLE_JWT = {
 # CORS Settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://172.20.10.10:8000",  # Physical device
+    "http://192.168.187.184:8000",  # Physical device
+    "http://172.20.10.5:8000",  # Physical device
+    "http://172.20.10.5:8000",  # Physical device
     "http://localhost:8000",     # Local development
     "http://127.0.0.1:8000",     # Local development alternative
 ]

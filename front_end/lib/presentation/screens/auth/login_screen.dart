@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:google_fonts/googleFonts.dart';
-import '../../../core/config/theme.dart';
+import 'package:semo/core/extensions/theme_extension.dart';
 import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
@@ -70,13 +69,13 @@ class _LoginScreenState extends State<LoginScreen>
         body: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    AppTheme.primaryColor,
-                    AppTheme.secondaryColor,
+                    context.primaryColor,
+                    context.secondaryColor,
                   ],
                 ),
               ),
@@ -98,17 +97,12 @@ class _LoginScreenState extends State<LoginScreen>
                         const SizedBox(height: 32),
                         Text(
                           'Welcome\nBack',
-                          style: AppTheme.headingLarge.copyWith(
-                            color: Colors.white,
-                            height: 1.2,
-                          ),
+                          style: context.headline1,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Sign in to continue',
-                          style: AppTheme.bodyLarge.copyWith(
-                            color: Colors.white.withOpacity(0.9),
-                          ),
+                          style: context.bodyLarge,
                         ),
                         const SizedBox(height: 48),
                         BlocBuilder<AuthBloc, AuthState>(
@@ -122,17 +116,16 @@ class _LoginScreenState extends State<LoginScreen>
                                     controller: _emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     enabled: state is! AuthLoading,
-                                    style: AppTheme.bodyLarge
+                                    style: context.bodyLarge
                                         .copyWith(color: Colors.black87),
                                     decoration: InputDecoration(
                                       labelText: 'Email',
                                       hintText: 'Enter your email',
-                                      prefixIcon: const Icon(
-                                          Icons.email_outlined,
-                                          color: AppTheme.primaryColor),
-                                      labelStyle: AppTheme.bodyMedium
+                                      prefixIcon: Icon(Icons.email_outlined,
+                                          color: context.primaryColor),
+                                      labelStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[700]),
-                                      hintStyle: AppTheme.bodyMedium
+                                      hintStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[400]),
                                     ),
                                     validator: (value) {
@@ -151,19 +144,19 @@ class _LoginScreenState extends State<LoginScreen>
                                     controller: _passwordController,
                                     obscureText: _obscurePassword,
                                     enabled: state is! AuthLoading,
-                                    style: AppTheme.bodyLarge
+                                    style: context.bodyLarge
                                         .copyWith(color: Colors.black87),
                                     decoration: InputDecoration(
                                       labelText: 'Password',
                                       hintText: 'Enter your password',
-                                      prefixIcon: const Icon(Icons.lock_outline,
-                                          color: AppTheme.primaryColor),
+                                      prefixIcon: Icon(Icons.lock_outline,
+                                          color: context.primaryColor),
                                       suffixIcon: IconButton(
                                         icon: Icon(
                                           _obscurePassword
                                               ? Icons.visibility_off
                                               : Icons.visibility,
-                                          color: AppTheme.primaryColor,
+                                          color: context.primaryColor,
                                         ),
                                         onPressed: () {
                                           setState(() {
@@ -172,9 +165,9 @@ class _LoginScreenState extends State<LoginScreen>
                                           });
                                         },
                                       ),
-                                      labelStyle: AppTheme.bodyMedium
+                                      labelStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[700]),
-                                      hintStyle: AppTheme.bodyMedium
+                                      hintStyle: context.bodyMedium
                                           .copyWith(color: Colors.grey[400]),
                                     ),
                                     validator: (value) {
@@ -231,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen>
                                             : Text(
                                                 'Login',
                                                 style:
-                                                    AppTheme.bodyLarge.copyWith(
+                                                    context.bodyLarge.copyWith(
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.w600,
                                                 ),
@@ -250,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen>
                           children: [
                             Text(
                               'Don\'t have an account? ',
-                              style: AppTheme.bodyMedium.copyWith(
+                              style: context.bodyMedium.copyWith(
                                 color: Colors.white.withOpacity(0.8),
                               ),
                             ),
@@ -260,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen>
                               },
                               child: Text(
                                 'Register',
-                                style: AppTheme.bodyMedium.copyWith(
+                                style: context.bodyMedium.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
@@ -300,7 +293,7 @@ class _LoginScreenState extends State<LoginScreen>
                           Expanded(
                             child: Text(
                               state.error,
-                              style: AppTheme.bodyMedium.copyWith(
+                              style: context.bodyMedium.copyWith(
                                 color: Colors.red.shade700,
                               ),
                             ),

@@ -17,6 +17,48 @@ final _categoryProductsKeys = <String, GlobalKey>{};
 // Navigator key for nested navigation
 final _nestedNavigatorKey = GlobalKey<NavigatorState>();
 
+// Added SwipeBackWrapper widget to enable native iOS swipe back gesture
+class SwipeBackWrapper extends StatefulWidget {
+  final Widget child;
+  final double dragThreshold;
+  const SwipeBackWrapper(
+      {Key? key, required this.child, this.dragThreshold = 100})
+      : super(key: key);
+
+  @override
+  _SwipeBackWrapperState createState() => _SwipeBackWrapperState();
+}
+
+class _SwipeBackWrapperState extends State<SwipeBackWrapper> {
+  double _dragDistance = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onHorizontalDragStart: (details) {
+        // Start tracking only if drag begins near the left edge (within 20 pixels)
+        if (details.globalPosition.dx <= 20) {
+          _dragDistance = 0.0;
+        }
+      },
+      onHorizontalDragUpdate: (details) {
+        // Only accumulate drag distance if started near left edge or already tracking
+        if (details.globalPosition.dx <= 20 || _dragDistance > 0) {
+          _dragDistance += details.delta.dx;
+        }
+      },
+      onHorizontalDragEnd: (details) {
+        // If drag distance exceeds threshold, trigger a back navigation
+        if (_dragDistance > widget.dragThreshold) {
+          Navigator.maybePop(context);
+        }
+      },
+      child: widget.child,
+    );
+  }
+}
+
 ShellRoute getStoreShellRoute() {
   return ShellRoute(
     builder: (context, state, child) {
@@ -96,17 +138,20 @@ ShellRoute getStoreShellRoute() {
       bool isViewingCategory =
           pathSegments.length >= 3 && pathSegments[2] == 'category';
 
-      return Scaffold(
-        body: GestureNavigationWrapper(
-          child: IndexedStack(
+      return SwipeBackWrapper(
+        child: Scaffold(
+          body: IndexedStack(
             index: currentIndex,
             children: [
               // Store Products Screen
               KeyedSubtree(
                 key: _storeProductsKey,
-                child: StoreProductsScreen(
-                  storeId: storeId,
-                  initialCategory: state.uri.queryParameters['category'],
+                child: GestureNavigationWrapper(
+                  child: StoreProductsScreen(
+                    storeId: storeId,
+                    initialCategory: state.uri.queryParameters['category'],
+                  ),
+                  onBackGesture: () => context.go('/homeScreen'),
                 ),
               ),
               // Store Aisles Screen with nested navigation for categories
@@ -150,29 +195,27 @@ ShellRoute getStoreShellRoute() {
               // Store People Screen
               KeyedSubtree(
                 key: _storePeopleKey,
-                child: StorePeopleScreen(storeId: storeId),
+                child: GestureNavigationWrapper(
+                  child: StorePeopleScreen(storeId: storeId),
+                  onBackGesture: () => context.go('/homeScreen'),
+                ),
               ),
               // Store History Screen
               KeyedSubtree(
                 key: _storeHistoryKey,
-                child: StoreHistoryScreen(storeId: storeId),
+                child: GestureNavigationWrapper(
+                  child: StoreHistoryScreen(storeId: storeId),
+                  onBackGesture: () => context.go('/homeScreen'),
+                ),
               ),
             ],
           ),
-          onHomeGesture: () => context.go('/homeScreen'),
-          onBackGesture: () {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            } else {
-              context.go('/homeScreen');
-            }
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: currentIndex,
-          onTap: onTabTapped,
-          items: navigationItems,
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: currentIndex,
+            onTap: onTabTapped,
+            items: navigationItems,
+          ),
         ),
       );
     },

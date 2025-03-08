@@ -67,14 +67,14 @@ ShellRoute getMainShellRoute() {
               label: 'Accueil',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.assignment_outlined),
-              activeIcon: Icon(Icons.assignment),
-              label: 'Déléguer',
+              icon: Icon(Icons.note_add_outlined),
+              activeIcon: Icon(Icons.note_add),
+              label: 'Publier',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.monetization_on_outlined),
-              activeIcon: Icon(Icons.monetization_on),
-              label: 'Taf & Cash',
+              icon: Icon(Icons.emoji_people_outlined),
+              activeIcon: Icon(Icons.emoji_people),
+              label: 'Accomplir',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.message_outlined),

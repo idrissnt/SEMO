@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:semo/core/extensions/theme_extension.dart';
 
 import '../../../core/utils/logger.dart';
 import '../../blocs/store/store_bloc.dart';
@@ -85,7 +87,7 @@ class _HomeTabState extends State<_HomeTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.backgroundColor,
       body: MultiBlocListener(
         listeners: [
           BlocListener<StoreBloc, StoreState>(
@@ -114,27 +116,40 @@ class _HomeTabState extends State<_HomeTab> {
                       context,
                     ),
                     sliver: SliverAppBar(
-                      expandedHeight: kToolbarHeight * 2.45,
+                      // Reduced expanded height to match app bar height
+                      expandedHeight: kToolbarHeight * 2.0,
                       collapsedHeight: kToolbarHeight,
                       toolbarHeight: kToolbarHeight,
                       pinned: true,
-                      primary: true,
+                      primary: true, // This ensures the status bar is respected
                       stretch: true,
-                      stretchTriggerOffset: 30.0,
                       backgroundColor: Colors.transparent,
                       elevation: 0,
+
+                      // Ensure status bar is visible with proper styling
+                      systemOverlayStyle: SystemUiOverlayStyle
+                          .dark, // Use .light for dark backgrounds
                       flexibleSpace: FlexibleSpaceBar(
-                        background: Container(color: Colors.white),
+                        background: Container(color: context.backgroundColor),
                         collapseMode: CollapseMode.pin,
                         expandedTitleScale: 1.0,
                         titlePadding: EdgeInsets.zero,
                         title: LayoutBuilder(
                           builder: (context, constraints) {
                             final top = constraints.biggest.height;
-                            final scrolledRatio = ((top - kToolbarHeight) /
-                                    (kToolbarHeight * 1.45))
+
+                            // Adjust the threshold to make collapsing happen earlier
+                            // Adjusted ratio calculation for reduced app bar height
+
+                            final scrolledRatio = ((top -
+                                        context.getResponsiveHeightValue(
+                                            kToolbarHeight)) /
+                                    (context.getResponsiveHeightValue(
+                                        kToolbarHeight)))
                                 .clamp(0.0, 1.0);
-                            final isCollapsed = scrolledRatio < 0.5;
+                            // Consider collapsed when scrolledRatio is less than 1
+                            final isCollapsed = scrolledRatio < 1;
+
                             return CustomHomeAppBar(
                               isCollapsed: isCollapsed,
                               scrolledRatio: scrolledRatio,
@@ -146,81 +161,87 @@ class _HomeTabState extends State<_HomeTab> {
                   ),
                 ];
               },
-              body: SingleChildScrollView(
-                padding: const EdgeInsets.only(top: kToolbarHeight * 1.6),
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BlocBuilder<StoreBloc, StoreState>(
-                      buildWhen: (previous, current) =>
-                          current is AllStoresLoaded ||
-                          current is StoreLoading ||
-                          current is StoreError,
-                      builder: (context, state) {
-                        if (state is StoreLoading) {
-                          return const LoadingView();
-                        } else if (state is StoreError) {
-                          return ErrorView(message: state.message);
-                        } else if (state is AllStoresLoaded) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (state.bigStores.isNotEmpty)
-                                StoreSection(
-                                  title: 'Fais tes courses chez :',
-                                  stores: state.bigStores,
-                                  isLarge: true,
-                                ),
-                              const SectionSeparator(),
-                              // Add Task Suggestions Section
-                              TaskSuggestionsSection(
-                                title: 'Besoin d\'un coup de main ?',
-                                taskSuggestions: getSampleTaskSuggestions(),
-                              ),
-                              const SectionSeparator(),
-                              // Add Earn Tasks Section
-                              EarnTasksSection(
-                                // title: 'Dispo et motivé ? Y\'a du boulot !',
-                                // title: 'Dispo = Money. Simple, non ?',
-                                title: 'Dispo et motivé ? Fais du fric !',
-                                earnTasks: getSampleEarnTasks(),
-                              ),
-                              const SectionSeparator(),
-                              // Add Earn when going to store Section
-                              EarnTasksSection(
-                                title: 'Tu vas au magasin ? Fais du fric ! ',
-                                earnTasks: getSampleEarnTasks(),
-                              ),
-                              const SectionSeparator(),
-                              // Add Weekly Recipes Section
-                              WeeklyRecipesSection(
-                                title: 'Recettes de la semaine',
-                                recipes: getSampleRecipes(),
-                              ),
-                              const SectionSeparator(),
+              body: Builder(builder: (context) {
+                // Use the app's responsive system for padding
+                final topPadding =
+                    context.getResponsiveHeightValue(kToolbarHeight * 1.6);
 
-                              // Add Product Category Section for Lidl - with dedicated widget
-                              // if (state.bigStores.isNotEmpty)
-                              //   StoreProductCategorySection(
-                              //     storeName: 'Lidl',
-                              //     initialStores: state.bigStores,
-                              //     maxSections: 3,
-                              //   ),
-                              const SectionSeparator(),
-                            ],
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                    // Featured Products Section
-                    // const StoreProductsSection(
-                    //   storeName: 'Carrefour', // Primary store name
-                    // ),
-                  ],
-                ),
-              ),
+                return SingleChildScrollView(
+                  padding: EdgeInsets.only(top: topPadding),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BlocBuilder<StoreBloc, StoreState>(
+                        buildWhen: (previous, current) =>
+                            current is AllStoresLoaded ||
+                            current is StoreLoading ||
+                            current is StoreError,
+                        builder: (context, state) {
+                          if (state is StoreLoading) {
+                            return const LoadingView();
+                          } else if (state is StoreError) {
+                            return ErrorView(message: state.message);
+                          } else if (state is AllStoresLoaded) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (state.bigStores.isNotEmpty)
+                                  StoreSection(
+                                    title: 'Fais tes courses chez :',
+                                    stores: state.bigStores,
+                                    isLarge: true,
+                                  ),
+                                const SectionSeparator(),
+                                // Add Task Suggestions Section
+                                TaskSuggestionsSection(
+                                  title: 'Besoin d\'un coup de main ?',
+                                  taskSuggestions: getSampleTaskSuggestions(),
+                                ),
+                                const SectionSeparator(),
+                                // Add Earn Tasks Section
+                                EarnTasksSection(
+                                  // title: 'Dispo et motivé ? Y\'a du boulot !',
+                                  // title: 'Dispo = Money. Simple, non ?',
+                                  title: 'Dispo et motivé ? Fais du fric !',
+                                  earnTasks: getSampleEarnTasks(),
+                                ),
+                                const SectionSeparator(),
+                                // Add Earn when going to store Section
+                                EarnTasksSection(
+                                  title: 'Tu vas au magasin ? Fais du fric ! ',
+                                  earnTasks: getSampleEarnTasks(),
+                                ),
+                                const SectionSeparator(),
+                                // Add Weekly Recipes Section
+                                WeeklyRecipesSection(
+                                  title: 'Recettes de la semaine',
+                                  recipes: getSampleRecipes(),
+                                ),
+                                const SectionSeparator(),
+
+                                // Add Product Category Section for Lidl - with dedicated widget
+                                // if (state.bigStores.isNotEmpty)
+                                //   StoreProductCategorySection(
+                                //     storeName: 'Lidl',
+                                //     initialStores: state.bigStores,
+                                //     maxSections: 3,
+                                //   ),
+                                const SectionSeparator(),
+                              ],
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                      // Featured Products Section
+                      // const StoreProductsSection(
+                      //   storeName: 'Carrefour', // Primary store name
+                      // ),
+                    ],
+                  ),
+                );
+              }),
             ),
           ),
         ),

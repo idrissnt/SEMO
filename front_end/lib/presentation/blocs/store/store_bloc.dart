@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/utils/logger.dart';
-import '../../../domain/repositories/store_repository.dart';
+import '../../../domain/repositories/store/store_repository.dart';
 import '../../../domain/usecases/get_stores_usecase.dart';
 import 'store_event.dart';
 import 'store_state.dart';

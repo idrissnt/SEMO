@@ -369,7 +369,7 @@ class RecipeCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Ajouter ingrédients au',
+                            'Ajouter ingrédients',
                             style: TextStyle(fontSize: 13),
                             overflow: TextOverflow.ellipsis,
                           ),

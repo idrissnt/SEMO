@@ -1,6 +1,6 @@
-import '../../data/models/store_model.dart';
-import '../entities/store.dart';
-import '../repositories/store_repository.dart';
+import '../../data/models/store/store_model.dart';
+import '../entities/stores/store.dart';
+import '../repositories/store/store_repository.dart';
 import '../../core/utils/logger.dart';
 
 class GetStoresUseCase {
@@ -11,10 +11,10 @@ class GetStoresUseCase {
 
   Future<Map<String, List<StoreModel>>> getStoresData({String? name}) async {
     _logger.debug('GetStoresUseCase: Getting lightweight store list');
-    
+
     // Call the repository with the lightweight endpoint
     Map<String, List<Store>> storesMap = await storeRepository.getStores(
-      isBigStore: true, 
+      isBigStore: true,
       name: name,
     );
 
@@ -37,18 +37,21 @@ class GetStoresUseCase {
   }
 
   Future<StoreModel?> getStoreDetails(String storeId) async {
-    _logger.debug('GetStoresUseCase: Getting full details for store ID: $storeId');
-    
+    _logger
+        .debug('GetStoresUseCase: Getting full details for store ID: $storeId');
+
     final store = await storeRepository.getStoreById(storeId);
-    
+
     if (store == null) {
       _logger.warning('GetStoresUseCase: Store not found with ID: $storeId');
       return null;
     }
-    
-    final storeModel = store is StoreModel ? store : StoreModel.fromEntity(store);
-    _logger.debug('GetStoresUseCase: Successfully retrieved store details: ${storeModel.name}');
-    
+
+    final storeModel =
+        store is StoreModel ? store : StoreModel.fromEntity(store);
+    _logger.debug(
+        'GetStoresUseCase: Successfully retrieved store details: ${storeModel.name}');
+
     return storeModel;
   }
 }

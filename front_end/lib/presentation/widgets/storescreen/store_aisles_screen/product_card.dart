@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../data/models/product_model.dart';
+import '../../../../data/models/store/product_model.dart';
+import '../../../../core/extensions/theme_extension.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -18,9 +19,9 @@ class ProductCard extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(context.borderRadiusMedium),
       ),
-      elevation: 2,
+      elevation: context.cardElevation,
       child: InkWell(
         onTap: onTap,
         child: Column(
@@ -28,7 +29,7 @@ class ProductCard extends StatelessWidget {
           children: [
             // Product Image
             SizedBox(
-              height: 120,
+              height: context.responsiveItemSize(120),
               width: double.infinity,
               child: Stack(
                 children: [
@@ -67,18 +68,18 @@ class ProductCard extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: const Offset(0, 1),
+                            spreadRadius: context.xxs,
+                            blurRadius: context.xs,
+                            offset: Offset(0, context.xxs),
                           ),
                         ],
                       ),
                       child: IconButton(
-                        constraints: const BoxConstraints(
-                          minWidth: 30,
-                          minHeight: 30,
+                        constraints: BoxConstraints(
+                          minWidth: context.m,
+                          minHeight: context.m,
                         ),
-                        iconSize: 20,
+                        iconSize: context.iconSizeSmall,
                         padding: EdgeInsets.zero,
                         icon: const Icon(Icons.add),
                         onPressed: onAddToCart,
@@ -91,28 +92,27 @@ class ProductCard extends StatelessWidget {
 
             // Product information
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(context.s),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Price
                   Text(
                     '€${product.price.toStringAsFixed(2)}',
-                    style: const TextStyle(
+                    style: context.bodyLarge.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: context.xxs),
 
                   // Product name
                   Text(
                     product.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14),
+                    style: context.bodyMedium,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: context.xxs),
 
                   // Quantity
                   if (product.quantity.isNotEmpty &&
@@ -120,8 +120,7 @@ class ProductCard extends StatelessWidget {
                       product.unit!.isNotEmpty)
                     Text(
                       '${product.quantity} ${product.unit}',
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: context.caption.copyWith(
                         color: Colors.grey.shade600,
                       ),
                     ),

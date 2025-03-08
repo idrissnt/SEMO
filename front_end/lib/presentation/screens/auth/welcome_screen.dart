@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/config/theme.dart';
+import 'package:semo/core/extensions/theme_extension.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -9,13 +9,13 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppTheme.primaryColor,
-              AppTheme.secondaryColor,
+              context.primaryColor,
+              context.secondaryColor,
             ],
           ),
         ),
@@ -28,18 +28,13 @@ class WelcomeScreen extends StatelessWidget {
               children: [
                 Text(
                   'Welcome to\nGrocery App',
-                  style: AppTheme.headingLarge.copyWith(
-                    color: Colors.white,
-                    height: 1.2,
-                  ),
+                  style: context.headline1,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 Text(
                   'Your one-stop solution for all your grocery needs',
-                  style: AppTheme.bodyLarge.copyWith(
-                    color: Colors.white.withOpacity(0.9),
-                  ),
+                  style: context.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 64),
@@ -48,11 +43,11 @@ class WelcomeScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: Colors.white,
-                    foregroundColor: AppTheme.primaryColor,
+                    foregroundColor: context.primaryColor,
                   ),
                   child: Text(
                     'Login',
-                    style: AppTheme.bodyLarge.copyWith(
+                    style: context.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -67,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: Text(
                     'Register',
-                    style: AppTheme.bodyLarge.copyWith(
+                    style: context.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),

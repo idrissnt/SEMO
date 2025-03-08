@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 
 import 'package:hive/hive.dart';
-import '../../core/config/app_config.dart';
-import '../../domain/entities/store.dart';
-import '../../core/utils/logger.dart';
+import '../../../core/config/app_config.dart';
+import '../../../domain/entities/stores/store.dart';
+import '../../../core/utils/logger.dart';
 
 @HiveType(typeId: 0)
 class StoreModel extends Store {

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../domain/entities/store.dart';
+import '../../../core/extensions/theme_extension.dart';
+import '../../../domain/entities/stores/store.dart';
 
 class StoreSection extends StatelessWidget {
   final String title;
@@ -26,31 +27,32 @@ class StoreSection extends StatelessWidget {
       return SizedBox.shrink();
     }
 
+    // Calculate responsive dimensions
+    final double storeWidth = context.responsiveItemSize(isLarge ? 100 : 95);
+    final double sectionHeight =
+        context.responsiveItemSize(isLarge ? 140 : 130);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: EdgeInsets.only(left: context.l),
           child: Text(
             title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+            style: context.sectionTitle,
           ),
         ),
         SizedBox(
-          height: isLarge ? 140 : 140, // before: 160 : 140
+          height: sectionHeight,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
+            padding: EdgeInsets.symmetric(horizontal: context.xs),
             itemCount: stores.length,
             itemBuilder: (context, index) {
               final store = stores[index];
               return Container(
-                width: isLarge ? 100 : 95,
-                margin: EdgeInsets.symmetric(horizontal: 4),
+                width: storeWidth,
+                margin: EdgeInsets.symmetric(horizontal: context.xs),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -62,14 +64,10 @@ class StoreSection extends StatelessWidget {
                         context.go('/store/${store.id}');
                       },
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: context.m),
                     Text(
                       store.name,
-                      style: TextStyle(
-                        fontSize: isLarge ? 14 : 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
+                      style: context.bodyMedium,
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -80,7 +78,7 @@ class StoreSection extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: context.l),
       ],
     );
   }
@@ -132,7 +130,9 @@ class _StoreImageButtonState extends State<StoreImageButton>
 
   @override
   Widget build(BuildContext context) {
-    final size = widget.isLarge ? 100.0 : 80.0;
+    // Calculate responsive size based on device width
+    final baseSize = widget.isLarge ? 100.0 : 80.0;
+    final size = context.responsiveItemSize(baseSize);
 
     return AnimatedBuilder(
       animation: _scaleAnimation,
@@ -150,30 +150,25 @@ class _StoreImageButtonState extends State<StoreImageButton>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: const [Colors.blueAccent, Colors.black],
+            colors: [context.primaryColor, context.secondaryColor],
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 20,
+              color: context.secondaryColor,
+              blurRadius: 5,
               offset: Offset(0, 2),
             ),
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(3.0),
+          padding: EdgeInsets.all(context.xs),
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: context.surfaceColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: context.secondaryColor,
                   blurRadius: 2,
                   spreadRadius: 0.5,
                   offset: Offset(0, 1),
@@ -181,12 +176,12 @@ class _StoreImageButtonState extends State<StoreImageButton>
               ],
             ),
             child: Material(
-              color: Colors.transparent,
+              color: context.surfaceColor,
               shape: CircleBorder(),
               clipBehavior: Clip.hardEdge,
               child: InkWell(
-                splashColor: Colors.black.withOpacity(0.3),
-                highlightColor: Colors.black.withOpacity(0.1),
+                splashColor: context.secondaryColor,
+                highlightColor: context.secondaryColor,
                 onTap: () {
                   _controller.forward().then((_) {
                     _controller.reverse().then((_) {
@@ -201,7 +196,7 @@ class _StoreImageButtonState extends State<StoreImageButton>
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
                           return Container(
-                            color: Colors.grey[100],
+                            color: context.surfaceColor,
                             child: Center(
                               child: CircularProgressIndicator(
                                 value: loadingProgress.expectedTotalBytes !=
@@ -217,21 +212,21 @@ class _StoreImageButtonState extends State<StoreImageButton>
                           final logger = AppLogger();
                           logger.error('Error loading store image: $error');
                           return Container(
-                            color: Colors.grey[200],
+                            color: context.surfaceColor,
                             child: Icon(
                               Icons.store,
                               size: size * 0.4,
-                              color: Colors.grey[400],
+                              color: context.textSecondaryColor,
                             ),
                           );
                         },
                       )
                     : Container(
-                        color: Colors.grey[200],
+                        color: context.surfaceColor,
                         child: Icon(
                           Icons.store,
                           size: size * 0.4,
-                          color: Colors.grey[400],
+                          color: context.surfaceColor,
                         ),
                       ),
               ),

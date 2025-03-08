@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import '../../core/config/app_config.dart';
-import '../../core/utils/logger.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../models/user_model.dart';
+import '../../../core/config/app_config.dart';
+import '../../../core/utils/logger.dart';
+import '../../../domain/entities/user_auth/user.dart';
+import '../../../domain/repositories/user_auth/auth_repository.dart';
+import '../../models/user_auth/user_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final http.Client _client;
@@ -79,7 +79,8 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } catch (e, stackTrace) {
       if (e.toString().contains('Connection refused')) {
-        _logger.error('Could not connect to server. Please check your internet connection.');
+        _logger.error(
+            'Could not connect to server. Please check your internet connection.');
         throw Exception(
             'Could not connect to server. Please check your internet connection.');
       }
@@ -157,11 +158,13 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } catch (e, stackTrace) {
       if (e.toString().contains('Connection refused')) {
-        _logger.error('Could not connect to server. Please check your internet connection.');
+        _logger.error(
+            'Could not connect to server. Please check your internet connection.');
         throw Exception(
             'Could not connect to server. Please check your internet connection.');
       }
-      _logger.error('Error during registration', error: e, stackTrace: stackTrace);
+      _logger.error('Error during registration',
+          error: e, stackTrace: stackTrace);
       throw Exception(e.toString().replaceAll('Exception: ', ''));
     }
   }
@@ -196,7 +199,8 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final token = await getAccessToken();
       _logger.debug('Starting token validation check');
-      _logger.debug('API URL: ${AppConfig.apiBaseUrl}${AppConfig.profileEndpoint}');
+      _logger.debug(
+          'API URL: ${AppConfig.apiBaseUrl}${AppConfig.profileEndpoint}');
 
       if (token == null) {
         _logger.debug('No token found in storage');
@@ -234,7 +238,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return false;
     } catch (e, stackTrace) {
-      _logger.error('Error during token validation', error: e, stackTrace: stackTrace);
+      _logger.error('Error during token validation',
+          error: e, stackTrace: stackTrace);
       if (e.toString().contains('SocketException') ||
           e.toString().contains('Connection refused')) {
         _logger.error('Could not connect to server. Is the backend running?');
@@ -263,12 +268,12 @@ class AuthRepositoryImpl implements AuthRepository {
         if (data['access'] != null) {
           _logger.debug('Token refresh successful');
           await saveAccessToken(data['access']);
-          
+
           // If a new refresh token is provided, save it
           if (data['refresh'] != null) {
             await saveRefreshToken(data['refresh']);
           }
-          
+
           return true;
         }
       }
@@ -328,7 +333,8 @@ class AuthRepositoryImpl implements AuthRepository {
         throw Exception('Failed to get user profile');
       }
     } catch (e, stackTrace) {
-      _logger.error('Error getting current user', error: e, stackTrace: stackTrace);
+      _logger.error('Error getting current user',
+          error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -341,7 +347,8 @@ class AuthRepositoryImpl implements AuthRepository {
           'Retrieved access token from secure storage: ${token != null ? 'Token exists' : 'No token'}');
       return token;
     } catch (e, stackTrace) {
-      _logger.error('Error reading access token', error: e, stackTrace: stackTrace);
+      _logger.error('Error reading access token',
+          error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -354,7 +361,8 @@ class AuthRepositoryImpl implements AuthRepository {
           'Retrieved refresh token from secure storage: ${token != null ? 'Token exists' : 'No token'}');
       return token;
     } catch (e, stackTrace) {
-      _logger.error('Error reading refresh token', error: e, stackTrace: stackTrace);
+      _logger.error('Error reading refresh token',
+          error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -365,7 +373,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await _secureStorage.write(key: _tokenKey, value: token);
       _logger.debug('Access token saved successfully');
     } catch (e, stackTrace) {
-      _logger.error('Error saving access token', error: e, stackTrace: stackTrace);
+      _logger.error('Error saving access token',
+          error: e, stackTrace: stackTrace);
       throw Exception('Failed to save access token');
     }
   }
@@ -376,7 +385,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await _secureStorage.write(key: _refreshTokenKey, value: token);
       _logger.debug('Refresh token saved successfully');
     } catch (e, stackTrace) {
-      _logger.error('Error saving refresh token', error: e, stackTrace: stackTrace);
+      _logger.error('Error saving refresh token',
+          error: e, stackTrace: stackTrace);
       throw Exception('Failed to save refresh token');
     }
   }
@@ -387,7 +397,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await _secureStorage.delete(key: _tokenKey);
       _logger.debug('Access token deleted successfully');
     } catch (e, stackTrace) {
-      _logger.error('Error deleting access token', error: e, stackTrace: stackTrace);
+      _logger.error('Error deleting access token',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -397,7 +408,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await _secureStorage.delete(key: _refreshTokenKey);
       _logger.debug('Refresh token deleted successfully');
     } catch (e, stackTrace) {
-      _logger.error('Error deleting refresh token', error: e, stackTrace: stackTrace);
+      _logger.error('Error deleting refresh token',
+          error: e, stackTrace: stackTrace);
     }
   }
 }

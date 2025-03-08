@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import '../../../domain/repositories/auth_repository.dart';
+import '../../../domain/repositories/user_auth/auth_repository.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -87,8 +87,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // First, log all available tokens
       final accessToken = await _authRepository.getAccessToken();
       final refreshToken = await _authRepository.getRefreshToken();
-      _logger.info('Access Token Status: ${accessToken != null ? 'EXISTS' : 'NULL'}');
-      _logger.info('Refresh Token Status: ${refreshToken != null ? 'EXISTS' : 'NULL'}');
+      _logger.info(
+          'Access Token Status: ${accessToken != null ? 'EXISTS' : 'NULL'}');
+      _logger.info(
+          'Refresh Token Status: ${refreshToken != null ? 'EXISTS' : 'NULL'}');
 
       // If no refresh token, user must log in
       if (refreshToken == null) {

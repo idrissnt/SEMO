@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:semo/core/extensions/responsive_extension.dart';
-import 'package:semo/core/utils/responsive_utils.dart';
+import '../../../core/extensions/theme_extension.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
   final bool isCollapsed;
@@ -16,18 +15,16 @@ class CustomHomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType = ResponsiveUtils.getDeviceType(context);
-
-    // Responsive height calculation
-    final appBarHeight = deviceType == ResponsiveUtils.getDeviceType(context)
-        ? (isCollapsed ? kToolbarHeight : kToolbarHeight * 2)
-        : (isCollapsed ? kToolbarHeight * 1.2 : kToolbarHeight * 2);
+    // Reduced app bar height to minimize white space
+    final appBarHeight = isCollapsed
+        ? context.responsiveItemSize(kToolbarHeight)
+        : context.responsiveItemSize(kToolbarHeight * 1.9);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return Material(
-          elevation: isCollapsed ? 2 : 0,
-          color: Colors.white,
+          elevation: isCollapsed ? context.cardElevation : 0,
+          color: context.backgroundColor,
           child: SafeArea(
             bottom: false,
             child: SizedBox(
@@ -35,12 +32,12 @@ class CustomHomeAppBar extends StatelessWidget {
               width: constraints.maxWidth,
               child: Stack(
                 children: [
-                  // Top row with location and icons
+                  // Top row with location and icons - only visible when not collapsed
                   if (!isCollapsed)
                     Positioned(
-                      top: 1,
-                      left: context.responsiveSize(0.04),
-                      right: context.responsiveSize(0.04),
+                      top: context.xxs,
+                      left: context.m,
+                      right: context.m,
                       child: _buildTopRow(context),
                     ),
 
@@ -48,14 +45,13 @@ class CustomHomeAppBar extends StatelessWidget {
                   AnimatedPositioned(
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeInOut,
+                    // Adjusted search bar position for reduced app bar height
                     top: isCollapsed
-                        ? 1
-                        : (deviceType == ResponsiveUtils.getDeviceType(context)
-                            ? kToolbarHeight
-                            : kToolbarHeight * 1.2),
-                    left: context.responsiveSize(0.04),
-                    right: context.responsiveSize(0.04),
-                    height: 48,
+                        ? context.s
+                        : context.responsiveItemSize(kToolbarHeight * 0.95),
+                    left: context.m,
+                    right: context.m,
+                    height: context.buttonHeightMedium,
                     child: _buildSearchBarRow(context),
                   ),
                 ],
@@ -81,30 +77,20 @@ class CustomHomeAppBar extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          Icons.location_on_outlined,
-          size: context.responsiveSize(0.06),
-          color: Colors.black,
-        ),
-        SizedBox(width: context.responsiveSize(0.01)),
+        context.iconMedium(
+            icon: Icons.location_on, color: context.textPrimaryColor),
+        SizedBox(width: context.xxs),
         SizedBox(
-          width: context.responsiveSize(0.3),
+          width: context.responsiveItemSize(100),
           child: Text(
             '1226 UniverS of',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: context.responsiveSize(0.035),
-              color: Colors.black87,
-            ),
+            style: context.appBarTitle,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
         ),
-        Icon(
-          Icons.keyboard_arrow_down,
-          size: context.responsiveSize(0.06),
-          color: Colors.black,
-        ),
+        context.iconMedium(
+            icon: Icons.keyboard_arrow_down, color: context.textPrimaryColor),
       ],
     );
   }
@@ -113,19 +99,26 @@ class CustomHomeAppBar extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildIconButton(Icons.shopping_cart_outlined),
-        _buildIconButton(Icons.notifications_none),
-        _buildIconButton(Icons.person_outline),
+        IconButton(
+          icon: context.iconMedium(
+              icon: Icons.shopping_cart_outlined,
+              color: context.textPrimaryColor),
+          onPressed: () {},
+          padding: EdgeInsets.all(context.xs),
+        ),
+        IconButton(
+          icon: context.iconMedium(
+              icon: Icons.notifications_none, color: context.textPrimaryColor),
+          onPressed: () {},
+          padding: EdgeInsets.all(context.xs),
+        ),
+        IconButton(
+          icon: context.iconMedium(
+              icon: Icons.person_outline, color: context.textPrimaryColor),
+          onPressed: () {},
+          padding: EdgeInsets.all(context.xs),
+        ),
       ],
-    );
-  }
-
-  Widget _buildIconButton(IconData icon) {
-    return IconButton(
-      icon: Icon(icon, size: 24),
-      onPressed: () {},
-      padding: EdgeInsets.all(8),
-      color: Colors.black87,
     );
   }
 
@@ -134,48 +127,47 @@ class CustomHomeAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          flex: 8,
+          // flex: 8,
           child: _buildSearchBar(context),
         ),
-        if (isCollapsed) _buildIconButton(Icons.person_outline),
+        if (isCollapsed)
+          IconButton(
+            icon: context.iconMedium(
+                icon: Icons.person, color: context.textPrimaryColor),
+            onPressed: () {},
+            padding: EdgeInsets.all(context.xs),
+          ),
       ],
     );
   }
 
   Widget _buildSearchBar(BuildContext context) {
     return Material(
-      color: Colors.grey[100],
-      borderRadius: BorderRadius.circular(24),
+      color: context.surfaceColor,
+      borderRadius: BorderRadius.circular(context.borderRadiusXLarge),
       child: SizedBox(
-        height: 48,
+        height: context.buttonHeightMedium,
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Icon(
-                Icons.search,
-                size: context.responsiveSize(0.05),
-                color: Colors.grey[700],
-              ),
+              padding: EdgeInsets.only(left: context.m),
+              child: context.iconMedium(
+                  icon: Icons.search, color: context.textSurfaceColor),
             ),
             Expanded(
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Search...',
-                  hintStyle: TextStyle(
-                    fontSize: context.responsiveSize(0.04),
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w400,
+                  hintStyle: context.appBarTitle.copyWith(
+                    color: context.textSurfaceColor,
                   ),
                   border: InputBorder.none,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: context.s, horizontal: context.xs),
                   isDense: true,
                 ),
-                style: TextStyle(
-                  fontSize: context.responsiveSize(0.04),
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w400,
+                style: context.bodyMedium.copyWith(
+                  color: context.textPrimaryColor,
                 ),
               ),
             ),

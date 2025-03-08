@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../core/config/app_config.dart';
-import '../../core/utils/logger.dart';
-import '../../domain/entities/store.dart';
-import '../../domain/repositories/store_repository.dart';
-import '../models/store_model.dart';
+import '../../../core/config/app_config.dart';
+import '../../../core/utils/logger.dart';
+import '../../../domain/entities/stores/store.dart';
+import '../../../domain/repositories/store/store_repository.dart';
+import '../../models/store/store_model.dart';
 
 class StoreRepositoryImpl implements StoreRepository {
   final http.Client client;

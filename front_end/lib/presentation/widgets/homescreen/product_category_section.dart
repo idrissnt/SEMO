@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../data/models/store_model.dart';
+import '../../../data/models/store/store_model.dart';
 import '../../../core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 
@@ -45,14 +45,17 @@ class ProductCategorySection extends StatelessWidget {
     }
 
     // Log store types
-    logger.debug('Store isBigStore values: ${stores.map((s) => '${s.name}: ${s.isBigStore}').join(", ")}');
+    logger.debug(
+        'Store isBigStore values: ${stores.map((s) => '${s.name}: ${s.isBigStore}').join(", ")}');
 
     // Find the store by name with more flexible matching
     final store = stores.firstWhere(
-      (store) => store.name.toLowerCase().contains(storeName.toLowerCase()) || 
-                 storeName.toLowerCase().contains(store.name.toLowerCase()),
+      (store) =>
+          store.name.toLowerCase().contains(storeName.toLowerCase()) ||
+          storeName.toLowerCase().contains(store.name.toLowerCase()),
       orElse: () {
-        logger.debug('Store $storeName not found, using first available store: ${stores.first.name}');
+        logger.debug(
+            'Store $storeName not found, using first available store: ${stores.first.name}');
         return stores.first;
       },
     );
@@ -209,24 +212,27 @@ class ProductCategorySection extends StatelessWidget {
     logger.debug(
         'forStoreMultiple called for store: $storeName, maxSections: $maxSections');
     logger.debug('Available stores count: ${stores.length}');
-    
+
     if (stores.isEmpty) {
       logger.debug('No stores available');
       return [];
     }
 
     // Try to find matching stores with more flexibility
-    List<StoreModel> matchingStores = stores.where(
-      (s) => s.name.toLowerCase().contains(storeName.toLowerCase()) || 
-             storeName.toLowerCase().contains(s.name.toLowerCase())
-    ).toList();
-    
+    List<StoreModel> matchingStores = stores
+        .where((s) =>
+            s.name.toLowerCase().contains(storeName.toLowerCase()) ||
+            storeName.toLowerCase().contains(s.name.toLowerCase()))
+        .toList();
+
     // If no matching stores found, use all available stores
     if (matchingStores.isEmpty) {
-      logger.debug('No matching stores found for $storeName, using all available stores');
+      logger.debug(
+          'No matching stores found for $storeName, using all available stores');
       matchingStores = stores;
     } else {
-      logger.debug('Found ${matchingStores.length} matching stores for $storeName');
+      logger.debug(
+          'Found ${matchingStores.length} matching stores for $storeName');
     }
 
     final List<Widget> sections = [];

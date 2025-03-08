@@ -64,10 +64,10 @@ class AppLogger {
       // Create log file with timestamp
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
       _logFile = File('${logsSubDir.path}/app_log_$timestamp.txt');
-      
+
       // Open file in write mode (not append)
       _logSink = _logFile?.openWrite(mode: FileMode.write);
-      
+
       print('Logging to: ${_logFile?.path}');
       _isInitialized = true;
     } catch (e, stackTrace) {
@@ -80,24 +80,24 @@ class AppLogger {
     if (_logSink == null) return;
 
     // Skip redundant initialization and loading logs
-    if (record.level == Level.FINE && 
+    if (record.level == Level.FINE &&
         (record.message.contains('MainScreen: Initializing') ||
-         record.message.contains('HomeTab: Initializing') ||
-         record.message.contains('LoginScreen: Initializing') ||
-         record.message.contains('Total products retrieved:') ||
-         record.message.contains('GetProductsUseCase: Got') ||
-         record.message.contains('Store Response Details:') ||
-         record.message.contains('Total stores in raw response:') ||
-         record.message.contains('Current Log File Path:') ||
-         record.message.contains('Successfully opened') ||
-         record.message.contains('Checking for existing'))) {
+            record.message.contains('HomeTab: Initializing') ||
+            record.message.contains('LoginScreen: Initializing') ||
+            record.message.contains('Total products retrieved:') ||
+            record.message.contains('GetProductsUseCase: Got') ||
+            record.message.contains('Store Response Details:') ||
+            record.message.contains('Total stores in raw response:') ||
+            record.message.contains('Current Log File Path:') ||
+            record.message.contains('Successfully opened') ||
+            record.message.contains('Checking for existing'))) {
       return;
     }
 
     // Deduplicate state change logs with time-based threshold
     if (record.message.contains('State')) {
       final now = DateTime.now();
-      if (record.message == _lastStateLog && 
+      if (record.message == _lastStateLog &&
           _lastStateLogTime != null &&
           now.difference(_lastStateLogTime!).inMilliseconds < 500) {
         return;
@@ -110,16 +110,16 @@ class AppLogger {
     final List<String> logParts = [
       '[${record.time}] ${record.level.name}: ${record.message}'
     ];
-    
+
     if (record.error != null) {
       logParts.add('Error: ${record.error}');
     }
-    
+
     if (record.stackTrace != null) {
       logParts.add('Stacktrace: ${record.stackTrace}');
     }
-    
-    final logMessage = '${logParts.join('\n')}';
+
+    final logMessage = logParts.join('\n');
 
     // Write to file if possible
     try {
@@ -133,13 +133,13 @@ class AppLogger {
     // Print to console in debug mode with selective filtering
     if (kDebugMode) {
       // Show INFO and above, plus important FINE logs
-      if (record.level.value >= Level.INFO.value || 
-          (record.level == Level.FINE && 
-           !record.message.contains('Converting') && 
-           !record.message.contains('Retrieved') &&
-           !record.message.contains('Successfully') &&
-           !record.message.contains('Attempting to') &&
-           !record.message.contains('Current Log'))) {
+      if (record.level.value >= Level.INFO.value ||
+          (record.level == Level.FINE &&
+              !record.message.contains('Converting') &&
+              !record.message.contains('Retrieved') &&
+              !record.message.contains('Successfully') &&
+              !record.message.contains('Attempting to') &&
+              !record.message.contains('Current Log'))) {
         debugPrint(logMessage);
       }
     }

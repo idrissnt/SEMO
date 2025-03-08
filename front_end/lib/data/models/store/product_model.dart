@@ -1,5 +1,6 @@
-import '../../core/config/app_config.dart';
-import '../../domain/entities/product.dart';
+import 'package:semo/domain/entities/stores/product.dart';
+
+import '../../../core/config/app_config.dart';
 
 class ProductModel extends Product {
   final String subcategory;
@@ -46,8 +47,8 @@ class ProductModel extends Product {
       name: json['name'] ?? 'Unknown Product',
       imageUrl: imageUrl,
       priceRange: (json['price_range'] as List<dynamic>?)
-              ?.map((e) => double.parse(e.toString()))
-              .toList(),
+          ?.map((e) => double.parse(e.toString()))
+          .toList(),
       isSeasonalProduct: json['is_seasonal'] ?? false,
       categoryName: json['category_name'] ?? '',
       parentCategory: json['parent_category'],
@@ -60,7 +61,9 @@ class ProductModel extends Product {
       unit: json['unit'],
       subcategory: json['subcategory']?.toString() ?? '',
       quantity: json['quantity']?.toString() ?? '',
-      price: json['price'] != null ? double.tryParse(json['price'].toString()) ?? 0.0 : 0.0,
+      price: json['price'] != null
+          ? double.tryParse(json['price'].toString()) ?? 0.0
+          : 0.0,
     );
   }
 

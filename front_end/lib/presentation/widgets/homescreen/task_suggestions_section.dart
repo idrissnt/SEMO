@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../core/extensions/theme_extension.dart';
 import '../../../core/utils/logger.dart';
 
 class TaskSuggestionsSection extends StatelessWidget {
@@ -22,21 +23,23 @@ class TaskSuggestionsSection extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    // Calculate responsive dimensions
+    final double sectionHeight = context.responsiveItemSize(160);
+    final double buttonSize = context.responsiveItemSize(40);
+    final double iconSize = context.responsiveItemSize(20);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
+          padding: EdgeInsets.only(
+              left: context.l, right: context.l, top: context.s),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: context.sectionTitle,
               ),
               TextButton(
                 onPressed: () {
@@ -45,21 +48,21 @@ class TaskSuggestionsSection extends StatelessWidget {
                 },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
-                  minimumSize: const Size(40, 40),
+                  minimumSize: Size(buttonSize, buttonSize),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Container(
-                  width: 40,
-                  height: 40,
+                  width: buttonSize,
+                  height: buttonSize,
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     shape: BoxShape.circle,
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Icon(
                       Icons.arrow_forward,
-                      size: 20,
-                      color: Colors.black87,
+                      size: iconSize,
+                      color: context.textPrimaryColor,
                     ),
                   ),
                 ),
@@ -68,10 +71,10 @@ class TaskSuggestionsSection extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 160,
+          height: sectionHeight,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: context.m),
             itemCount: taskSuggestions.length,
             itemBuilder: (context, index) {
               final task = taskSuggestions[index];
@@ -85,7 +88,7 @@ class TaskSuggestionsSection extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: context.l),
       ],
     );
   }
@@ -103,98 +106,92 @@ class TaskSuggestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate responsive dimensions
+    final double cardWidth = context.responsiveItemSize(150);
+    final double iconSize = context.responsiveItemSize(20);
+    final double smallIconSize = context.responsiveItemSize(14);
+
     return Container(
-      width: 150,
-      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+      width: cardWidth,
+      margin: EdgeInsets.symmetric(horizontal: context.xs, vertical: context.s),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(context.borderRadiusMedium),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(context.borderRadiusMedium),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: context.secondaryColor,
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(context.m),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(context.s),
                       decoration: BoxDecoration(
-                        color: task.iconBackgroundColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
+                        color: task.iconBackgroundColor,
+                        borderRadius:
+                            BorderRadius.circular(context.borderRadiusSmall),
                       ),
                       child: Icon(
                         task.icon,
                         color: task.iconBackgroundColor,
-                        size: 20,
+                        size: iconSize,
                       ),
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: context.s, vertical: context.xxs),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        color: context.primaryColor,
+                        borderRadius:
+                            BorderRadius.circular(context.borderRadiusMedium),
                       ),
                       child: Text(
                         task.reward,
-                        style: const TextStyle(
-                          color: Colors.blue,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: context.badgeText,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: context.m),
                 Text(
                   task.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: context.listItemTitle,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: context.xxs),
                 Text(
                   task.description,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
+                  style: context.listItemSubtitle,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const Spacer(),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.access_time,
-                      size: 14,
+                      size: smallIconSize,
                       color: Colors.grey,
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: context.xxs),
                     Text(
                       task.timeEstimate,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
+                      style: context.caption,
                     ),
                   ],
                 ),

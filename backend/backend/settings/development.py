@@ -6,14 +6,17 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '10.0.2.2',  
+    'localhost',
+    '172.20.10.5', # Physical device IP
     '172.20.10.10',  # Physical device IP
+    '192.168.187.184',  # Physical device IP
 ]
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
