@@ -6,6 +6,9 @@ import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
+import '../../widgets/auth/auth_header.dart';
+import '../../widgets/auth/register_form_widget.dart';
+// import '../../widgets/auth/social_login_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -17,14 +20,6 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen>
     with SingleTickerProviderStateMixin {
   final AppLogger _logger = AppLogger();
-  final _formKey = GlobalKey<FormState>();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -49,52 +44,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void dispose() {
     _logger.debug('RegisterScreen: Disposing controllers');
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
     _animationController.dispose();
     super.dispose();
-  }
-
-  void _register() {
-    if (_formKey.currentState!.validate()) {
-      final firstName = _firstNameController.text.trim();
-      final lastName = _lastNameController.text.trim();
-      final email = _emailController.text.trim();
-      final password = _passwordController.text;
-      final confirmPassword = _confirmPasswordController.text;
-
-      _logger.info('Registration attempt for email: $email');
-
-      if (password != confirmPassword) {
-        _logger.warning('Password and confirm password do not match');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Passwords do not match')),
-        );
-        return;
-      }
-
-      try {
-        context.read<AuthBloc>().add(
-              AuthRegisterRequested(
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password,
-                password2: confirmPassword,
-              ),
-            );
-      } catch (e, stackTrace) {
-        _logger.error('Registration error', error: e, stackTrace: stackTrace);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed: ${e.toString()}')),
-        );
-      }
-    } else {
-      _logger.warning('Registration form validation failed');
-    }
   }
 
   @override
@@ -141,241 +92,15 @@ class _RegisterScreenState extends State<RegisterScreen>
                           onPressed: () => context.go('/welcome'),
                         ),
                         const SizedBox(height: 32),
-                        Text(
-                          'Create\nAccount',
-                          style: context.headline1,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Sign up to get started',
-                          style: context.bodyLarge.copyWith(
-                            // ignore: deprecated_member_use
-                            color: Colors.white.withOpacity(0.9),
-                          ),
+                        const AuthHeader(
+                          title: 'Create\nAccount',
+                          subtitle: 'Sign up to get started',
                         ),
                         const SizedBox(height: 48),
-                        BlocBuilder<AuthBloc, AuthState>(
-                          builder: (context, state) {
-                            return Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextFormField(
-                                    controller: _firstNameController,
-                                    enabled: state is! AuthLoading,
-                                    style: context.bodyLarge
-                                        .copyWith(color: Colors.black87),
-                                    decoration: InputDecoration(
-                                      labelText: 'First Name',
-                                      hintText: 'Enter your first name',
-                                      prefixIcon: Icon(Icons.person_outline,
-                                          color: context.primaryColor),
-                                      labelStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[700]),
-                                      hintStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[400]),
-                                      helperText: 'Enter your legal first name',
-                                      helperStyle: context.bodySmall
-                                          .copyWith(color: Colors.grey[600]),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your first name';
-                                      }
-                                      if (value.length < 2) {
-                                        return 'First name must be at least 2 characters';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(height: 16),
-                                  TextFormField(
-                                    controller: _lastNameController,
-                                    enabled: state is! AuthLoading,
-                                    style: context.bodyLarge
-                                        .copyWith(color: Colors.black87),
-                                    decoration: InputDecoration(
-                                      labelText: 'Last Name',
-                                      hintText: 'Enter your last name',
-                                      prefixIcon: Icon(Icons.person_outline,
-                                          color: context.primaryColor),
-                                      labelStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[700]),
-                                      hintStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[400]),
-                                      helperText: 'Enter your legal last name',
-                                      helperStyle: context.bodySmall
-                                          .copyWith(color: Colors.grey[600]),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your last name';
-                                      }
-                                      if (value.length < 2) {
-                                        return 'Last name must be at least 2 characters';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(height: 16),
-                                  TextFormField(
-                                    controller: _emailController,
-                                    enabled: state is! AuthLoading,
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: context.bodyLarge
-                                        .copyWith(color: Colors.black87),
-                                    decoration: InputDecoration(
-                                      labelText: 'Email',
-                                      hintText: 'Enter your email',
-                                      prefixIcon: Icon(Icons.email_outlined,
-                                          color: context.primaryColor),
-                                      labelStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[700]),
-                                      hintStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[400]),
-                                      helperText:
-                                          'Use a valid email address (e.g., name@example.com)',
-                                      helperStyle: context.bodySmall
-                                          .copyWith(color: Colors.grey[600]),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your email';
-                                      }
-                                      if (!RegExp(
-                                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                          .hasMatch(value)) {
-                                        return 'Please enter a valid email address';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(height: 16),
-                                  TextFormField(
-                                    controller: _passwordController,
-                                    enabled: state is! AuthLoading,
-                                    obscureText: _obscurePassword,
-                                    style: context.bodyLarge
-                                        .copyWith(color: Colors.black87),
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      hintText: 'Enter your password',
-                                      prefixIcon: Icon(Icons.lock_outline,
-                                          color: context.primaryColor),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          _obscurePassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: context.primaryColor,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscurePassword =
-                                                !_obscurePassword;
-                                          });
-                                        },
-                                      ),
-                                      labelStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[700]),
-                                      hintStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[400]),
-                                      helperText: 'At least 6 characters',
-                                      helperStyle: context.bodySmall
-                                          .copyWith(color: Colors.grey[600]),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter a password';
-                                      }
-                                      if (value.length < 6) {
-                                        return 'Password must be at least 6 characters';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(height: 16),
-                                  TextFormField(
-                                    controller: _confirmPasswordController,
-                                    enabled: state is! AuthLoading,
-                                    obscureText: _obscureConfirmPassword,
-                                    style: context.bodyLarge
-                                        .copyWith(color: Colors.black87),
-                                    decoration: InputDecoration(
-                                      labelText: 'Confirm Password',
-                                      hintText: 'Confirm your password',
-                                      prefixIcon: Icon(Icons.lock_outline,
-                                          color: context.primaryColor),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          _obscureConfirmPassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: context.primaryColor,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscureConfirmPassword =
-                                                !_obscureConfirmPassword;
-                                          });
-                                        },
-                                      ),
-                                      labelStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[700]),
-                                      hintStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[400]),
-                                      helperText:
-                                          'Re-enter your password to confirm',
-                                      helperStyle: context.bodySmall
-                                          .copyWith(color: Colors.grey[600]),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please confirm your password';
-                                      }
-                                      if (value != _passwordController.text) {
-                                        return 'Passwords do not match';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(height: 32),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: state is AuthLoading
-                                          ? null
-                                          : _register,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: context.primaryColor,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 16),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                      ),
-                                      child: state is AuthLoading
-                                          ? CircularProgressIndicator(
-                                              color: context.primaryColor,
-                                            )
-                                          : Text(
-                                              'Register',
-                                              style: context.bodyLarge.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: context.primaryColor,
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 16),
+                        RegisterFormWidget(authBloc: context.read<AuthBloc>()),
+                        const SizedBox(height: 24),
+                        // SocialLoginWidget(),
+                        // const SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -417,11 +142,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                         color: Colors.red.shade50,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.red.shade200),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black,
                             blurRadius: 8,
-                            offset: const Offset(0, 4),
+                            offset: Offset(0, 4),
                           ),
                         ],
                       ),

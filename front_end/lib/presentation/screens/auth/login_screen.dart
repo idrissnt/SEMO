@@ -6,8 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/extensions/theme_extension.dart';
 import '../../../core/utils/logger.dart';
 import '../../blocs/auth/auth_bloc.dart';
-import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
+import '../../widgets/auth/auth_header.dart';
+import '../../widgets/auth/login_form_widget.dart';
+// import '../../widgets/auth/social_login_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,10 +21,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   final AppLogger _logger = AppLogger();
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -46,8 +44,6 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void dispose() {
     _logger.debug('LoginScreen: Disposing controllers');
-    _emailController.dispose();
-    _passwordController.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -83,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen>
             SafeArea(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: EdgeInsets.all(context.xl),
                   child: FadeTransition(
                     opacity: _fadeAnimation,
                     child: Column(
@@ -95,156 +91,22 @@ class _LoginScreenState extends State<LoginScreen>
                           onPressed: () => context.go('/welcome'),
                         ),
                         const SizedBox(height: 32),
-                        Text(
-                          'Welcome\nBack',
-                          style: context.headline1,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Sign in to continue',
-                          style: context.bodyLarge,
+                        const AuthHeader(
+                          title: 'Welcome\nBack',
+                          subtitle: 'Sign in to continue',
                         ),
                         const SizedBox(height: 48),
-                        BlocBuilder<AuthBloc, AuthState>(
-                          builder: (context, state) {
-                            return Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextFormField(
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    enabled: state is! AuthLoading,
-                                    style: context.bodyLarge
-                                        .copyWith(color: Colors.black87),
-                                    decoration: InputDecoration(
-                                      labelText: 'Email',
-                                      hintText: 'Enter your email',
-                                      prefixIcon: Icon(Icons.email_outlined,
-                                          color: context.primaryColor),
-                                      labelStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[700]),
-                                      hintStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[400]),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your email';
-                                      }
-                                      if (!value.contains('@') ||
-                                          !value.contains('.')) {
-                                        return 'Please enter a valid email';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(height: 16),
-                                  TextFormField(
-                                    controller: _passwordController,
-                                    obscureText: _obscurePassword,
-                                    enabled: state is! AuthLoading,
-                                    style: context.bodyLarge
-                                        .copyWith(color: Colors.black87),
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      hintText: 'Enter your password',
-                                      prefixIcon: Icon(Icons.lock_outline,
-                                          color: context.primaryColor),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          _obscurePassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: context.primaryColor,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscurePassword =
-                                                !_obscurePassword;
-                                          });
-                                        },
-                                      ),
-                                      labelStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[700]),
-                                      hintStyle: context.bodyMedium
-                                          .copyWith(color: Colors.grey[400]),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your password';
-                                      }
-                                      if (value.length < 6) {
-                                        return 'Password must be at least 6 characters';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(height: 32),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: state is AuthLoading
-                                          ? null
-                                          : () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                _logger.info(
-                                                    'Login attempt for email: ${_emailController.text.trim()}');
-                                                context.read<AuthBloc>().add(
-                                                      AuthLoginRequested(
-                                                        email: _emailController
-                                                            .text
-                                                            .trim(),
-                                                        password:
-                                                            _passwordController
-                                                                .text,
-                                                      ),
-                                                    );
-                                              } else {
-                                                _logger.warning(
-                                                    'Login form validation failed');
-                                              }
-                                            },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 16),
-                                        child: state is AuthLoading
-                                            ? const SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                          Color>(Colors.white),
-                                                ),
-                                              )
-                                            : Text(
-                                                'Login',
-                                                style:
-                                                    context.bodyLarge.copyWith(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 16),
+                        LoginFormWidget(authBloc: context.read<AuthBloc>()),
+                        const SizedBox(height: 24),
+                        // SocialLoginWidget(),
+                        // const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Don\'t have an account? ',
                               style: context.bodyMedium.copyWith(
-                                color: Colors.white.withOpacity(0.8),
+                                color: Colors.white,
                               ),
                             ),
                             GestureDetector(

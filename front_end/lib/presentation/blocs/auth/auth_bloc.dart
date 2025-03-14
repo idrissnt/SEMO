@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:semo/data/models/error/api_error.dart';
+import 'package:semo/presentation/blocs/auth/services/error_messages.dart';
 import '../../../domain/repositories/user_auth/auth_repository.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -23,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     _logger.info('Starting login process for user: ${event.email}');
     emit(AuthLoading());
+    
     try {
       final user = await _authRepository.login(
         email: event.email,
@@ -31,8 +34,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _logger.info('Login successful');
       emit(AuthAuthenticated(user));
     } catch (e) {
-      _logger.severe('Login failed: $e');
-      emit(AuthFailure(_getErrorMessage(e)));
+      // Create structured error
+      final apiError = ApiError.fromException(e);
+      
+      // Log detailed error information
+      _logger.severe(
+        'Login failed: ${apiError.message}',
+        apiError.originalError,
+      );
+      
+      // Get user-friendly error message
+      final errorMessage = getErrorMessage(apiError);
+      
+      // Emit failure state with user-friendly message
+      emit(AuthFailure(errorMessage));
       emit(AuthUnauthenticated());
     }
   }
@@ -43,19 +58,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     _logger.info('Starting registration process');
     emit(AuthLoading());
+    
     try {
       final user = await _authRepository.register(
         firstName: event.firstName,
         lastName: event.lastName,
         email: event.email,
         password: event.password,
-        password2: event.password2,
       );
       _logger.info('Registration and auto-login successful');
       emit(AuthAuthenticated(user));
     } catch (e) {
-      _logger.severe('Registration failed: $e');
-      emit(AuthFailure(_getErrorMessage(e)));
+      // Create structured error
+      final apiError = ApiError.fromException(e);
+      
+      // Log detailed error information
+      _logger.severe(
+        'Registration failed: ${apiError.message}',
+        apiError.originalError,
+      );
+      
+      // Get user-friendly error message
+      final errorMessage = getErrorMessage(apiError);
+      
+      // Emit failure state with user-friendly message
+      emit(AuthFailure(errorMessage));
       emit(AuthUnauthenticated());
     }
   }
@@ -71,7 +98,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _logger.info('Logout successful');
       emit(AuthUnauthenticated());
     } catch (e) {
-      _logger.info('Logout error handled gracefully: $e');
+      // Create structured error
+      final apiError = ApiError.fromException(e);
+      
+      // Log detailed error information but at INFO level since we handle it gracefully
+      _logger.info(
+        'Logout error handled gracefully: ${apiError.message}',
+        apiError.originalError,
+      );
+      
       // Even if the server request fails, we want to log out locally
       emit(AuthUnauthenticated());
     }
@@ -119,62 +154,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUnauthenticated());
       }
     } catch (e) {
-      _logger.severe('Authentication check failed', e);
-      emit(AuthFailure(_getErrorMessage(e)));
+      // Create structured error
+      final apiError = ApiError.fromException(e);
+      
+      // Log detailed error information
+      _logger.severe(
+        'Authentication check failed: ${apiError.message}',
+        apiError.originalError,
+      );
+      
+      // Get user-friendly error message
+      final errorMessage = getErrorMessage(apiError);
+      
+      // Emit failure state with user-friendly message
+      emit(AuthFailure(errorMessage));
       emit(AuthUnauthenticated());
     }
-  }
-
-  String _getErrorMessage(dynamic error) {
-    final errorStr = error.toString().toLowerCase();
-
-    // Password validation errors
-    if (errorStr.contains('password2')) {
-      if (errorStr.contains('not match')) {
-        return 'Passwords do not match. Please confirm your password.';
-      }
-      return 'Please confirm your password.';
-    }
-
-    if (errorStr.contains('password')) {
-      if (errorStr.contains('required')) {
-        return 'Password is required.';
-      }
-      if (errorStr.contains('6 characters') || errorStr.contains('too short')) {
-        return 'Password must be at least 6 characters long.';
-      }
-      return 'Please check your password.';
-    }
-
-    // Email validation errors
-    if (errorStr.contains('email')) {
-      if (errorStr.contains('already exists')) {
-        return 'This email is already registered. Please try logging in.';
-      }
-      if (errorStr.contains('required')) {
-        return 'Email address is required.';
-      }
-      if (errorStr.contains('valid')) {
-        return 'Please enter a valid email address.';
-      }
-      return 'Please check your email address.';
-    }
-
-    // Name validation errors
-    if (errorStr.contains('first_name')) {
-      return 'Please enter your first name.';
-    }
-    if (errorStr.contains('last_name')) {
-      return 'Please enter your last name.';
-    }
-
-    // Network errors
-    if (errorStr.contains('connection refused') ||
-        errorStr.contains('network')) {
-      return 'Unable to connect to server. Please check your internet connection.';
-    }
-
-    // If we can't identify a specific error, show the raw error message
-    return error.toString().replaceAll('Exception: ', '');
   }
 }

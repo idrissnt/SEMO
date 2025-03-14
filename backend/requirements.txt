@@ -8,4 +8,14 @@ gunicorn==21.2.0
 pillow==11.1.0
 
 # Optional: Required only for PostgreSQL database
-# psycopg2-binary==2.9.9
+psycopg2-binary==2.9.9
+
+# to helps manage hierarchical data (nested categories)
+django-ltree==0.5.3
+
+# Image processing
+django-imagekit==4.1.0
+
+# Stripe
+stripe==11.6.0
+python-decouple==3.8

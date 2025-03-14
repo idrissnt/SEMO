@@ -5,6 +5,7 @@ class User {
   final String email;
   final String? profileImage;
   final DateTime createdAt;
+  final String? address;
 
   User({
     required this.id,
@@ -13,6 +14,7 @@ class User {
     required this.email,
     this.profileImage,
     required this.createdAt,
+    this.address,
   });
 
   String get fullName => '$firstName $lastName';

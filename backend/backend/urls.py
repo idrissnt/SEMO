@@ -11,15 +11,17 @@ from drf_spectacular.views import (
     SpectacularRedocView,
 )
 
-urlpatterns = [
+urlpatterns = [     
     path('admin/', admin.site.urls),
     
     # API URLs
     path('api/v1/', include([
-        path('', include('the_user_app.urls')),
+        path('auth/', include('the_user_app.urls', namespace='the_user_app')),
         path('stores/', include('store.urls', namespace='store')),
-        path('products/', include('product.urls', namespace='product')),
-        path('recipes/', include('recipe.urls', namespace='recipe')),
+        path('orders/', include('orders.urls', namespace='orders')),
+        path('payments/', include('payments.urls', namespace='payments')),
+        path('deliveries/', include('deliveries.urls', namespace='deliveries')),
+        path('cart/', include('cart.urls', namespace='cart')),
     ])),
     
     # API Documentation

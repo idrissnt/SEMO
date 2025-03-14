@@ -11,7 +11,7 @@ import 'data/repositories/user_auth/auth_repository_impl.dart';
 import 'data/repositories/store/store_repository_impl.dart';
 import 'domain/repositories/user_auth/auth_repository.dart';
 import 'domain/repositories/store/store_repository.dart';
-import 'domain/usecases/get_stores_usecase.dart';
+import 'data/repositories/store/usecases/get_stores_usecase.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_event.dart';
 import 'presentation/blocs/store/store_bloc.dart';
@@ -33,7 +33,7 @@ void main() async {
     logger.debug('Initializing repositories');
     final authRepository = AuthRepositoryImpl(
       client: client,
-      storage: secureStorage,
+      secureStorage: secureStorage,
     );
     final storeRepository = StoreRepositoryImpl(
       client: client,

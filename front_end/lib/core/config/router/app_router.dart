@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../../domain/services/auth_service.dart';
+import '../../../domain/repositories/user_auth/auth_repository.dart';
 import '../../../presentation/blocs/auth/auth_bloc.dart';
 import '../../../presentation/blocs/auth/auth_state.dart';
-import '../../utils/logger.dart';
 import 'auth_routes.dart';
 import 'main_shell_route.dart';
 import 'store_shell_route.dart';
@@ -21,16 +19,14 @@ class AppRouter {
     redirect: (context, state) async {
       // Get AuthBloc state first before any async operations
       final authState = context.read<AuthBloc>().state;
-
-      final authService = AuthService(
-        storage: const FlutterSecureStorage(),
-        logger: AppLogger(),
-      );
+      
+      // Get the AuthRepository from the provider
+      final authRepository = context.read<AuthRepository>();
       final prefs = await SharedPreferences.getInstance();
 
-      // Get tokens and check validity
-      final accessToken = await authService.getAccessToken();
-      final refreshToken = await authService.getRefreshToken();
+      // Get tokens from the repository
+      final accessToken = await authRepository.getAccessToken();
+      final refreshToken = await authRepository.getRefreshToken();
 
       // Comprehensive token validation
       final hasValidTokens = accessToken != null &&
@@ -41,7 +37,7 @@ class AppRouter {
       // Combine token check with authentication state
       final isAuthenticated = hasValidTokens &&
           (authState is AuthAuthenticated ||
-              await authService.isAuthenticated());
+              await authRepository.hasValidToken());
 
       // Check onboarding status
       final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;

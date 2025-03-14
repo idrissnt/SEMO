@@ -11,6 +11,7 @@ class UserModel extends User {
     required String lastName,
     String? profileImage,
     DateTime? createdAt,
+    String? address,
   }) : super(
           id: id,
           email: email,
@@ -18,10 +19,12 @@ class UserModel extends User {
           lastName: lastName,
           profileImage: profileImage,
           createdAt: createdAt ?? DateTime.now(),
+          address: address,
         );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     _logger.debug('Creating UserModel from JSON: $json');
+
     // Check if user data is nested
     final userData = json['user'] ?? json;
 
@@ -34,6 +37,7 @@ class UserModel extends User {
       createdAt: userData['created_at'] != null
           ? DateTime.parse(userData['created_at'])
           : DateTime.now(),
+      address: userData['address'],
     );
   }
 
@@ -44,5 +48,6 @@ class UserModel extends User {
         'last_name': lastName,
         'profile_image': profileImage,
         'created_at': createdAt.toIso8601String(),
+        'address': address,
       };
 }

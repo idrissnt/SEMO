@@ -203,7 +203,8 @@ class _HomeTabState extends State<_HomeTab> {
                                 EarnTasksSection(
                                   // title: 'Dispo et motivé ? Y\'a du boulot !',
                                   // title: 'Dispo = Money. Simple, non ?',
-                                  title: 'Dispo et motivé ? Fais du fric !',
+                                  // title: 'Dispo et motivé ? Fais du fric !',
+                                  title: 'Accomplir une tache !',
                                   earnTasks: getSampleEarnTasks(),
                                 ),
                                 const SectionSeparator(),

@@ -17,3 +17,6 @@ python manage.py setup_dev
 
 # Run the development server
 python manage.py runserver 0.0.0.0:8000 # to allow all apps to connect
+
+# Access the development server
+http://127.0.0.1:8000/admin/the_user_app/customuser/
