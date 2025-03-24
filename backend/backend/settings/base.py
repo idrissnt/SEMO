@@ -110,7 +110,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Model
-AUTH_USER_MODEL = 'the_user_app.CustomUser'
+AUTH_USER_MODEL = 'the_user_app.CustomUser'  # This refers to the model imported in models.py
 
 # REST Framework settings
 REST_FRAMEWORK = {
@@ -122,13 +122,15 @@ REST_FRAMEWORK = {
     #     'rest_framework.permissions.IsAuthenticated',
     # ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'the_user_app.exceptions.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'the_user_app.interfaces.api.exceptions.custom_exception_handler',
 }
 
 # JWT settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    # Set access token to last 100 years (effectively forever)
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=36500),  # 100 years
+    # Set refresh token to also last 100 years
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=36500),  # 100 years
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
