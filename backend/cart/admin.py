@@ -3,9 +3,9 @@ from .models import Cart, CartItem
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'store', 'created_at', 'total_items', 'total_price']
-    list_filter = ['store', 'created_at']
-    search_fields = ['user__email', 'store__name']
+    list_display = ['id', 'user', 'store_brand', 'created_at', 'total_items', 'total_price']
+    list_filter = ['store_brand', 'created_at']
+    search_fields = ['user__email', 'store_brand__name']
     readonly_fields = ['created_at', 'updated_at', 'total_items', 'total_price']
     date_hierarchy = 'created_at'
 
@@ -20,7 +20,7 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ['cart', 'store_product', 'quantity', 'total_price', 'added_at']
-    list_filter = ['cart__store', 'added_at']
+    list_filter = ['cart__store_brand', 'added_at']
     search_fields = ['cart__user__email', 'store_product__product__name']
     autocomplete_fields = ['store_product']
     readonly_fields = ['added_at', 'total_price']

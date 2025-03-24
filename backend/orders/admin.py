@@ -3,9 +3,9 @@ from .models import Order, OrderItem
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'store', 'status', 'total_amount', 'created_at']
-    list_filter = ['status', 'store', 'created_at']
-    search_fields = ['user__email', 'store__name']
+    list_display = ['id', 'user', 'store_brand', 'status', 'total_amount', 'created_at']
+    list_filter = ['status', 'store_brand', 'created_at']
+    search_fields = ['user__email', 'store_brand__name']
     readonly_fields = ['created_at']
     date_hierarchy = 'created_at'
 

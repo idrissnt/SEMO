@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Order, OrderItem, Store, Payment
-from store.serializers import StoreProductSerializer
+from .models import Order, OrderItem, StoreBrand, Payment
+from store.serializers import ProductWithDetailsSerializer
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    store_product = StoreProductSerializer(read_only=True)
+    store_product = ProductWithDetailsSerializer(read_only=True)
     
     class Meta:
         model = OrderItem
@@ -12,7 +12,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True, required=True)
-    store = serializers.SlugRelatedField(slug_field='slug', queryset=Store.objects.all())
+    store = serializers.SlugRelatedField(slug_field='slug', queryset=StoreBrand.objects.all())
     payment = serializers.SlugRelatedField(
         slug_field='id',
         queryset=Payment.objects.all(),

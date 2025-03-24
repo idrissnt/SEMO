@@ -19,3 +19,20 @@ django-imagekit==4.1.0
 # Stripe
 stripe==11.6.0
 python-decouple==3.8
+
+# Redis for caching
+redis==5.2.1
+django-redis==5.4.0
+
+# CSV processing
+python-slugify==8.0.4
+
+# Excel processing
+XlsxWriter==3.2.2
+pandas==2.2.3
+
+# Google Maps API
+googlemaps==4.10.0
+
+# Full-text search
+djangorestframework-gis==1.1

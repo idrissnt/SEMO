@@ -1,27 +1,4 @@
 from rest_framework import serializers
-from backend.store.domain.value_objects.address import Address
-
-class AddressSerializer(serializers.Serializer):
-    """Serializer for Address value object"""
-    street_number = serializers.CharField(allow_blank=True)
-    route = serializers.CharField(allow_blank=True)
-    city = serializers.CharField()
-    postal_code = serializers.CharField()
-    country = serializers.CharField()
-    
-    def create(self, validated_data):
-        return Address(**validated_data)
-    
-    def to_representation(self, instance):
-        return {
-            'street_number': instance.street_number,
-            'route': instance.route,
-            'city': instance.city,
-            'postal_code': instance.postal_code,
-            'country': instance.country,
-            'full_address': instance.get_full_address()
-        }
-
 
 class StoreBrandSerializer(serializers.Serializer):
     """Serializer for StoreBrand domain entity"""

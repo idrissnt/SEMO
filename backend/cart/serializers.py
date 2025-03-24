@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import Cart, CartItem
-from store.serializers import StoreProductSerializer
-from store.models import Store
+from store.serializers import ProductWithDetailsSerializer
+from store.models import StoreBrand
 
 class CartItemSerializer(serializers.ModelSerializer):
-    store_product = StoreProductSerializer(read_only=True)
+    store_product = ProductWithDetailsSerializer(read_only=True)
     total_price = serializers.SerializerMethodField()
 
     class Meta:
@@ -19,7 +19,7 @@ class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True, source='cart_items')
     total_price = serializers.SerializerMethodField()
     total_items = serializers.SerializerMethodField()
-    store = serializers.SlugRelatedField(slug_field='slug', queryset=Store.objects.all())
+    store = serializers.SlugRelatedField(slug_field='slug', queryset=StoreBrand.objects.all())
 
     class Meta:
         model = Cart

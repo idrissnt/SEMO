@@ -13,8 +13,8 @@ from django.contrib.postgres.search import(
     SearchQuery, SearchRank, TrigramSimilarity
 )
 
-from backend.store.domain.services.search_service import SearchStrategy
-from backend.store.infrastructure.django_models.orm_models import(
+from store.domain.services.search_service import SearchStrategy
+from store.infrastructure.django_models.orm_models import(
     ProductModel, StoreProductModel
 )
 

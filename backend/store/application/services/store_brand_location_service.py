@@ -1,13 +1,13 @@
 from typing import List, Dict, Any
 
-from backend.store.domain.models.entities import StoreBrand
-from backend.store.domain.services.cache_service import CacheService
-from backend.store.domain.services.store_location_service import StoreLocationService
-from backend.store.domain.value_objects.coordinates import Coordinates
-from backend.store.domain.repositories.repository_interfaces import(
+from store.domain.models.entities import StoreBrand
+from store.domain.services.cache_service import CacheService
+from store.domain.services.store_location_service import StoreLocationService
+from store.domain.value_objects.coordinates import Coordinates
+from store.domain.repositories.repository_interfaces import(
     StoreBrandRepository
 )
-from backend.store.config.constants import (
+from store.config.constants import (
     DEFAULT_SEARCH_RADIUS, 
     LOCATION_CACHE_TIMEOUT
 )

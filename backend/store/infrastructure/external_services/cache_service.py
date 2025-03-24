@@ -2,9 +2,9 @@ from typing import Any, Dict, Optional, List
 import json
 import hashlib
 from django.core.cache import cache
-from backend.store.domain.services.cache_service import CacheService
-from backend.store.domain.value_objects.coordinates import Coordinates
-from backend.store.config.constants import (
+from store.domain.services.cache_service import CacheService
+from store.domain.value_objects.coordinates import Coordinates
+from store.config.constants import (
     CACHE_KEY_PREFIX,
     ADDRESS_KEY_PREFIX,
     BRAND_KEY_PREFIX,

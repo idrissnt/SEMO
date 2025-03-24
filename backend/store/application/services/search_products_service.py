@@ -1,13 +1,13 @@
 from typing import List, Dict, Optional, Tuple
 import uuid
 
-from backend.store.domain.models.entities import  ProductName, ProductWithDetails
-from backend.store.domain.repositories.repository_interfaces import (
+from store.domain.models.entities import ProductName, ProductWithDetails
+from store.domain.repositories.repository_interfaces import (
     ProductRepository
 )
-from backend.store.domain.services.cache_service import CacheService
-from backend.store.domain.services.search_analytics_service import SearchAnalyticsService
-from backend.store.domain.value_objects.pagination import PaginationParams, PagedResult
+from store.domain.services.cache_service import CacheService
+from store.domain.services.search_analytics_service import SearchAnalyticsService
+from store.domain.value_objects.pagination import PaginationParams, PagedResult
 
 
 class SearchProductsService:

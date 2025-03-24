@@ -1,17 +1,17 @@
 from django.db import models
 from django.conf import settings
-from store.models import StoreProduct, Store
+from store.models import StoreProduct, StoreBrand
 import uuid
 
 class Cart(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)  # Cart is store-specific
+    store_brand = models.ForeignKey(StoreBrand, on_delete=models.CASCADE)  # Cart is store-specific
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ['user', 'store']  # One cart per user per store
+        unique_together = ['user', 'store_brand']  # One cart per user per store
         db_table = 'carts'
 
     def total_price(self):

@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 import uuid
 
-from backend.store.interfaces.api.serializers import (
+from store.interfaces.api.serializers import (
     ProductNameSerializer,
     StoreBrandSerializer, 
     ProductWithDetailsSerializer,
@@ -11,7 +11,7 @@ from backend.store.interfaces.api.serializers import (
 )
 
 # Factory imports for dependency injection
-from backend.store.infrastructure.factory import StoreFactory
+from store.infrastructure.factory import StoreFactory
 
 
 class StoreBrandLocationViewSet(viewsets.ViewSet):

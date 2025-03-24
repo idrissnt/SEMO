@@ -8,8 +8,8 @@ from datetime import datetime, timedelta
 from django.db import models
 from django.utils import timezone
 
-from backend.store.domain.services.search_analytics_service import SearchAnalyticsService
-from backend.store.infrastructure.django_models.analytics_models import SearchQueryLog
+from store.domain.services.search_analytics_service import SearchAnalyticsService
+from store.infrastructure.django_models.analytics_models import SearchQueryLog
 
 
 class DjangoSearchAnalyticsService(SearchAnalyticsService):

@@ -15,8 +15,8 @@ class StoreBrandModel(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-    image_logo = models.ImageField(default='stores/default.png', required=True)
-    image_banner = models.ImageField(default='stores/default.png', required=True)
+    image_logo = models.ImageField(default='stores/default.png', )
+    image_banner = models.ImageField(default='stores/default.png', )
     
     class Meta:
         db_table = 'store_brands'
@@ -28,7 +28,7 @@ class CategoryModel(models.Model):
     """Django ORM model for Category"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, unique=True)
-    store_brand = models.ManyToManyField(StoreBrandModel, on_delete=models.CASCADE)
+    store_brand = models.ManyToManyField(StoreBrandModel)
     path = PathField()  # Hierarchical path (e.g., "Store1.Food.Fruits")
     slug = models.SlugField(unique=True)
     
@@ -38,7 +38,7 @@ class CategoryModel(models.Model):
             GistIndex(fields=['path'], name='category_path_gist'),  # Speeds up hierarchical queries
             GistIndex(fields=['name'], name='category_name_trigram_idx', opclasses=['gin_trgm_ops'])  # For trigram similarity
         ]
-        unique_together = ('store_brand', 'path')  # Path must be unique per store
+        # unique_together = ('store_brand', 'path')  # Path must be unique per store
         db_table = 'categories'
         
     def __str__(self):

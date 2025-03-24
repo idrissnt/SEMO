@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, List, Dict, Optional
 
-from backend.store.domain.value_objects.coordinates import Coordinates
+from store.domain.value_objects.coordinates import Coordinates
 
 class CacheService(ABC):
     """Interface for caching services"""

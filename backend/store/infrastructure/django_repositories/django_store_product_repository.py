@@ -1,9 +1,9 @@
 from typing import List, Optional
 import uuid
 
-from backend.store.domain.models.entities import ProductWithDetails
-from backend.store.domain.repositories.repository_interfaces import StoreProductRepository
-from backend.store.infrastructure.django_repositories.repository_utils import QueryUtils
+from store.domain.models.entities import ProductWithDetails
+from store.domain.repositories.repository_interfaces import StoreProductRepository
+from store.infrastructure.django_repositories.repository_utils import QueryUtils
 
 class DjangoStoreProductRepository(StoreProductRepository):
     """Django ORM implementation of StoreProductRepository"""

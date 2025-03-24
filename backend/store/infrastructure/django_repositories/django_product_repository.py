@@ -1,12 +1,12 @@
 from typing import List, Dict, Tuple
 import uuid
 
-from backend.store.domain.models.entities import ProductWithDetails
-from backend.store.domain.repositories.repository_interfaces import ProductRepository
-from backend.store.infrastructure.django_models.orm_models import (
+from store.domain.models.entities import ProductWithDetails
+from store.domain.repositories.repository_interfaces import ProductRepository
+from store.infrastructure.django_models.orm_models import (
     ProductModel, 
 )
-from backend.store.infrastructure.search.search_strategies_implement import CombinedSearchStrategy
+from store.infrastructure.search.search_strategies_implement import CombinedSearchStrategy
 
 class DjangoProductRepository(ProductRepository):
     """Django ORM implementation of ProductRepository"""
@@ -21,7 +21,7 @@ class DjangoProductRepository(ProductRepository):
         matching_product_ids = self.search_service.search_products(query, store_id=store_id)
             
         # Import the utility class
-        from backend.store.infrastructure.django_repositories.repository_utils import QueryUtils
+        from store.infrastructure.django_repositories.repository_utils import QueryUtils
         
         # Build optimized query using the utility
         store_products = QueryUtils.build_optimized_query(
@@ -48,7 +48,7 @@ class DjangoProductRepository(ProductRepository):
             return {}  # Return empty dict if no matches
             
         # Import the utility class
-        from backend.store.infrastructure.django_repositories.repository_utils import QueryUtils
+        from store.infrastructure.django_repositories.repository_utils import QueryUtils
         
         # Build optimized query using the utility
         # QueryUtils.build_optimized_query already includes select_related
@@ -93,7 +93,7 @@ class DjangoProductRepository(ProductRepository):
         
         # If we have enough prefix matches, return them
         if len(prefix_matches) >= limit:
-            from backend.store.domain.models.entities import ProductName
+            from store.domain.models.entities import ProductName
             return [ProductName(name) for name in prefix_matches[:limit]]
             
         # Otherwise, supplement with trigram similarity matches
@@ -112,7 +112,7 @@ class DjangoProductRepository(ProductRepository):
         )
         
         # Combine results, with prefix matches first
-        from backend.store.domain.models.entities import ProductName
+        from store.domain.models.entities import ProductName
         # Flatten the list and ensure we don't exceed the limit
         combined_matches = prefix_matches + similarity_matches
         return [ProductName(name) for name in combined_matches[:limit]]

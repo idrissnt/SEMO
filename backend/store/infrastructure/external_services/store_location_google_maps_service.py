@@ -4,10 +4,10 @@ from googlemaps import Client
 from django.conf import settings
 from unittest.mock import MagicMock
 
-from backend.store.domain.value_objects.coordinates import Coordinates
-from backend.store.domain.value_objects.address import Address
-from backend.store.domain.services.store_location_service import StoreLocationService
-from backend.store.config.constants import MAX_RESULTS_STORES_BRANDS_NEARBY
+from store.domain.value_objects.coordinates import Coordinates
+from store.domain.value_objects.address import Address
+from store.domain.services.store_location_service import StoreLocationService
+from store.config.constants import MAX_RESULTS_STORES_BRANDS_NEARBY
 
 
 class GoogleMapsService(StoreLocationService):

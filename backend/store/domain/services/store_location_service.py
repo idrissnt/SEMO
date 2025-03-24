@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, Tuple
 
-from backend.store.domain.value_objects.coordinates import Coordinates
-from backend.store.domain.value_objects.address import Address
+from store.domain.value_objects.coordinates import Coordinates
+from store.domain.value_objects.address import Address
 
 
 class StoreLocationService(ABC):

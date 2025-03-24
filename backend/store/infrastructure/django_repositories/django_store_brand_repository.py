@@ -1,8 +1,8 @@
 from typing import List
 
-from backend.store.domain.models.entities import StoreBrand
-from backend.store.domain.repositories.repository_interfaces import StoreBrandRepository
-from backend.store.infrastructure.django_models.orm_models import StoreBrandModel
+from store.domain.models.entities import StoreBrand
+from store.domain.repositories.repository_interfaces import StoreBrandRepository
+from store.infrastructure.django_models.orm_models import StoreBrandModel
 
 
 class DjangoStoreBrandRepository(StoreBrandRepository):

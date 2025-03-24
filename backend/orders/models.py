@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from store.models import StoreProduct, Store
+from store.models import StoreProduct, StoreBrand
 from payments.models import Payment
 import uuid
 
@@ -8,7 +8,7 @@ class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     STATUS_CHOICES = (('pending', 'Pending'), ('processing', 'Processing'), ('delivered', 'Delivered'), ('cancelled', 'Cancelled'))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)  # Order is store-specific
+    store_brand = models.ForeignKey(StoreBrand, on_delete=models.CASCADE)  # Order is store-specific
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)

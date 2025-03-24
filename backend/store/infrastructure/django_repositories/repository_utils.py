@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 from typing import List
-from backend.store.domain.models.entities import ProductWithDetails
-from backend.store.infrastructure.django_models.orm_models import StoreProductModel
+from store.domain.models.entities import ProductWithDetails
+from store.infrastructure.django_models.orm_models import StoreProductModel
 
 class QueryUtils:
     """Utility methods for optimized queries across repositories"""

@@ -1,10 +1,9 @@
 from typing import List, Optional
 import uuid
 
-from backend.store.domain.models.entities import ProductWithDetails
-from backend.store.domain.repositories.repository_interfaces import StoreProductRepository, CategoryRepository
-from backend.store.domain.services.cache_service import CacheService
-
+from store.domain.models.entities import ProductWithDetails
+from store.domain.repositories.repository_interfaces import StoreProductRepository
+from store.domain.services.cache_service import CacheService
 
 class StoreProductsService:
     """Application service for store products-related use cases"""
