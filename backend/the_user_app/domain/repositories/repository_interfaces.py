@@ -80,6 +80,18 @@ class UserRepository(ABC):
             True if password is correct, False otherwise
         """
         pass
+    
+    @abstractmethod
+    def delete(self, user_id: uuid.UUID) -> bool:
+        """Delete a user
+        
+        Args:
+            user_id: UUID of the user to delete
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        pass
 
 class AddressRepository(ABC):
     """Repository interface for Address domain model"""

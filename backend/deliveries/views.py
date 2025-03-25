@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from .models import Driver, Delivery
 from .serializers import DriverSerializer, DeliverySerializer
 from orders.models import Order
-from the_user_app.permissions import IsAdminOrDriverOwner
+from the_user_app.core.permissions import IsAdminOrDriverOwner
 
 class DriverViewSet(viewsets.ModelViewSet):
     serializer_class = DriverSerializer

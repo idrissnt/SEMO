@@ -15,36 +15,6 @@ class UserProfileViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = UserProfileSerializer
 
-    def _get_user_with_addresses(self, user_id):
-        """Helper method to get user with addresses"""
-        # Get user service from factory
-        user_service = UserFactory.create_user_service()
-        
-        # Get address service from factory
-        address_service = UserFactory.create_address_service()
-        
-        # Get user by ID
-        user = user_service.get_user_by_id(user_id)
-        
-        # Get addresses for user
-        addresses = address_service.get_user_addresses(user_id)
-        
-        # Create user with addresses object
-        user_with_addresses = {
-            'id': user.id,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'phone_number': user.phone_number,
-            'role': user.role,
-            'has_vehicle': user.has_vehicle,
-            'license_number': user.license_number,
-            'is_available': user.is_available,
-            'addresses': addresses
-        }
-        
-        return user_with_addresses
-
     @extend_schema(
         responses={
             200: UserProfileSerializer,
@@ -94,3 +64,54 @@ class UserProfileViewSet(viewsets.ViewSet):
                 return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
                 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    @extend_schema(
+        responses={
+            204: OpenApiResponse(description='No Content - Account deleted successfully'),
+            400: OpenApiResponse(description='Bad Request'),
+            401: OpenApiResponse(description='Unauthorized')
+        },
+        description='Delete user account'
+    )
+    @action(detail=False, methods=['delete'])
+    def delete_account(self, request):
+        # Get user service from factory
+        user_service = UserFactory.create_user_service()
+        
+        # Delete user
+        success, error = user_service.delete_user(request.user.id)
+        
+        if success:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+
+    def _get_user_with_addresses(self, user_id):
+        """Helper method to get user with addresses"""
+        # Get user service from factory
+        user_service = UserFactory.create_user_service()
+        
+        # Get address service from factory
+        address_service = UserFactory.create_address_service()
+            
+        # Get user by ID
+        user = user_service.get_user_by_id(user_id)
+            
+        # Get addresses for user
+        addresses = address_service.get_user_addresses(user_id)
+            
+        # Create user with addresses object
+        user_with_addresses = {
+            'id': user.id,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'phone_number': user.phone_number,
+            'role': user.role,
+            'has_vehicle': user.has_vehicle,
+            'license_number': user.license_number,
+            'is_available': user.is_available,
+            'addresses': addresses
+        }
+            
+        return user_with_addresses

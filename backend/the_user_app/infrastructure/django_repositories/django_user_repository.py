@@ -122,6 +122,22 @@ class DjangoUserRepository(UserRepository):
             return user_model.check_password(password)
         except CustomUserModel.DoesNotExist:
             return False
+
+    def delete(self, user_id: uuid.UUID) -> bool:
+        """Delete a user
+        
+        Args:
+            user_id: UUID of the user to delete
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            user_model = CustomUserModel.objects.get(id=user_id)
+            user_model.delete()
+            return True
+        except CustomUserModel.DoesNotExist:
+            return False
     
     def _to_domain(self, model: CustomUserModel) -> User:
         """Convert ORM model to domain model"""

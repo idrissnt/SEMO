@@ -108,3 +108,30 @@ class UserApplicationService:
         except Exception as e:
             logger.error(f"Error changing password: {str(e)}")
             return False, f"Error changing password: {str(e)}"
+    
+    def delete_user(self, user_id: uuid.UUID) -> Tuple[bool, str]:
+        """Delete a user
+        
+        Args:
+            user_id: UUID of the user to delete
+            
+        Returns:
+            Tuple of (success, error_message)
+            success is True if deletion is successful
+            error_message is empty if deletion is successful, otherwise contains the error
+        """
+        # Check if user exists
+        user = self.user_repository.get_by_id(user_id)
+        if not user:
+            return False, f"User with ID {user_id} not found"
+        
+        # Delete user
+        try:
+            success = self.user_repository.delete(user_id)
+            if success:
+                return True, ""
+            else:
+                return False, "Error deleting user"
+        except Exception as e:
+            logger.error(f"Error deleting user: {str(e)}")
+            return False, f"Error deleting user: {str(e)}"

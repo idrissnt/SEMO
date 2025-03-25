@@ -1,8 +1,8 @@
-from typing import Optional, Tuple, Dict, Any
+from typing import Tuple, Dict, Any
 import uuid
 from datetime import datetime
 
-from ..models.entities import User, LogoutEvent, AuthCredentials
+from ..models.entities import LogoutEvent, AuthCredentials
 
 class AuthDomainService:
     """Domain service for authentication-related operations"""
