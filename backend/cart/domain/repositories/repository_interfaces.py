@@ -13,8 +13,9 @@ class CartRepository(ABC):
     
     @abstractmethod
     def get_cart(self, cart_id: uuid.UUID = None, user_id: uuid.UUID = None, 
-               store_brand_id: uuid.UUID = None, include_product_details: bool = True) -> Optional[Cart]:
-        """Get a cart with options to include product details
+               store_brand_id: uuid.UUID = None
+               ) -> Optional[Cart]:
+        """Get a cart
         
         At least one of cart_id, or (user_id and store_brand_id) must be provided.
         
@@ -22,7 +23,6 @@ class CartRepository(ABC):
             cart_id: UUID of the cart (optional)
             user_id: UUID of the user (optional)
             store_brand_id: UUID of the store brand (optional)
-            include_product_details: Whether to include product details
             
         Returns:
             Cart object if found, None otherwise
@@ -30,12 +30,11 @@ class CartRepository(ABC):
         pass
     
     @abstractmethod
-    def get_all_for_user(self, user_id: uuid.UUID, include_product_details: bool = True) -> List[Cart]:
+    def get_all_for_user(self, user_id: uuid.UUID) -> List[Cart]:
         """Get all carts for a user
         
         Args:
             user_id: UUID of the user
-            include_product_details: Whether to include product details
             
         Returns:
             List of Cart objects
@@ -54,6 +53,54 @@ class CartRepository(ABC):
             Cart object
         """
         pass
+
+    @abstractmethod
+    def recalculate_cart_totals(self, cart_id: uuid.UUID) -> bool:
+        """Recalculate the totals for a cart
+        
+        Args:
+            cart_id: UUID of the cart
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        pass
+
+    @abstractmethod
+    def add_item_to_cart(self, cart_id: uuid.UUID, store_product_id: uuid.UUID,
+                        quantity: int
+                        ) -> Tuple[Optional[Cart], Optional[CartItem]]:
+        """Add an item to a cart and return the updated cart
+        
+        This is a convenience method that adds an item and returns the updated cart.
+        It ensures that cart totals are updated correctly.
+        
+        Args:
+            cart_id: UUID of the cart
+            store_product_id: UUID of the store product
+            quantity: Quantity of the item
+            
+        Returns:
+            Tuple of (Cart, CartItem) or (None, None) if failed
+        """
+        pass
+
+    @abstractmethod
+    def update_item_in_cart(self, cart_id: uuid.UUID, item_id: uuid.UUID, 
+                           quantity: int
+                           ) -> Tuple[Optional[Cart], Optional[CartItem]]:
+        """Update an item in a cart and return the updated cart
+        
+        Args:
+            cart_id: UUID of the cart
+            item_id: UUID of the item to update
+            quantity: New quantity
+            
+        Returns:
+            Tuple of (updated cart, updated item) or (cart, None) if item was deleted
+        """
+        pass
+        
     
     @abstractmethod
     def delete(self, cart_id: uuid.UUID) -> bool:
@@ -78,6 +125,43 @@ class CartRepository(ABC):
             True if successful, False otherwise
         """
         pass
+        
+    @abstractmethod
+    def reserve(self, cart_id: uuid.UUID, minutes: int = 15) -> bool:
+        """Reserve a cart for a specified time
+        
+        Args:
+            cart_id: UUID of the cart
+            minutes: Number of minutes to reserve the cart for
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        pass
+        
+    @abstractmethod
+    def release_reservation(self, cart_id: uuid.UUID) -> bool:
+        """Release a cart reservation
+        
+        Args:
+            cart_id: UUID of the cart
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        pass
+        
+    @abstractmethod
+    def is_reserved(self, cart_id: uuid.UUID) -> bool:
+        """Check if a cart is currently reserved
+        
+        Args:
+            cart_id: UUID of the cart
+            
+        Returns:
+            True if the cart is reserved, False otherwise
+        """
+        pass
 
 
 class CartItemRepository(ABC):
@@ -86,18 +170,6 @@ class CartItemRepository(ABC):
     Responsible for operations on cart items, such as adding,
     updating, and removing items from a cart.
     """    
-    
-    @abstractmethod
-    def get_store_brand_for_product(self, store_product_id: uuid.UUID) -> Optional[uuid.UUID]:
-        """Get the store brand ID for a store product
-        
-        Args:
-            store_product_id: UUID of the store product
-            
-        Returns:
-            UUID of the store brand if found, None otherwise
-        """
-        pass
     
     @abstractmethod
     def add_item(self, cart_id: uuid.UUID, store_product_id: uuid.UUID, 
@@ -128,7 +200,9 @@ class CartItemRepository(ABC):
         pass
     
     @abstractmethod
-    def get_items_for_cart(self, cart_id: uuid.UUID, include_product_details: bool = True) -> List[CartItem]:
+    def get_items_for_cart(self, cart_id: uuid.UUID, 
+                           include_product_details: bool = True
+                           ) -> List[CartItem]:
         """Get all items for a cart
         
         Args:

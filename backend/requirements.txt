@@ -36,3 +36,9 @@ googlemaps==4.10.0
 
 # Full-text search
 djangorestframework-gis==1.1
+
+# Celery for task queue and event processing
+celery==5.3.6
+django-celery-results==2.5.1
+django-celery-beat==2.5.0
+amqp==5.2.0

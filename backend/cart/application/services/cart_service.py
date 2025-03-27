@@ -1,9 +1,13 @@
 from typing import List, Optional, Tuple, Dict, Any
 import uuid
 import logging
+from django.utils import timezone
+from django.core.cache import cache
 
 from cart.domain.models.entities import Cart, CartItem
 from cart.domain.repositories.repository_interfaces import CartRepository, CartItemRepository
+from core.domain_events.event_bus import event_bus
+from core.domain_events.events import CartCheckedOutEvent
 
 logger = logging.getLogger(__name__)
 
@@ -15,14 +19,13 @@ class CartApplicationService:
         self.cart_item_repository = cart_item_repository
     
     def get_cart(self, cart_id: uuid.UUID = None, user_id: uuid.UUID = None, 
-                store_brand_id: uuid.UUID = None, include_product_details: bool = True) -> Optional[Cart]:
-        """Get a cart with optional product details
+                store_brand_id: uuid.UUID = None) -> Optional[Cart]:
+        """Get a cart
         
         Args:
             cart_id: UUID of the cart (optional)
             user_id: UUID of the user (optional)
             store_brand_id: UUID of the store brand (optional)
-            include_product_details: Whether to include product details
             
         Returns:
             Cart object if found, None otherwise
@@ -30,21 +33,19 @@ class CartApplicationService:
         return self.cart_repository.get_cart(
             cart_id=cart_id,
             user_id=user_id,
-            store_brand_id=store_brand_id,
-            include_product_details=include_product_details
+            store_brand_id=store_brand_id
         )
     
-    def get_all_carts_for_user(self, user_id: uuid.UUID, include_product_details: bool = True) -> List[Cart]:
+    def get_all_carts_for_user(self, user_id: uuid.UUID) -> List[Cart]:
         """Get all carts for a user
         
         Args:
             user_id: UUID of the user
-            include_product_details: Whether to include product details
             
         Returns:
             List of Cart objects
         """
-        return self.cart_repository.get_all_for_user(user_id, include_product_details)
+        return self.cart_repository.get_all_for_user(user_id)
     
     def get_or_create_cart(self, user_id: uuid.UUID, store_brand_id: uuid.UUID) -> Cart:
         """Get an existing cart or create a new one
@@ -80,8 +81,7 @@ class CartApplicationService:
             return False, f"Error clearing cart: {str(e)}"
     
     def add_item_to_cart(self, user_id: uuid.UUID, store_brand_id: uuid.UUID, 
-                         store_product_id: uuid.UUID, quantity: int = 1,
-                         product_details: Dict[str, Any] = None) -> Tuple[Optional[CartItem], str]:
+                         store_product_id: uuid.UUID, quantity: int = 1) -> Tuple[Optional[CartItem], str]:
         """Add an item to a cart
         
         Args:
@@ -89,7 +89,6 @@ class CartApplicationService:
             store_brand_id: UUID of the store brand
             store_product_id: UUID of the store product
             quantity: Quantity of the item to add
-            product_details: Optional product details for display
             
         Returns:
             Tuple of (cart_item, error_message)
@@ -100,26 +99,29 @@ class CartApplicationService:
             # Get or create cart
             cart = self.get_or_create_cart(user_id, store_brand_id)
             
-            # Add item to cart
-            result_item, error = self.cart_item_repository.add_item(
+            # Add item to cart using the cart repository's aggregate method
+            cart, cart_item = self.cart_repository.add_item_to_cart(
                 cart_id=cart.id,
                 store_product_id=store_product_id,
-                quantity=quantity,
-                product_details=product_details
+                quantity=quantity
             )
             
-            if not result_item:
-                return None, error
+            if not cart or not cart_item:
+                return None, "Failed to add item to cart"
                 
-            return result_item, ""
+            # Return the cart item from the result tuple (cart, item)
+            return cart, ""
         except Exception as e:
             logger.error(f"Error adding item to cart: {str(e)}")
             return None, f"Error adding item to cart: {str(e)}"
     
-    def update_item_quantity(self, item_id: uuid.UUID, quantity: int) -> Tuple[Optional[CartItem], str, bool]:
+    def update_item_quantity(self, cart_id: uuid.UUID, 
+                             item_id: uuid.UUID, quantity: int
+                             ) -> Tuple[Optional[CartItem], str, bool]:
         """Update the quantity of a cart item
         
         Args:
+            cart_id: UUID of the cart
             item_id: UUID of the cart item
             quantity: New quantity
             
@@ -130,24 +132,29 @@ class CartApplicationService:
             was_deleted is True if the item was deleted, False otherwise
         """
         try:
-            # Update quantity
-            cart_item, was_deleted = self.cart_item_repository.update_item_quantity(item_id, quantity)
+            # Use the cart repository's aggregate method
+            cart, cart_item = self.cart_repository.update_item_in_cart(cart_id, item_id, quantity)
+            
+            if not cart or not cart_item:
+                return None, "Failed to update item", False
+                
+            was_deleted = cart_item is None
             
             if was_deleted:
                 return None, "", True
             
-            if cart_item:
-                return cart_item, "", False
-            else:
-                return None, "Failed to update item quantity", False
+            return cart_item, "", False
         except Exception as e:
             logger.error(f"Error updating item quantity: {str(e)}")
             return None, f"Error updating item quantity: {str(e)}", False
     
-    def remove_item_from_cart(self, item_id: uuid.UUID) -> Tuple[bool, str]:
+    def remove_item_from_cart(self, cart_id: uuid.UUID, 
+                             item_id: uuid.UUID
+                             ) -> Tuple[bool, str]:
         """Remove an item from a cart
         
         Args:
+            cart_id: UUID of the cart
             item_id: UUID of the cart item
             
         Returns:
@@ -156,11 +163,20 @@ class CartApplicationService:
             error_message is empty if successful, otherwise contains the error
         """
         try:
+            # First get the cart item to confirm it exists
+            item = self.cart_item_repository.get_item(item_id)
+            if not item:
+                return False, "Item not found"
+                
+            # Remove the item
             success = self.cart_item_repository.remove_item(item_id)
-            if success:
-                return True, ""
-            else:
+            if not success:
                 return False, "Failed to remove item from cart"
+                
+            # Recalculate cart totals
+            self.cart_repository.recalculate_cart_totals(cart_id)
+                
+            return True, ""
         except Exception as e:
             logger.error(f"Error removing item from cart: {str(e)}")
             return False, f"Error removing item from cart: {str(e)}"
@@ -185,3 +201,119 @@ class CartApplicationService:
         except Exception as e:
             logger.error(f"Error deleting cart: {str(e)}")
             return False, f"Error deleting cart: {str(e)}"
+            
+    def reserve_cart(self, cart_id: uuid.UUID, minutes: int = 3600) -> Tuple[bool, str]:
+        """Reserve a cart for checkout
+        
+        Args:
+            cart_id: UUID of the cart
+            minutes: Number of minutes to reserve the cart for
+            
+        Returns:
+            Tuple of (success, error_message)
+            success is True if cart was reserved successfully
+            error_message is empty if successful, otherwise contains the error
+        """
+        try:
+            cart = self.cart_repository.get_cart(cart_id=cart_id)
+            if not cart:
+                return False, "Cart not found"
+                
+            # Update the cart model
+            self.cart_repository.reserve(cart_id, minutes)
+            
+            return True, ""
+        except Exception as e:
+            logger.error(f"Error reserving cart: {str(e)}")
+            return False, f"Error reserving cart: {str(e)}"
+    
+    def release_cart_reservation(self, cart_id: uuid.UUID) -> Tuple[bool, str]:
+        """Release a cart reservation
+        
+        Args:
+            cart_id: UUID of the cart
+            
+        Returns:
+            Tuple of (success, error_message)
+            success is True if reservation was released successfully
+            error_message is empty if successful, otherwise contains the error
+        """
+        try:
+            cart = self.cart_repository.get_cart(cart_id=cart_id)
+            if not cart:
+                return False, "Cart not found"
+                
+            # Update the cart model
+            self.cart_repository.release_reservation(cart_id)
+            
+            return True, ""
+        except Exception as e:
+            logger.error(f"Error releasing cart reservation: {str(e)}")
+            return False, f"Error releasing cart reservation: {str(e)}"
+    
+    def mark_cart_for_recovery(self, cart_id: uuid.UUID) -> bool:
+        """Mark a cart for recovery email
+        
+        Args:
+            cart_id: UUID of the cart
+            
+        Returns:
+            True if cart was marked successfully
+        """
+        # Get cart
+        cart = self.cart_repository.get_cart(cart_id=cart_id)
+        if not cart or cart.is_empty():
+            return False
+        
+        # Add to recovery queue (implementation depends on your email system)
+        recovery_time = timezone.now() + timezone.timedelta(hours=24)
+        
+        # Example implementation using Django's cache
+        cache.set(f"cart_recovery:{cart_id}", str(recovery_time), 86400)  # 24 hours
+        
+        return True
+        
+    def checkout_cart(self, cart_id: uuid.UUID) -> Tuple[bool, str, Optional[uuid.UUID]]:
+        """Checkout a cart by creating an order
+        
+        Args:
+            cart_id: UUID of the cart
+            
+        Returns:
+            Tuple of (success, message, order_id)
+            success is True if checkout was successful
+            message contains success or error message
+            order_id is the UUID of the created order if successful
+        """
+        try:
+            # Get cart with items
+            cart = self.cart_repository.get_cart(cart_id=cart_id, include_product_details=True)
+            if not cart:
+                return False, "Cart not found", None
+                
+            if cart.is_empty():
+                return False, "Cart is empty", None
+            
+            # Reserve the cart during checkout
+            self.reserve_cart(cart_id)
+            
+            # Publish cart checked out event
+            # The order service will handle this event and create the order
+            event_bus.publish(CartCheckedOutEvent.create(
+                cart_id=cart_id,
+                user_id=cart.user_id,
+                store_brand_id=cart.store_brand_id,
+                total_amount=float(cart.total_price)
+            ))
+            
+            # Clear the cart
+            self.clear_cart(cart_id)
+            
+            # Note: The actual order ID will be returned by the order service
+            # This is just a placeholder for now
+            return True, "Checkout successful", None
+        except Exception as e:
+            logger.error(f"Error during checkout: {str(e)}")
+            # Release reservation on error
+            self.release_cart_reservation(cart_id)
+            return False, f"Error during checkout: {str(e)}", None

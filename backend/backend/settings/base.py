@@ -33,6 +33,10 @@ INSTALLED_APPS = [
     'django_ltree',
     'imagekit', 
     
+    # Celery apps
+    'django_celery_results',
+    'django_celery_beat',
+    
     # Local apps
     'the_user_app',
     'store',
@@ -207,3 +211,17 @@ CACHES = {
         }
     }
 }
+
+# Celery Configuration
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'amqp://guest:guest@localhost:5672//')
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# Celery Beat Schedule
+CELERY_BEAT_SCHEDULE = {}
+
+# Configure Celery to use Redis as a message broker if RabbitMQ is not available
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://127.0.0.1:6000/0')

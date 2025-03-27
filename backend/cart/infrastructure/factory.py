@@ -1,4 +1,5 @@
 from cart.application.services.cart_service import CartApplicationService
+from cart.application.services.cart_recovery_service import CartRecoveryService
 from cart.domain.repositories.repository_interfaces import CartRepository, CartItemRepository
 from cart.infrastructure.django_repositories.django_cart_repository import DjangoCartRepository
 from cart.infrastructure.django_repositories.django_cart_item_repository import DjangoCartItemRepository
@@ -34,3 +35,14 @@ class CartFactory:
         cart_repository = CartFactory.create_cart_repository()
         cart_item_repository = CartFactory.create_cart_item_repository()
         return CartApplicationService(cart_repository, cart_item_repository)
+    
+    @staticmethod
+    def create_cart_recovery_service() -> CartRecoveryService:
+        """Create a cart recovery service instance
+        
+        Returns:
+            CartRecoveryService instance
+        """
+        cart_repository = CartFactory.create_cart_repository()
+        cart_service = CartFactory.create_cart_service()
+        return CartRecoveryService(cart_repository, cart_service)

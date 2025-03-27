@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import stripe
-from .models import Payment
 from django.conf import settings
+
+from payments.infrastructure.factory import RepositoryFactory
+from payments.application.services.payment_service import PaymentApplicationService
+from core.domain_events.event_bus import EventBus
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -27,10 +30,23 @@ def stripe_webhook(request):
 
 def handle_successful_payment(intent):
     payment_id = intent['metadata']['payment_id']
-    try:
-        payment = Payment.objects.get(id=payment_id)
-        payment.status = 'completed'
-        payment.transaction_id = intent['id']
-        payment.save()
-    except Payment.DoesNotExist:
-        pass
+    
+    # Initialize repositories and service
+    payment_repository = RepositoryFactory.create_payment_repository()
+    payment_method_repository = RepositoryFactory.create_payment_method_repository()
+    payment_transaction_repository = RepositoryFactory.create_payment_transaction_repository()
+    event_bus = EventBus()
+    
+    service = PaymentApplicationService(
+        payment_repository=payment_repository,
+        payment_method_repository=payment_method_repository,
+        payment_transaction_repository=payment_transaction_repository,
+        event_bus=event_bus
+    )
+    
+    # Confirm the payment
+    success, message, _ = service.confirm_payment(intent['id'])
+    
+    if not success:
+        # Log the error
+        print(f"Error handling webhook payment: {message}")

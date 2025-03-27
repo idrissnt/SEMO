@@ -39,16 +39,36 @@ class CartItemViewSet(viewsets.ViewSet):
             cart_service = CartFactory.create_cart_service()
             
             # Add item to cart
-            cart_item, error = cart_service.add_item_to_cart(
+            cart, error = cart_service.add_item_to_cart(
                 user_id=request.user.id,
                 store_brand_id=serializer.validated_data['store_brand_id'],
                 store_product_id=serializer.validated_data['store_product_id'],
                 quantity=serializer.validated_data.get('quantity', 1)
             )
             
-            if cart_item:
+            if cart:
+                # Find the newly added item (should be the last one)
+                if cart.items and len(cart.items) > 0:
+                    # Get the last item in the cart (the one we just added)
+                    added_item = cart.items[-1]
+                    
+                    # Create a comprehensive response with both item and cart summary
+                    response_data = {
+                        'item': CartItemSerializer(added_item).data,
+                        'cart_summary': {
+                            'id': str(cart.id),
+                            'cart_total_items': cart.cart_total_items,
+                            'cart_total_price': cart.cart_total_price,
+                            'store_brand_id': str(cart.store_brand_id),
+                            'store_brand_name': cart.store_brand_name
+                        }
+                    }
+                    
+                    return Response(response_data, status=status.HTTP_201_CREATED)
+                    
+                # Return the cart if we can't identify the specific item
                 return Response(
-                    CartItemSerializer(cart_item).data, 
+                    {'cart_id': str(cart.id), 'message': 'Item added to cart'}, 
                     status=status.HTTP_201_CREATED
                 )
             else:
@@ -73,11 +93,33 @@ class CartItemViewSet(viewsets.ViewSet):
             # Get cart service
             cart_service = CartFactory.create_cart_service()
             
+            # First get the cart item to get the cart_id
+            cart_service = CartFactory.create_cart_service()
+            cart_item_repository = CartFactory.create_cart_item_repository()
+            item = cart_item_repository.get_item(uuid.UUID(pk))
+            
+            if not item:
+                return Response(
+                    {'detail': 'Item not found'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+                
             # Remove item
-            success, error = cart_service.remove_item_from_cart(uuid.UUID(pk))
+            success, error = cart_service.remove_item_from_cart(item.cart_id, uuid.UUID(pk))
             
             if success:
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                # Get updated cart for summary information
+                cart = cart_service.get_cart(cart_id=item.cart_id)
+                
+                # Return cart summary so UI can update totals
+                return Response({
+                    'status': 'item removed',
+                    'cart_summary': {
+                        'id': str(item.cart_id),
+                        'cart_total_items': cart.cart_total_items if cart else 0,
+                        'cart_total_price': cart.cart_total_price if cart else 0.0
+                    }
+                }, status=status.HTTP_200_OK)
             else:
                 return Response(
                     {'detail': error}, 
@@ -109,20 +151,48 @@ class CartItemViewSet(viewsets.ViewSet):
             # Get cart service
             cart_service = CartFactory.create_cart_service()
             
+            # First get the cart item to get the cart_id
+            cart_item_repository = CartFactory.create_cart_item_repository()
+            item = cart_item_repository.get_item(uuid.UUID(pk))
+            
+            if not item:
+                return Response(
+                    {'detail': 'Item not found'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+                
             # Update quantity
             cart_item, error, was_deleted = cart_service.update_item_quantity(
+                item.cart_id,
                 uuid.UUID(pk), 
                 quantity
             )
             
             if was_deleted:
-                return Response(
-                    {'status': 'item removed'}, 
-                    status=status.HTTP_204_NO_CONTENT
-                )
+                # For item removal, return cart summary so UI can update totals
+                cart = cart_service.get_cart(cart_id=item.cart_id)
+                return Response({
+                    'status': 'item removed',
+                    'cart_summary': {
+                        'id': str(item.cart_id),
+                        'cart_total_items': cart.cart_total_items if cart else 0,
+                        'cart_total_price': cart.cart_total_price if cart else 0.0
+                    }
+                }, status=status.HTTP_200_OK)
             
             if cart_item:
-                return Response(CartItemSerializer(cart_item).data)
+                # Get updated cart for summary information
+                cart = cart_service.get_cart(cart_id=item.cart_id)
+                
+                # Return both updated item and cart summary
+                return Response({
+                    'item': CartItemSerializer(cart_item).data,
+                    'cart_summary': {
+                        'id': str(item.cart_id),
+                        'cart_total_items': cart.cart_total_items if cart else 0,
+                        'cart_total_price': cart.cart_total_price if cart else 0.0
+                    }
+                })
             else:
                 return Response(
                     {'detail': error}, 
