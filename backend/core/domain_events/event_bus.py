@@ -5,13 +5,22 @@ It replaces the previous in-memory event bus implementation to provide better re
 persistence, and support for distributed systems.
 """
 import logging
-from typing import Type, Callable, Dict, Any
+from typing import Type, Callable
 
 from .events import DomainEvent
 from .event_registry import register_handler, unregister_handler
 from .tasks import process_domain_event
 
 logger = logging.getLogger(__name__)
+
+
+# - The Message Router
+# The event bus is the central component that connects publishers and subscribers:
+
+# Key features:
+# - Implemented as a singleton to ensure a single point of event routing
+# - Uses Celery to handle asynchronous processing
+# - Provides registration methods for connecting events to handlers
 
 class CeleryEventBus:
     """
@@ -88,6 +97,8 @@ class CeleryEventBus:
         logger.info(f"Publishing event {event_type_name} with ID {event.event_id}")
         
         # Send to Celery task for asynchronous processing
+        # Celery (configured in celery.py) routes these tasks to available workers
+        # Workers execute the task defined in tasks.py, which processes the events
         process_domain_event.delay(event_type_name, event_data)
 
 

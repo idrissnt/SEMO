@@ -1,10 +1,10 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from uuid import UUID
 
 from deliveries.domain.models.entities import Driver
 from deliveries.domain.repositories.repository_interfaces import DriverRepository
 from deliveries.infrastructure.django_models.orm_models import DriverModel
-from the_user_app.models import CustomUser
+from django.conf import settings
 
 
 class DjangoDriverRepository(DriverRepository):
@@ -33,30 +33,68 @@ class DjangoDriverRepository(DriverRepository):
     
     def list_available(self) -> List[Driver]:
         """List all available drivers"""
-        driver_models = DriverModel.objects.filter(user__is_available=True)
+        driver_models = DriverModel.objects.filter(is_available=True)
         return [self._to_domain_entity(driver_model) for driver_model in driver_models]
     
     def create(self, user_id: UUID) -> Driver:
         """Create a new driver"""
         try:
-            user = CustomUser.objects.get(id=user_id)
+            user = settings.AUTH_USER_MODEL.objects.get(id=user_id)
             driver_model = DriverModel.objects.create(user=user)
             return self._to_domain_entity(driver_model)
-        except CustomUser.DoesNotExist:
+        except settings.AUTH_USER_MODEL.DoesNotExist:
             raise ValueError(f"User with ID {user_id} not found")
-    
-    def delete(self, driver_id: int) -> bool:
+
+    def update_availability(self, driver_id: int, 
+                            is_available: bool) -> Tuple[bool, str]:
+        """Update the availability of a driver"""
+        try:
+            driver_model = DriverModel.objects.get(id=driver_id)
+            driver_model.is_available = is_available
+            driver_model.save()
+            return True, ""
+        except DriverModel.DoesNotExist:
+            return False, f"Driver with ID {driver_id} not found"
+
+    def update_info(self, driver_id: int, license_number: str, 
+                    has_vehicle: bool) -> Tuple[bool, str, Optional[Driver]]:
+        """Update an existing driver info"""
+        try:
+            driver_model = DriverModel.objects.get(id=driver_id)
+            
+            # Update fields
+            driver_model.license_number = license_number    
+            driver_model.has_vehicle = has_vehicle
+            
+            driver_model.save()
+            return True, "", self._to_domain_entity(driver_model)
+        except DriverModel.DoesNotExist:
+            return False, f"Driver with ID {driver_id} not found", None
+
+    def delete(self, driver_id: int) -> Tuple[bool, str]:
         """Delete a driver"""
+        from deliveries.infrastructure.django_models.orm_models import DeliveryModel
+        active_deliveries = DeliveryModel.objects.filter(
+            driver_id=driver_id
+        ).exclude(status='delivered').exists()
+        
+        if active_deliveries:
+            return False, "Cannot delete driver with active deliveries"
+        
         try:
             driver_model = DriverModel.objects.get(id=driver_id)
             driver_model.delete()
-            return True
+            return True, ""
         except DriverModel.DoesNotExist:
-            return False
-    
+            return False, f"Driver with ID {driver_id} not found"
+
     def _to_domain_entity(self, driver_model: DriverModel) -> Driver:
         """Convert ORM model to domain entity"""
         return Driver(
             id=driver_model.id,
-            user_id=driver_model.user.id
+            user_id=driver_model.user.id,
+            mean_time_taken=driver_model.mean_time_taken,
+            license_number=driver_model.license_number,
+            is_available=driver_model.is_available,
+            has_vehicle=driver_model.has_vehicle,
         )

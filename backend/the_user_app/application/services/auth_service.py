@@ -5,6 +5,8 @@ from datetime import datetime
 from the_user_app.domain.models.entities import User
 from the_user_app.domain.repositories.repository_interfaces import UserRepository, AuthRepository
 from the_user_app.domain.services.auth_service import AuthDomainService
+from the_user_app.domain.models.events.user_events import UserRegisteredEvent
+from core.domain_events.event_bus import event_bus
 
 logger = logging.getLogger(__name__)
 
@@ -88,15 +90,16 @@ class AuthApplicationService:
             first_name=user_data['first_name'],
             last_name=user_data.get('last_name'),
             phone_number=user_data.get('phone_number'),
-            role=user_data.get('role', 'customer'),
-            vehicle_type=user_data.get('vehicle_type'),
-            license_number=user_data.get('license_number'),
-            is_available=True
         )
         
         # Create user in repository
         try:
             created_user = self.user_repository.create(user, user_data['password'])
+            
+            # Publish user registered event
+            event_bus.publish(UserRegisteredEvent.create(
+                user_id=created_user.id))
+            
             return created_user, ""
         except Exception as e:
             logger.error(f"Error creating user: {str(e)}")

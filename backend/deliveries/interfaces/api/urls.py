@@ -1,8 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from views import DriverViewSet
-from views import DeliveryViewSet, DeliveryTimelineViewSet, DeliveryLocationViewSet
-from views import OrderDeliveryViewSet
+from views.delivery_views import DeliveryViewSet, DeliveryTimelineViewSet, DeliveryLocationViewSet
+from views.driver_views import DriverViewSet
 
 app_name = 'deliveries'
 
@@ -14,7 +13,4 @@ router.register(r'delivery-locations', DeliveryLocationViewSet, basename='delive
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('orders/<uuid:pk>/delivery/', 
-         OrderDeliveryViewSet.as_view({'get': 'retrieve'}),
-         name='order-delivery'),
 ]

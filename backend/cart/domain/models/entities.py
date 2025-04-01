@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 import uuid
 from datetime import datetime
 
@@ -16,11 +16,6 @@ class CartItem:
     item_total_price: float = 0.0
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     added_at: datetime = field(default_factory=datetime.now)
-
-    # Optional product details for direct use in UI
-    # one_item_price: float
-    # product_details: Optional[Dict[str, Any]] = None
-
 
     def calculate_item_price_total(self) -> float:
         """Calculate the total price for this cart item (price × quantity)"""

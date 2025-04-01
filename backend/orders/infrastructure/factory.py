@@ -36,6 +36,6 @@ class RepositoryFactory:
     @staticmethod
     def create_cart_service() -> CartServiceInterface:
         """Create a CartServiceInterface implementation"""
-        from cart.infrastructure.factory import RepositoryFactory as CartRepositoryFactory
-        cart_repository = CartRepositoryFactory.create_cart_repository()
+        from cart.infrastructure.factory import CartFactory
+        cart_repository = CartFactory.create_cart_repository()
         return CartService(cart_repository)

@@ -56,10 +56,6 @@ class DjangoUserRepository(UserRepository):
             first_name=user.first_name,
             last_name=user.last_name,
             phone_number=user.phone_number,
-            role=user.role,
-            has_vehicle=user.has_vehicle,
-            license_number=user.license_number,
-            is_available=user.is_available
         )
         return self._to_domain(user_model)
     
@@ -79,10 +75,6 @@ class DjangoUserRepository(UserRepository):
             user_model.first_name = user.first_name
             user_model.last_name = user.last_name
             user_model.phone_number = user.phone_number
-            user_model.role = user.role
-            user_model.has_vehicle = user.has_vehicle
-            user_model.license_number = user.license_number
-            user_model.is_available = user.is_available
             
             user_model.save()
             return self._to_domain(user_model)
@@ -147,9 +139,4 @@ class DjangoUserRepository(UserRepository):
             first_name=model.first_name,
             last_name=model.last_name,
             phone_number=model.phone_number,
-            role=model.role,
-            has_vehicle=model.has_vehicle,
-            license_number=model.license_number,
-            is_available=model.is_available,
-            is_active=model.is_active
         )

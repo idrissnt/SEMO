@@ -1,50 +1,56 @@
 from rest_framework import serializers
-from orders.infrastructure.django_models.orm_models import OrderModel, OrderItemModel, OrderTimelineModel
 from the_user_app.serializers import UserSerializer
 
+class OrderItemSerializer(serializers.Serializer):
+    """Serializer for OrderItem domain entity"""
+    id = serializers.UUIDField(read_only=True)
+    order_id = serializers.UUIDField(source='order.id')
+    store_product_id = serializers.UUIDField()
+    quantity = serializers.IntegerField(min_value=1)
+    product_name = serializers.CharField()
+    product_image_url = serializers.CharField(allow_null=True)
+    product_image_thumbnail = serializers.CharField(allow_null=True)
+    product_price = serializers.FloatField()
+    product_description = serializers.CharField(allow_null=True)
+    item_total_price = serializers.FloatField(read_only=True)
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    """Serializer for OrderItem model"""
-    product_name = serializers.CharField(source='store_product.product.name', read_only=True)
-    
-    class Meta:
-        model = OrderItemModel
-        fields = ['id', 'order', 'store_product', 'product_name', 'quantity', 'price_at_order']
-        read_only_fields = ['id']
+class OrderTimelineSerializer(serializers.Serializer):
+    """Serializer for OrderTimeline domain entity"""
+    id = serializers.UUIDField(read_only=True)
+    order_id = serializers.UUIDField(source='order.id')
+    event_type = serializers.CharField()
+    timestamp = serializers.DateTimeField(read_only=True)
+    notes = serializers.CharField(allow_null=True, required=False)
 
-
-class OrderTimelineSerializer(serializers.ModelSerializer):
-    """Serializer for OrderTimeline model"""
-    
-    class Meta:
-        model = OrderTimelineModel
-        fields = ['id', 'order', 'event_type', 'timestamp', 'notes']
-        read_only_fields = ['id', 'timestamp']
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    """Serializer for Order model"""
+class OrderSerializer(serializers.Serializer):
+    """Serializer for Order domain entity"""
+    id = serializers.UUIDField(read_only=True)
+    user_id = serializers.UUIDField(read_only=True)
     user = UserSerializer(read_only=True)
-    items = OrderItemSerializer(source='order_items', many=True, read_only=True)
-    timeline = OrderTimelineSerializer(source='timeline_events', many=True, read_only=True)
-    store_brand_name = serializers.CharField(source='store_brand.name', read_only=True)
-    
-    class Meta:
-        model = OrderModel
-        fields = [
-            'id', 'user', 'store_brand', 'store_brand_name', 
-            'total_amount', 'status', 'created_at', 
-            'payment', 'items', 'timeline'
-        ]
-        read_only_fields = ['id', 'created_at', 'payment']
+    store_brand_id = serializers.UUIDField()
+    store_brand_name = serializers.CharField()
+    store_brand_image_logo = serializers.CharField(allow_null=True)
+    cart_total_price = serializers.FloatField()
+    cart_total_items = serializers.IntegerField()
+    fee = serializers.FloatField(read_only=True)
+    order_total_price = serializers.FloatField(read_only=True)
+    user_store_distance = serializers.FloatField()
+    status = serializers.CharField()
+    created_at = serializers.DateTimeField(read_only=True)
+    payment_id = serializers.UUIDField(allow_null=True, required=False)
+    cart_id = serializers.UUIDField(allow_null=True, required=False)
+    items = OrderItemSerializer(many=True, read_only=True)
+    timeline = OrderTimelineSerializer(many=True, read_only=True)
 
     def validate_status(self, value):
         """Validate status transitions"""
         if self.instance:
             # Get the domain entity to validate the status transition
-            from orders.infrastructure.django_repositories.order_repository import DjangoOrderRepository
-            repository = DjangoOrderRepository()
-            order = repository._to_entity(self.instance)
+            from orders.domain.models.entities import Order
+            
+            # Create a domain entity from the current instance data
+            current_data = {**self.instance, 'status': self.instance.status}
+            order = Order(**current_data)
             
             if not order.can_transition_to(value):
                 raise serializers.ValidationError(
@@ -52,10 +58,12 @@ class OrderSerializer(serializers.ModelSerializer):
                 )
         return value
 
-
 class OrderCreateSerializer(serializers.Serializer):
     """Serializer for creating orders"""
-    store_brand = serializers.UUIDField()
+    store_brand_id = serializers.UUIDField()
+    store_brand_name = serializers.CharField(required=False, default="")
+    store_brand_image_logo = serializers.CharField(required=False, default="")
+    user_store_distance = serializers.FloatField(required=False, default=0.0)
     items = serializers.ListField(
         child=serializers.DictField(
             child=serializers.Field(),
@@ -66,10 +74,15 @@ class OrderCreateSerializer(serializers.Serializer):
     
     def validate_items(self, items):
         """Validate items structure"""
+        required_fields = [
+            'store_product_id', 'quantity', 'product_name', 'product_image_url',
+            'product_image_thumbnail', 'product_price', 'product_description'
+        ]
+        
         for item in items:
-            if not all(k in item for k in ('store_product_id', 'quantity', 'price')):
+            if not all(k in item for k in required_fields):
                 raise serializers.ValidationError(
-                    "Each item must contain store_product_id, quantity, and price"
+                    f"Each item must contain: {', '.join(required_fields)}"
                 )
             if item['quantity'] <= 0:
                 raise serializers.ValidationError("Quantity must be greater than 0")

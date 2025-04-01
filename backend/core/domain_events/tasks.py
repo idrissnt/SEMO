@@ -9,6 +9,15 @@ from .event_factory import create_event_from_data
 
 logger = logging.getLogger(__name__)
 
+# The Reliable Processor
+# The Celery task processes events asynchronously:
+
+# Key features:
+# - Supports automatic retries with exponential backoff
+# - Recreates event objects from serialized data
+# - Calls all registered handlers for the event type
+# - Handles errors gracefully without affecting other handlers
+
 @shared_task(bind=True, max_retries=3)
 def process_domain_event(self, event_type_name: str, event_data: dict):
     """

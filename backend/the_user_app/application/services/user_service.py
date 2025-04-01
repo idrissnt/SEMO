@@ -59,19 +59,7 @@ class UserApplicationService:
             first_name=profile_data.get('first_name', user.first_name),
             last_name=profile_data.get('last_name', user.last_name),
             phone_number=profile_data.get('phone_number', user.phone_number),
-            role=profile_data.get('role', user.role),
-            has_vehicle=profile_data.get('has_vehicle', user.has_vehicle),
-            license_number=profile_data.get('license_number', user.license_number),
-            is_available=profile_data.get('is_available', user.is_available)
         )
-        
-        # Validate driver-specific fields
-        if updated_user.role == 'driver':
-            if not updated_user.has_vehicle:
-                return None, "Vehicle is required for drivers"
-            
-            if not updated_user.license_number:
-                return None, "License number is required for drivers"
         
         # Update user in repository
         try:

@@ -73,12 +73,12 @@ class CartRecoveryService:
             True if email was sent successfully
         """
         try:
-            # Get cart with product details
-            cart = self.cart_repository.get_cart(cart_id=cart_id, include_product_details=True)
+            # Get cart
+            cart = self.cart_repository.get_cart(cart_id=cart_id)
             if not cart or cart.is_empty():
                 return False
             
-            # Here you would implement the actual email sending logic
+            # Here we would implement the actual email sending logic
             # This could involve using Django's email functionality or a third-party service
             
             # For demonstration purposes, we'll just log that we would send an email

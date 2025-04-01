@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Dict, Any
+from typing import List, Optional, Tuple
 import uuid
 import logging
 from django.utils import timezone
@@ -6,8 +6,6 @@ from django.core.cache import cache
 
 from cart.domain.models.entities import Cart, CartItem
 from cart.domain.repositories.repository_interfaces import CartRepository, CartItemRepository
-from core.domain_events.event_bus import event_bus
-from core.domain_events.events import CartCheckedOutEvent
 
 logger = logging.getLogger(__name__)
 
@@ -265,55 +263,10 @@ class CartApplicationService:
         if not cart or cart.is_empty():
             return False
         
-        # Add to recovery queue (implementation depends on your email system)
+        # Add to recovery queue (implementation depends on the email system)
         recovery_time = timezone.now() + timezone.timedelta(hours=24)
         
         # Example implementation using Django's cache
         cache.set(f"cart_recovery:{cart_id}", str(recovery_time), 86400)  # 24 hours
         
         return True
-        
-    def checkout_cart(self, cart_id: uuid.UUID) -> Tuple[bool, str, Optional[uuid.UUID]]:
-        """Checkout a cart by creating an order
-        
-        Args:
-            cart_id: UUID of the cart
-            
-        Returns:
-            Tuple of (success, message, order_id)
-            success is True if checkout was successful
-            message contains success or error message
-            order_id is the UUID of the created order if successful
-        """
-        try:
-            # Get cart with items
-            cart = self.cart_repository.get_cart(cart_id=cart_id, include_product_details=True)
-            if not cart:
-                return False, "Cart not found", None
-                
-            if cart.is_empty():
-                return False, "Cart is empty", None
-            
-            # Reserve the cart during checkout
-            self.reserve_cart(cart_id)
-            
-            # Publish cart checked out event
-            # The order service will handle this event and create the order
-            event_bus.publish(CartCheckedOutEvent.create(
-                cart_id=cart_id,
-                user_id=cart.user_id,
-                store_brand_id=cart.store_brand_id,
-                total_amount=float(cart.total_price)
-            ))
-            
-            # Clear the cart
-            self.clear_cart(cart_id)
-            
-            # Note: The actual order ID will be returned by the order service
-            # This is just a placeholder for now
-            return True, "Checkout successful", None
-        except Exception as e:
-            logger.error(f"Error during checkout: {str(e)}")
-            # Release reservation on error
-            self.release_cart_reservation(cart_id)
-            return False, f"Error during checkout: {str(e)}", None

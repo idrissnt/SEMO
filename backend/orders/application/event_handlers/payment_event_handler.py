@@ -3,7 +3,7 @@ Event handlers for payment events
 """
 import logging
 from core.domain_events.decorators import event_handler
-from core.domain_events.events import PaymentCompletedEvent, PaymentFailedEvent
+from payments.domain.events.payment_events import PaymentCompletedEvent, PaymentFailedEvent
 from orders.application.services.order_service import OrderApplicationService
 
 logger = logging.getLogger(__name__)

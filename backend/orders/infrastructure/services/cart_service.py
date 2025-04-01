@@ -20,20 +20,27 @@ class CartService(CartServiceInterface):
         Returns:
             CartInfo if found, None otherwise
         """
-        cart = self.cart_repository.get_cart(cart_id=cart_id, include_product_details=True)
+        # Get the cart using the repository (no need for include_product_details parameter)
+        cart = self.cart_repository.get_cart(cart_id=cart_id)
         if not cart:
             return None
             
-        # Convert cart items to CartItemInfo objects
+        # Convert cart items to CartItemInfo objects with direct product fields
         cart_items = []
         for item in cart.items:
             cart_items.append(CartItemInfo(
+                id=item.id,
                 store_product_id=item.store_product_id,
                 quantity=item.quantity,
-                product_details=item.product_details,
-                item_total_price=item.calculate_item_price_total()
+                product_name=item.product_name,
+                product_image_thumbnail=item.product_image_thumbnail,
+                product_image_url=item.product_image_url,
+                product_price=item.product_price,
+                product_description=item.product_description,
+                item_total_price=item.item_total_price
             ))
             
+        # Create CartInfo using direct cart fields
         return CartInfo(
             id=cart.id,
             user_id=cart.user_id,
@@ -41,8 +48,8 @@ class CartService(CartServiceInterface):
             store_brand_name=cart.store_brand_name,
             store_brand_image_logo=cart.store_brand_logo,            
             items=cart_items,
-            cart_total_price=float(cart.calculate_cart_price_total()),
-            cart_total_items=cart.total_items()
+            cart_total_price=cart.cart_total_price,
+            cart_total_items=cart.cart_total_items
         )
         
     def clear_cart(self, cart_id: UUID) -> bool:

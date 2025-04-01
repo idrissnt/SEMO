@@ -196,50 +196,6 @@ class CartViewSet(viewsets.ViewSet):
         },
         description='Checkout a cart and create an order'
     )
-    @action(detail=True, methods=['post'])
-    def checkout(self, request, pk=None):
-        """Checkout a cart and create an order"""
-        try:
-            # Get cart service
-            cart_service = CartFactory.create_cart_service()
-            
-            # Get cart
-            cart = cart_service.get_cart(cart_id=uuid.UUID(pk))
-            
-            if not cart or cart.user_id != request.user.id:
-                return Response(
-                    {'detail': 'Cart not found'}, 
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            if cart.is_empty():
-                return Response(
-                    {'detail': 'Cannot checkout an empty cart'}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
-            # Checkout cart
-            success, message, order_id = cart_service.checkout_cart(uuid.UUID(pk))
-            
-            if success:
-                response_data = {
-                    'status': 'success',
-                    'message': message
-                }
-                if order_id:
-                    response_data['order_id'] = str(order_id)
-                return Response(response_data)
-            else:
-                return Response(
-                    {'detail': message}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        except ValueError:
-            return Response(
-                {'detail': 'Invalid cart ID'}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-    
     @extend_schema(
         responses={
             200: OpenApiResponse(description='Cart marked for recovery'),

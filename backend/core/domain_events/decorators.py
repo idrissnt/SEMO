@@ -10,6 +10,20 @@ from .event_bus import event_bus
 
 logger = logging.getLogger(__name__)
 
+# - The Connector
+# The @event_handler decorator makes it easy to register handlers:
+
+# Key features:
+# - Simplifies registration of event handlers
+# - Automatically connects events to handlers
+# - Provides a clean syntax for event subscriptions
+
+# Usage:
+# @event_handler(OrderCreatedEvent)
+# def handle_order_created(event: OrderCreatedEvent):
+#     # Handle the event
+#     pass
+
 def event_handler(event_type: Type[DomainEvent]):
     """
     Decorator for registering event handlers

@@ -2,9 +2,17 @@
 Event registry for storing event type to handler mappings
 """
 import logging
-from typing import Dict, List, Callable, Any
+from typing import Dict, List, Callable
 
 logger = logging.getLogger(__name__)
+
+# - The Handler Directory
+# The registry maintains a mapping between event types and their handlers:
+
+# Key features:
+# - Stores handlers in a dictionary keyed by event type name
+# - Supports multiple handlers per event type
+# - Provides methods to register, unregister, and retrieve handlers
 
 # Global registry to store event handlers
 # Maps event type names to list of handler functions

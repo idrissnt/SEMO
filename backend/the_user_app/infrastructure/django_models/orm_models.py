@@ -26,10 +26,6 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUserModel(AbstractUser):
     """Django ORM model for User"""
-    ROLE_CHOICES = (
-        ('customer', 'Customer'),
-        ('driver', 'Driver'),
-    )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=150, unique=True, 
@@ -39,12 +35,6 @@ class CustomUserModel(AbstractUser):
     last_name = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=15, unique=True, 
                                    null=True, blank=True)
-    license_number = models.CharField(max_length=100, unique=True, 
-                                     null=True, blank=True)
-    is_available = models.BooleanField(default=True, null=True, blank=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, 
-                           default='customer', null=True, blank=True)
-    has_vehicle = models.BooleanField(default=False, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name']
@@ -60,8 +50,8 @@ class CustomUserModel(AbstractUser):
 class AddressModel(models.Model):
     """Django ORM model for Address"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(CustomUserModel, on_delete=models.CASCADE, 
-                            related_name='addresses')
+    user = models.OneToOneField(CustomUserModel, on_delete=models.CASCADE, 
+                            related_name='address')
     street_number = models.CharField(max_length=20)
     street_name = models.CharField(max_length=255)
     city = models.CharField(max_length=255)

@@ -1,18 +1,19 @@
 import uuid
 from typing import List, Tuple, Optional
 from decimal import Decimal
+from datetime import datetime
 
 from orders.domain.models.entities import Order
+from orders.domain.models.constants import OrderStatus, OrderEventType
 from orders.domain.repositories.repository_interfaces import (
     OrderRepository, OrderItemRepository, OrderTimelineRepository
 )
 from orders.domain.services.user_service_interface import UserServiceInterface
 from orders.domain.services.cart_service_interface import CartServiceInterface
 from core.domain_events.event_bus import event_bus
-from core.domain_events.events import (
-    OrderCreatedEvent, OrderStatusChangedEvent, OrderPaidEvent, CartCheckedOutEvent
+from orders.domain.events.orders_events import (
+    OrderCreatedEvent, OrderStatusChangedEvent, OrderPaidEvent
 )
-
 
 class OrderApplicationService:
     """Application service for order management"""
@@ -36,15 +37,20 @@ class OrderApplicationService:
         user_id: uuid.UUID, 
         store_brand_id: uuid.UUID, 
         items: List[dict],
-        cart_id: Optional[uuid.UUID] = None
+        store_brand_name: str = "",
+        store_brand_image_logo: str = "",
+        user_store_distance: float = 0.0
     ) -> Tuple[bool, str, Optional[Order]]:
         """
-        Create a new order with items
+        Create a new order with items without a creating a cart
         
         Args:
             user_id: ID of the user placing the order
             store_brand_id: ID of the store brand
-            items: List of dicts with store_product_id, quantity, and price
+            items: List of dicts with store_product details
+            store_brand_name: Name of the store brand
+            store_brand_image_logo: Logo URL of the store brand
+            user_store_distance: Distance between user and store in meters
             
         Returns:
             Tuple of (success, message, order)
@@ -54,45 +60,46 @@ class OrderApplicationService:
         if not user_info:
             return False, "User not found", None
         
-        # Calculate total amount
-        total_amount = sum(Decimal(str(item['price'])) * item['quantity'] for item in items)
+        # Calculate total items and amount
+        total_items = sum(item['quantity'] for item in items)
+        total_amount = sum(Decimal(str(item['product_price'])) * item['quantity'] for item in items)
         
-        # Create order
-        order = self.order_repository.create(user_id, store_brand_id, float(total_amount), cart_id=cart_id)
-        
-        # Create order items
-        for item in items:
-            self.order_item_repository.create(
-                order.id,
-                item['store_product_id'],
-                item['quantity'],
-                item['price']
-            )
+        # Create order with items in a single transaction
+        order = self.order_repository.create_with_items(
+            user_id=user_id, 
+            store_brand_id=store_brand_id, 
+            items_data=items,
+            cart_total_price=float(total_amount),
+            cart_total_items=total_items,
+            status=OrderStatus.PENDING,
+            payment_id=None,
+            cart_id=None,
+            store_brand_name=store_brand_name,
+            store_brand_image_logo=store_brand_image_logo,
+            user_store_distance=user_store_distance
+        )
         
         # Create timeline event
         self.order_timeline_repository.create(
             order.id,
-            'created',
+            OrderEventType.CREATED,
             f"Order created with {len(items)} items"
         )
         
         # Publish domain event
         event_bus.publish(OrderCreatedEvent.create(
-            order_id=order.id,
-            user_id=user_id,
-            store_brand_id=store_brand_id,
-            total_amount=float(total_amount),
-            delivery_address=user_info.address or "No address provided"
+            order_id=order.id
         ))
         
         return True, "Order created successfully", order
         
-    def create_order_from_cart(self, cart_id: uuid.UUID) -> Tuple[bool, str, Optional[Order]]:
+    def create_order_from_cart(self, cart_id: uuid.UUID, store_brand_address: str, user_store_distance: float = 0.0) -> Tuple[bool, str, Optional[Order]]:
         """
         Create a new order from an existing cart
         
         Args:
             cart_id: UUID of the cart to convert
+            user_store_distance: Distance between user and store in meters
             
         Returns:
             Tuple of (success, message, order)
@@ -105,40 +112,56 @@ class OrderApplicationService:
         if cart.is_empty():
             return False, "Cart is empty", None
         
-        # Convert cart items to order items format
-        items = []
-        for item in cart.items:
-            # Extract price from product_details or use a default
-            price = 0
-            if item.product_details and 'price' in item.product_details:
-                price = item.product_details['price']
-            
-            items.append({
+        # Validate user exists
+        user_info = self.user_service.get_user_by_id(cart.user_id)
+        if not user_info:
+            return False, "User not found", None
+        
+        # Convert cart items to the format expected by create_with_items
+        items_data = [
+            {
                 'store_product_id': item.store_product_id,
                 'quantity': item.quantity,
-                'price': price
-            })
+                'product_name': item.product_name,
+                'product_image_url': item.product_image_url,
+                'product_image_thumbnail': item.product_image_thumbnail,
+                'product_price': item.product_price,
+                'product_description': item.product_description,
+                'item_total_price': item.item_total_price
+            } for item in cart.items
+        ]
         
-        # Create order
-        success, message, order = self.create_order(
+        # Create order with items in a single transaction
+        order = self.order_repository.create_with_items(
             user_id=cart.user_id,
             store_brand_id=cart.store_brand_id,
-            items=items,
-            cart_id=cart_id
+            items_data=items_data,
+            cart_total_price=cart.cart_total_price,
+            cart_total_items=cart.cart_total_items,
+            status=OrderStatus.PENDING,
+            payment_id=None,
+            cart_id=cart_id,
+            store_brand_name=cart.store_brand_name,
+            store_brand_image_logo=cart.store_brand_image_logo,
+            user_store_distance=user_store_distance,
+            store_brand_address=store_brand_address,
         )
         
-        # Publish cart checked out event if order was created successfully
-        if success:
-            # Publish cart checked out event
-            event_bus.publish(CartCheckedOutEvent.create(
-                cart_id=cart_id,
-                user_id=cart.user_id,
-                store_brand_id=cart.store_brand_id,
-                total_amount=float(order.total_amount)
-            ))
-            # Note: We no longer clear the cart here - it will be cleared when the order is processed
+        # Create timeline event
+        self.order_timeline_repository.create(
+            order.id,
+            OrderEventType.CREATED,
+            f"Order created from cart with {len(cart.items)} items"
+        )
         
-        return success, message, order
+        # Publish domain event
+        event_bus.publish(OrderCreatedEvent.create(
+            order_id=order.id
+        ))
+        
+        # Note: We no longer clear the cart here - it will be cleared when the order is processed
+        
+        return True, "Order created successfully", order
     
     def update_order_status(
         self, 
@@ -183,6 +206,26 @@ class OrderApplicationService:
         
         return True, f"Order status updated to {new_status}", updated_order
     
+    def add_notes_for_driver(self, order_id: uuid.UUID, notes_for_driver: str) -> Tuple[bool, str, Optional[Order]]:
+
+        # Add notes for driver
+        updated_order = self.order_repository.add_notes_for_driver(order_id, notes_for_driver)
+        
+        if not updated_order:
+            return False, "Failed to add notes for driver", None
+
+        return True, f"Notes for driver added: {notes_for_driver}", updated_order
+    
+    def add_scheduled_time(self, order_id: uuid.UUID, scheduled_time: datetime) -> Tuple[bool, str, Optional[Order]]:
+
+        # Add scheduled time
+        updated_order = self.order_repository.add_schedule_for(order_id, scheduled_time)
+        
+        if not updated_order:
+            return False, "Failed to add scheduled time", None
+
+        return True, f"Scheduled time added: {scheduled_time}", updated_order
+
     def get_order_with_items(self, order_id: uuid.UUID) -> Optional[Order]:
         """
         Get an order with all its items
@@ -193,9 +236,15 @@ class OrderApplicationService:
         Returns:
             Order with items or None if not found
         """
+        # Get order
         order = self.order_repository.get_by_id(order_id)
         if not order:
             return None
+
+        # Validate user exists
+        user_info = self.user_service.get_user_by_id(order.user_id)
+        if not user_info:
+            return "User not found"
         
         # Get items for the order
         items = self.order_item_repository.list_by_order(order_id)
@@ -213,7 +262,17 @@ class OrderApplicationService:
         Returns:
             List of orders for the user
         """
-        return self.order_repository.list_by_user(user_id)
+        # Validate user exists
+        user_info = self.user_service.get_user_by_id(user_id)
+        if not user_info:
+            return "User not found"
+
+        # Get orders for the user
+        orders = self.order_repository.list_by_user(user_id)
+        if not orders:
+            return []
+
+        return orders
     
     def cancel_order(self, order_id: uuid.UUID) -> Tuple[bool, str, Optional[Order]]:
         """
@@ -225,7 +284,7 @@ class OrderApplicationService:
         Returns:
             Tuple of (success, message, order)
         """
-        return self.update_order_status(order_id, 'cancelled')
+        return self.update_order_status(order_id, OrderStatus.CANCELLED)
     
     def set_order_payment(
         self, 
@@ -253,7 +312,7 @@ class OrderApplicationService:
         # Create timeline event
         self.order_timeline_repository.create(
             order_id,
-            'payment_received',
+            OrderEventType.PAYMENT_RECEIVED,
             f"Payment {payment_id} received for order"
         )
         
@@ -261,11 +320,13 @@ class OrderApplicationService:
         event_bus.publish(OrderPaidEvent.create(
             order_id=order_id,
             payment_id=payment_id,
-            amount=float(order.total_amount)
+            amount=float(order.cart_total_price),
+            cart_id=order.cart_id,
+            delivery_address=order.user.address
         ))
         
         # If order is in pending state, move to processing
-        if updated_order.status == 'pending':
-            return self.update_order_status(order_id, 'processing')
+        if updated_order.status == OrderStatus.PENDING:
+            return self.update_order_status(order_id, OrderStatus.PROCESSING)
         
         return True, "Payment set for order", updated_order

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Tuple
 from uuid import UUID
 
 from deliveries.domain.models.entities import Driver, Delivery, DeliveryTimelineEvent, DeliveryLocation
@@ -9,7 +9,7 @@ class DriverRepository(ABC):
     """Interface for driver repository"""
     
     @abstractmethod
-    def get_by_id(self, driver_id: int) -> Optional[Driver]:
+    def get_by_id(self, driver_id: UUID) -> Optional[Driver]:
         """Get a driver by ID"""
         pass
     
@@ -34,10 +34,24 @@ class DriverRepository(ABC):
         pass
     
     @abstractmethod
-    def delete(self, driver_id: int) -> bool:
-        """Delete a driver"""
+    def update_info(self, driver_id: UUID, 
+                    license_number: str, 
+                    has_vehicle: bool
+                    ) -> Tuple[bool, str, Optional[Driver]]:
+        """Update an existing driver info"""
         pass
 
+    @abstractmethod
+    def update_availability(self, driver_id: UUID, 
+                            is_available: bool
+                            ) -> Tuple[bool, str]:
+        """Update the availability of a driver"""
+        pass
+    
+    @abstractmethod
+    def delete(self, driver_id: UUID) -> Tuple[bool, str]:
+        """Delete a driver"""
+        pass
 
 class DeliveryTimelineRepository(ABC):
     """Interface for delivery timeline repository"""
@@ -120,16 +134,6 @@ class DeliveryRepository(ABC):
     @abstractmethod
     def create(self, order_id: UUID, delivery_address: str) -> Delivery:
         """Create a new delivery"""
-        pass
-    
-    @abstractmethod
-    def update_status(self, delivery_id: UUID, status: str) -> Optional[Delivery]:
-        """Update delivery status"""
-        pass
-    
-    @abstractmethod
-    def update_driver(self, delivery_id: UUID, driver_id: int) -> Optional[Delivery]:
-        """Assign a driver to a delivery"""
         pass
     
     @abstractmethod

@@ -4,7 +4,7 @@ Factory for creating domain events from serialized data
 import logging
 import importlib
 import inspect
-from typing import Dict, Any, Type
+from typing import Dict, Any
 
 from .events import DomainEvent
 

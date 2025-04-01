@@ -1,15 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List, Dict, Any
+from typing import Optional, List
 from uuid import UUID
 from dataclasses import dataclass
-
 
 @dataclass
 class CartItemInfo:
     """Minimal cart item information needed by the orders domain"""
+    id: UUID
     store_product_id: UUID
     quantity: int
-    product_details: Optional[Dict[str, Any]] = None
+    product_name: str
+    product_image_thumbnail: str
+    product_image_url: str
+    product_price: float
+    product_description: str
     item_total_price: float
 
 
@@ -22,13 +26,12 @@ class CartInfo:
     store_brand_name: str
     store_brand_image_logo: str
     items: List[CartItemInfo]
-    cart_total_price: float
-    cart_total_items: int
+    cart_total_price: float = 0.0
+    cart_total_items: int = 0
     
     def is_empty(self) -> bool:
         """Check if the cart is empty"""
-        return len(self.items) == 0
-
+        return self.cart_total_items == 0
 
 class CartServiceInterface(ABC):
     """Interface for cart-related operations needed by the orders domain"""

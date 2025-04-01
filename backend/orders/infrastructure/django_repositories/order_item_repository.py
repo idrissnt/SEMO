@@ -23,28 +23,6 @@ class DjangoOrderItemRepository(OrderItemRepository):
         """List all items for an order"""
         item_models = OrderItemModel.objects.filter(order_id=order_id)
         return [self._to_entity(item_model) for item_model in item_models]
-
-    def create(self, order_id: UUID, store_product_id: UUID, 
-        quantity: int, item_total_price: float, product_details: dict = None
-        ) -> OrderItem:
-        """Create a new order item"""
-
-        # Calculate item price from store product
-        from store.models import StoreProduct
-        try:
-            store_product = StoreProduct.objects.get(id=store_product_id)
-            item_price = store_product.price
-        except StoreProduct.DoesNotExist:
-            item_price = Decimal('0.00')
-            
-        item_model = OrderItemModel.objects.create(
-            order_id=order_id,
-            store_product_id=store_product_id,
-            quantity=quantity,
-            item_price=item_price,
-            item_total_price=Decimal(str(item_total_price))
-        )
-        return self._to_entity(item_model)
     
     def delete(self, item_id: UUID) -> bool:
         """Delete an order item"""
@@ -58,15 +36,18 @@ class DjangoOrderItemRepository(OrderItemRepository):
     def _to_entity(self, item_model: OrderItemModel) -> OrderItem:
         """Convert ORM model to domain entity"""
         # Get product details from store product
-        product_details = None
+        product_name = ""
+        product_image_url = ""
+        product_image_thumbnail = ""
+        product_description = ""
+        
         try:
             store_product = item_model.store_product
-            product_details = {
-                'id': str(store_product.id),
-                'name': store_product.product.name,
-                'price': float(store_product.price),
-                'image': store_product.product.image_url if hasattr(store_product.product, 'image_url') else None
-            }
+            product = store_product.product
+            product_name = product.name
+            product_image_url = product.image_url if hasattr(product, 'image_url') else ""
+            product_image_thumbnail = product.image_thumbnail if hasattr(product, 'image_thumbnail') else ""
+            product_description = product.description if hasattr(product, 'description') else ""
         except Exception:
             pass
             
@@ -75,6 +56,10 @@ class DjangoOrderItemRepository(OrderItemRepository):
             order_id=item_model.order.id,
             store_product_id=item_model.store_product.id,
             quantity=item_model.quantity,
-            item_total_price=float(item_model.item_total_price),
-            product_details=product_details
+            product_name=product_name,
+            product_image_url=product_image_url,
+            product_image_thumbnail=product_image_thumbnail,
+            product_price=float(item_model.product_price),
+            product_description=product_description,
+            item_total_price=float(item_model.item_total_price)
         )

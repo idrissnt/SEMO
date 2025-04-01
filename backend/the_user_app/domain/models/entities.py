@@ -8,13 +8,8 @@ class User:
     """Domain model representing a user"""
     email: str
     first_name: str
-    is_active: bool = True
     last_name: Optional[str] = None
     phone_number: Optional[str] = None
-    role: str = 'customer'
-    has_vehicle: Optional[bool] = None
-    license_number: Optional[str] = None
-    is_available: bool = True
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     
     def __str__(self) -> str:

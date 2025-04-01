@@ -1,11 +1,16 @@
 from dataclasses import dataclass, asdict
-from typing import Optional, Dict, Any, ClassVar, Type
+from typing import Optional, Dict, Any
 from uuid import UUID
 from datetime import datetime
-import json
 import uuid
 
+# The Foundation
+# The DomainEvent class is the base for all events in the system:
 
+# Key features:
+# - Each event has a unique ID and timestamp
+# - The create() factory method simplifies creating new events
+# - Serialization methods (to_dict() and from_dict()) handle conversion for storage/transmission
 @dataclass
 class DomainEvent:
     """Base class for all domain events"""
@@ -45,112 +50,3 @@ class DomainEvent:
             elif key == 'timestamp' and isinstance(value, str):
                 data[key] = datetime.fromisoformat(value)
         return cls(**data)
-
-
-# Order Events
-@dataclass
-class OrderCreatedEvent(DomainEvent):
-    """Event fired when a new order is created"""
-    order_id: UUID
-    user_id: UUID
-    store_brand_id: UUID
-    total_amount: float
-    delivery_address: str
-
-
-@dataclass
-class OrderStatusChangedEvent(DomainEvent):
-    """Event fired when an order's status changes"""
-    order_id: UUID
-    previous_status: str
-    new_status: str
-    notes: Optional[str] = None
-
-
-@dataclass
-class OrderPaidEvent(DomainEvent):
-    """Event fired when an order is paid"""
-    order_id: UUID
-    payment_id: UUID
-    amount: float
-
-
-# Delivery Events
-@dataclass
-class DeliveryCreatedEvent(DomainEvent):
-    """Event fired when a new delivery is created"""
-    delivery_id: UUID
-    order_id: UUID
-    delivery_address: str
-
-
-@dataclass
-class DeliveryAssignedEvent(DomainEvent):
-    """Event fired when a delivery is assigned to a driver"""
-    delivery_id: UUID
-    driver_id: int
-    order_id: UUID
-
-
-@dataclass
-class DeliveryStatusChangedEvent(DomainEvent):
-    """Event fired when a delivery's status changes"""
-    delivery_id: UUID
-    previous_status: str
-    new_status: str
-    location: Optional[Dict[str, float]] = None
-    notes: Optional[str] = None
-
-
-@dataclass
-class DeliveryLocationUpdatedEvent(DomainEvent):
-    """Event fired when a delivery's location is updated"""
-    delivery_id: UUID
-    latitude: float
-    longitude: float
-    driver_id: int
-
-
-# Cart Events
-@dataclass
-class CartCheckedOutEvent(DomainEvent):
-    """Event fired when a cart is checked out"""
-    cart_id: UUID
-    user_id: UUID
-    store_brand_id: UUID
-    total_amount: float
-
-
-# Payment Events
-@dataclass
-class PaymentCreatedEvent(DomainEvent):
-    """Event fired when a new payment is created"""
-    payment_id: UUID
-    order_id: UUID
-    amount: float
-    payment_method: str
-
-
-@dataclass
-class PaymentCompletedEvent(DomainEvent):
-    """Event fired when a payment is completed successfully"""
-    payment_id: UUID
-    order_id: UUID
-    amount: float
-
-
-@dataclass
-class PaymentFailedEvent(DomainEvent):
-    """Event fired when a payment fails"""
-    payment_id: UUID
-    order_id: UUID
-    error_message: str
-
-
-@dataclass
-class PaymentMethodAddedEvent(DomainEvent):
-    """Event fired when a new payment method is added"""
-    payment_method_id: str
-    user_id: UUID
-    is_default: bool
-    payment_method_type: str
