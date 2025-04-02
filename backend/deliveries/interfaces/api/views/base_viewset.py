@@ -10,14 +10,7 @@ from typing import Type, Dict, Any, Optional
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from deliveries.application.services.delivery_service import DeliveryApplicationService
-from deliveries.infrastructure.django_repositories.delivery_repository import DjangoDeliveryRepository
-from deliveries.infrastructure.django_repositories.driver_repository import DjangoDriverRepository
-from deliveries.infrastructure.django_repositories.delivery_location_repository import DjangoDeliveryLocationRepository
-from the_user_app.infrastructure.django_repositories.user_repository import DjangoUserRepository
-
 logger = logging.getLogger(__name__)
-
 
 class BaseViewSet(viewsets.ViewSet):
     """
@@ -29,52 +22,6 @@ class BaseViewSet(viewsets.ViewSet):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Initialize repositories using dependency injection
-        self._delivery_repository = None
-        self._driver_repository = None
-        self._user_repository = None
-        self._delivery_location_repository = None
-        self._delivery_service = None
-    
-    @property
-    def delivery_repository(self):
-        """Lazy-loaded delivery repository"""
-        if self._delivery_repository is None:
-            self._delivery_repository = DjangoDeliveryRepository()
-        return self._delivery_repository
-    
-    @property
-    def driver_repository(self):
-        """Lazy-loaded driver repository"""
-        if self._driver_repository is None:
-            self._driver_repository = DjangoDriverRepository()
-        return self._driver_repository
-    
-    @property
-    def user_repository(self):
-        """Lazy-loaded user repository"""
-        if self._user_repository is None:
-            self._user_repository = DjangoUserRepository()
-        return self._user_repository
-    
-    @property
-    def delivery_location_repository(self):
-        """Lazy-loaded delivery location repository"""
-        if self._delivery_location_repository is None:
-            self._delivery_location_repository = DjangoDeliveryLocationRepository()
-        return self._delivery_location_repository
-    
-    @property
-    def delivery_service(self):
-        """Lazy-loaded delivery application service"""
-        if self._delivery_service is None:
-            self._delivery_service = DeliveryApplicationService(
-                delivery_repository=self.delivery_repository,
-                driver_repository=self.driver_repository,
-                user_repository=self.user_repository,
-                delivery_location_repository=self.delivery_location_repository
-            )
-        return self._delivery_service
     
     def handle_exception(self, exc):
         """

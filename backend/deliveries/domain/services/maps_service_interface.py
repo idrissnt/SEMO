@@ -71,7 +71,7 @@ class MapsServiceInterface(ABC):
         Args:
             location: Center point to search from
             radius_km: Search radius in kilometers
-            place_type: Type of place to search for (e.g., 'restaurant', 'store')
+            place_type: Type of place to search for (e.g., 'hypermarket', 'supermarket')
             
         Returns:
             List of places with their details

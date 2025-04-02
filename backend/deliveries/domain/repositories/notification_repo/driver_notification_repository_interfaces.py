@@ -161,19 +161,19 @@ class DriverNotificationRepository(ABC):
     def get_all_driver_notifications(self,
                                   driver_id: UUID,
                                   status: Optional[NotificationStatus] = None,
-                                  limit: Optional[int] = None,
-                                  offset: Optional[int] = None) -> List[DriverNotification]:
+                                  limit: Optional[int] = 20,
+                                  cursor: Optional[UUID] = None) -> List[DriverNotification]:
         """
-        Get all notifications for a driver with optional filtering and pagination
+        Get all notifications for a driver with optional filtering and cursor-based pagination
         
         This method retrieves all notifications for a specific driver,
-        optionally filtered by status and with pagination support.
+        optionally filtered by status and with cursor-based pagination support.
         
         Args:
             driver_id: ID of the driver
             status: Optional status filter
             limit: Optional maximum number of notifications to return
-            offset: Optional offset for pagination
+            cursor: Optional cursor (notification ID) for pagination - returns notifications older than this ID
             
         Returns:
             List of driver notifications

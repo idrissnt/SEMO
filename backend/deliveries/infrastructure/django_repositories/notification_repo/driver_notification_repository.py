@@ -8,6 +8,8 @@ from typing import List, Optional, Dict, Any
 from uuid import UUID
 from datetime import datetime
 
+from django.db.models import Q
+
 from deliveries.domain.models.entities.notification_entities import DriverNotification
 from deliveries.domain.models.value_objects import NotificationStatus
 from deliveries.domain.repositories.notification_repo.driver_notification_repository_interfaces import DriverNotificationRepository
@@ -195,9 +197,9 @@ class DjangoDriverNotificationRepository(DriverNotificationRepository):
     def get_all_driver_notifications(self,
                                   driver_id: UUID,
                                   status: Optional[NotificationStatus] = None,
-                                  limit: Optional[int] = None,
-                                  offset: Optional[int] = None) -> List[DriverNotification]:
-        """Get all notifications for a driver with optional filtering and pagination"""
+                                  limit: Optional[int] = 20,
+                                  cursor: Optional[UUID] = None) -> List[DriverNotification]:
+        """Get all notifications for a driver with optional filtering and cursor-based pagination"""
         try:
             # Start with a base query for the driver's notifications
             query = DriverNotificationModel.objects.filter(driver__id=driver_id)
@@ -206,13 +208,24 @@ class DjangoDriverNotificationRepository(DriverNotificationRepository):
             if status is not None:
                 query = query.filter(status=status.value)
             
+            # Apply cursor-based pagination if provided
+            if cursor is not None:
+                # Get the created_at timestamp of the cursor notification
+                try:
+                    cursor_notification = DriverNotificationModel.objects.get(id=cursor)
+                    # Get notifications created before the cursor notification
+                    query = query.filter(
+                        Q(created_at__lt=cursor_notification.created_at) | 
+                        Q(created_at=cursor_notification.created_at, id__lt=cursor)
+                    )
+                except DriverNotificationModel.DoesNotExist:
+                    # If cursor notification doesn't exist, just continue without filtering
+                    pass
+            
             # Order by created_at descending (newest first)
             query = query.order_by('-created_at')
             
-            # Apply pagination if provided
-            if offset is not None:
-                query = query[offset:]
-            
+            # Apply limit
             if limit is not None:
                 query = query[:limit]
             

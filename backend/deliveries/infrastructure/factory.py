@@ -1,3 +1,9 @@
+"""Factory classes for creating repository and service instances.
+
+This module provides factory classes for creating repository and service instances
+following the Abstract Factory pattern. This ensures proper dependency injection
+and separation of concerns according to Clean Architecture principles.
+"""
 from typing import Type, Optional
 
 # Repository interfaces
@@ -27,6 +33,18 @@ from deliveries.domain.services.notification_service_interface import Notificati
 from deliveries.infrastructure.services.google_maps_service import GoogleMapsService
 from deliveries.infrastructure.services.redis_location_service import RedisLocationService
 from deliveries.infrastructure.services.fcm_notification_service import FCMNotificationService
+
+# Application services
+from deliveries.application.services.driver_service import NotificationApplicationService
+from deliveries.application.services.notification_services.driver_notification_service import DriverNotificationService
+from deliveries.application.services.notification_services.delivery_notification_service import DeliveryNotificationService
+from deliveries.application.services.notification_services.customer_notification_service import CustomerNotificationService
+from deliveries.application.services.delivery_services.base_delivery_services import BaseDeliveryApplicationService
+from deliveries.application.services.delivery_services.location_service import LocationApplicationService
+from deliveries.application.services.delivery_services.search_services import DeliverySearchApplicationService
+
+# Order repository interface (for dependencies)
+from orders.domain.repositories.repository_interfaces import OrderRepository
 
 class RepositoryFactory:
     """Factory for creating repository instances
@@ -162,3 +180,96 @@ class ServiceFactory:
             service: An implementation of NotificationServiceInterface
         """
         cls._notification_service = service
+
+
+class ApplicationServiceFactory:
+    """Factory for creating application service instances
+    
+    This factory follows the Abstract Factory pattern to create application service
+    instances with their dependencies properly injected. It uses the RepositoryFactory
+    and ServiceFactory to get the required dependencies.
+    """
+    
+    @classmethod
+    def create_notification_application_service(cls) -> NotificationApplicationService:
+        """Create a notification application service instance"""
+        notification_repository = RepositoryFactory.create_driver_notification_repository()
+        notification_service = ServiceFactory.create_notification_service()
+        
+        return NotificationApplicationService(
+            notification_service=notification_service,
+            notification_repository=notification_repository
+        )
+    
+    @classmethod
+    def create_driver_notification_service(cls) -> DriverNotificationService:
+        """Create a driver notification service instance"""
+        notification_repository = RepositoryFactory.create_driver_notification_repository()
+        notification_service = ServiceFactory.create_notification_service()
+        
+        return DriverNotificationService(
+            notification_repository=notification_repository,
+            notification_service=notification_service
+        )
+    
+    @classmethod
+    def create_delivery_notification_service(cls) -> DeliveryNotificationService:
+        """Create a delivery notification service instance"""
+        delivery_repository = RepositoryFactory.create_delivery_repository()
+        notification_service = ServiceFactory.create_notification_service()
+        driver_location_repository = RepositoryFactory.create_driver_location_repository()
+        notification_repository = RepositoryFactory.create_driver_notification_repository()
+        # Note: Order repository would need proper initialization in a real implementation
+        order_repository = None
+        
+        return DeliveryNotificationService(
+            delivery_repository=delivery_repository,
+            notification_service=notification_service,
+            driver_location_repository=driver_location_repository,
+            notification_repository=notification_repository,
+            order_repository=order_repository
+        )
+    
+    @classmethod
+    def create_customer_notification_service(cls) -> CustomerNotificationService:
+        """Create a customer notification service instance"""
+        notification_repository = RepositoryFactory.create_driver_notification_repository()
+        delivery_repository = RepositoryFactory.create_delivery_repository()
+        notification_service = ServiceFactory.create_notification_service()
+        
+        return CustomerNotificationService(
+            notification_repository=notification_repository,
+            delivery_repository=delivery_repository,
+            notification_service=notification_service
+        )
+    
+    @classmethod
+    def create_delivery_application_service(cls) -> BaseDeliveryApplicationService:
+        """Create a delivery application service instance"""
+        delivery_repository = RepositoryFactory.create_delivery_repository()
+        delivery_timeline_repository = RepositoryFactory.create_delivery_timeline_repository()
+        
+        return BaseDeliveryApplicationService(
+            delivery_repository=delivery_repository,
+            delivery_timeline_repository=delivery_timeline_repository
+        )
+    
+    @classmethod
+    def create_location_application_service(cls) -> LocationApplicationService:
+        """Create a location application service instance"""
+        delivery_location_repository = RepositoryFactory.create_delivery_location_repository()
+        maps_service = ServiceFactory.create_maps_service()
+        
+        return LocationApplicationService(
+            delivery_location_repository=delivery_location_repository,
+            maps_service=maps_service
+        )
+    
+    @classmethod
+    def create_delivery_search_service(cls) -> DeliverySearchApplicationService:
+        """Create a delivery search service instance"""
+        delivery_repository = RepositoryFactory.create_delivery_repository()
+        
+        return DeliverySearchApplicationService(
+            delivery_repository=delivery_repository
+        )

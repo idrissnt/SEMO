@@ -9,12 +9,22 @@ from uuid import UUID
 
 from deliveries.domain.models.entities.notification_entities import DriverNotification
 from deliveries.domain.models.value_objects import NotificationStatus
-from deliveries.application.services.notification.base_notification_service import BaseNotificationService
+from deliveries.domain.repositories.notification_repo.driver_notification_repository_interfaces import DriverNotificationRepository
+from deliveries.domain.services.notification_service_interface import NotificationServiceInterface
 
 logger = logging.getLogger(__name__)
 
-class DriverNotificationService(BaseNotificationService):
+class DriverNotificationService:
     """Driver Notification Application service for handling driver notifications"""
+    
+    def __init__(
+        self,
+        notification_repository: DriverNotificationRepository,
+        notification_service: NotificationServiceInterface
+    ):
+        """Initialize the driver notification service"""
+        self.notification_repository = notification_repository
+        self.notification_service = notification_service
     
     def send_pending_notifications(self, driver_id: UUID) -> Dict[UUID, bool]:
         """
@@ -56,7 +66,7 @@ class DriverNotificationService(BaseNotificationService):
             return {}
     
     def get_driver_notifications(self, driver_id: UUID, status: Optional[NotificationStatus] = None, 
-                            limit: Optional[int] = None, offset: Optional[int] = None) -> List[DriverNotification]:
+                            limit: Optional[int] = 20, cursor: Optional[UUID] = None) -> List[DriverNotification]:
         """
         Get all notifications for a driver with optional filtering and pagination
         
@@ -67,7 +77,7 @@ class DriverNotificationService(BaseNotificationService):
             driver_id: ID of the driver
             status: Optional status filter
             limit: Optional maximum number of notifications to return
-            offset: Optional offset for pagination
+            cursor: Optional cursor for pagination (notification ID)
             
         Returns:
             List of driver notifications
@@ -77,7 +87,7 @@ class DriverNotificationService(BaseNotificationService):
                 driver_id=driver_id,
                 status=status,
                 limit=limit,
-                offset=offset
+                cursor=cursor
             )
         except Exception as e:
             logger.error(f"Error getting driver notifications: {str(e)}")

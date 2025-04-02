@@ -12,8 +12,9 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from deliveries.infrastructure.factory import RepositoryFactory
-from deliveries.application.services.notification_service import NotificationApplicationService
+from deliveries.infrastructure.factory import ApplicationServiceFactory
+from deliveries.interfaces.api.serializers.notification_serializers import DriverNotificationSerializer
+from deliveries.interfaces.api.serializers.delivery_serializers import DeliverySerializer
 
 
 class DeliveryNotificationViewSet(viewsets.ViewSet):
@@ -21,14 +22,9 @@ class DeliveryNotificationViewSet(viewsets.ViewSet):
     
     permission_classes = [IsAuthenticated]
     
-    def get_notification_service(self):
-        """Get the notification application service"""
-        delivery_repository = RepositoryFactory.create_delivery_repository()
-        driver_repository = RepositoryFactory.create_driver_repository()
-        return NotificationApplicationService(
-            delivery_repository=delivery_repository,
-            driver_repository=driver_repository
-        )
+    def get_delivery_notification_service(self):
+        """Get the delivery notification service"""
+        return ApplicationServiceFactory.create_delivery_notification_service()
     
     @swagger_auto_schema(
         responses={
@@ -55,17 +51,18 @@ class DeliveryNotificationViewSet(viewsets.ViewSet):
                 )
             
             # Handle delivery acceptance
-            success, message = self.get_notification_service().handle_delivery_acceptance(
+            success, message, delivery = self.get_delivery_notification_service().handle_delivery_acceptance_from_notification(
                 delivery_id=delivery_id,
                 driver_id=driver_id
             )
             
             # Return response
             if success:
-                return Response(
-                    {"message": message},
-                    status=status.HTTP_200_OK
-                )
+                response_data = {"message": message}
+                if delivery:
+                    serializer = DeliverySerializer(delivery)
+                    response_data["delivery"] = serializer.data
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(
                     {"error": message},
@@ -103,7 +100,7 @@ class DeliveryNotificationViewSet(viewsets.ViewSet):
                 )
             
             # Handle delivery refusal
-            success, message = self.get_notification_service().handle_delivery_refusal(
+            success, message = self.get_delivery_notification_service().handle_delivery_refusal(
                 delivery_id=delivery_id,
                 driver_id=driver_id
             )

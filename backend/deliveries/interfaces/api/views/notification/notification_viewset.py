@@ -14,8 +14,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from deliveries.interfaces.api.serializers.notification_serializers import DriverNotificationSerializer
-from deliveries.infrastructure.factory import RepositoryFactory
-from deliveries.application.services.notification_service import NotificationApplicationService
+from deliveries.infrastructure.factory import RepositoryFactory, ApplicationServiceFactory
 from deliveries.domain.models.value_objects import NotificationStatus
 
 
@@ -30,83 +29,8 @@ class NotificationViewSet(viewsets.ViewSet):
     
     def get_notification_service(self):
         """Get the notification application service"""
-        delivery_repository = RepositoryFactory.create_delivery_repository()
-        driver_repository = RepositoryFactory.create_driver_repository()
-        return NotificationApplicationService(
-            delivery_repository=delivery_repository,
-            driver_repository=driver_repository
-        )
-    
-    @swagger_auto_schema(
-        responses={
-            200: openapi.Response('List of pending notifications', DriverNotificationSerializer(many=True)),
-            500: openapi.Response('Server error'),
-        }
-    )
-    @action(detail=False, methods=['get'], url_path='pending')
-    def pending(self, request: Request) -> Response:
-        """Get all pending notifications for the authenticated driver"""
-        try:
-            # Get the driver ID from the authenticated user
-            driver_id = request.user.id
-            
-            # Get pending notifications
-            notifications = self.get_notification_repository().get_pending_notifications(
-                driver_id=driver_id
-            )
-            
-            # Serialize notifications
-            serializer = DriverNotificationSerializer(notifications, many=True)
-            
-            # Return response
-            return Response(serializer.data, status=status.HTTP_200_OK)
-            
-        except Exception as e:
-            return Response(
-                {"error": str(e)},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-    
-    @swagger_auto_schema(
-        responses={
-            200: openapi.Response('Notifications sent successfully'),
-            500: openapi.Response('Server error'),
-        }
-    )
-    @action(detail=False, methods=['post'], url_path='send')
-    def send(self, request: Request) -> Response:
-        """Send all pending notifications to the authenticated driver"""
-        try:
-            # Get the driver ID from the authenticated user
-            driver_id = request.user.id
-            
-            # Send pending notifications
-            results = self.get_notification_service().send_pending_notifications(
-                driver_id=driver_id
-            )
-            
-            # Return response
-            if results:
-                success_count = sum(1 for success in results.values() if success)
-                return Response(
-                    {
-                        "message": f"Sent {success_count} out of {len(results)} notifications",
-                        "results": {str(k): v for k, v in results.items()}
-                    },
-                    status=status.HTTP_200_OK
-                )
-            else:
-                return Response(
-                    {"message": "No pending notifications found"},
-                    status=status.HTTP_200_OK
-                )
-                
-        except Exception as e:
-            return Response(
-                {"error": str(e)},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-    
+        return ApplicationServiceFactory.create_notification_application_service()
+ 
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
