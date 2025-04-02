@@ -1,16 +1,16 @@
 from typing import List, Optional, Tuple
 from uuid import UUID
 
-from deliveries.domain.models.entities import Driver
-from deliveries.domain.repositories.repository_interfaces import DriverRepository
-from deliveries.infrastructure.django_models.orm_models import DriverModel
+from deliveries.domain.models.entities.driver_entities import Driver
+from deliveries.domain.repositories.driver_repo.driver_repository_interfaces import DriverRepository
+from deliveries.infrastructure.django_models.driver_orm_models.driver_model import DriverModel
 from django.conf import settings
 
 
 class DjangoDriverRepository(DriverRepository):
     """Django ORM implementation of DriverRepository"""
     
-    def get_by_id(self, driver_id: int) -> Optional[Driver]:
+    def get_by_id(self, driver_id: UUID) -> Optional[Driver]:
         """Get a driver by ID"""
         try:
             driver_model = DriverModel.objects.get(id=driver_id)
@@ -45,7 +45,7 @@ class DjangoDriverRepository(DriverRepository):
         except settings.AUTH_USER_MODEL.DoesNotExist:
             raise ValueError(f"User with ID {user_id} not found")
 
-    def update_availability(self, driver_id: int, 
+    def update_availability(self, driver_id: UUID, 
                             is_available: bool) -> Tuple[bool, str]:
         """Update the availability of a driver"""
         try:
@@ -56,7 +56,7 @@ class DjangoDriverRepository(DriverRepository):
         except DriverModel.DoesNotExist:
             return False, f"Driver with ID {driver_id} not found"
 
-    def update_info(self, driver_id: int, license_number: str, 
+    def update_info(self, driver_id: UUID, license_number: str, 
                     has_vehicle: bool) -> Tuple[bool, str, Optional[Driver]]:
         """Update an existing driver info"""
         try:
@@ -71,7 +71,7 @@ class DjangoDriverRepository(DriverRepository):
         except DriverModel.DoesNotExist:
             return False, f"Driver with ID {driver_id} not found", None
 
-    def delete(self, driver_id: int) -> Tuple[bool, str]:
+    def delete(self, driver_id: UUID) -> Tuple[bool, str]:
         """Delete a driver"""
         from deliveries.infrastructure.django_models.orm_models import DeliveryModel
         active_deliveries = DeliveryModel.objects.filter(

@@ -2,8 +2,8 @@ from typing import List, Optional, Dict
 from uuid import UUID
 
 from deliveries.domain.models.entities import DeliveryTimelineEvent
-from deliveries.domain.repositories.repository_interfaces import DeliveryTimelineRepository
-from deliveries.infrastructure.django_models.orm_models import DeliveryTimelineModel
+from deliveries.domain.repositories.delivery_timeline_repository_interfaces import DeliveryTimelineRepository
+from deliveries.infrastructure.django_models.delivery_orm_models.delivery_models import DeliveryTimelineModel
 
 
 class DjangoDeliveryTimelineRepository(DeliveryTimelineRepository):

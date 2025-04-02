@@ -2,8 +2,8 @@ from typing import Tuple, Optional
 import logging
 from uuid import UUID
 
-from deliveries.domain.repositories.repository_interfaces import DriverRepository
-from deliveries.domain.models.entities import Driver
+from deliveries.domain.repositories.driver_repo.driver_repository_interfaces import DriverRepository
+from deliveries.domain.models.entities.driver_entities import Driver
 
 logger = logging.getLogger(__name__)
 

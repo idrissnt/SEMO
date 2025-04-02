@@ -42,3 +42,6 @@ celery==5.3.6
 django-celery-results==2.5.1
 django-celery-beat==2.7.0
 amqp==5.2.0
+
+# Firebase Cloud Messaging
+firebase-admin==6.7.0
