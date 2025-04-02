@@ -7,6 +7,7 @@ an identity of their own.
 """
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
+from enum import Enum
 import math
 
 
@@ -121,3 +122,12 @@ class RouteInfo:
             'polyline': self.polyline,
             'waypoints': [wp.to_dict() for wp in self.waypoints] if self.waypoints else []
         }
+
+
+class NotificationStatus(Enum):
+    """Notification status value object"""
+    PENDING = "pending"
+    SENT = "sent"
+    ACCEPTED = "accepted"
+    REFUSED = "refused"
+    CANCELLED = "cancelled"

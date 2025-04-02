@@ -6,9 +6,7 @@ retrieving, and updating deliveries, following Domain-Driven Design principles
 and Clean Architecture with CQRS pattern.
 """
 import logging
-from uuid import UUID
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
@@ -19,10 +17,6 @@ from deliveries.interfaces.api.views.base_viewset import BaseViewSet
 from deliveries.interfaces.api.serializers import (
     DeliveryOutputSerializer,
     DeliveryCreateInputSerializer,
-    DeliveryUpdateStatusInputSerializer,
-    DeliveryAssignDriverInputSerializer,
-    DeliveryUpdateLocationInputSerializer,
-    DeliveryUpdateETAInputSerializer,
 )
 
 logger = logging.getLogger(__name__)

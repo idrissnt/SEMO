@@ -6,9 +6,9 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 
-from deliveries.domain.models.entities import Delivery
-from deliveries.domain.models.value_objects import GeoPoint, RouteInfo
-from deliveries.domain.repositories.delivery_repository_interfaces import DeliveryRepository
+from deliveries.domain.models.entities.delivery_entities import Delivery
+from deliveries.domain.models.value_objects import GeoPoint
+from deliveries.domain.repositories.delivery_repo.delivery_repository_interfaces import DeliveryRepository
 from deliveries.infrastructure.django_models.delivery_orm_models.delivery_models import DeliveryModel
 from deliveries.infrastructure.django_models.driver_orm_models.driver_model import DriverModel
 from orders.models import Order

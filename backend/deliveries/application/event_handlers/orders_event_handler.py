@@ -3,10 +3,8 @@ Event handlers for order events
 """
 import logging
 from core.domain_events.decorators import event_handler
-from core.domain_events.event_bus import event_bus
 
 from orders.domain.events.orders_events import OrderPaidEvent
-from deliveries.domain.models.events.deliveries_events import DeliveryCreatedEvent
 from deliveries.application.services.delivery_service import DeliveryApplicationService
 
 logger = logging.getLogger(__name__)

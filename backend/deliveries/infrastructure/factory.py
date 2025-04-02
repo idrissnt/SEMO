@@ -7,6 +7,7 @@ from deliveries.domain.repositories.delivery_repo.delivery_timeline_repository_i
 from deliveries.domain.repositories.delivery_repo.delivery_location_repository_interfaces import DeliveryLocationRepository
 from deliveries.domain.repositories.driver_repo.driver_device_repository_interfaces import DriverDeviceRepository
 from deliveries.domain.repositories.driver_repo.driver_location_repository_interfaces import DriverLocationRepository
+from deliveries.domain.repositories.notification_repo.driver_notification_repository_interfaces import DriverNotificationRepository
 
 # Repository implementations
 from deliveries.infrastructure.django_repositories.driver_repo.driver_repository import DjangoDriverRepository
@@ -15,6 +16,7 @@ from deliveries.infrastructure.django_repositories.delivery_repo.delivery_timeli
 from deliveries.infrastructure.django_repositories.delivery_repo.delivery_location_repository import DjangoDeliveryLocationRepository
 from deliveries.infrastructure.django_repositories.driver_repo.driver_device_repository import DjangoDriverDeviceRepository
 from deliveries.infrastructure.django_repositories.driver_repo.driver_location_repository import DjangoDriverLocationRepository
+from deliveries.infrastructure.django_repositories.notification_repo.driver_notification_repository import DjangoDriverNotificationRepository
 
 # Service interfaces
 from deliveries.domain.services.maps_service_interface import MapsServiceInterface
@@ -62,6 +64,11 @@ class RepositoryFactory:
     def create_driver_location_repository() -> DriverLocationRepository:
         """Create a driver location repository instance"""
         return DjangoDriverLocationRepository()
+        
+    @staticmethod
+    def create_driver_notification_repository() -> DriverNotificationRepository:
+        """Create a driver notification repository instance"""
+        return DjangoDriverNotificationRepository()
 
 
 class ServiceFactory:

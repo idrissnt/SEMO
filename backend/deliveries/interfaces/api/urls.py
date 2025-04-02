@@ -7,6 +7,8 @@ from deliveries.interfaces.api.views import (
     DriverViewSet,
     TimelineViewSet
 )
+from deliveries.interfaces.api.views.notification.notification_viewset import NotificationViewSet
+from deliveries.interfaces.api.views.notification.delivery_notification_viewset import DeliveryNotificationViewSet
 
 app_name = 'deliveries'
 
@@ -16,6 +18,8 @@ router.register(r'deliveries', DeliveryViewSet, basename='delivery')
 router.register(r'geo', GeoSpatialViewSet, basename='geospatial')
 router.register(r'drivers', DriverViewSet, basename='driver')
 router.register(r'timeline', TimelineViewSet, basename='timeline')
+router.register(r'notifications', NotificationViewSet, basename='notification')
+router.register(r'delivery-notifications', DeliveryNotificationViewSet, basename='delivery-notification')
 
 urlpatterns = [
     path('', include(router.urls)),

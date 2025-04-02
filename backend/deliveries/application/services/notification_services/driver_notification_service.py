@@ -1,34 +1,20 @@
 """
-Application service for delivery notifications.
+Driver Notification Application service for handling driver notifications.
 
-This service coordinates the notification use cases, including sending notifications
-to drivers about new orders and delivery status updates.
+This module defines the service for handling driver notifications.
 """
 import logging
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional, Tuple
 from uuid import UUID
 
+from deliveries.domain.models.entities.notification_entities import DriverNotification
 from deliveries.domain.models.value_objects import NotificationStatus
-from deliveries.domain.services.notification_service_interface import NotificationServiceInterface
-from deliveries.domain.repositories.notification_repo.driver_notification_repository_interfaces import DriverNotificationRepository
+from deliveries.application.services.notification.base_notification_service import BaseNotificationService
 
 logger = logging.getLogger(__name__)
 
-class NotificationApplicationService:
-    """Application service for delivery notifications
-    
-    This service coordinates notification-related use cases, including sending
-    notifications to drivers about new orders, delivery status updates, and
-    other important events.
-    """
-    
-    def __init__(
-        self,
-        notification_service: NotificationServiceInterface,
-        notification_repository: DriverNotificationRepository,
-    ):
-        self.notification_service = notification_service
-        self.notification_repository = notification_repository
+class DriverNotificationService(BaseNotificationService):
+    """Driver Notification Application service for handling driver notifications"""
     
     def send_pending_notifications(self, driver_id: UUID) -> Dict[UUID, bool]:
         """
@@ -97,4 +83,37 @@ class NotificationApplicationService:
             logger.error(f"Error getting driver notifications: {str(e)}")
             return []
     
-   
+    def handle_delivery_refusal(self, delivery_id: UUID, driver_id: UUID) -> Tuple[bool, str]:
+        """
+        Handle a driver refusing a delivery
+        
+        Args:
+            delivery_id: UUID of the delivery
+            driver_id: UUID of the driver
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        try:
+            # Update notification status
+            notification = self.notification_repository.get_by_delivery_and_driver(
+                delivery_id=delivery_id,
+                driver_id=driver_id
+            )
+            
+            if notification:
+                self.notification_repository.update_status(
+                    notification_id=notification.id,
+                    new_status=NotificationStatus.REFUSED
+                )
+                
+                # Record the refusal (this would be implemented in a real system)
+                logger.info(f"Driver {driver_id} refused delivery {delivery_id}")
+                
+                return True, "Delivery refusal recorded successfully"
+            else:
+                return False, "Notification not found"
+                
+        except Exception as e:
+            logger.error(f"Error handling delivery refusal: {str(e)}")
+            return False, f"Error handling delivery refusal: {str(e)}"
