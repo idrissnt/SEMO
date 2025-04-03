@@ -22,6 +22,7 @@ urlpatterns = [
         path('payments/', include('payments.urls', namespace='payments')),
         path('deliveries/', include('deliveries.urls', namespace='deliveries')),
         path('cart/', include('cart.urls', namespace='cart')),
+        path('tasks/', include('tasks.urls', namespace='tasks')),
     ])),
     
     # API Documentation

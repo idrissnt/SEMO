@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 import logging
 
-from the_user_app.interfaces.api.serializers import UserProfileSerializer
+from the_user_app.interfaces.api.serializers.user_serializers import UserProfileSerializer
 from the_user_app.infrastructure.factory import UserFactory
 
 logger = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 @extend_schema(tags=['User'])
 class UserProfileViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
-    serializer_class = UserProfileSerializer
+    serializer_class = UserProfileSerializer    
 
     @extend_schema(
         responses={
@@ -107,10 +107,6 @@ class UserProfileViewSet(viewsets.ViewSet):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'phone_number': user.phone_number,
-            'role': user.role,
-            'has_vehicle': user.has_vehicle,
-            'license_number': user.license_number,
-            'is_available': user.is_available,
             'addresses': addresses
         }
             

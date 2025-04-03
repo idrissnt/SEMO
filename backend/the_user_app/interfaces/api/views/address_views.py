@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 import logging
 import uuid
 
-from the_user_app.interfaces.api.serializers import AddressSerializer
+from the_user_app.interfaces.api.serializers.user_serializers import AddressSerializer
 from the_user_app.infrastructure.factory import UserFactory
 
 logger = logging.getLogger(__name__)

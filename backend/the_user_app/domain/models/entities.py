@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import Optional, List, Dict, Any, Union
 import uuid
 from datetime import datetime
+
+from .value_objects import ExperienceLevel
 
 @dataclass
 class User:
@@ -58,3 +60,27 @@ class BlacklistedToken:
     expires_at: datetime
     blacklisted_at: datetime = field(default_factory=datetime.now)
     id: uuid.UUID = field(default_factory=uuid.uuid4)
+
+@dataclass
+class TaskPerformerProfile:
+    """Domain model representing a task performer profile"""
+    user_id: uuid.UUID
+    user_name: str
+    user_email: str
+    skills: List[str]
+    experience_level: Union[ExperienceLevel, str]  # Using value object
+    availability: Dict[str, Any]  # JSON structure for availability schedule
+    preferred_radius_km: int
+    bio: Optional[str] = None
+    hourly_rate: Optional[float] = None
+    rating: Optional[float] = None
+    completed_tasks_count: int = 0
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
+    
+    def __post_init__(self):
+        # Convert string to ExperienceLevel if needed
+        if isinstance(self.experience_level, str):
+            self.experience_level = ExperienceLevel.from_string(self.experience_level) or self.experience_level
+    
+    def __str__(self) -> str:
+        return f"Performer Profile {self.id}"

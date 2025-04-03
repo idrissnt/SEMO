@@ -2,6 +2,9 @@ import uuid
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.contrib.postgres.fields import ArrayField
+
+from ...domain.models.value_objects import ExperienceLevel
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -102,3 +105,33 @@ class BlacklistedTokenModel(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.blacklisted_at}"
+
+
+class TaskPerformerProfileModel(models.Model):
+    """Django ORM model for task PerformerProfile"""
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(CustomUserModel, on_delete=models.CASCADE, related_name='performer_profile')
+    skills = ArrayField(models.CharField(max_length=100), default=list)
+    experience_level = models.CharField(max_length=20, choices=ExperienceLevel.choices())
+    availability = models.JSONField(default=dict)  # JSON structure for availability schedule
+    preferred_radius_km = models.IntegerField(default=10)
+    bio = models.TextField(null=True, blank=True)
+    hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    rating = models.FloatField(null=True, blank=True)
+    completed_tasks_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'performer_profiles'
+        verbose_name = 'Performer Profile'
+        verbose_name_plural = 'Performer Profiles'
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['experience_level']),
+            models.Index(fields=['rating']),
+        ]
+    
+    def __str__(self):
+        return f"Performer Profile for {self.user.email}"

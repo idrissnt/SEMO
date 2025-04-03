@@ -5,7 +5,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from the_user_app.interfaces.api.views import (
     AuthViewSet,
     UserProfileViewSet,
-    AddressViewSet
+    AddressViewSet,
+    TaskPerformerProfileViewSet
 )
 
 app_name = 'the_user_app'
@@ -15,6 +16,7 @@ router = DefaultRouter()
 router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'users', UserProfileViewSet, basename='users')
 router.register(r'addresses', AddressViewSet, basename='addresses')
+router.register(r'task-performers', TaskPerformerProfileViewSet, basename='task-performers')
 
 # The API URLs are now determined automatically by the router
 urlpatterns = [

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 import logging
 
-from the_user_app.interfaces.api.serializers import (
+from the_user_app.interfaces.api.serializers.user_serializers import (
     UserSerializer,
     PasswordChangeSerializer,
     LoginRequestSerializer,
