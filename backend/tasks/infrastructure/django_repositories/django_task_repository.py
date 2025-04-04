@@ -57,16 +57,16 @@ class DjangoTaskRepository(TaskRepository):
         task_models = TaskModel.objects.prefetch_related('attributes').filter(status=status)
         return [self._task_model_to_domain(task_model) for task_model in task_models]
     
-    def get_by_category(self, category: TaskCategory) -> List[Task]:
+    def get_by_category_id(self, category_id: uuid.UUID) -> List[Task]:
         """Get all tasks in a specific category
         
         Args:
-            category: Category of the tasks to retrieve
+            category_id: UUID of the category
             
         Returns:
             List of Task objects
         """
-        task_models = TaskModel.objects.prefetch_related('attributes').filter(category=category.value)
+        task_models = TaskModel.objects.prefetch_related('attributes').filter(category_id=category_id)
         return [self._task_model_to_domain(task_model) for task_model in task_models]
     
     def search_by_location(self, latitude: float, longitude: float, radius_km: float) -> List[Task]:
@@ -103,9 +103,11 @@ class DjangoTaskRepository(TaskRepository):
             requester_id=task.requester_id,
             title=task.title,
             description=task.description,
-            category=task.category.value,
-            location_address_id=task.location_address_id,
+            image_url=task.image_url,
+            category_id=task.category_id,
+            location_address=task.location_address,
             budget=task.budget,
+            estimated_duration=task.estimated_duration,
             scheduled_date=task.scheduled_date,
             status=task.status.value,
             created_at=task.created_at,
@@ -153,9 +155,11 @@ class DjangoTaskRepository(TaskRepository):
             # Update the task model fields
             task_model.title = task.title
             task_model.description = task.description
-            task_model.category = task.category.value
-            task_model.location_address_id = task.location_address_id
+            task_model.image_url = task.image_url
+            task_model.category_id = task.category_id
+            task_model.location_address = task.location_address
             task_model.budget = task.budget
+            task_model.estimated_duration = task.estimated_duration
             task_model.scheduled_date = task.scheduled_date
             task_model.status = task.status.value
             task_model.updated_at = task.updated_at
@@ -247,12 +251,14 @@ class DjangoTaskRepository(TaskRepository):
         # Create and return the domain entity
         return Task(
             id=task_model.id,
-            requester_id=task_model.requester_id,
+            requester_id=task_model.requester.id,
             title=task_model.title,
             description=task_model.description,
-            category=TaskCategory(task_model.category),
-            location_address_id=task_model.location_address_id,
+            image_url=task_model.image_url,
+            category_id=task_model.category.id,
+            location_address=task_model.location_address,
             budget=float(task_model.budget),
+            estimated_duration=task_model.estimated_duration,
             scheduled_date=task_model.scheduled_date,
             status=TaskStatus(task_model.status),
             attributes=attributes,

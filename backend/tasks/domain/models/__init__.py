@@ -12,6 +12,7 @@ __all__ = [
     # Entities
     'Task',
     'TaskAttribute',
+    'PredefinedTaskType',
     'TaskCategory',
     'TaskCategoryTemplate',
     'TaskApplication',

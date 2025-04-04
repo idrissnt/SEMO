@@ -5,9 +5,9 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 import uuid
 
-from ...models.entities.task import Task
-from ...models.entities.task_category import TaskCategory
-from ...models.value_objects.task_status import TaskStatus
+from models import Task
+from models import TaskCategory
+from models import TaskStatus
 
 
 class TaskRepository(ABC):
@@ -50,11 +50,11 @@ class TaskRepository(ABC):
         pass
     
     @abstractmethod
-    def get_by_category(self, category: TaskCategory) -> List[Task]:
+    def get_by_category_id(self, category_id: uuid.UUID) -> List[Task]:
         """Get all tasks in a specific category
         
         Args:
-            category: Category of the tasks to retrieve
+            category_id: UUID of the category
             
         Returns:
             List of Task objects

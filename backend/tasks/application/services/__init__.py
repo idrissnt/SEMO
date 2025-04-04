@@ -2,8 +2,10 @@
 Application services for the tasks app.
 This module re-exports all application services for backward compatibility.
 """
-# Import from task services
-from .task.task_service import TaskApplicationService
+# Import from task and predefined task services
+from .task_and_predefined_task.task_service import TaskApplicationService
+from .task_and_predefined_task.predefined_task_service import PredefinedTaskTypeService
+from .task_and_predefined_task.task_category_service import TaskCategoryService
 
 # Import from application services
 from .application.application_service import ApplicationService
@@ -15,8 +17,6 @@ from .assignment.assignment_service import AssignmentService
 # Import from review services
 from .review.review_service import ReviewService
 
-# Import from category services
-from .category.category_template_service import CategoryTemplateService
 
 __all__ = [
     'TaskApplicationService',
@@ -24,5 +24,6 @@ __all__ = [
     'ChatService',
     'AssignmentService',
     'ReviewService',
-    'CategoryTemplateService',
+    'PredefinedTaskTypeService',
+    'TaskCategoryService',
 ]

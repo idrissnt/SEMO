@@ -17,7 +17,8 @@ from .assignment.assignment_repository import TaskAssignmentRepository
 from .review.review_repository import ReviewRepository
 
 # Import from category repositories
-from .category.category_template_repository import TaskCategoryTemplateRepository
+from .category.predefined_category_repository import PredefinedTaskTypeRepository
+from .task_category.task_category_repository import TaskCategoryRepository
 
 __all__ = [
     'TaskRepository',
@@ -26,5 +27,6 @@ __all__ = [
     'NegotiationOfferRepository',
     'TaskAssignmentRepository',
     'ReviewRepository',
-    'TaskCategoryTemplateRepository',
+    'PredefinedTaskTypeRepository',
+    'TaskCategoryRepository',
 ]

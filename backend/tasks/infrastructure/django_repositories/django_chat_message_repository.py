@@ -3,11 +3,10 @@ Django implementation of the ChatMessageRepository interface.
 """
 from typing import List, Optional
 import uuid
-from datetime import datetime
 
-from ...domain.repositories.application.chat_message_repository import ChatMessageRepository
-from ...domain.models.entities.chat_message import ChatMessage
-from ..django_models.application.chat_message import ChatMessageModel
+from ...domain.repositories import ChatMessageRepository
+from ...domain.models import ChatMessage
+from ..django_models import ChatMessageModel
 
 
 class DjangoChatMessageRepository(ChatMessageRepository):

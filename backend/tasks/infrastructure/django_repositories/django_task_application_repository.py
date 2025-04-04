@@ -3,13 +3,11 @@ import uuid
 from django.db import transaction
 
 # Import domain entities
-from ...domain.models.entities.task_application import TaskApplication, NegotiationOffer
-from ...domain.models.value_objects.application_status import ApplicationStatus
-from ...domain.repositories.repository_interfaces import TaskApplicationRepository
+from ...domain.models import TaskApplication
+from ...domain.repositories import TaskApplicationRepository
 
 # Import ORM models
-from ..django_models.application.application import TaskApplicationModel
-from ..django_models.application.negotiation import NegotiationOfferModel
+from ..django_models import TaskApplicationModel
 
 
 class DjangoTaskApplicationRepository(TaskApplicationRepository):

@@ -3,11 +3,11 @@ import uuid
 from django.db import transaction
 
 # Import domain entities
-from ...domain.models.entities.task_assignment import TaskAssignment
-from ...domain.repositories.repository_interfaces import TaskAssignmentRepository
+from ...domain.models import TaskAssignment
+from ...domain.repositories import TaskAssignmentRepository
 
 # Import ORM models
-from ..django_models.assignment.assignment import TaskAssignmentModel
+from ..django_models import TaskAssignmentModel
 
 
 class DjangoTaskAssignmentRepository(TaskAssignmentRepository):

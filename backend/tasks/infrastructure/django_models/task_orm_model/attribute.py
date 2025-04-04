@@ -4,7 +4,7 @@ ORM model for task attributes.
 from django.db import models
 import uuid
 
-from tasks.infrastructure.django_models.task.task import TaskModel
+from task import TaskModel
 
 
 class TaskAttributeModel(models.Model):

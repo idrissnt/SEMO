@@ -5,9 +5,9 @@ from typing import List, Optional
 import uuid
 from decimal import Decimal
 
-from ...domain.repositories.application.negotiation_repository import NegotiationOfferRepository
-from ...domain.models.entities.task_application import NegotiationOffer
-from ..django_models.application.negotiation import NegotiationOfferModel
+from ...domain.repositories import NegotiationOfferRepository
+from ...domain.models import NegotiationOffer
+from ..django_models import NegotiationOfferModel
 
 
 class DjangoNegotiationOfferRepository(NegotiationOfferRepository):

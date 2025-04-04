@@ -9,7 +9,7 @@ from ..serializers import (
     TaskSerializer,
     TaskCreateSerializer,
     TaskSearchSerializer,
-    TaskCategoryTemplateSerializer
+    PredefinedTaskTypeSerializer
 )
 
 
@@ -21,12 +21,16 @@ class TaskViewSet(viewsets.ViewSet):
         super().__init__(**kwargs)
         self.task_application_service = ServiceFactory.get_task_application_service()
     
+    @action(detail=False, methods=["get"])
     def list(self, request):
         """Get all tasks created by the authenticated user"""
         requester_id = uuid.UUID(str(request.user.id))
         tasks = self.task_application_service.get_tasks_by_requester(requester_id)
-        return Response(tasks)
+        # Use the TaskSerializer to convert the list of domain entities to a response
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
     
+    @action(detail=True, methods=["get"])
     def retrieve(self, request, pk=None):
         """Get a task by ID"""
         try:
@@ -37,15 +41,23 @@ class TaskViewSet(viewsets.ViewSet):
                     {"error": "Task not found"},
                     status=status.HTTP_404_NOT_FOUND
                 )
-            return Response(task)
+            # Use the TaskSerializer to convert the domain entity to a response
+            serializer = TaskSerializer(task)
+            return Response(serializer.data)
         except ValueError:
             return Response(
                 {"error": "Invalid task ID"},
                 status=status.HTTP_400_BAD_REQUEST
             )
     
+    @action(detail=False, methods=["post"])
     def create(self, request):
-        """Create a new task"""
+        """Create a new task
+        
+        Endpoint: POST /api/tasks/
+        
+        The frontend should send all required fields directly in the request body
+        """
         serializer = TaskCreateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -54,18 +66,38 @@ class TaskViewSet(viewsets.ViewSet):
             )
         
         try:
-            requester_id = uuid.UUID(str(request.user.id))
-            task = self.task_application_service.create_task(
-                requester_id=requester_id,
-                category=serializer.validated_data["category"],
-                title=serializer.validated_data["title"],
-                description=serializer.validated_data["description"],
-                location_address_id=serializer.validated_data["location_address_id"],
-                budget=float(serializer.validated_data["budget"]),
-                scheduled_date=serializer.validated_data["scheduled_date"],
-                attribute_answers=serializer.validated_data["attribute_answers"]
-            )
-            return Response(task, status=status.HTTP_201_CREATED)
+            # Prepare task data dictionary
+            task_data = {
+                'requester_id': str(request.user.id),
+                'category': serializer.validated_data["category"],
+                'title': serializer.validated_data["title"],
+                'description': serializer.validated_data["description"],
+                'location_address': serializer.validated_data["location_address"],
+                'budget': str(serializer.validated_data["budget"]),
+                'estimated_duration': serializer.validated_data.get("estimated_duration", 60),  # Default to 60 minutes if not provided
+                'scheduled_date': serializer.validated_data["scheduled_date"].isoformat(),
+                'attributes': []
+            }
+            
+            # Add image_url if present
+            if 'image_url' in serializer.validated_data and serializer.validated_data['image_url']:
+                task_data['image_url'] = serializer.validated_data['image_url']
+                
+            # Add attributes if present
+            if 'attribute_answers' in serializer.validated_data and serializer.validated_data['attribute_answers']:
+                for name, answer in serializer.validated_data['attribute_answers'].items():
+                    task_data['attributes'].append({
+                        'name': name,
+                        'question': name.replace('_', ' ').capitalize(),
+                        'answer': answer
+                    })
+            
+            # Create the task using the application service
+            task = self.task_application_service.create_task(task_data)
+            
+            # Use the TaskSerializer to convert the domain entity to a response
+            response_serializer = TaskSerializer(task)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         except ValueError as e:
             return Response(
                 {"error": str(e)},
@@ -100,15 +132,45 @@ class TaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["get"])
-    def categories(self, request):
-        """Get all task categories with their templates"""
-        categories = self.task_application_service.get_task_categories()
-        return Response(categories)
+    @action(detail=True, methods=["get"], url_path='predefined-task/(?P<task_id>[^/.]+)')
+    def predefined_tasks(self, request, pk=None, task_id=None):
+        """Get details of a specific predefined task type
+        
+        Endpoint: GET /api/tasks/{pk}/predefined-task/{task_id}/
+        
+        This endpoint returns all the details of a specific predefined task type,
+        including its default values and attribute templates.
+        
+        Args:
+            pk: Category ID (not used)
+            task_id: UUID of the predefined task type
+        """
+        try:
+            predefined_task_id = uuid.UUID(task_id)
+            predefined_type_service = ServiceFactory.get_predefined_type_service()
+            predefined_type = predefined_type_service.get_predefined_task_by_id(predefined_task_id)
+            
+            if not predefined_type:
+                return Response(
+                    {"error": "Predefined task type not found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # Use the PredefinedTaskTypeSerializer to convert the domain entity to a response
+            serializer = PredefinedTaskTypeSerializer(predefined_type)
+            return Response(serializer.data)
+        except ValueError:
+            return Response(
+                {"error": "Invalid predefined task type ID"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
     
     @action(detail=False, methods=["post"])
-    def search(self, request):
-        """Search for tasks near a location"""
+    def search_by_location(self, request):
+        """Search for tasks near a location
+        
+        Endpoint: POST /api/tasks/search_by_location/
+        """
         serializer = TaskSearchSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -116,10 +178,9 @@ class TaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        tasks = self.task_application_service.search_tasks(
+        tasks = self.task_application_service.search_tasks_by_location(
             latitude=serializer.validated_data["latitude"],
             longitude=serializer.validated_data["longitude"],
-            radius_km=serializer.validated_data["radius_km"],
-            category=serializer.validated_data.get("category")
+            radius_km=serializer.validated_data["radius_km"]
         )
         return Response(tasks)

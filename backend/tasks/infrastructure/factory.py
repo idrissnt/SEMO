@@ -1,36 +1,39 @@
 from typing import Optional
 
 # Import repository interfaces
-from ..domain.repositories.task.task_repository import TaskRepository
-from ..domain.repositories.application.application_repository import TaskApplicationRepository
-from ..domain.repositories.application.chat_message_repository import ChatMessageRepository
-from ..domain.repositories.application.negotiation_repository import NegotiationOfferRepository
-from ..domain.repositories.assignment.assignment_repository import TaskAssignmentRepository
-from ..domain.repositories.review.review_repository import ReviewRepository
-from ..domain.repositories.category.category_template_repository import TaskCategoryTemplateRepository
-
-# Import domain services
-from ..domain.services.task_service_interface import TaskService
+from ..domain.repositories import (
+    TaskRepository,
+    TaskApplicationRepository,
+    ChatMessageRepository,
+    NegotiationOfferRepository,
+    TaskAssignmentRepository,
+    ReviewRepository,
+    PredefinedTaskTypeRepository,
+    TaskCategoryRepository
+)
 
 # Import repository implementations
-from .django_repositories.django_task_repository import DjangoTaskRepository
-from .django_repositories.django_task_application_repository import DjangoTaskApplicationRepository
-from .django_repositories.django_chat_message_repository import DjangoChatMessageRepository
-from .django_repositories.django_negotiation_offer_repository import DjangoNegotiationOfferRepository
-from .django_repositories.django_task_assignment_repository import DjangoTaskAssignmentRepository
-from .django_repositories.django_review_repository import DjangoReviewRepository
-from .django_repositories.django_task_category_template_repository import DjangoTaskCategoryTemplateRepository
-
-# Import service implementations
-from .services.task_service import DjangoTaskService
+from .django_repositories import (
+    DjangoTaskRepository,
+    DjangoTaskApplicationRepository,
+    DjangoChatMessageRepository,
+    DjangoNegotiationOfferRepository,
+    DjangoTaskAssignmentRepository,
+    DjangoReviewRepository,
+    DjangoPredefinedTaskTypeRepository,
+    DjangoTaskCategoryRepository
+)
 
 # Import application services
-from ..application.services.task.task_service import TaskApplicationService
-from ..application.services.application.application_service import ApplicationService
-from ..application.services.application.chat_service import ChatService
-from ..application.services.assignment.assignment_service import AssignmentService
-from ..application.services.review.review_service import ReviewService
-from ..application.services.category.category_template_service import CategoryTemplateService
+from application.services import (
+    TaskApplicationService,
+    ApplicationService,
+    ChatService,
+    AssignmentService,
+    ReviewService,
+    PredefinedTaskTypeService,
+    TaskCategoryService
+)
 
 
 class RepositoryFactory:
@@ -42,7 +45,8 @@ class RepositoryFactory:
     _negotiation_offer_repository: Optional[NegotiationOfferRepository] = None
     _task_assignment_repository: Optional[TaskAssignmentRepository] = None
     _review_repository: Optional[ReviewRepository] = None
-    _task_category_template_repository: Optional[TaskCategoryTemplateRepository] = None
+    _predefined_type_repository: Optional[PredefinedTaskTypeRepository] = None
+    _task_category_repository: Optional[TaskCategoryRepository] = None
     
     @classmethod
     def get_task_repository(cls) -> TaskRepository:
@@ -111,51 +115,29 @@ class RepositoryFactory:
         return cls._review_repository
     
     @classmethod
-    def get_task_category_template_repository(cls) -> TaskCategoryTemplateRepository:
-        """Get the task category template repository instance
+    def get_predefined_type_repository(cls) -> PredefinedTaskTypeRepository:
+        """Get the predefined task type repository instance
         
         Returns:
-            TaskCategoryTemplateRepository instance
+            PredefinedTaskTypeRepository instance
         """
-        if cls._task_category_template_repository is None:
-            cls._task_category_template_repository = DjangoTaskCategoryTemplateRepository()
-        return cls._task_category_template_repository
-    
-    # For testing
+        if cls._predefined_type_repository is None:
+            cls._predefined_type_repository = DjangoPredefinedTaskTypeRepository()
+        return cls._predefined_type_repository
+        
     @classmethod
-    def set_task_repository(cls, repository: TaskRepository) -> None:
-        cls._task_repository = repository
+    def get_task_category_repository(cls) -> TaskCategoryRepository:
+        """Get the task category repository instance
+        
+        Returns:
+            TaskCategoryRepository instance
+        """
+        if cls._task_category_repository is None:
+            cls._task_category_repository = DjangoTaskCategoryRepository()
+        return cls._task_category_repository
     
-    @classmethod
-    def set_task_application_repository(cls, repository: TaskApplicationRepository) -> None:
-        cls._task_application_repository = repository
-    
-    @classmethod
-    def set_chat_message_repository(cls, repository: ChatMessageRepository) -> None:
-        cls._chat_message_repository = repository
-    
-    @classmethod
-    def set_negotiation_offer_repository(cls, repository: NegotiationOfferRepository) -> None:
-        cls._negotiation_offer_repository = repository
-    
-    @classmethod
-    def set_task_assignment_repository(cls, repository: TaskAssignmentRepository) -> None:
-        cls._task_assignment_repository = repository
-    
-    @classmethod
-    def set_review_repository(cls, repository: ReviewRepository) -> None:
-        cls._review_repository = repository
-    
-    @classmethod
-    def set_task_category_template_repository(cls, repository: TaskCategoryTemplateRepository) -> None:
-        cls._task_category_template_repository = repository
-
-
 class ServiceFactory:
     """Factory for creating service instances"""
-    
-    # Domain services
-    _task_service: Optional[TaskService] = None
     
     # Application services
     _task_application_service: Optional[TaskApplicationService] = None
@@ -163,24 +145,8 @@ class ServiceFactory:
     _chat_service: Optional[ChatService] = None
     _assignment_service: Optional[AssignmentService] = None
     _review_service: Optional[ReviewService] = None
-    _category_template_service: Optional[CategoryTemplateService] = None
-    
-    # Domain service getters
-    @classmethod
-    def get_task_service(cls) -> TaskService:
-        """Get the task service instance
-        
-        Returns:
-            TaskService instance
-        """
-        if cls._task_service is None:
-            cls._task_service = DjangoTaskService(
-                task_repository=RepositoryFactory.get_task_repository(),
-                task_application_repository=RepositoryFactory.get_task_application_repository(),
-                task_assignment_repository=RepositoryFactory.get_task_assignment_repository(),
-                task_category_template_repository=RepositoryFactory.get_task_category_template_repository()
-            )
-        return cls._task_service
+    _predefined_type_service: Optional[PredefinedTaskTypeService] = None
+    _task_category_service: Optional[TaskCategoryService] = None
     
     # Application service getters
     @classmethod
@@ -193,8 +159,7 @@ class ServiceFactory:
         if cls._task_application_service is None:
             cls._task_application_service = TaskApplicationService(
                 task_repository=RepositoryFactory.get_task_repository(),
-                task_category_template_repository=RepositoryFactory.get_task_category_template_repository(),
-                task_service=cls.get_task_service()
+                predefined_type_repository=RepositoryFactory.get_predefined_type_repository(),
             )
         return cls._task_application_service
     
@@ -258,44 +223,29 @@ class ServiceFactory:
         return cls._review_service
     
     @classmethod
-    def get_category_template_service(cls) -> CategoryTemplateService:
-        """Get the category template service instance
+    def get_predefined_type_service(cls) -> PredefinedTaskTypeService:
+        """Get the predefined task type service instance
         
         Returns:
-            CategoryTemplateService instance
+            PredefinedTaskTypeService instance
         """
-        if cls._category_template_service is None:
-            cls._category_template_service = CategoryTemplateService(
-                task_category_template_repository=RepositoryFactory.get_task_category_template_repository()
+        if cls._predefined_type_service is None:
+            cls._predefined_type_service = PredefinedTaskTypeService(
+                predefined_type_repository=RepositoryFactory.get_predefined_type_repository()
             )
-        return cls._category_template_service
-    
-    # For testing - Domain services
-    @classmethod
-    def set_task_service(cls, service: TaskService) -> None:
-        cls._task_service = service
+        return cls._predefined_type_service
         
-    # For testing - Application services
     @classmethod
-    def set_task_application_service(cls, service: TaskApplicationService) -> None:
-        cls._task_application_service = service
+    def get_task_category_service(cls) -> TaskCategoryService:
+        """Get the task category service instance
+        
+        Returns:
+            TaskCategoryService instance
+        """
+        if cls._task_category_service is None:
+            cls._task_category_service = TaskCategoryService(
+                task_category_repository=RepositoryFactory.get_task_category_repository()
+            )
+        return cls._task_category_service
     
-    @classmethod
-    def set_application_service(cls, service: ApplicationService) -> None:
-        cls._application_service = service
-    
-    @classmethod
-    def set_chat_service(cls, service: ChatService) -> None:
-        cls._chat_service = service
-    
-    @classmethod
-    def set_assignment_service(cls, service: AssignmentService) -> None:
-        cls._assignment_service = service
-    
-    @classmethod
-    def set_review_service(cls, service: ReviewService) -> None:
-        cls._review_service = service
-    
-    @classmethod
-    def set_category_template_service(cls, service: CategoryTemplateService) -> None:
-        cls._category_template_service = service
+   
