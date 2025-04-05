@@ -68,7 +68,7 @@ class PredefinedTaskTypeService:
         # Extract required fields
         category = TaskCategory(template_data['category'])
         name = template_data['name']
-        image_url = template_data.get('image_url', 'tasks/default.png')
+        image_url = template_data.get('image_url')
         title_template = template_data['title_template']
         description_template = template_data['description_template']
         attribute_templates = template_data['attribute_templates']
@@ -76,7 +76,7 @@ class PredefinedTaskTypeService:
         
         # Create template
         template = PredefinedTaskType(
-            category=category,
+            category_id=category.id,
             name=name,
             image_url=image_url,
             title_template=title_template,

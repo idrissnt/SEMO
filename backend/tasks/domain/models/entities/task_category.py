@@ -29,6 +29,9 @@ class TaskCategoryType(Enum):
     WEDDING_HELP = "wedding_help"
     EVENT_ORGANIZATION = "event_organization"
     PHOTOGRAPHY_FINDING = "photography_finding"
+    VIDEOGRAPHY_FINDING = "videography_finding"
+    APPLIANCE_REPAIR = "appliance_repair"
+    
 
 @dataclass
 class TaskCategory:

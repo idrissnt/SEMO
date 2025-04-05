@@ -4,12 +4,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 import uuid
 
-from ....infrastructure.factory import ServiceFactory
-from ..serializers import (
+from infrastructure.factory import ServiceFactory
+from serializers import (
     TaskSerializer,
     TaskCreateSerializer,
     TaskSearchSerializer,
-    PredefinedTaskTypeSerializer
 )
 
 
@@ -74,7 +73,7 @@ class TaskViewSet(viewsets.ViewSet):
                 'description': serializer.validated_data["description"],
                 'location_address': serializer.validated_data["location_address"],
                 'budget': str(serializer.validated_data["budget"]),
-                'estimated_duration': serializer.validated_data.get("estimated_duration", 60),  # Default to 60 minutes if not provided
+                'estimated_duration': serializer.validated_data.get("estimated_duration"),
                 'scheduled_date': serializer.validated_data["scheduled_date"].isoformat(),
                 'attributes': []
             }
@@ -131,40 +130,7 @@ class TaskViewSet(viewsets.ViewSet):
                 {"error": str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
-    
-    @action(detail=True, methods=["get"], url_path='predefined-task/(?P<task_id>[^/.]+)')
-    def predefined_tasks(self, request, pk=None, task_id=None):
-        """Get details of a specific predefined task type
         
-        Endpoint: GET /api/tasks/{pk}/predefined-task/{task_id}/
-        
-        This endpoint returns all the details of a specific predefined task type,
-        including its default values and attribute templates.
-        
-        Args:
-            pk: Category ID (not used)
-            task_id: UUID of the predefined task type
-        """
-        try:
-            predefined_task_id = uuid.UUID(task_id)
-            predefined_type_service = ServiceFactory.get_predefined_type_service()
-            predefined_type = predefined_type_service.get_predefined_task_by_id(predefined_task_id)
-            
-            if not predefined_type:
-                return Response(
-                    {"error": "Predefined task type not found"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            # Use the PredefinedTaskTypeSerializer to convert the domain entity to a response
-            serializer = PredefinedTaskTypeSerializer(predefined_type)
-            return Response(serializer.data)
-        except ValueError:
-            return Response(
-                {"error": "Invalid predefined task type ID"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-    
     @action(detail=False, methods=["post"])
     def search_by_location(self, request):
         """Search for tasks near a location

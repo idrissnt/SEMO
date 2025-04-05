@@ -3,9 +3,9 @@ Application services for the tasks app.
 This module re-exports all application services for backward compatibility.
 """
 # Import from task and predefined task services
-from .task_and_predefined_task.task_service import TaskApplicationService
-from .task_and_predefined_task.predefined_task_service import PredefinedTaskTypeService
-from .task_and_predefined_task.task_category_service import TaskCategoryService
+from .task.task_service import TaskApplicationService
+from .task.predefined_task_service import PredefinedTaskTypeService
+from .task.task_category_service import TaskCategoryService
 
 # Import from application services
 from .application.application_service import ApplicationService

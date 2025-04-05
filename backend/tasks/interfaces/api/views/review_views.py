@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 import uuid
 
-from ....infrastructure.factory import ServiceFactory
-from ..serializers import ReviewSerializer
+from infrastructure.factory import ServiceFactory
+from serializers import ReviewSerializer
 
 
 class ReviewViewSet(viewsets.ViewSet):

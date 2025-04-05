@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 import uuid
 
-from ....infrastructure.factory import ServiceFactory
-from ..serializers import TaskApplicationSerializer
+from infrastructure.factory import ServiceFactory
+from serializers import TaskApplicationSerializer
 
 
 class TaskApplicationViewSet(viewsets.ViewSet):

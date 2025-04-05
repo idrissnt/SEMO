@@ -23,6 +23,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
         super().__init__(**kwargs)
         self.task_category_service = ServiceFactory.get_task_category_service()
     
+    @action(detail=False, methods=["get"])
     def list(self, request):
         """Get all task categories
         
@@ -35,6 +36,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
         serializer = TaskCategorySerializer(categories, many=True)
         return Response(serializer.data)
     
+    @action(detail=True, methods=["get"])
     def retrieve(self, request, pk=None):
         """Get a specific task category by ID
         
@@ -61,6 +63,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
+    @action(detail=False, methods=["post"])
     def create(self, request):
         """Create a new task category
         
@@ -79,68 +82,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
             response_serializer.data,
             status=status.HTTP_201_CREATED
         )
-    
-    def update(self, request, pk=None):
-        """Update an existing task category
-        
-        Endpoint: PUT /api/categories/{pk}/
-        
-        Args:
-            pk: UUID of the category to update
-        """
-        try:
-            category_id = uuid.UUID(pk)
-            serializer = TaskCategorySerializer(data=request.data)
-            
-            if not serializer.is_valid():
-                return Response(
-                    serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
-            category = self.task_category_service.update_category(
-                category_id, serializer.validated_data
-            )
-            
-            if not category:
-                return Response(
-                    {"error": "Category not found"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            response_serializer = TaskCategorySerializer(category)
-            return Response(response_serializer.data)
-        except ValueError:
-            return Response(
-                {"error": "Invalid category ID"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-    
-    def destroy(self, request, pk=None):
-        """Delete a task category
-        
-        Endpoint: DELETE /api/categories/{pk}/
-        
-        Args:
-            pk: UUID of the category to delete
-        """
-        try:
-            category_id = uuid.UUID(pk)
-            success = self.task_category_service.delete_category(category_id)
-            
-            if not success:
-                return Response(
-                    {"error": "Category not found"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except ValueError:
-            return Response(
-                {"error": "Invalid category ID"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-            
+
     @action(detail=True, methods=["get"])
     def tasks(self, request, pk=None):
         """Get all tasks for a specific category
@@ -176,5 +118,60 @@ class TaskCategoryViewSet(viewsets.ViewSet):
         except ValueError:
             return Response(
                 {"error": "Invalid category ID"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
+    @action(detail=True, url_path='tasks/(?P<task_id>[^/.]+)', methods=["get"])
+    def task_detail(self, request, pk=None, task_id=None):
+        """Get a single task in a specific category
+        
+        Endpoint: GET /api/categories/{pk}/tasks/{task_id}/
+        
+        This endpoint returns a specific task that belongs to a specific category.
+        It verifies both that the category exists and that the task belongs to that category.
+        
+        Args:
+            pk: UUID of the category
+            task_id: UUID of the task
+        """
+        try:
+            category_id = uuid.UUID(pk)
+            task_id = uuid.UUID(task_id)
+            
+            # First check if the category exists
+            category = self.task_category_service.get_category_by_id(category_id)
+            if not category:
+                return Response(
+                    {"error": "Category not found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # Get the task application service to fetch the task
+            task_service = ServiceFactory.get_task_application_service()
+            
+            # Get the specific task
+            task = task_service.get_task_by_id(task_id)
+            
+            # Check if task exists
+            if not task:
+                return Response(
+                    {"error": "Task not found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+                
+            # Check if task belongs to the specified category
+            if str(task.category_id) != str(category_id):
+                return Response(
+                    {"error": "Task does not belong to the specified category"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # Serialize the task
+            serializer = TaskSerializer(task)
+            
+            return Response(serializer.data)
+        except ValueError:
+            return Response(
+                {"error": "Invalid category ID or task ID"},
                 status=status.HTTP_400_BAD_REQUEST
             )
