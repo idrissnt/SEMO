@@ -67,6 +67,7 @@ class TaskPerformerProfile:
     user_id: uuid.UUID
     user_name: str
     user_email: str
+    profile_photo_url: Optional[str] = None
     skills: List[str]
     experience_level: Union[ExperienceLevel, str]  # Using value object
     availability: Dict[str, Any]  # JSON structure for availability schedule

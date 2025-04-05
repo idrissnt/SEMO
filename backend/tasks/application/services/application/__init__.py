@@ -1,7 +1,7 @@
 """
 Application services.
 """
-from .application_service import ApplicationService
+from .application_service import TaskApplicationService
 from .chat_service import ChatService
 
-__all__ = ['ApplicationService', 'ChatService']
+__all__ = ['TaskApplicationService', 'ChatService']

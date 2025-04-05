@@ -5,8 +5,8 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 import uuid
 
-from ...models.entities.task_application import TaskApplication
-from ...models.value_objects.application_status import ApplicationStatus
+from models import (TaskApplication,
+                    ApplicationStatus)
 
 
 class TaskApplicationRepository(ABC):
@@ -73,11 +73,11 @@ class TaskApplicationRepository(ABC):
         pass
     
     @abstractmethod
-    def update(self, application: TaskApplication) -> TaskApplication:
+    def update_status(self, application: TaskApplication) -> TaskApplication:
         """Update an existing application
         
         Args:
-            application: TaskApplication object with updated fields
+            application: TaskApplication object with updated status
             
         Returns:
             Updated TaskApplication object

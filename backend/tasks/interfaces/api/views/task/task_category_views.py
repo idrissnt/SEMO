@@ -3,7 +3,8 @@ API views for task categories.
 """
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 import uuid
 
 from infrastructure.factory import ServiceFactory
@@ -18,12 +19,14 @@ class TaskCategoryViewSet(viewsets.ViewSet):
     including listing all categories, retrieving a specific category,
     and creating/updating/deleting categories.
     """
+    permission_classes = [IsAuthenticated, IsAdminUser]
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.task_category_service = ServiceFactory.get_task_category_service()
     
     @action(detail=False, methods=["get"])
+    @permission_classes([AllowAny])
     def list(self, request):
         """Get all task categories
         
@@ -37,6 +40,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=["get"])
+    @permission_classes([AllowAny])
     def retrieve(self, request, pk=None):
         """Get a specific task category by ID
         
@@ -64,6 +68,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
             )
     
     @action(detail=False, methods=["post"])
+    @permission_classes([IsAdminUser])
     def create(self, request):
         """Create a new task category
         
@@ -84,6 +89,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
         )
 
     @action(detail=True, methods=["get"])
+    @permission_classes([AllowAny])
     def tasks(self, request, pk=None):
         """Get all tasks for a specific category
         
@@ -122,6 +128,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
             )
     
     @action(detail=True, url_path='tasks/(?P<task_id>[^/.]+)', methods=["get"])
+    @permission_classes([AllowAny])
     def task_detail(self, request, pk=None, task_id=None):
         """Get a single task in a specific category
         

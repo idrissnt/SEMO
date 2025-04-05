@@ -3,11 +3,11 @@ import uuid
 from django.db import transaction
 
 # Import domain entities
-from ...domain.models import TaskAssignment
-from ...domain.repositories import TaskAssignmentRepository
+from domain.models import TaskAssignment
+from domain.repositories import TaskAssignmentRepository
 
 # Import ORM models
-from ..django_models import TaskAssignmentModel
+from django_models import TaskAssignmentModel
 
 
 class DjangoTaskAssignmentRepository(TaskAssignmentRepository):
@@ -55,6 +55,18 @@ class DjangoTaskAssignmentRepository(TaskAssignmentRepository):
         assignment_models = TaskAssignmentModel.objects.filter(performer_id=performer_id)
         return [self._assignment_model_to_domain(model) for model in assignment_models]
     
+    def get_active_by_performer_id(self, performer_id: uuid.UUID) -> List[TaskAssignment]:
+        """Get all active assignments for a performer (assigned but not completed)
+        
+        Args:
+            performer_id: UUID of the performer
+            
+        Returns:
+            List of TaskAssignment objects
+        """
+        assignment_models = TaskAssignmentModel.objects.filter(performer_id=performer_id, completed_at__isnull=True)
+        return [self._assignment_model_to_domain(model) for model in assignment_models]
+
     @transaction.atomic
     def create(self, assignment: TaskAssignment) -> TaskAssignment:
         """Create a new assignment
@@ -123,8 +135,8 @@ class DjangoTaskAssignmentRepository(TaskAssignmentRepository):
         """
         return TaskAssignment(
             id=model.id,
-            task_id=model.task_id,
-            performer_id=model.performer_id,
+            task_id=model.task.id,
+            performer_id=model.performer.id,
             assigned_at=model.assigned_at,
             started_at=model.started_at,
             completed_at=model.completed_at

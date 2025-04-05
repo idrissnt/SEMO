@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 import uuid
 
 from infrastructure.factory import ServiceFactory
@@ -18,23 +18,24 @@ class TaskViewSet(viewsets.ViewSet):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.task_application_service = ServiceFactory.get_task_application_service()
+        self.task_service = ServiceFactory.get_task_service()
     
     @action(detail=False, methods=["get"])
     def list(self, request):
         """Get all tasks created by the authenticated user"""
         requester_id = uuid.UUID(str(request.user.id))
-        tasks = self.task_application_service.get_tasks_by_requester(requester_id)
+        tasks = self.task_service.get_tasks_by_requester(requester_id)
         # Use the TaskSerializer to convert the list of domain entities to a response
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
     
     @action(detail=True, methods=["get"])
+    @permission_classes([AllowAny])
     def retrieve(self, request, pk=None):
         """Get a task by ID"""
         try:
             task_id = uuid.UUID(pk)
-            task = self.task_application_service.get_task_by_id(task_id)
+            task = self.task_service.get_task_by_id(task_id)
             if not task:
                 return Response(
                     {"error": "Task not found"},
@@ -92,7 +93,7 @@ class TaskViewSet(viewsets.ViewSet):
                     })
             
             # Create the task using the application service
-            task = self.task_application_service.create_task(task_data)
+            task = self.task_service.create_task(task_data)
             
             # Use the TaskSerializer to convert the domain entity to a response
             response_serializer = TaskSerializer(task)
@@ -109,7 +110,7 @@ class TaskViewSet(viewsets.ViewSet):
         try:
             task_id = uuid.UUID(pk)
             requester_id = uuid.UUID(str(request.user.id))
-            task = self.task_application_service.publish_task(task_id, requester_id)
+            task = self.task_service.publish_task(task_id, requester_id)
             return Response(task)
         except ValueError as e:
             return Response(
@@ -123,7 +124,7 @@ class TaskViewSet(viewsets.ViewSet):
         try:
             task_id = uuid.UUID(pk)
             user_id = uuid.UUID(str(request.user.id))
-            task = self.task_application_service.cancel_task(task_id, user_id)
+            task = self.task_service.cancel_task(task_id, user_id)
             return Response(task)
         except ValueError as e:
             return Response(
@@ -132,10 +133,13 @@ class TaskViewSet(viewsets.ViewSet):
             )
         
     @action(detail=False, methods=["post"])
+    @permission_classes([AllowAny])
     def search_by_location(self, request):
         """Search for tasks near a location
         
         Endpoint: POST /api/tasks/search_by_location/
+        
+        This endpoint is publicly accessible (no authentication required).
         """
         serializer = TaskSearchSerializer(data=request.data)
         if not serializer.is_valid():
@@ -144,7 +148,7 @@ class TaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        tasks = self.task_application_service.search_tasks_by_location(
+        tasks = self.task_service.search_tasks_by_location(
             latitude=serializer.validated_data["latitude"],
             longitude=serializer.validated_data["longitude"],
             radius_km=serializer.validated_data["radius_km"]

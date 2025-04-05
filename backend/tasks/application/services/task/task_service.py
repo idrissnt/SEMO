@@ -11,7 +11,7 @@ from domain.models import (Task, TaskAttribute,TaskCategory,
 from domain.repositories import (TaskRepository,PredefinedTaskTypeRepository)
 
 
-class TaskApplicationService:
+class TaskService:
     """Application service for task-related operations"""
     
     def __init__(

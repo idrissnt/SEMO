@@ -3,13 +3,14 @@ Application service for task assignment-related operations.
 """
 from typing import List, Optional, Dict, Any
 import uuid
-from datetime import datetime
 
-from ....domain.models.entities.task_assignment import TaskAssignment
-from ....domain.models.value_objects.task_status import TaskStatus
-from ....domain.repositories.task.task_repository import TaskRepository
-from ....domain.repositories.assignment.assignment_repository import TaskAssignmentRepository
-from ....domain.repositories.application.application_repository import TaskApplicationRepository
+from domain.models import ( TaskAssignment,
+                          TaskStatus,
+                          ApplicationStatus)
+
+from domain.repositories import (TaskRepository,
+                                TaskAssignmentRepository,
+                                TaskApplicationRepository)
 
 
 class AssignmentService:
@@ -25,66 +26,66 @@ class AssignmentService:
         self.task_assignment_repository = task_assignment_repository
         self.task_application_repository = task_application_repository
     
-    def get_assignment(self, assignment_id: uuid.UUID) -> Optional[Dict[str, Any]]:
+    def get_assignment(self, assignment_id: uuid.UUID) -> Optional[TaskAssignment]:
         """Get assignment by ID
         
         Args:
             assignment_id: UUID of the assignment
             
         Returns:
-            Dictionary with assignment information if found, None otherwise
+            TaskAssignment object if found, None otherwise
         """
         assignment = self.task_assignment_repository.get_by_id(assignment_id)
         if assignment:
-            return self._assignment_to_dict(assignment)
+            return assignment
         return None
     
-    def get_assignment_by_task(self, task_id: uuid.UUID) -> Optional[Dict[str, Any]]:
+    def get_assignment_by_task(self, task_id: uuid.UUID) -> Optional[TaskAssignment]:
         """Get assignment for a task
         
         Args:
             task_id: UUID of the task
             
         Returns:
-            Dictionary with assignment information if found, None otherwise
+            TaskAssignment object if found, None otherwise
         """
         assignment = self.task_assignment_repository.get_by_task_id(task_id)
         if assignment:
-            return self._assignment_to_dict(assignment)
+            return assignment
         return None
     
-    def get_assignments_by_performer(self, performer_id: uuid.UUID) -> List[Dict[str, Any]]:
+    def get_assignments_by_performer(self, performer_id: uuid.UUID) -> List[TaskAssignment]:
         """Get all assignments for a performer
         
         Args:
             performer_id: UUID of the performer
             
         Returns:
-            List of dictionaries with assignment information
+            List of TaskAssignment objects
         """
         assignments = self.task_assignment_repository.get_by_performer_id(performer_id)
-        return [self._assignment_to_dict(assignment) for assignment in assignments]
+        return assignments
     
-    def get_active_assignments_by_performer(self, performer_id: uuid.UUID) -> List[Dict[str, Any]]:
+    def get_active_assignments_by_performer(self, performer_id: uuid.UUID) -> List[TaskAssignment]:
         """Get all active assignments for a performer (assigned but not completed)
         
         Args:
             performer_id: UUID of the performer
             
         Returns:
-            List of dictionaries with assignment information
+            List of TaskAssignment objects
         """
         assignments = self.task_assignment_repository.get_active_by_performer_id(performer_id)
-        return [self._assignment_to_dict(assignment) for assignment in assignments]
+        return assignments
     
-    def create_assignment(self, assignment_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def create_assignment(self, assignment_data: Dict[str, Any]) -> Optional[TaskAssignment]:
         """Create a new assignment
         
         Args:
             assignment_data: Dictionary with assignment data
             
         Returns:
-            Dictionary with created assignment information if successful, None otherwise
+            TaskAssignment object if successful, None otherwise
         """
         # Extract required fields
         task_id = uuid.UUID(assignment_data['task_id'])
@@ -99,7 +100,7 @@ class AssignmentService:
         applications = self.task_application_repository.get_by_task_id(task_id)
         performer_application = next((app for app in applications 
                                      if app.performer_id == performer_id 
-                                     and app.status.value == 'accepted'), None)
+                                     and app.status.value == ApplicationStatus.ACCEPTED.value), None)
         if not performer_application:
             return None
         
@@ -116,21 +117,19 @@ class AssignmentService:
         task.assign(performer_id)
         self.task_repository.update(task)
         
-        return self._assignment_to_dict(created_assignment)
+        return created_assignment
     
-    def start_assignment(self, assignment_id: uuid.UUID) -> Optional[Dict[str, Any]]:
+    def start_assignment(self, assignment_id: uuid.UUID) -> TaskAssignment:
         """Mark an assignment as started
         
         Args:
             assignment_id: UUID of the assignment to start
             
         Returns:
-            Dictionary with updated assignment information if successful, None otherwise
+            Updated TaskAssignment object
         """
         # Get existing assignment
         assignment = self.task_assignment_repository.get_by_id(assignment_id)
-        if not assignment:
-            return None
         
         # Start assignment
         assignment.start()
@@ -144,21 +143,19 @@ class AssignmentService:
             task.start()
             self.task_repository.update(task)
         
-        return self._assignment_to_dict(updated_assignment)
+        return updated_assignment
     
-    def complete_assignment(self, assignment_id: uuid.UUID) -> Optional[Dict[str, Any]]:
+    def complete_assignment(self, assignment_id: uuid.UUID) -> TaskAssignment:
         """Mark an assignment as completed
         
         Args:
             assignment_id: UUID of the assignment to complete
             
         Returns:
-            Dictionary with updated assignment information if successful, None otherwise
+            Updated TaskAssignment object
         """
         # Get existing assignment
         assignment = self.task_assignment_repository.get_by_id(assignment_id)
-        if not assignment:
-            return None
         
         # Complete assignment
         assignment.complete()
@@ -172,30 +169,4 @@ class AssignmentService:
             task.complete()
             self.task_repository.update(task)
         
-        return self._assignment_to_dict(updated_assignment)
-    
-    def _assignment_to_dict(self, assignment: TaskAssignment) -> Dict[str, Any]:
-        """Convert TaskAssignment object to dictionary
-        
-        Args:
-            assignment: TaskAssignment object
-            
-        Returns:
-            Dictionary with assignment information
-        """
-        result = {
-            'id': str(assignment.id),
-            'task_id': str(assignment.task_id),
-            'performer_id': str(assignment.performer_id),
-            'assigned_at': assignment.assigned_at.isoformat(),
-            'started_at': None,
-            'completed_at': None
-        }
-        
-        if assignment.started_at:
-            result['started_at'] = assignment.started_at.isoformat()
-        
-        if assignment.completed_at:
-            result['completed_at'] = assignment.completed_at.isoformat()
-        
-        return result
+        return updated_assignment

@@ -5,8 +5,8 @@ from django.db import models
 import uuid
 
 from the_user_app.infrastructure.django_models.orm_models import TaskPerformerProfileModel
-from tasks.infrastructure.django_models.task.task import TaskModel
-from tasks.domain.models.value_objects.application_status import ApplicationStatus
+from django_models import TaskModel
+from domain.models import ApplicationStatus
 
 
 class TaskApplicationModel(models.Model):

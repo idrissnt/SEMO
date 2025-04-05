@@ -3,11 +3,11 @@ import uuid
 from django.db import transaction
 
 # Import domain entities
-from ...domain.models import TaskApplication
-from ...domain.repositories import TaskApplicationRepository
+from domain.models import TaskApplication, ApplicationStatus
+from domain.repositories import TaskApplicationRepository
 
 # Import ORM models
-from ..django_models import TaskApplicationModel
+from django_models import TaskApplicationModel
 
 
 class DjangoTaskApplicationRepository(TaskApplicationRepository):
@@ -66,27 +66,29 @@ class DjangoTaskApplicationRepository(TaskApplicationRepository):
             id=application.id,
             task_id=application.task_id,
             performer_id=application.performer_id,
-            message=application.message,
-            price_offer=application.price_offer,
-            created_at=application.created_at
+            initial_message=application.initial_message,
+            initial_offer=application.initial_offer,
+            status=application.status.value,
+            chat_enabled=application.chat_enabled,
+            created_at=application.created_at,
+            updated_at=application.updated_at
         )
         application_model.save()
         return self._application_model_to_domain(application_model)
     
     @transaction.atomic
-    def update(self, application: TaskApplication) -> TaskApplication:
+    def update_status(self, application: TaskApplication) -> TaskApplication:
         """Update an existing application
         
         Args:
-            application: TaskApplication object with updated fields
+            application: TaskApplication object with updated status
             
         Returns:
             Updated TaskApplication object
         """
         try:
             application_model = TaskApplicationModel.objects.get(id=application.id)
-            application_model.message = application.message
-            application_model.price_offer = application.price_offer
+            application_model.status = application.status.value
             application_model.save()
             return self._application_model_to_domain(application_model)
         except TaskApplicationModel.DoesNotExist:
@@ -120,9 +122,12 @@ class DjangoTaskApplicationRepository(TaskApplicationRepository):
         """
         return TaskApplication(
             id=model.id,
-            task_id=model.task_id,
-            performer_id=model.performer_id,
-            message=model.message,
-            price_offer=float(model.price_offer) if model.price_offer else None,
-            created_at=model.created_at
+            task_id=model.task.id,
+            performer_id=model.performer.id,
+            initial_message=model.initial_message,
+            initial_offer=float(model.initial_offer) if model.initial_offer else None,
+            status=ApplicationStatus(model.status),
+            chat_enabled=model.chat_enabled,
+            created_at=model.created_at,
+            updated_at=model.updated_at
         )

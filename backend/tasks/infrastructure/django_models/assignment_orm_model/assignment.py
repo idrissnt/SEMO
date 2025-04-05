@@ -5,7 +5,7 @@ from django.db import models
 import uuid
 
 from the_user_app.infrastructure.django_models.orm_models import TaskPerformerProfileModel
-from tasks.infrastructure.django_models.task.task import TaskModel
+from django_models import TaskModel
 
 
 class TaskAssignmentModel(models.Model):

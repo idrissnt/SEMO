@@ -114,6 +114,7 @@ class TaskPerformerProfileModel(models.Model):
     user = models.OneToOneField(CustomUserModel, on_delete=models.CASCADE, related_name='performer_profile')
     skills = ArrayField(models.CharField(max_length=100), default=list)
     experience_level = models.CharField(max_length=20, choices=ExperienceLevel.choices())
+    profile_photo_url = models.URLField(null=True, blank=True, default=None)
     availability = models.JSONField(default=dict)  # JSON structure for availability schedule
     preferred_radius_km = models.IntegerField(default=10)
     bio = models.TextField(null=True, blank=True)

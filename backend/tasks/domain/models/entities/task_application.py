@@ -6,7 +6,7 @@ from typing import Optional, List
 import uuid
 from datetime import datetime
 
-from tasks.domain.models.value_objects.application_status import ApplicationStatus
+from tasks.domain.models import ApplicationStatus
 from the_user_app.domain.models.entities import TaskPerformerProfile
 
 
@@ -51,7 +51,6 @@ class TaskApplication:
         """Accept the application"""
         if self.status in [ApplicationStatus.PENDING, ApplicationStatus.NEGOTIATING]:
             self.status = ApplicationStatus.ACCEPTED
-            self.chat_enabled = True  # Enable chat after acceptance
             self.updated_at = datetime.now()
     
     def reject(self) -> None:

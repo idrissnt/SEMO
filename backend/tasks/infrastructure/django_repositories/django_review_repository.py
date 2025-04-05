@@ -3,11 +3,11 @@ import uuid
 from django.db import transaction
 
 # Import domain entities
-from ...domain.models import Review
-from ...domain.repositories import ReviewRepository
+from domain.models import Review
+from domain.repositories import ReviewRepository
 
 # Import ORM models
-from ..django_models import ReviewModel
+from django_models import ReviewModel
 
 
 class DjangoReviewRepository(ReviewRepository):
@@ -121,9 +121,9 @@ class DjangoReviewRepository(ReviewRepository):
         """
         return Review(
             id=model.id,
-            task_id=model.task_id,
-            reviewer_id=model.reviewer_id,
-            reviewee_id=model.reviewee_id,
+            task_id=model.task.id,
+            reviewer_id=model.reviewer.id,
+            reviewee_id=model.reviewee.id,
             rating=model.rating,
             comment=model.comment,
             created_at=model.created_at

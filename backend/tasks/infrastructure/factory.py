@@ -26,8 +26,8 @@ from .django_repositories import (
 
 # Import application services
 from application.services import (
+    TaskService,
     TaskApplicationService,
-    ApplicationService,
     ChatService,
     AssignmentService,
     ReviewService,
@@ -140,8 +140,8 @@ class ServiceFactory:
     """Factory for creating service instances"""
     
     # Application services
+    _task_service: Optional[TaskService] = None
     _task_application_service: Optional[TaskApplicationService] = None
-    _application_service: Optional[ApplicationService] = None
     _chat_service: Optional[ChatService] = None
     _assignment_service: Optional[AssignmentService] = None
     _review_service: Optional[ReviewService] = None
@@ -150,28 +150,28 @@ class ServiceFactory:
     
     # Application service getters
     @classmethod
+    def get_task_service(cls) -> TaskService:
+        """Get the task service instance
+        
+        Returns:
+            TaskService instance
+        """
+        if cls._task_service is None:
+            cls._task_service = TaskService(
+                task_repository=RepositoryFactory.get_task_repository(),
+                predefined_type_repository=RepositoryFactory.get_predefined_type_repository(),
+            )
+        return cls._task_service
+    
+    @classmethod
     def get_task_application_service(cls) -> TaskApplicationService:
-        """Get the task application service instance
+        """Get the application service instance
         
         Returns:
             TaskApplicationService instance
         """
         if cls._task_application_service is None:
             cls._task_application_service = TaskApplicationService(
-                task_repository=RepositoryFactory.get_task_repository(),
-                predefined_type_repository=RepositoryFactory.get_predefined_type_repository(),
-            )
-        return cls._task_application_service
-    
-    @classmethod
-    def get_application_service(cls) -> ApplicationService:
-        """Get the application service instance
-        
-        Returns:
-            ApplicationService instance
-        """
-        if cls._application_service is None:
-            cls._application_service = ApplicationService(
                 task_repository=RepositoryFactory.get_task_repository(),
                 task_application_repository=RepositoryFactory.get_task_application_repository(),
                 negotiation_repository=RepositoryFactory.get_negotiation_offer_repository()
