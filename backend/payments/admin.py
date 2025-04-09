@@ -3,15 +3,14 @@ from .models import Payment
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'order', 'amount', 'status', 'payment_method', 'created_at']
-    list_filter = ['status', 'payment_method', 'created_at']
-    search_fields = ['order__user__email', 'transaction_id']
-    readonly_fields = ['created_at', 'transaction_id']
+    list_display = ['id', 'amount', 'status', 'created_at']
+    list_filter = ['status', 'created_at']
+    search_fields = ['transaction_id']
     date_hierarchy = 'created_at'
 
     fieldsets = (
         ('Payment Details', {
-            'fields': ('order', 'amount', 'payment_method', 'status')
+            'fields': ('amount', 'status')
         }),
         ('Transaction Info', {
             'fields': ('transaction_id', 'created_at')

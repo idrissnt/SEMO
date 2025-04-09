@@ -28,22 +28,6 @@ class UserSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=255, required=False, allow_null=True)
     phone_number = serializers.CharField(max_length=15, required=False, allow_null=True)
     role = serializers.ChoiceField(choices=['customer', 'driver'], default='customer', required=False)
-    has_vehicle = serializers.BooleanField(required=False, default=False)
-    license_number = serializers.CharField(max_length=100, required=False, allow_null=True)
-    is_available = serializers.BooleanField(read_only=True, default=True)
-    
-    def validate(self, attrs):
-        # Validate driver-specific fields
-        if attrs.get('role') == 'driver':
-            if not attrs.get('has_vehicle'):
-                raise serializers.ValidationError(
-                    "Vehicle is required for drivers"
-                )
-            if not attrs.get('license_number'):
-                raise serializers.ValidationError(
-                    "License number is required for drivers"
-                )
-        return attrs
 
 class UserProfileSerializer(serializers.Serializer):
     """Serializer for User with addresses"""
@@ -53,9 +37,6 @@ class UserProfileSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=255, required=False, allow_null=True)
     phone_number = serializers.CharField(max_length=15, required=False, allow_null=True)
     role = serializers.ChoiceField(choices=['customer', 'driver'], required=False)
-    has_vehicle = serializers.BooleanField(required=False)
-    license_number = serializers.CharField(max_length=100, required=False, allow_null=True)
-    is_available = serializers.BooleanField(required=False)
     addresses = AddressSerializer(many=True, read_only=True)
 
 class LoginRequestSerializer(serializers.Serializer):

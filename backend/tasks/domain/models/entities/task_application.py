@@ -6,7 +6,7 @@ from typing import Optional, List
 import uuid
 from datetime import datetime
 
-from tasks.domain.models import ApplicationStatus
+from ..value_objects.application_status import ApplicationStatus
 from the_user_app.domain.models.entities import TaskPerformerProfile
 
 
@@ -26,8 +26,8 @@ class TaskApplication:
     task_id: uuid.UUID
     performer_id: uuid.UUID  # ID of the TaskPerformerProfile
     performer: Optional[TaskPerformerProfile] = None  # Reference to the TaskPerformerProfile entity
-    initial_message: str
-    initial_offer: float
+    initial_message: Optional[str] = None
+    initial_offer: Optional[float] = None
     status: ApplicationStatus = ApplicationStatus.PENDING
     negotiation_history: List[NegotiationOffer] = field(default_factory=list)
     chat_enabled: bool = False  # Only enabled after price agreement

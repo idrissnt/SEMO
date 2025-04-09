@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Dict, Any
 import uuid
 
-from ..models.entities.conversation import Conversation
+from ..models import Conversation
 
 
 class ConversationRepository(ABC):

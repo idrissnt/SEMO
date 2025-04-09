@@ -5,8 +5,6 @@ This module provides configuration settings and integration helpers
 for the messaging system.
 """
 import os
-from .infrastructure.channel_layers import get_channel_layer_config, get_redis_config
-
 
 class MessagingConfig:
     """
@@ -30,32 +28,6 @@ class MessagingConfig:
         ]
     
     @staticmethod
-    def get_channel_layers(environment=None):
-        """
-        Get the channel layers configuration.
-        
-        Args:
-            environment: The environment to get the configuration for.
-        
-        Returns:
-            A dictionary with the channel layers configuration.
-        """
-        return get_channel_layer_config(environment)
-    
-    @staticmethod
-    def get_caches(environment=None):
-        """
-        Get the cache configuration for Redis.
-        
-        Args:
-            environment: The environment to get the configuration for.
-        
-        Returns:
-            A dictionary with the cache configuration.
-        """
-        return get_redis_config(environment)
-    
-    @staticmethod
     def get_asgi_application():
         """
         Get the ASGI application for the messaging system.
@@ -63,7 +35,7 @@ class MessagingConfig:
         Returns:
             The path to the ASGI application.
         """
-        return 'messaging.asgi.application'
+        return 'backend.asgi.application'
     
     @staticmethod
     def get_websocket_url_patterns():
@@ -106,7 +78,6 @@ class MessagingConfig:
         Returns:
             The modified settings dictionary.
         """
-        environment = os.environ.get('DJANGO_ENV', 'development')
         
         # Add installed apps
         if 'INSTALLED_APPS' in settings_dict:
@@ -116,12 +87,6 @@ class MessagingConfig:
         
         # Configure ASGI application
         settings_dict['ASGI_APPLICATION'] = MessagingConfig.get_asgi_application()
-        
-        # Configure channel layers
-        settings_dict['CHANNEL_LAYERS'] = MessagingConfig.get_channel_layers(environment)
-        
-        # Configure caches
-        settings_dict['CACHES'] = MessagingConfig.get_caches(environment)
         
         # Configure WebSocket URL
         websocket_url = os.environ.get('WEBSOCKET_URL', 'ws://localhost:8000')

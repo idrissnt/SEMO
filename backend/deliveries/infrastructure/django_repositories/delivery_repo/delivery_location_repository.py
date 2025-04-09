@@ -7,7 +7,7 @@ from django.contrib.gis.db.models.functions import Distance
 
 from deliveries.domain.models.entities import DeliveryLocation
 from deliveries.domain.models.value_objects import GeoPoint
-from deliveries.domain.repositories.delivery_location_repository_interfaces import DeliveryLocationRepository
+from deliveries.domain.repositories.delivery_repo.delivery_location_repository_interfaces import DeliveryLocationRepository
 from deliveries.infrastructure.django_models.delivery_orm_models.delivery_models import DeliveryLocationModel
 
 

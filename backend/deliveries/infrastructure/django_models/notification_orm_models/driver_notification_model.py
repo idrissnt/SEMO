@@ -5,7 +5,7 @@ This module provides the Django ORM model for storing driver notifications.
 """
 import uuid
 from django.db import models
-from django.contrib.postgres.fields import JSONField
+from django.db import models
 
 from deliveries.infrastructure.django_models.driver_orm_models.driver_model import DriverModel
 from deliveries.infrastructure.django_models.delivery_orm_models.delivery_models import DeliveryModel
@@ -18,7 +18,7 @@ class DriverNotificationModel(models.Model):
     delivery = models.ForeignKey(DeliveryModel, on_delete=models.CASCADE, related_name="notifications")
     title = models.CharField(max_length=255)
     body = models.TextField()
-    data = JSONField(default=dict)
+    data = models.JSONField(default=dict)
     status = models.CharField(max_length=20, default=NotificationStatus.PENDING.value)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

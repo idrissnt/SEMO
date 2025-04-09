@@ -68,10 +68,10 @@ class TaskPerformerProfile:
     user_name: str
     user_email: str
     profile_photo_url: Optional[str] = None
-    skills: List[str]
-    experience_level: Union[ExperienceLevel, str]  # Using value object
-    availability: Dict[str, Any]  # JSON structure for availability schedule
-    preferred_radius_km: int
+    skills: Optional[List[str]] = None
+    experience_level: Optional[Union[ExperienceLevel, str]] = None  # Using value object
+    availability: Optional[Dict[str, Any]] = None  # JSON structure for availability schedule
+    preferred_radius_km: Optional[int] = None
     bio: Optional[str] = None
     hourly_rate: Optional[float] = None
     rating: Optional[float] = None

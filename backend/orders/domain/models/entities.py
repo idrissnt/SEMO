@@ -39,7 +39,7 @@ class Order:
     total_time: float
     schedule_for: Optional[datetime] = None
     notes_for_driver: Optional[str] = None
-    user_store_distance: float # Distance in meters
+    user_store_distance: Optional[float] = None # Distance in meters
     payment_id: Optional[UUID] = None
     id: UUID = field(default_factory=uuid.uuid4)
 

@@ -7,14 +7,17 @@ from deliveries.domain.repositories.delivery_repo.delivery_repository_interfaces
 from deliveries.domain.repositories.driver_repo.driver_repository_interfaces import DriverRepository
 from deliveries.domain.services.maps_service_interface import MapsServiceInterface
 from deliveries.domain.services.notification_service_interface import NotificationServiceInterface
-from deliveries.infrastructure.factory import ServiceFactory
 from deliveries.application.services.notification_services.delivery_notification_service import DeliveryNotificationService
 from deliveries.domain.repositories.notification_repo.driver_notification_repository_interfaces import DriverNotificationRepository
 from core.domain_events.event_bus import event_bus
+
 from deliveries.domain.models.constants import DeliveryStatus
 from deliveries.domain.models.events.deliveries_events import (
     DeliveryCreatedEvent,
 )
+
+from deliveries.infrastructure.services.fcm_notification_service import FCMNotificationService
+from deliveries.infrastructure.services.google_maps_service import GoogleMapsService
 
 
 class BaseDeliveryApplicationService:
@@ -36,15 +39,15 @@ class BaseDeliveryApplicationService:
     ):
         self.delivery_repository = delivery_repository
         self.driver_repository = driver_repository
-        self.maps_service = maps_service or ServiceFactory.create_maps_service()
-        self.notification_service = notification_service or ServiceFactory.create_notification_service()
+        self.maps_service = maps_service or GoogleMapsService()
+        self.notification_service = notification_service or FCMNotificationService()
         self.driver_notification_repository = driver_notification_repository 
         
         # Create the notification application service
         self.notification_app_service = DeliveryNotificationService(
             delivery_repository=delivery_repository,
             driver_repository=driver_repository,
-            notification_service=notification_service,
+            notification_service=self.notification_service,
         )
 
     def create(self, order_id: uuid.UUID) -> Delivery:

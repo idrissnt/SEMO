@@ -202,7 +202,7 @@ spec:
 
 ## Security Considerations
 
-1. **JWT Authentication**: Ensure your JWT secret key is securely stored and not hardcoded in your codebase.
+1. **JWT Authentication**: Ensure JWT secret key is securely stored and not hardcoded in the codebase.
 
 2. **HTTPS**: Always use HTTPS in production to secure WebSocket connections (WSS).
 
@@ -212,7 +212,7 @@ spec:
 
 ## Monitoring
 
-Monitor your messaging system using:
+Monitor the messaging system using:
 
 1. **Redis Metrics**: Monitor Redis memory usage, connections, and command execution.
 
@@ -224,11 +224,11 @@ Monitor your messaging system using:
 
 Common issues and solutions:
 
-1. **WebSocket Connection Failures**: Check that your proxy/load balancer is configured to handle WebSocket connections.
+1. **WebSocket Connection Failures**: Check that the proxy/load balancer is configured to handle WebSocket connections.
 
-2. **Redis Connection Issues**: Verify Redis is running and accessible from your application servers.
+2. **Redis Connection Issues**: Verify Redis is running and accessible from the application servers.
 
-3. **Message Delivery Delays**: Check Redis performance and consider scaling your Redis instance.
+3. **Message Delivery Delays**: Check Redis performance and consider scaling the Redis instance.
 
 ## Using the Helper Configuration
 

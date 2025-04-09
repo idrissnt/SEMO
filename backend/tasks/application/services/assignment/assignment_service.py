@@ -4,11 +4,11 @@ Application service for task assignment-related operations.
 from typing import List, Optional, Dict, Any
 import uuid
 
-from domain.models import ( TaskAssignment,
+from ....domain.models import ( TaskAssignment,
                           TaskStatus,
                           ApplicationStatus)
 
-from domain.repositories import (TaskRepository,
+from ....domain.repositories import (TaskRepository,
                                 TaskAssignmentRepository,
                                 TaskApplicationRepository)
 

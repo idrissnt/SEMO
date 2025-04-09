@@ -5,10 +5,10 @@ from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime
 
-from domain.models import (Task, TaskAttribute,TaskCategory,
+from ....domain.models import (Task, TaskAttribute,TaskCategory,
                            TaskStatus)
 
-from domain.repositories import (TaskRepository,PredefinedTaskTypeRepository)
+from ....domain.repositories import (TaskRepository,PredefinedTaskTypeRepository)
 
 
 class TaskService:

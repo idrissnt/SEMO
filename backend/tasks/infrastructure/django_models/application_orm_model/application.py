@@ -5,13 +5,13 @@ from django.db import models
 import uuid
 
 from the_user_app.infrastructure.django_models.orm_models import TaskPerformerProfileModel
-from django_models import TaskModel
-from domain.models import ApplicationStatus
+from ..task_orm_model.task import TaskModel
+from ....domain.models.value_objects.application_status import ApplicationStatus
 
 
 class TaskApplicationModel(models.Model):
     """Django ORM model for task applications"""
-    STATUS_CHOICES = ApplicationStatus.choices
+    STATUS_CHOICES = ApplicationStatus.choices()
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     task = models.ForeignKey(TaskModel, on_delete=models.CASCADE, related_name='applications')

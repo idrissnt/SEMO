@@ -14,7 +14,7 @@ from drf_yasg import openapi
 
 from deliveries.infrastructure.factory import ApplicationServiceFactory
 from deliveries.interfaces.api.serializers.notification_serializers import DriverNotificationSerializer
-from deliveries.interfaces.api.serializers.delivery_serializers import DeliverySerializer
+from deliveries.interfaces.api.serializers.delivery_serializers import DeliveryOutputSerializer
 
 
 class DeliveryNotificationViewSet(viewsets.ViewSet):
@@ -60,7 +60,7 @@ class DeliveryNotificationViewSet(viewsets.ViewSet):
             if success:
                 response_data = {"message": message}
                 if delivery:
-                    serializer = DeliverySerializer(delivery)
+                    serializer = DeliveryOutputSerializer(delivery)
                     response_data["delivery"] = serializer.data
                 return Response(response_data, status=status.HTTP_200_OK)
             else:

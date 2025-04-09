@@ -5,7 +5,6 @@ This module contains serializers for converting message domain entities to/from
 API representations.
 """
 from rest_framework import serializers
-import uuid
 
 from ....domain.models import Message
 
@@ -44,19 +43,29 @@ class MessageSerializer(serializers.Serializer):
         # If the instance is already a dict, use it directly
         if isinstance(instance, dict):
             return instance
-        
-        # Otherwise, convert the domain entity to a dict
-        return {
-            'id': str(instance.id),
-            'conversation_id': str(instance.conversation_id),
-            'sender_id': str(instance.sender_id),
-            'content': instance.content,
-            'content_type': instance.content_type,
-            'sent_at': instance.sent_at.isoformat() if instance.sent_at else None,
-            'delivered_at': instance.delivered_at.isoformat() if instance.delivered_at else None,
-            'read_at': instance.read_at.isoformat() if instance.read_at else None,
-            'metadata': instance.metadata
-        }
+        # If the instance is a Pydantic model, use its model_dump method
+        if hasattr(instance, 'model_dump'):
+            # Start with the base model data
+            result = instance.model_dump()
+
+            # Convert UUIDs to strings for JSON serialization
+            result['id'] = str(result['id'])
+            result['conversation_id'] = str(result['conversation_id'])
+            result['sender_id'] = str(result['sender_id'])
+
+            # Format datetime objects
+            if result['sent_at']:
+                result['sent_at'] = result['sent_at'].isoformat()
+            if result['delivered_at']:
+                result['delivered_at'] = result['delivered_at'].isoformat()
+            if result['read_at']:
+                result['read_at'] = result['read_at'].isoformat()
+
+            # Ensure metadata is not None
+            result['metadata'] = result['metadata'] or {}
+            return result
+        # Fallback to standard serialization
+        return super().to_representation(instance)
     
     def create(self, validated_data):
         """
@@ -94,12 +103,16 @@ class MessageSerializer(serializers.Serializer):
         Returns:
             Updated Message domain entity
         """
-        # Update the Message entity
-        instance.content = validated_data.get('content', instance.content)
-        instance.content_type = validated_data.get('content_type', instance.content_type)
-        instance.metadata = validated_data.get('metadata', instance.metadata)
+        # For Pydantic models, we need to create a new instance with updated values
+        # since Pydantic models are immutable
+        update_data = {
+            'content': validated_data.get('content', instance.content),
+            'content_type': validated_data.get('content_type', instance.content_type),
+            'metadata': validated_data.get('metadata', instance.metadata)
+        }
         
-        return instance
+        # Create a new instance with updated values
+        return instance.model_copy(update=update_data)
 
 
 class MessageCreateSerializer(serializers.Serializer):

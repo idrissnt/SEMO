@@ -10,7 +10,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
 
-from ..models.entities.message import Message
+from ..models import Message
 
 
 class MessageRepository(ABC):

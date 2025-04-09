@@ -4,7 +4,7 @@ This module provides factory classes for creating repository and service instanc
 following the Abstract Factory pattern. This ensures proper dependency injection
 and separation of concerns according to Clean Architecture principles.
 """
-from typing import Type, Optional
+from typing import Optional
 
 # Repository interfaces
 from deliveries.domain.repositories.driver_repo.driver_repository_interfaces import DriverRepository
@@ -35,7 +35,6 @@ from deliveries.infrastructure.services.redis_location_service import RedisLocat
 from deliveries.infrastructure.services.fcm_notification_service import FCMNotificationService
 
 # Application services
-from deliveries.application.services.driver_service import NotificationApplicationService
 from deliveries.application.services.notification_services.driver_notification_service import DriverNotificationService
 from deliveries.application.services.notification_services.delivery_notification_service import DeliveryNotificationService
 from deliveries.application.services.notification_services.customer_notification_service import CustomerNotificationService
@@ -189,17 +188,6 @@ class ApplicationServiceFactory:
     instances with their dependencies properly injected. It uses the RepositoryFactory
     and ServiceFactory to get the required dependencies.
     """
-    
-    @classmethod
-    def create_notification_application_service(cls) -> NotificationApplicationService:
-        """Create a notification application service instance"""
-        notification_repository = RepositoryFactory.create_driver_notification_repository()
-        notification_service = ServiceFactory.create_notification_service()
-        
-        return NotificationApplicationService(
-            notification_service=notification_service,
-            notification_repository=notification_repository
-        )
     
     @classmethod
     def create_driver_notification_service(cls) -> DriverNotificationService:

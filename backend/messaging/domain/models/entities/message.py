@@ -4,14 +4,14 @@ Message entity for the messaging system.
 This module defines the Message entity, which represents a single message
 in a conversation between users.
 """
-from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional, Dict, Any
 import uuid
 
+from pydantic import BaseModel, Field
 
-@dataclass
-class Message:
+
+class Message(BaseModel):
     """
     Message entity representing a single message in a conversation.
     
@@ -37,10 +37,10 @@ class Message:
     sent_at: datetime
     delivered_at: Optional[datetime] = None
     read_at: Optional[datetime] = None
-    metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
     
-    @staticmethod
-    def create(conversation_id: uuid.UUID, sender_id: uuid.UUID, 
+    @classmethod
+    def create(cls, conversation_id: uuid.UUID, sender_id: uuid.UUID, 
                content: str, content_type: str = "text", 
                metadata: Optional[Dict[str, Any]] = None) -> 'Message':
         """
@@ -59,7 +59,7 @@ class Message:
         Returns:
             A new Message instance
         """
-        return Message(
+        return cls(
             id=uuid.uuid4(),
             conversation_id=conversation_id,
             sender_id=sender_id,
@@ -74,17 +74,17 @@ class Message:
         Mark the message as delivered.
         
         Returns:
-            Self with updated delivered_at timestamp
+            A new Message instance with updated delivered_at timestamp
         """
-        self.delivered_at = datetime.now()
-        return self
+        # Create a new instance with updated delivered_at (Pydantic models are immutable)
+        return self.model_copy(update={"delivered_at": datetime.now()})
     
     def mark_read(self) -> 'Message':
         """
         Mark the message as read.
         
         Returns:
-            Self with updated read_at timestamp
+            A new Message instance with updated read_at timestamp
         """
-        self.read_at = datetime.now()
-        return self
+        # Create a new instance with updated read_at (Pydantic models are immutable)
+        return self.model_copy(update={"read_at": datetime.now()})

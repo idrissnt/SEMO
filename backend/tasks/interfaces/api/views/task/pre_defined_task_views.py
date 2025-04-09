@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import uuid
 
-from infrastructure.factory import ServiceFactory
-from serializers import (
+from .....infrastructure.factory import ServiceFactory
+from ...serializers import (
     PredefinedTaskTypeSerializer,
     TaskCategorySerializer,
     TaskSerializer
@@ -21,8 +21,14 @@ class PredefinedTaskViewSet(viewsets.ViewSet):
         self.task_category_service = ServiceFactory.get_task_category_service()
         self.task_service = ServiceFactory.get_task_service()
 
-    @action(detail=False, methods=["get"])
-    @permission_classes([AllowAny])
+    def get_permissions(self):
+        """Allow anyone to retrieve or list predefined tasks"""
+        if self.action == 'list' or self.action == 'retrieve':
+            return [AllowAny()]
+        elif self.action == 'create':
+            return [IsAdminUser()]
+        return [IsAuthenticated()]
+
     def list(self, request):
         """Get all predefined task types
         
@@ -35,8 +41,6 @@ class PredefinedTaskViewSet(viewsets.ViewSet):
         serializer = PredefinedTaskTypeSerializer(predefined_types, many=True)
         return Response(serializer.data)
     
-    @action(detail=True, methods=["get"])
-    @permission_classes([AllowAny])
     def retrieve(self, request, pk=None):
         """Get a specific predefined task by ID
         
@@ -63,8 +67,7 @@ class PredefinedTaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["get"])
-    @permission_classes([AllowAny])
+    @action(detail=False, methods=["get"], permission_classes=[AllowAny])
     def categories(self, request):
         """Get all categories for predefined tasks
         
@@ -77,12 +80,11 @@ class PredefinedTaskViewSet(viewsets.ViewSet):
         serializer = TaskCategorySerializer(categories, many=True)
         return Response(serializer.data)
     
-    @action(detail=False, url_path='categories/(?P<category_id>[^/.]+)/tasks', methods=["get"])
-    @permission_classes([AllowAny])
+    @action(detail=False, url_path='categorie/(?P<category_id>[^/.]+)/tasks', methods=["get"], permission_classes=[AllowAny])
     def tasks_by_category(self, request, category_id=None):
         """Get all tasks for a specific category
         
-        Endpoint: GET /api/predefined-tasks/categories/{category_id}/tasks/
+        Endpoint: GET /api/predefined-tasks/categorie/{category_id}/tasks/
         
         Returns a list of all tasks that belong to the specified category.
         This endpoint is publicly accessible (no authentication required).

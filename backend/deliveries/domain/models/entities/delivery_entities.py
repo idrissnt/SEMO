@@ -79,15 +79,15 @@ class Delivery:
     schedule_for: Optional[datetime] = None
     notes_for_driver: Optional[str] = None
 
-    store_brand_id: UUID
-    store_brand_name: str
-    store_brand_image_logo: str
-    store_brand_address_human_readable: str
+    store_brand_id: Optional[UUID] = None
+    store_brand_name: Optional[str] = None
+    store_brand_image_logo: Optional[str] = None
+    store_brand_address_human_readable: Optional[str] = None
 
-    driver_id: Optional[UUID]
-    status: DeliveryStatus
+    driver_id: Optional[UUID] = None
+    status: DeliveryStatus = DeliveryStatus.PENDING
     
-    created_at: datetime
+    created_at: datetime = datetime.now()
     timeline_events: Optional[List[DeliveryTimelineEvent]] = None
     current_location: Optional[DeliveryLocation] = None
     

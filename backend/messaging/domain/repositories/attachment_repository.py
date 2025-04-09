@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, BinaryIO, Dict, Any, List
 import uuid
 
-from models import Attachment
+from ..models import Attachment
 
 
 class AttachmentRepository(ABC):

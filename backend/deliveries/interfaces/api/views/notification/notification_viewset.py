@@ -165,7 +165,7 @@ class NotificationViewSet(viewsets.ViewSet):
             500: openapi.Response('Server error'),
         }
     )
-    @action(detail=True, methods=['delete'])
+    # @action(detail=True, methods=['delete'])
     def destroy(self, request: Request, pk=None) -> Response:
         """Delete a specific notification (RESTful compatibility method)"""
         try:

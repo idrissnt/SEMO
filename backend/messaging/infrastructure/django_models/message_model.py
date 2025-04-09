@@ -6,7 +6,7 @@ This module defines the Django ORM model for storing messages in the database.
 from django.db import models
 from django.conf import settings
 import uuid
-from conversation_model import ConversationModel
+from .conversation_model import ConversationModel
 
 class MessageModel(models.Model):
     """

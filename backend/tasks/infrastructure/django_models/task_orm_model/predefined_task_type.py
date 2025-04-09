@@ -5,9 +5,9 @@ This module defines the database model for storing predefined task types,
 which serve as templates for common tasks that users can create.
 """
 from django.db import models
-from django.contrib.postgres.fields import JSONField
+from django.db import models
 import uuid
-from task_category_model import TaskCategoryModel
+from .task_category_model import TaskCategoryModel
 
 class PredefinedTaskTypeModel(models.Model):
     """Django ORM model for predefined task types
@@ -21,10 +21,10 @@ class PredefinedTaskTypeModel(models.Model):
     image_url = models.ImageField(default='tasks/default.png', )
     category = models.ForeignKey(TaskCategoryModel, on_delete=models.PROTECT, related_name='predefined_task_types')
     location_address = models.CharField(max_length=255)
-    estimated_budget_range = JSONField()  # Tuple of (min, max) budget range
-    estimated_duration_range = JSONField()  # Tuple of (min, max) duration range
+    estimated_budget_range = models.JSONField()  # Tuple of (min, max) budget range
+    estimated_duration_range = models.JSONField()  # Tuple of (min, max) duration range
     scheduled_date = models.DateTimeField()
-    attribute_templates = JSONField()  # List of {name, question} dictionaries
+    attribute_templates = models.JSONField()  # List of {name, question} dictionaries
     
     class Meta:
         db_table = 'predefined_task_types'

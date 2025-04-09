@@ -11,3 +11,8 @@ class ApplicationStatus(Enum):
     ACCEPTED = "accepted"  # Application accepted by requester
     REJECTED = "rejected"  # Application rejected by requester
     WITHDRAWN = "withdrawn"  # Application withdrawn by performer
+    
+    @classmethod
+    def choices(cls):
+        """Return the enum values as Django model field choices."""
+        return [(status.value, status.name) for status in cls]

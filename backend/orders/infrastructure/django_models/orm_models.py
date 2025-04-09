@@ -42,8 +42,8 @@ class OrderItemModel(models.Model):
     order = models.ForeignKey(OrderModel, on_delete=models.CASCADE, related_name='order_items')
     store_product = models.ForeignKey(StoreProduct, on_delete=models.CASCADE)  # Store-specific product snapshot
     quantity = models.IntegerField()
-    product_price = models.DecimalField(max_digits=10, decimal_places=2)  # Price when ordered
-    item_total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Price when ordered
+    item_total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         db_table = 'order_items'

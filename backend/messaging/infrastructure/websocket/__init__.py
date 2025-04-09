@@ -6,7 +6,7 @@ including consumers, routing, and authentication middleware.
 """
 from .consumers import ChatConsumer
 from .routing import websocket_urlpatterns
-from .auth import JwtAuthMiddleware, JwtAuthMiddlewareStack
+from .middleware import JwtAuthMiddleware, JwtAuthMiddlewareStack
 
 __all__ = [
     'ChatConsumer',

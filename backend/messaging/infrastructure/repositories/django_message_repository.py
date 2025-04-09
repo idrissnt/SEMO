@@ -9,8 +9,8 @@ import uuid
 
 from django.utils import timezone
 
-from domain import (Message, MessageRepository)
-from django_models import MessageModel
+from ...domain import (Message, MessageRepository)
+from ..django_models import MessageModel
 
 
 class DjangoMessageRepository(MessageRepository):
@@ -32,16 +32,17 @@ class DjangoMessageRepository(MessageRepository):
             The created message with any repository-generated fields updated
         """
         # Create new message
+        message_dict = message.model_dump()
         message_model = MessageModel.objects.create(
-            id=message.id,
-            conversation_id=message.conversation_id,
-            sender_id=message.sender_id,
-            content=message.content,
-            content_type=message.content_type,
-            sent_at=message.sent_at,
-            delivered_at=message.delivered_at,
-            read_at=message.read_at,
-            metadata=message.metadata
+            id=message_dict['id'],
+            conversation_id=message_dict['conversation_id'],
+            sender_id=message_dict['sender_id'],
+            content=message_dict['content'],
+            content_type=message_dict['content_type'],
+            sent_at=message_dict['sent_at'],
+            delivered_at=message_dict['delivered_at'],
+            read_at=message_dict['read_at'],
+            metadata=message_dict['metadata']
         )
         
         # Convert back to domain entity
@@ -61,11 +62,12 @@ class DjangoMessageRepository(MessageRepository):
         try:
             message_model = MessageModel.objects.get(id=message.id)
             # Update existing message
-            message_model.content = message.content
-            message_model.content_type = message.content_type
-            message_model.delivered_at = message.delivered_at
-            message_model.read_at = message.read_at
-            message_model.metadata = message.metadata
+            message_dict = message.model_dump()
+            message_model.content = message_dict['content']
+            message_model.content_type = message_dict['content_type']
+            message_model.delivered_at = message_dict['delivered_at']
+            message_model.read_at = message_dict['read_at']
+            message_model.metadata = message_dict['metadata']
             message_model.save()
             return self._to_domain_entity(message_model)
         except MessageModel.DoesNotExist:
@@ -214,6 +216,7 @@ class DjangoMessageRepository(MessageRepository):
         Returns:
             Domain entity
         """
+        # Create a Pydantic model from the Django model
         return Message(
             id=model.id,
             conversation_id=model.conversation.id,
@@ -223,5 +226,5 @@ class DjangoMessageRepository(MessageRepository):
             sent_at=model.sent_at,
             delivered_at=model.delivered_at,
             read_at=model.read_at,
-            metadata=model.metadata
+            metadata=model.metadata or {}
         )

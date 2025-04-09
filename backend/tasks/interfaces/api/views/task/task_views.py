@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import uuid
 
-from infrastructure.factory import ServiceFactory
-from serializers import (
+from .....infrastructure.factory import ServiceFactory
+from ...serializers import (
     TaskSerializer,
     TaskCreateSerializer,
     TaskSearchSerializer,
@@ -19,8 +19,13 @@ class TaskViewSet(viewsets.ViewSet):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.task_service = ServiceFactory.get_task_service()
+        
+    def get_permissions(self):
+        """Allow anyone to retrieve a task, but require authentication for other actions"""
+        if self.action == 'retrieve' or self.action == 'search_by_location':
+            return [AllowAny()]
+        return [IsAuthenticated()]
     
-    @action(detail=False, methods=["get"])
     def list(self, request):
         """Get all tasks created by the authenticated user"""
         requester_id = uuid.UUID(str(request.user.id))
@@ -29,8 +34,6 @@ class TaskViewSet(viewsets.ViewSet):
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
     
-    @action(detail=True, methods=["get"])
-    @permission_classes([AllowAny])
     def retrieve(self, request, pk=None):
         """Get a task by ID"""
         try:
@@ -50,7 +53,6 @@ class TaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["post"])
     def create(self, request):
         """Create a new task
         
@@ -104,7 +106,7 @@ class TaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"], url_path="publish")
     def publish(self, request, pk=None):
         """Publish a task"""
         try:
@@ -118,7 +120,7 @@ class TaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"], url_path="cancel")
     def cancel(self, request, pk=None):
         """Cancel a task"""
         try:
@@ -132,8 +134,7 @@ class TaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-    @action(detail=False, methods=["post"])
-    @permission_classes([AllowAny])
+    @action(detail=False, methods=["post"], url_path="search-by-location")
     def search_by_location(self, request):
         """Search for tasks near a location
         

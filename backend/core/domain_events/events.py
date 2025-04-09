@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 from uuid import UUID
 from datetime import datetime
 import uuid

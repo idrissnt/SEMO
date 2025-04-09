@@ -4,8 +4,8 @@ Application service for review-related operations.
 from typing import List, Optional, Dict, Any
 import uuid
 
-from domain.models import Review
-from domain.repositories import (ReviewRepository,
+from ....domain.models import Review
+from ....domain.repositories import (ReviewRepository,
                                 TaskRepository,
                                 TaskAssignmentRepository)
 

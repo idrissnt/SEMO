@@ -7,7 +7,7 @@ from django.contrib.gis.measure import D
 # Import domain entities and value objects
 from ...domain.models import (
     Task, TaskAttribute, 
-    TaskCategory, TaskStatus
+    TaskStatus
 )
 from ...domain.repositories import TaskRepository
 

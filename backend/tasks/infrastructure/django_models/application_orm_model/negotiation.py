@@ -4,7 +4,7 @@ ORM model for negotiation offers.
 from django.db import models
 import uuid
 
-from tasks.infrastructure.django_models.task_orm_models import TaskApplicationModel
+from .application import TaskApplicationModel
 
 class NegotiationOfferModel(models.Model):
     """Django ORM model for negotiation offers"""

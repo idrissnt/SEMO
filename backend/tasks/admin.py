@@ -1,18 +1,18 @@
 from django.contrib import admin
-from .infrastructure.django_models.task_orm_models import (
+from .infrastructure.django_models import (
     TaskModel,
     TaskAttributeModel,
     TaskApplicationModel,
     TaskAssignmentModel,
     ReviewModel,
-    TaskCategoryTemplateModel
+    TaskCategoryModel
 )
 
 
-@admin.register(TaskCategoryTemplateModel)
-class TaskCategoryTemplateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'description')
-    search_fields = ('name', 'category', 'description')
+@admin.register(TaskCategoryModel)
+class TaskCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    search_fields = ('name', 'description')
 
 
 class TaskAttributeInline(admin.TabularInline):
@@ -30,7 +30,7 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(TaskApplicationModel)
 class TaskApplicationAdmin(admin.ModelAdmin):
-    list_display = ('task', 'performer', 'price_offer', 'created_at')
+    list_display = ('task', 'performer', 'initial_offer', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('task__title', 'performer__email', 'message')
 

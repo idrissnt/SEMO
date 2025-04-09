@@ -5,13 +5,15 @@ This module defines the Attachment entity, which represents a file attachment
 in the messaging system.
 """
 import uuid
-from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional
 
+from pydantic import BaseModel, Field
 
-@dataclass(frozen=True)
-class Attachment:
+
+class Attachment(BaseModel):
+    """Pydantic model configuration to make it immutable"""
+    model_config = {"frozen": True}
     """
     Represents a file attachment in the messaging system.
     
@@ -26,7 +28,7 @@ class Attachment:
     uploaded_by_id: uuid.UUID
     uploaded_at: datetime
     message_id: Optional[uuid.UUID] = None
-    metadata: Dict[str, Any] = None
+    metadata: Dict[str, Any] = Field(default_factory=dict)
     
     @classmethod
     def create(cls, filename: str, content_type: str, file_path: str, 
@@ -70,17 +72,7 @@ class Attachment:
         Returns:
             A new Attachment instance with the message association
         """
-        return Attachment(
-            id=self.id,
-            filename=self.filename,
-            content_type=self.content_type,
-            file_path=self.file_path,
-            file_size=self.file_size,
-            uploaded_by_id=self.uploaded_by_id,
-            uploaded_at=self.uploaded_at,
-            message_id=message_id,
-            metadata=self.metadata
-        )
+        return self.model_copy(update={"message_id": message_id})
     
     def update_metadata(self, metadata: Dict[str, Any]) -> 'Attachment':
         """
@@ -92,17 +84,7 @@ class Attachment:
         Returns:
             A new Attachment instance with updated metadata
         """
-        return Attachment(
-            id=self.id,
-            filename=self.filename,
-            content_type=self.content_type,
-            file_path=self.file_path,
-            file_size=self.file_size,
-            uploaded_by_id=self.uploaded_by_id,
-            uploaded_at=self.uploaded_at,
-            message_id=self.message_id,
-            metadata=metadata
-        )
+        return self.model_copy(update={"metadata": metadata})
     
     def is_image(self) -> bool:
         """

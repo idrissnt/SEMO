@@ -12,7 +12,7 @@ import logging
 
 from payments.domain.models.entities import PaymentMethod
 from payments.domain.models.constants import PaymentMethodTypes
-from payments.domain.services.payment_service_interface import PaymentMethodServiceInterface
+from payments.domain.services.payment_method_service_interface import PaymentMethodServiceInterface
 from payments.domain.repositories.payment_method_repository_interfaces import PaymentMethodRepository
 from payments.infrastructure.external.stripe_gateway import StripeGateway
 

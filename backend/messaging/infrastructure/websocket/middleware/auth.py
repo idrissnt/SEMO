@@ -15,6 +15,12 @@ from django.conf import settings
 from channels.middleware import BaseMiddleware
 from channels.db import database_sync_to_async
 
+# Import from the_user_app for token blacklist checking and validation
+from the_user_app.infrastructure.factory import UserFactory
+
+from rest_framework_simplejwt.tokens import UntypedToken
+from rest_framework_simplejwt.exceptions import TokenError
+
 # Set up logging
 logger = logging.getLogger(__name__)
 
@@ -29,21 +35,11 @@ class JwtAuthMiddleware(BaseMiddleware):
     provided in the query string or headers.
     """
     
-    def __init__(self, inner):
-        """
-        Initialize the middleware.
-        
-        Args:
-            inner: ASGI application to wrap
-        """
-        super().__init__(inner)
-    
     async def __call__(self, scope, receive, send):
         """
-        Process an ASGI connection.
+        Process the WebSocket connection.
         
-        This method is called for each WebSocket connection. It extracts the
-        JWT token from the query string or headers, validates it, and adds
+        This method extracts the JWT token from the query string or headers, validates it, and adds
         the authenticated user to the scope.
         
         Args:
@@ -68,26 +64,33 @@ class JwtAuthMiddleware(BaseMiddleware):
         
         # If token found, authenticate
         if token:
-            try:
-                # Decode the token
-                payload = jwt.decode(
-                    token,
-                    settings.SECRET_KEY,
-                    algorithms=["HS256"]
-                )
-                
-                # Get the user ID from the payload
-                user_id = payload.get("user_id")
-                if user_id:
-                    # Get the user from the database
-                    user = await self.get_user(user_id)
-                    if user:
-                        # Add the user to the scope
-                        scope["user"] = user
-            except ExpiredSignatureError:
-                logger.warning("Expired JWT token")
-            except InvalidTokenError:
-                logger.warning("Invalid JWT token")
+            # Check if token is blacklisted
+            is_blacklisted = await self.check_token_blacklisted(token)
+            if is_blacklisted:
+                logger.warning("Blacklisted JWT token")
+            else:
+                try:
+                    # Use Simple JWT's UntypedToken for validation
+                    # This ensures we use the same validation mechanism as the_user_app
+                    token_obj = UntypedToken(token)
+                    payload = token_obj.payload
+                    
+                    # Get the user ID from the payload
+                    user_id = payload.get("user_id")
+                    if user_id:
+                        # Get the user from the database
+                        user = await self.get_user(user_id)
+                        if user:
+                            # Add the user to the scope
+                            scope["user"] = user
+                            # Store token in scope for potential future validation
+                            scope["auth_token"] = token
+                except ExpiredSignatureError:
+                    logger.warning("Expired JWT token")
+                except InvalidTokenError:
+                    logger.warning("Invalid JWT token")
+                except TokenError:
+                    logger.warning("Invalid token format")
         
         # Continue processing the connection
         return await super().__call__(scope, receive, send)
@@ -107,6 +110,26 @@ class JwtAuthMiddleware(BaseMiddleware):
             return User.objects.get(id=user_id)
         except User.DoesNotExist:
             return None
+    
+    @database_sync_to_async
+    def check_token_blacklisted(self, token):
+        """
+        Check if a token is blacklisted using the_user_app's auth repository.
+        
+        Args:
+            token: JWT token to check
+            
+        Returns:
+            True if token is blacklisted, False otherwise
+        """
+        try:
+            # Get auth repository from the_user_app
+            auth_repository = UserFactory.create_auth_repository()
+            return auth_repository.is_token_blacklisted(token)
+        except Exception as e:
+            logger.error(f"Error checking token blacklist: {str(e)}")
+            # If there's an error checking the blacklist, assume the token is invalid
+            return True
 
 
 # Convenience function for adding the middleware to the ASGI application

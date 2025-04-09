@@ -7,9 +7,9 @@ from rest_framework.decorators import action, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 import uuid
 
-from infrastructure.factory import ServiceFactory
-from serializers.task_category_serializer import TaskCategorySerializer
-from serializers import TaskSerializer
+from .....infrastructure.factory import ServiceFactory
+from ...serializers import TaskCategorySerializer
+from ...serializers import TaskSerializer
 
 
 class TaskCategoryViewSet(viewsets.ViewSet):
@@ -19,14 +19,22 @@ class TaskCategoryViewSet(viewsets.ViewSet):
     including listing all categories, retrieving a specific category,
     and creating/updating/deleting categories.
     """
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated]
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.task_category_service = ServiceFactory.get_task_category_service()
     
-    @action(detail=False, methods=["get"])
-    @permission_classes([AllowAny])
+    def get_permissions(self):
+        """Allow anyone to retrieve or list categories, to get tasks by category or tasks by category id
+        Allow only admin to create categories
+        other actions require authentication"""
+        if self.action == 'list' or self.action == 'retrieve':
+            return [AllowAny()]
+        elif self.action == 'create':
+            return [IsAdminUser()]
+        return [IsAuthenticated()]
+
     def list(self, request):
         """Get all task categories
         
@@ -39,8 +47,6 @@ class TaskCategoryViewSet(viewsets.ViewSet):
         serializer = TaskCategorySerializer(categories, many=True)
         return Response(serializer.data)
     
-    @action(detail=True, methods=["get"])
-    @permission_classes([AllowAny])
     def retrieve(self, request, pk=None):
         """Get a specific task category by ID
         
@@ -67,8 +73,6 @@ class TaskCategoryViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["post"])
-    @permission_classes([IsAdminUser])
     def create(self, request):
         """Create a new task category
         
@@ -88,8 +92,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
             status=status.HTTP_201_CREATED
         )
 
-    @action(detail=True, methods=["get"])
-    @permission_classes([AllowAny])
+    @action(detail=True, methods=["get"], url_path="tasks", permission_classes=[AllowAny])
     def tasks(self, request, pk=None):
         """Get all tasks for a specific category
         
@@ -127,12 +130,11 @@ class TaskCategoryViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=True, url_path='tasks/(?P<task_id>[^/.]+)', methods=["get"])
-    @permission_classes([AllowAny])
+    @action(detail=True, url_path='task-detail/(?P<task_id>[^/.]+)', methods=["get"], permission_classes=[AllowAny])
     def task_detail(self, request, pk=None, task_id=None):
         """Get a single task in a specific category
         
-        Endpoint: GET /api/categories/{pk}/tasks/{task_id}/
+        Endpoint: GET /api/categories/{pk}/task-detail/{task_id}/
         
         This endpoint returns a specific task that belongs to a specific category.
         It verifies both that the category exists and that the task belongs to that category.

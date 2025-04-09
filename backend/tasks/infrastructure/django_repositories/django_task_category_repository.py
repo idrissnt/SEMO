@@ -4,9 +4,9 @@ Django implementation of the TaskCategoryRepository.
 from typing import List, Optional
 import uuid
 
-from tasks.domain.models import TaskCategory, TaskCategoryType
-from tasks.domain.repositories import TaskCategoryRepository
-from tasks.infrastructure.django_models import TaskCategoryModel
+from ...domain.models import TaskCategory, TaskCategoryType
+from ...domain.repositories import TaskCategoryRepository
+from ..django_models import TaskCategoryModel
 
 
 class DjangoTaskCategoryRepository(TaskCategoryRepository):

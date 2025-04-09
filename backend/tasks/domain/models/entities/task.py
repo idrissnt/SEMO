@@ -14,8 +14,8 @@ from typing import Optional, List
 import uuid
 from datetime import datetime
 
-from tasks.domain.models import TaskStatus
-from predefined_task_type import TaskCategory
+from ..value_objects.task_status import TaskStatus
+from .task_category import TaskCategory
 
 
 @dataclass

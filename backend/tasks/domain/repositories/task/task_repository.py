@@ -5,9 +5,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 import uuid
 
-from models import Task
-from models import TaskCategory
-from models import TaskStatus
+from ...models import (Task, TaskCategory, TaskStatus)
 
 
 class TaskRepository(ABC):

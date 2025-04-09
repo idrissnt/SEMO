@@ -4,14 +4,14 @@ Conversation entity for the messaging system.
 This module defines the Conversation entity, which represents a chat room
 or conversation thread between two or more users.
 """
-from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 import uuid
 
+from pydantic import BaseModel, Field
 
-@dataclass
-class Conversation:
+
+class Conversation(BaseModel):
     """
     Conversation entity representing a chat room between users.
     
@@ -33,10 +33,13 @@ class Conversation:
     created_at: datetime
     last_message_at: Optional[datetime] = None
     title: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    @staticmethod
-    def create(participants: List[uuid.UUID], type: str = "direct", 
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    # for task we will return ;
+    # the task title, image, price, and id
+
+    @classmethod
+    def create(cls, participants: List[uuid.UUID], type: str = "task", 
                title: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None) -> 'Conversation':
         """
         Factory method to create a new conversation.
@@ -46,18 +49,14 @@ class Conversation:
         
         Args:
             participants: List of user IDs participating in the conversation
-            type: Type of conversation (default: "direct")
+            type: Type of conversation (default: "task")
             title: Optional title for the conversation
             metadata: Additional conversation metadata
             
         Returns:
             A new Conversation instance
         """
-        # For direct conversations, ensure exactly 2 participants
-        if type == "direct" and len(participants) != 2:
-            raise ValueError("Direct conversations must have exactly 2 participants")
-            
-        return Conversation(
+        return cls(
             id=uuid.uuid4(),
             type=type,
             participants=participants,
@@ -88,13 +87,7 @@ class Conversation:
             
         Returns:
             Self with updated participants list
-            
-        Raises:
-            ValueError: If trying to add a third participant to a direct conversation
         """
-        if self.type == "direct":
-            raise ValueError("Cannot add participants to a direct conversation")
-            
         if user_id not in self.participants:
             self.participants.append(user_id)
         return self
@@ -108,14 +101,7 @@ class Conversation:
             
         Returns:
             Self with updated participants list
-            
-        Raises:
-            ValueError: If trying to remove from a direct conversation or if
-                       removing would leave fewer than 2 participants in a group
         """
-        if self.type == "direct":
-            raise ValueError("Cannot remove participants from a direct conversation")
-            
         if len(self.participants) <= 2:
             raise ValueError("Cannot remove participant: conversation needs at least 2 participants")
             

@@ -15,7 +15,9 @@ from deliveries.domain.models.value_objects import GeoPoint
 from deliveries.domain.services.notification_service_interface import NotificationServiceInterface
 from deliveries.domain.repositories.driver_repo.driver_device_repository_interfaces import DriverDeviceRepository
 from deliveries.domain.repositories.driver_repo.driver_location_repository_interfaces import DriverLocationRepository
-from deliveries.infrastructure.factory import RepositoryFactory
+
+from deliveries.infrastructure.django_repositories.driver_repo.driver_device_repository import DjangoDriverDeviceRepository
+from deliveries.infrastructure.django_repositories.driver_repo.driver_location_repository import DjangoDriverLocationRepository
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +30,8 @@ class FCMNotificationService(NotificationServiceInterface):
         """Initialize the FCM client"""
         try:
             # Store repositories for device tokens and driver locations
-            self.driver_device_repository = driver_device_repository or RepositoryFactory.create_driver_device_repository()
-            self.driver_location_repository = driver_location_repository or RepositoryFactory.create_driver_location_repository()
+            self.driver_device_repository = driver_device_repository or DjangoDriverDeviceRepository()
+            self.driver_location_repository = driver_location_repository or DjangoDriverLocationRepository()
             
             # Initialize Firebase Admin SDK if not already initialized
             if not hasattr(FCMNotificationService, '_initialized'):

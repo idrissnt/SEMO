@@ -1,9 +1,8 @@
 from payments.domain.repositories.payment_repository_interfaces import PaymentRepository
 from payments.domain.repositories.payment_method_repository_interfaces import PaymentMethodRepository
-from payments.domain.services.payment_service_interface import (
-    PaymentServiceInterface,
-    PaymentMethodServiceInterface
-)
+from payments.domain.services.payment_service_interface import PaymentServiceInterface
+from payments.domain.services.payment_method_service_interface import PaymentMethodServiceInterface
+
 from payments.infrastructure.django_repositories.payment_repository import DjangoPaymentRepository
 from payments.infrastructure.django_repositories.payment_method_repository import DjangoPaymentMethodRepository
 from payments.infrastructure.services.stripe_payment_service import StripePaymentService

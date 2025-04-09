@@ -5,6 +5,8 @@ from uuid import UUID
 from deliveries.domain.models.entities.delivery_entities import Delivery
 from deliveries.domain.models.value_objects import GeoPoint
 
+from datetime import datetime
+
 class DeliveryRepository(ABC):
     """Interface for delivery repository"""
     

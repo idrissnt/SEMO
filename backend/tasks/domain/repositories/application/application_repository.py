@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 import uuid
 
-from models import (TaskApplication,
+from ...models import (TaskApplication,
                     ApplicationStatus)
 
 

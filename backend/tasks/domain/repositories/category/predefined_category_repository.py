@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 import uuid
 
-from ...models.entities.task_category import PredefinedTaskType, TaskCategory
+from ...models import PredefinedTaskType, TaskCategory
 
 
 class PredefinedTaskTypeRepository(ABC):

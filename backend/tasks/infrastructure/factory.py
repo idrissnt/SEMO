@@ -25,7 +25,7 @@ from .django_repositories import (
 )
 
 # Import application services
-from application.services import (
+from ..application.services import (
     TaskService,
     TaskApplicationService,
     ChatService,

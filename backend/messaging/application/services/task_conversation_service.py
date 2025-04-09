@@ -68,7 +68,7 @@ class TaskConversationService:
             title = f"Task: {task_title}"
         
         # Create the conversation
-        conversation = self.conversation_service.create_conversation(
+        conversation = self.conversation_repository.create(
             participants=[requester_id, performer_id],
             type="task",
             title=title,
@@ -92,40 +92,6 @@ class TaskConversationService:
             The task conversation if found, None otherwise
         """
         return self.conversation_repository.get_by_task(task_id)
-    
-    def add_task_participant(
-        self,
-        task_id: uuid.UUID,
-        user_id: uuid.UUID,
-        added_by_id: uuid.UUID
-    ) -> Optional[Conversation]:
-        """
-        Add a participant to a task conversation.
-        
-        This method adds a user to a task conversation if the user adding them
-        is already a participant.
-        
-        Args:
-            task_id: ID of the task
-            user_id: ID of the user to add
-            added_by_id: ID of the user adding the new participant
-            
-        Returns:
-            The updated conversation if successful, None otherwise
-            
-        Raises:
-            ValueError: If the conversation doesn't exist or if the user adding
-                       the participant is not a participant themselves
-        """
-        conversation = self.conversation_repository.get_by_task(task_id)
-        if not conversation:
-            return None
-        
-        return self.conversation_service.add_participant(
-            conversation_id=conversation.id,
-            user_id=user_id,
-            added_by_id=added_by_id
-        )
     
     def notify_task_status_change(
         self,
@@ -164,3 +130,4 @@ class TaskConversationService:
                 "updated_by_id": str(updated_by_id)
             }
         }
+    

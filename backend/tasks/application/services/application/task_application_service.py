@@ -4,8 +4,8 @@ Application service for task application-related operations.
 from typing import List, Optional, Dict, Any
 import uuid
 
-from domain.models import TaskApplication, NegotiationOffer
-from domain.repositories import (TaskRepository, 
+from ....domain.models import TaskApplication, NegotiationOffer
+from ....domain.repositories import (TaskRepository, 
                                 TaskApplicationRepository, 
                                 NegotiationOfferRepository)
 

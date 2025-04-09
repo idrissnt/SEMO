@@ -45,14 +45,6 @@ class AuthDomainService:
         if not user_data.get('first_name'):
             return False, "First name is required"
         
-        # Validate driver-specific fields
-        if user_data.get('role') == 'driver':
-            if not user_data.get('has_vehicle'):
-                return False, "Vehicle is required for drivers"
-            
-            if not user_data.get('license_number'):
-                return False, "License number is required for drivers"
-        
         return True, ""
     
     @staticmethod

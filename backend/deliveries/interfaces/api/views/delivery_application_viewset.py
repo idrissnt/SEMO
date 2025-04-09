@@ -16,7 +16,7 @@ from drf_yasg import openapi
 
 from deliveries.domain.models.constants import DeliveryStatus
 from deliveries.interfaces.api.views.base_viewset import BaseViewSet
-from deliveries.interfaces.api.serializers import (
+from ..serializers import (
     DeliveryOutputSerializer,
     DeliveryCreateInputSerializer,
     DeliveryUpdateStatusInputSerializer,

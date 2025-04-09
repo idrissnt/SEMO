@@ -8,8 +8,8 @@ import uuid
 
 from django.utils import timezone
 
-from domain import (Conversation, ConversationRepository)
-from django_models import ConversationModel, ConversationParticipantModel
+from ...domain import (Conversation, ConversationRepository)
+from ..django_models import ConversationModel, ConversationParticipantModel
 
 
 class DjangoConversationRepository(ConversationRepository):
@@ -24,13 +24,14 @@ class DjangoConversationRepository(ConversationRepository):
         """
         Create a new conversation in the database
         """
+        conversation_dict = conversation.model_dump()
         conversation_model = ConversationModel.objects.create(
-                id=conversation.id,
-                type=conversation.type,
-                title=conversation.title,
-                created_at=conversation.created_at,
-                last_message_at=conversation.last_message_at,
-                metadata=conversation.metadata
+                id=conversation_dict['id'],
+                type=conversation_dict['type'],
+                title=conversation_dict['title'],
+                created_at=conversation_dict['created_at'],
+                last_message_at=conversation_dict['last_message_at'],
+                metadata=conversation_dict['metadata']
             )
             
         # Add participants
@@ -47,10 +48,11 @@ class DjangoConversationRepository(ConversationRepository):
         try:
             conversation_model = ConversationModel.objects.get(id=conversation.id)
             # Update existing conversation
-            conversation_model.type = conversation.type
-            conversation_model.title = conversation.title
-            conversation_model.last_message_at = conversation.last_message_at
-            conversation_model.metadata = conversation.metadata
+            conversation_dict = conversation.model_dump()
+            conversation_model.type = conversation_dict['type']
+            conversation_model.title = conversation_dict['title']
+            conversation_model.last_message_at = conversation_dict['last_message_at']
+            conversation_model.metadata = conversation_dict['metadata']
             conversation_model.save()
             
             # Update participants (this is more complex)
@@ -102,40 +104,6 @@ class DjangoConversationRepository(ConversationRepository):
         
         # Convert to domain entities
         return [self._to_domain_entity(c) for c in conversations]
-    
-    def get_direct_conversation(
-        self,
-        user_id1: uuid.UUID,
-        user_id2: uuid.UUID
-    ) -> Optional[Conversation]:
-        """
-        Get the direct conversation between two users.
-        
-        This is a convenience method for finding the one-to-one conversation
-        between two specific users.
-        
-        Args:
-            user_id1: ID of the first user
-            user_id2: ID of the second user
-            
-        Returns:
-            The direct conversation if found, None otherwise
-        """
-        # Find direct conversations where both users are participants
-        # This is a bit complex in Django ORM
-        conversations = ConversationModel.objects.filter(
-            type='direct',
-            participants__id=user_id1
-        ).filter(
-            participants__id=user_id2
-        )
-        
-        # Check that the conversation has exactly 2 participants
-        for conversation in conversations:
-            if conversation.participants.count() == 2:
-                return self._to_domain_entity(conversation)
-        
-        return None
     
     def get_by_task(self, task_id: uuid.UUID) -> Optional[Conversation]:
         """
@@ -247,7 +215,7 @@ class DjangoConversationRepository(ConversationRepository):
             created_at=model.created_at,
             last_message_at=model.last_message_at,
             title=model.title,
-            metadata=model.metadata
+            metadata=model.metadata or {}
         )
     
     def _add_participants(self, conversation_model: ConversationModel, participant_ids: List[uuid.UUID]) -> None:

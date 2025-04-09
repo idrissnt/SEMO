@@ -43,8 +43,8 @@ class PaymentsConfig(AppConfig):
         such as order creation and status changes.
         """
         # Import here to avoid circular imports
-        from core.events.event_bus import event_bus
-        from orders.domain.events.order_events import OrderCreatedEvent, OrderStatusChangedEvent, OrderPaidEvent
+        from core.domain_events.event_bus import event_bus
+        from orders.domain.events.orders_events import OrderCreatedEvent, OrderStatusChangedEvent, OrderPaidEvent
         from payments.infrastructure.factory import ServiceFactory
         
         # Create service using the factory
@@ -114,8 +114,8 @@ class PaymentsConfig(AppConfig):
                 logger.exception(f"Error handling OrderPaidEvent: {str(e)}")
         
         # Subscribe to events
-        event_bus.subscribe(OrderCreatedEvent.EVENT_TYPE, handle_order_created)
-        event_bus.subscribe(OrderStatusChangedEvent.EVENT_TYPE, handle_order_status_changed)
-        event_bus.subscribe(OrderPaidEvent.EVENT_TYPE, handle_order_paid)
+        event_bus.subscribe(OrderCreatedEvent, handle_order_created)
+        event_bus.subscribe(OrderStatusChangedEvent, handle_order_status_changed)
+        event_bus.subscribe(OrderPaidEvent, handle_order_paid)
         
         logger.info("Subscribed to order events")

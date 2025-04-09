@@ -11,8 +11,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.urls import reverse
 
-from domain import (AttachmentRepository, Attachment)
-from django_models import AttachmentModel
+from ...domain import (AttachmentRepository, Attachment)
+from ..django_models import AttachmentModel
 
 
 class DjangoAttachmentRepository(AttachmentRepository):
@@ -182,6 +182,9 @@ class DjangoAttachmentRepository(AttachmentRepository):
         Returns:
             Attachment domain entity
         """
+        # Handle the case where message might be None
+        message_id = attachment.message.id if attachment.message else None
+        
         return Attachment(
             id=attachment.id,
             filename=attachment.file_name,
@@ -190,6 +193,6 @@ class DjangoAttachmentRepository(AttachmentRepository):
             file_size=attachment.file_size,
             uploaded_by_id=attachment.uploaded_by.id,
             uploaded_at=attachment.uploaded_at,
-            message_id=attachment.message.id,
+            message_id=message_id,
             metadata=attachment.metadata or {}
         )

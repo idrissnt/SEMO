@@ -1,5 +1,8 @@
 """
 Base settings for Django project.
+
+This module contains the base settings that are common to all environments.
+Environment-specific settings should be defined in development.py, production.py, etc.
 """
 import os
 from pathlib import Path
@@ -11,11 +14,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key-for-dev')
-
 # Application definition
-INSTALLED_APPS = [
+# Import MessagingConfig for WebSocket configuration
+from messaging.config import MessagingConfig
+
+# Base INSTALLED_APPS before adding messaging-specific apps
+BASE_INSTALLED_APPS = [
     'django.contrib.gis',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,7 +35,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django_ltree',
-    'imagekit', 
+    'imagekit',
+    # 'channels' is added by MessagingConfig.get_installed_apps()
     
     # Celery apps
     'django_celery_results',
@@ -45,7 +50,26 @@ INSTALLED_APPS = [
     'cart',
     'deliveries',
     'tasks',
+    
 ]
+
+# DEBUG setting should be overridden in environment-specific settings
+# DEBUG = False  # Default to False for security
+
+# Django Channels configuration for WebSockets
+ASGI_APPLICATION = 'backend.asgi.application'
+
+# Channel layers configuration - basic structure
+# Environment-specific files will override with their own REDIS_URL
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["redis://localhost:6379/0"],  # Default for local development
+            # Will be overridden in environment-specific settings
+        },
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,51 +146,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # Removed default permission classes to allow unauthenticated access
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'EXCEPTION_HANDLER': 'the_user_app.interfaces.api.exceptions.custom_exception_handler',
 }
-
-# JWT settings
-SIMPLE_JWT = {
-    # Set access token to last 100 years (effectively forever)
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=36500),  # 100 years
-    # Set refresh token to also last 100 years
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=36500),  # 100 years
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-}
-
-# CORS Settings
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://192.168.187.184:8000",  # Physical device
-    "http://172.20.10.5:8000",  # Physical device
-    "http://172.20.10.5:8000",  # Physical device
-    "http://localhost:8000",     # Local development
-    "http://127.0.0.1:8000",     # Local development alternative
-]
-CORS_ALLOW_ALL_HEADERS = True
-CORS_ALLOW_METHODS = [
-    "DELETE",
-    "GET",
-    "OPTIONS",
-    "PATCH",
-    "POST",
-    "PUT",
-]
 
 # API Documentation settings
 SPECTACULAR_SETTINGS = {
@@ -203,18 +185,25 @@ LOGGING = {
     },
 }
 
+# Redis cache configuration (using database 1)
+# Base structure - will be overridden with environment-specific REDIS_URL in dev/prod settings
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6000/1",
+        "LOCATION": "redis://localhost:6379/1",  # Default for local development, DB 1 for caching
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        }
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PARSER_CLASS": "redis.connection.HiredisParser",  # Faster parser
+        },
+        "KEY_PREFIX": "django_cache"  # Prefix for cache keys
     }
 }
 
-# Celery Configuration
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'amqp://guest:guest@localhost:5672//')
+# Use Redis as the session backend for better performance
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+# Celery Configuration - common settings
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -224,5 +213,29 @@ CELERY_TIMEZONE = 'UTC'
 # Celery Beat Schedule
 CELERY_BEAT_SCHEDULE = {}
 
-# Configure Celery to use Redis as a message broker if RabbitMQ is not available
-# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://127.0.0.1:6000/0')
+# Note: CELERY_BROKER_URL should be defined in environment-specific settings
+
+# -------------------------------------------------------------------------
+# Django Channels Configuration
+# -------------------------------------------------------------------------
+
+# Django Channels needs ASGI_APPLICATION setting
+# This tells Django which ASGI application to use for handling WebSocket connections
+ASGI_APPLICATION = 'backend.asgi.application'
+
+# -------------------------------------------------------------------------
+# Messaging Configuration
+# -------------------------------------------------------------------------
+
+# Add messaging-specific apps to INSTALLED_APPS
+INSTALLED_APPS = BASE_INSTALLED_APPS.copy()
+
+# Configure the messaging system using MessagingConfig
+# This will add required apps and set WebSocket URL
+settings_dict = locals()
+MessagingConfig.configure_django_settings(settings_dict)
+
+# WebSocket URL (base default for development)
+# This will be overridden in environment-specific settings (development.py, production.py)
+# Used by frontend clients to connect to the WebSocket server
+WEBSOCKET_URL = 'ws://localhost:8000'

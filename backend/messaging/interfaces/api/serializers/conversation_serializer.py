@@ -46,17 +46,22 @@ class ConversationSerializer(serializers.Serializer):
         # If the instance is already a dict, use it directly
         if isinstance(instance, dict):
             return instance
-        
-        # Otherwise, convert the domain entity to a dict
-        result = {
-            'id': str(instance.id),
-            'type': instance.type,
-            'participants': [str(p) for p in instance.participants],
-            'created_at': instance.created_at.isoformat() if instance.created_at else None,
-            'last_message_at': instance.last_message_at.isoformat() if instance.last_message_at else None,
-            'title': instance.title,
-            'metadata': instance.metadata
-        }
+            
+        # If the instance is a Pydantic model, use its model_dump method
+        if hasattr(instance, 'model_dump'):
+            # Start with the base model data
+            result = instance.model_dump()
+            # Convert UUIDs to strings for JSON serialization
+            result['id'] = str(result['id'])
+            result['participants'] = [str(p) for p in result['participants']]
+            # Format datetime objects
+            if result['created_at']:
+                result['created_at'] = result['created_at'].isoformat()
+            if result['last_message_at']:
+                result['last_message_at'] = result['last_message_at'].isoformat()
+        else:
+            # Fallback to standard serialization
+            return super().to_representation(instance)
         
         # Add additional fields if they exist in the context
         if hasattr(instance, 'unread_count'):
@@ -102,27 +107,21 @@ class ConversationSerializer(serializers.Serializer):
         Returns:
             Updated Conversation domain entity
         """
-        # Update the Conversation entity
-        instance.title = validated_data.get('title', instance.title)
-        instance.metadata = validated_data.get('metadata', instance.metadata)
+        # For Pydantic models, we need to create a new instance with updated values
+        # since Pydantic models are immutable
+        update_data = {
+            'title': validated_data.get('title', instance.title),
+            'metadata': validated_data.get('metadata', instance.metadata)
+        }
         
         # Handle participants update (more complex)
         if 'participants' in validated_data and instance.type != 'direct':
             # For direct conversations, participants can't be changed
-            # For group conversations, we need to add/remove participants
-            new_participants = validated_data['participants']
-            
-            # Add new participants
-            for participant_id in new_participants:
-                if participant_id not in instance.participants:
-                    instance.add_participant(participant_id)
-            
-            # Remove participants who are no longer in the list
-            for participant_id in list(instance.participants):
-                if participant_id not in new_participants:
-                    instance.remove_participant(participant_id)
+            # For group conversations, we need to update the participants list
+            update_data['participants'] = validated_data['participants']
         
-        return instance
+        # Create a new instance with updated values
+        return instance.model_copy(update=update_data)
 
 
 class ConversationCreateSerializer(serializers.Serializer):

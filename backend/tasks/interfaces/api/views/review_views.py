@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 import uuid
 
-from infrastructure.factory import ServiceFactory
-from serializers import ReviewSerializer
-from domain.models import TaskStatus
+from ....infrastructure.factory import ServiceFactory
+from ..serializers import ReviewSerializer
+from ....domain.models import TaskStatus
 
 class ReviewViewSet(viewsets.ViewSet):
     """ViewSet for reviews"""

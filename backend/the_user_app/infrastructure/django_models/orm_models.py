@@ -62,7 +62,7 @@ class AddressModel(models.Model):
     country = models.CharField(max_length=255)
 
     class Meta:
-        db_table = 'user_addresses'
+        db_table = 'user_address'
         indexes = [
             models.Index(fields=['user']),
         ]

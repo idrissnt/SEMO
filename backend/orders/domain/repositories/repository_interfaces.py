@@ -109,14 +109,14 @@ class OrderItemRepository(ABC):
         """List all items for an order"""
         pass
     
-    @abstractmethod
-    def create(self, order_id: UUID, store_product_id: UUID, 
-        quantity: int, product_name: str, product_image_url: str,
-        product_image_thumbnail: str, product_price: float,
-        product_description: str, item_total_price: float
-        ) -> OrderItem:
-        """Create a new order item with all product details"""
-        pass
+    # @abstractmethod
+    # def create(self, order_id: UUID, store_product_id: UUID, 
+    #     quantity: int, product_name: str, product_image_url: str,
+    #     product_image_thumbnail: str, product_price: float,
+    #     product_description: str, item_total_price: float
+    #     ) -> OrderItem:
+    #     """Create a new order item with all product details"""
+    #     pass
     
     @abstractmethod
     def delete(self, item_id: UUID) -> bool:

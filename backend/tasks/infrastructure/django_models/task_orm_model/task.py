@@ -10,7 +10,7 @@ from django.contrib.gis.db import models as gis_models
 
 
 from django.conf import settings
-from task_category_model import TaskCategoryModel
+from .task_category_model import TaskCategoryModel
 
 class TaskModel(models.Model):
     """Django ORM model for tasks

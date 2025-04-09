@@ -4,8 +4,8 @@ Application service for predefined task type-related operations.
 from typing import List, Optional, Dict, Any
 import uuid
 
-from domain.models import PredefinedTaskType, TaskCategory
-from domain.repositories import PredefinedTaskTypeRepository
+from ....domain.models import PredefinedTaskType, TaskCategory
+from ....domain.repositories import PredefinedTaskTypeRepository
 
 
 class PredefinedTaskTypeService:

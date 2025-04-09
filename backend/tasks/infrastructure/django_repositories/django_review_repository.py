@@ -3,11 +3,11 @@ import uuid
 from django.db import transaction
 
 # Import domain entities
-from domain.models import Review
-from domain.repositories import ReviewRepository
+from ...domain.models import Review
+from ...domain.repositories import ReviewRepository
 
 # Import ORM models
-from django_models import ReviewModel
+from ..django_models import ReviewModel
 
 
 class DjangoReviewRepository(ReviewRepository):

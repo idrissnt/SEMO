@@ -7,7 +7,7 @@ from django.db import models
 from django.conf import settings
 import uuid
 
-from message_model import MessageModel
+from .message_model import MessageModel
 
 class AttachmentModel(models.Model):
     """

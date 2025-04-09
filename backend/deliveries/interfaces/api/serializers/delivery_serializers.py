@@ -6,8 +6,7 @@ following CQRS pattern with separate input and output serializers.
 """
 from rest_framework import serializers
 
-from deliveries.domain.models.entities import Delivery
-from deliveries.interfaces.api.serializers.base_serializers import EntitySerializer, GeoPointSerializer
+from .base_serializers import EntitySerializer, GeoPointSerializer
 
 
 class DeliveryOutputSerializer(EntitySerializer):

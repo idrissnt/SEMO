@@ -4,7 +4,7 @@ Utility functions for cart repositories
 import logging
 import uuid
 from decimal import Decimal
-from typing import List
+from typing import Optional, Dict, Any
 
 from cart.domain.models.entities import Cart, CartItem
 from cart.infrastructure.django_models.orm_models import CartModel, CartItemModel

@@ -1,6 +1,6 @@
 """
 Category repository interfaces.
 """
-from .category_template_repository import TaskCategoryTemplateRepository
+from .predefined_category_repository import PredefinedTaskTypeRepository
 
-__all__ = ['TaskCategoryTemplateRepository']
+__all__ = ['PredefinedTaskTypeRepository']

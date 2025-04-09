@@ -4,7 +4,6 @@ Serializers for attachment-related API endpoints.
 This module contains serializers for handling file attachments in the API.
 """
 from rest_framework import serializers
-import uuid
 
 from ....domain.models.entities.attachment import Attachment
 
@@ -42,23 +41,25 @@ class AttachmentSerializer(serializers.Serializer):
         if isinstance(instance, dict):
             return instance
             
-        # If the instance is an Attachment entity, convert it to a dictionary
-        if isinstance(instance, Attachment):
-            return {
-                'id': str(instance.id),
-                'filename': instance.filename,
-                'file_path': instance.file_path,
-                'file_size': instance.file_size,
-                'content_type': instance.content_type,
-                'uploaded_by_id': str(instance.uploaded_by_id),
-                'uploaded_at': instance.uploaded_at.isoformat() if instance.uploaded_at else None,
-                'message_id': str(instance.message_id) if instance.message_id else None,
-                'metadata': instance.metadata or {},
-                # Add a URL field for client convenience
-                'file_url': f"/media/{instance.file_path}" if instance.file_path else None
-            }
-            
-        # If we got here, we don't know how to handle this type
+        # If the instance is a Pydantic model, use its model_dump method
+        if hasattr(instance, 'model_dump'):
+            # Start with the base model data
+            result = instance.model_dump()
+            # Convert UUIDs to strings for JSON serialization
+            result['id'] = str(result['id'])
+            result['uploaded_by_id'] = str(result['uploaded_by_id'])
+            if result['message_id']:
+                result['message_id'] = str(result['message_id'])
+            # Format datetime objects
+            if result['uploaded_at']:
+                result['uploaded_at'] = result['uploaded_at'].isoformat()
+            # Add a URL field for client convenience
+            result['file_url'] = f"/media/{result['file_path']}" if result['file_path'] else None
+            # Ensure metadata is not None
+            result['metadata'] = result['metadata'] or {}
+            return result
+        
+        # Fallback to standard serialization
         return super().to_representation(instance)
 
 
