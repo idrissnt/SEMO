@@ -36,7 +36,7 @@ class CategoryModel(models.Model):
     class Meta:
         indexes = [
             GistIndex(fields=['path'], name='category_path_gist'),  # Speeds up hierarchical queries
-            GistIndex(fields=['name'], name='category_name_trigram_idx', opclasses=['gin_trgm_ops'])  # For trigram similarity
+            GinIndex(fields=['name'], name='category_name_trigram_idx', opclasses=['gin_trgm_ops'])  # For trigram similarity
         ]
         # unique_together = ('store_brand', 'path')  # Path must be unique per store
         db_table = 'categories'
@@ -59,9 +59,8 @@ class ProductModel(models.Model):
         options={'quality': 80},
         default='stores/default.png'
     )
-    
     image_thumbnail = ImageSpecField(
-        source='image_url',  # Generate thumbnail from main image
+        source='image_url',  # Generate thumbnail from main image. this field is not stored in the database
         processors=[ResizeToFill(200, 150)],  # Resize to 200x150
         format='JPEG',
         options={'quality': 60}
@@ -86,10 +85,10 @@ class ProductModel(models.Model):
         )
     
     class Meta:
-        # Uses GiST index for fast fuzzy matching
+        # Uses GIN index for fast fuzzy matching
         indexes = [
             GinIndex(fields=['search_vector']),  # For full-text search
-            GistIndex(fields=['name'], name='product_name_trigram_idx', opclasses=['gin_trgm_ops'])  # For trigram similarity
+            GinIndex(fields=['name'], name='product_name_trigram_idx', opclasses=['gin_trgm_ops'])  # For trigram similarity
         ]
         db_table = 'products'
 

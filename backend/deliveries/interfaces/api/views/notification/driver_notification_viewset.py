@@ -23,6 +23,10 @@ class DriverNotificationViewSet(viewsets.ViewSet):
     
     permission_classes = [IsAuthenticated]
     
+    def list(self, request: Request) -> Response:
+        """List all driver notifications"""
+        return Response([])
+
     def get_driver_notification_service(self):
         """Get the driver notification service"""
         return ApplicationServiceFactory.create_driver_notification_service()

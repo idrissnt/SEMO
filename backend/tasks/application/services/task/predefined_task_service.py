@@ -31,21 +31,28 @@ class PredefinedTaskTypeService:
             return template
         return None
     
-    def get_predefined_tasks_by_category(self, category: str) -> List[PredefinedTaskType]:
+    def get_predefined_tasks_by_category(self, category_id: uuid.UUID) -> List[PredefinedTaskType]:
         """Get predefined tasks for a category
         
         Args:
-            category: Category to get predefined tasks for
+            category_id: UUID of the category to get predefined tasks for
             
         Returns:
             List of PredefinedTaskType objects
         """
         try:
-            category_enum = TaskCategory(category)
-            templates = self.predefined_type_repository.get_by_category(category_enum)
+            templates = self.predefined_type_repository.get_by_category_id(category_id)
             return templates
         except ValueError:
             return []
+
+    def get_all_categories(self) -> List[TaskCategory]:
+        """Get all task categories that have predefined tasks
+        
+        Returns:
+            List of TaskCategory objects that have associated predefined tasks
+        """
+        return self.predefined_type_repository.get_all_categories()
     
     def get_all_predefined_tasks(self) -> List[PredefinedTaskType]:
         """Get all predefined tasks
@@ -66,7 +73,7 @@ class PredefinedTaskTypeService:
             PredefinedTaskType object
         """
         # Extract required fields
-        category = TaskCategory(template_data['category'])
+        category_id = uuid.UUID(template_data['category_id'])
         name = template_data['name']
         image_url = template_data.get('image_url')
         title_template = template_data['title_template']
@@ -76,7 +83,7 @@ class PredefinedTaskTypeService:
         
         # Create template
         template = PredefinedTaskType(
-            category_id=category.id,
+            category_id=category_id,
             name=name,
             image_url=image_url,
             title_template=title_template,

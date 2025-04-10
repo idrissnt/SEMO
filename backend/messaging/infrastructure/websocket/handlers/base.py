@@ -15,7 +15,7 @@ from ....infrastructure.factory import ServiceFactory
 # Set up logging
 logger = logging.getLogger(__name__)
 
-User = get_user_model()
+# We'll lazy-load the User model to avoid issues with Django initialization
 
 
 class BaseHandler:
@@ -25,6 +25,11 @@ class BaseHandler:
     This class provides common functionality for processing different types
     of WebSocket messages.
     """
+    
+    @property
+    def User(self):
+        """Lazy-load the User model to ensure Django is initialized."""
+        return get_user_model()
     
     def __init__(self, consumer):
         """

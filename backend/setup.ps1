@@ -18,5 +18,8 @@ python manage.py setup_dev
 # Run the development server
 python manage.py runserver 0.0.0.0:8000 # to allow all apps to connect
 
+# Run the development server with gunicorn for asgi application
+python -m gunicorn backend.asgi:application -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --reload
+
 # Access the development server
 http://127.0.0.1:8000/admin/the_user_app/customuser/

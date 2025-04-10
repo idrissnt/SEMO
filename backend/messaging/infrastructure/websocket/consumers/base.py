@@ -13,7 +13,8 @@ from django.contrib.auth import get_user_model
 # Set up logging
 logger = logging.getLogger(__name__)
 
-User = get_user_model()
+# We'll lazy-load the User model to avoid issues with Django initialization
+# This ensures the model is only loaded when needed, after Django is fully initialized
 
 
 class BaseConsumer(AsyncJsonWebsocketConsumer):
@@ -23,6 +24,11 @@ class BaseConsumer(AsyncJsonWebsocketConsumer):
     This consumer provides common functionality for all messaging WebSocket
     consumers, including authentication, serialization, and database access.
     """
+    
+    @property
+    def User(self):
+        """Lazy-load the User model to ensure Django is initialized."""
+        return get_user_model()
     
     async def connect(self):
         """

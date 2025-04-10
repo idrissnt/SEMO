@@ -1,14 +1,14 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 import uuid
 
 from .....infrastructure.factory import ServiceFactory
 from ...serializers import (
     PredefinedTaskTypeSerializer,
-    TaskCategorySerializer,
-    TaskSerializer
+    TaskSerializer,
+    TaskCategorySerializer
 )
 
 class PredefinedTaskViewSet(viewsets.ViewSet):
@@ -22,8 +22,8 @@ class PredefinedTaskViewSet(viewsets.ViewSet):
         self.task_service = ServiceFactory.get_task_service()
 
     def get_permissions(self):
-        """Allow anyone to retrieve or list predefined tasks"""
-        if self.action == 'list' or self.action == 'retrieve':
+        """Allow anyone to retrieve, list predefined tasks, or view categories"""
+        if self.action in ['list', 'retrieve', 'get_all_categories', 'tasks_by_category']:
             return [AllowAny()]
         elif self.action == 'create':
             return [IsAdminUser()]
@@ -67,20 +67,7 @@ class PredefinedTaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["get"], permission_classes=[AllowAny])
-    def categories(self, request):
-        """Get all categories for predefined tasks
-        
-        Endpoint: GET /api/predefined-tasks/categories/
-        
-        Returns a list of all categories that have predefined task types.
-        """
-        # Get all categories
-        categories = self.task_category_service.get_all_categories()
-        serializer = TaskCategorySerializer(categories, many=True)
-        return Response(serializer.data)
-    
-    @action(detail=False, url_path='categorie/(?P<category_id>[^/.]+)/tasks', methods=["get"], permission_classes=[AllowAny])
+    @action(detail=False, url_path='categorie/(?P<category_id>[^/.]+)/tasks', methods=["get"])
     def tasks_by_category(self, request, category_id=None):
         """Get all tasks for a specific category
         
@@ -113,3 +100,15 @@ class PredefinedTaskViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
+    @action(detail=False, url_path='categories', methods=["get"])
+    def get_all_categories(self, request):
+        """Get all task categories that have predefined tasks
+        
+        Endpoint: GET /api/predefined-tasks/categories/
+        
+        Returns a list of all task categories that have associated predefined tasks.
+        This endpoint is publicly accessible (no authentication required).
+        """
+        categories = self.predefined_type_service.get_all_categories()
+        serializer = TaskCategorySerializer(categories, many=True)
+        return Response(serializer.data)

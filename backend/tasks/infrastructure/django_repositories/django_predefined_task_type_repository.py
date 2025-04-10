@@ -7,10 +7,11 @@ from django.db import transaction
 
 # Import domain entities
 from ...domain.models import PredefinedTaskType, TaskCategory
+from ...domain.models.entities.task_category import TaskCategoryType
 from ...domain.repositories import PredefinedTaskTypeRepository
 
 # Import ORM models
-from ..django_models import PredefinedTaskTypeModel
+from ..django_models import PredefinedTaskTypeModel, TaskCategoryModel
 
 
 class DjangoPredefinedTaskTypeRepository(PredefinedTaskTypeRepository):
@@ -36,7 +37,7 @@ class DjangoPredefinedTaskTypeRepository(PredefinedTaskTypeRepository):
             return None
     
     def get_by_category_id(self, category_id: uuid.UUID) -> List[PredefinedTaskType]:
-        """Get templates for a category
+        """Get all predefined tasks for a category
         
         Args:
             category_id: UUID of the category
@@ -44,17 +45,30 @@ class DjangoPredefinedTaskTypeRepository(PredefinedTaskTypeRepository):
         Returns:
             List of PredefinedTaskType objects for the category
         """
-        type_models = PredefinedTaskTypeModel.objects.filter(category_id=category_id)
-        return [self._type_model_to_domain(type_model) for type_model in type_models]
+        predefined_task_models = PredefinedTaskTypeModel.objects.filter(category_id=category_id)
+        return [self._type_model_to_domain(model) for model in predefined_task_models]
     
+    def get_all_categories(self) -> List[TaskCategory]:
+        """Get all task categories that have predefined tasks
+        
+        Returns:
+            List of TaskCategory objects that have associated predefined tasks
+        """
+        # More efficient query using select_related and distinct
+        category_models = TaskCategoryModel.objects.filter(
+            id__in=PredefinedTaskTypeModel.objects.values('category_id').distinct()
+        ).select_related()
+        
+        return [self._category_model_to_domain(model) for model in category_models]
+
     def get_all(self) -> List[PredefinedTaskType]:
         """Get all predefined task types
         
         Returns:
             List of PredefinedTaskType objects
         """
-        type_models = PredefinedTaskTypeModel.objects.all()
-        return [self._type_model_to_domain(model) for model in type_models]
+        predefined_task_models = PredefinedTaskTypeModel.objects.all()
+        return [self._type_model_to_domain(model) for model in predefined_task_models]
     
     @transaction.atomic
     def create(self, predefined_type: PredefinedTaskType) -> PredefinedTaskType:
@@ -66,7 +80,7 @@ class DjangoPredefinedTaskTypeRepository(PredefinedTaskTypeRepository):
         Returns:
             Created PredefinedTaskType object
         """
-        type_model = PredefinedTaskTypeModel.objects.create(
+        predefined_task_model = PredefinedTaskTypeModel.objects.create(
             id=predefined_type.id,
             category_id=predefined_type.category_id,
             image_url=predefined_type.image_url,
@@ -78,7 +92,7 @@ class DjangoPredefinedTaskTypeRepository(PredefinedTaskTypeRepository):
             estimated_budget_range=predefined_type.estimated_budget_range,
             estimated_duration_range=predefined_type.estimated_duration_range
         )
-        return self._type_model_to_domain(type_model)
+        return self._type_model_to_domain(predefined_task_model)
     
     @transaction.atomic
     def update(self, predefined_type: PredefinedTaskType) -> PredefinedTaskType:
@@ -91,18 +105,17 @@ class DjangoPredefinedTaskTypeRepository(PredefinedTaskTypeRepository):
             Updated PredefinedTaskType object
         """
         try:
-            type_model = PredefinedTaskTypeModel.objects.get(id=predefined_type.id)
-            type_model.category_id = predefined_type.category_id
-            type_model.image_url = predefined_type.image_url
-            type_model.title_template = predefined_type.title_template
-            type_model.description_template = predefined_type.description_template
-            type_model.attribute_templates = predefined_type.attribute_templates
-            type_model.location_address = predefined_type.location_address
-            type_model.scheduled_date = predefined_type.scheduled_date
-            type_model.estimated_budget_range = predefined_type.estimated_budget_range
-            type_model.estimated_duration_range = predefined_type.estimated_duration_range
-            type_model.save()
-            return self._type_model_to_domain(type_model)
+            predefined_task_model = PredefinedTaskTypeModel.objects.get(id=predefined_type.id)
+            predefined_task_model.image_url = predefined_type.image_url
+            predefined_task_model.title_template = predefined_type.title_template
+            predefined_task_model.description_template = predefined_type.description_template
+            predefined_task_model.attribute_templates = predefined_type.attribute_templates
+            predefined_task_model.location_address = predefined_type.location_address
+            predefined_task_model.scheduled_date = predefined_type.scheduled_date
+            predefined_task_model.estimated_budget_range = predefined_type.estimated_budget_range
+            predefined_task_model.estimated_duration_range = predefined_type.estimated_duration_range
+            predefined_task_model.save()
+            return self._type_model_to_domain(predefined_task_model)
         except PredefinedTaskTypeModel.DoesNotExist:
             return self.create(predefined_type)
     
@@ -117,11 +130,33 @@ class DjangoPredefinedTaskTypeRepository(PredefinedTaskTypeRepository):
             True if successful, False otherwise
         """
         try:
-            type_model = PredefinedTaskTypeModel.objects.get(id=type_id)
-            type_model.delete()
+            predefined_task_model = PredefinedTaskTypeModel.objects.get(id=type_id)
+            predefined_task_model.delete()
             return True
         except PredefinedTaskTypeModel.DoesNotExist:
             return False
+    
+    def _category_model_to_domain(self, model: TaskCategoryModel) -> TaskCategory:
+        """Convert a TaskCategoryModel to a TaskCategory domain entity
+        
+        Args:
+            model: Django ORM model
+            
+        Returns:
+            TaskCategory domain entity
+        """
+        return TaskCategory(
+            id=model.id,
+            type=TaskCategoryType(model.type),
+            name=model.name,
+            display_name=model.display_name,
+            description=model.description,
+            image_url=model.image_url,
+            icon_name=model.icon_name,
+            color_hex=model.color_hex,
+            created_at=model.created_at,
+            updated_at=model.updated_at
+        )
     
     def _type_model_to_domain(self, model: PredefinedTaskTypeModel) -> PredefinedTaskType:
         """Convert a PredefinedTaskTypeModel to a PredefinedTaskType domain entity

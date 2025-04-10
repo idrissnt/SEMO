@@ -23,7 +23,7 @@ class QueryUtils:
             # Product fields
             'product__id', 'product__name', 'product__slug', 
             'product__quantity', 'product__unit', 'product__description',
-            'product__image_url', 'product__image_thumbnail',
+            'product__image_url',  # Removed image_thumbnail as it's not a DB field
             
             # Category fields
             'category__id', 'category__name', 'category__path', 'category__slug'

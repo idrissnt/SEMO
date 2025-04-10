@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 import uuid
 
 from ....infrastructure.factory import ServiceFactory
@@ -15,17 +15,26 @@ class TaskAssignmentViewSet(viewsets.ViewSet):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.assignment_service = ServiceFactory.get_assignment_service()
+        
+    def list(self, request):
+        """List all assignments (requires authentication)"""
+        # Return an empty list by default - this is just to make the endpoint accessible
+        # Most users will use the my_assignments action instead
+        return Response([])
     
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], url_path='my-assignments')
     def my_assignments(self, request):
-        """Get all assignments for the authenticated user as a performer"""
+        """Get all assignments for the authenticated user as a performer
+        url: /tasks/assignments/my-assignments/"""
         performer_id = uuid.UUID(str(request.user.id))
         assignments = self.assignment_service.get_assignments_by_performer(performer_id)
         return Response(assignments)
     
     @action(detail=True, methods=["post"])
     def start(self, request, pk=None):
-        """Start a task assignment"""
+        """Start a task assignment
+        url: /tasks/assignments/{assignment_id}/start/
+        """
         try:
             assignment_id = uuid.UUID(pk)
             performer_id = uuid.UUID(str(request.user.id))
@@ -73,7 +82,8 @@ class TaskAssignmentViewSet(viewsets.ViewSet):
     
     @action(detail=True, methods=["post"])
     def complete(self, request, pk=None):
-        """Complete a task assignment"""
+        """Complete a task assignment
+        url: /tasks/assignments/{assignment_id}/complete/"""
         try:
             assignment_id = uuid.UUID(pk)
             performer_id = uuid.UUID(str(request.user.id))

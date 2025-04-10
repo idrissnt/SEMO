@@ -166,6 +166,9 @@ class BaseDeliveryApplicationService:
         updated_delivery = self.delivery_repository.update_status(assigned_delivery.id, DeliveryStatus.ASSIGNED)
 
         return True, f"Delivery assigned successfully to {driver.id}", updated_delivery
+
+    def update_status(self, delivery_id: uuid.UUID, status: DeliveryStatus) -> Optional[Delivery]:
+        return self.delivery_repository.update_status(delivery_id, status)
     
     def get_delivery(self, delivery_id: uuid.UUID) -> Optional[Delivery]:
         """Get a delivery by ID"""

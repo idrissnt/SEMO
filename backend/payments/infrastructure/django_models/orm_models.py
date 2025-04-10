@@ -17,7 +17,7 @@ class PaymentModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order_id = models.UUIDField(db_index=True)  # Loose coupling with orders bounded context
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    currency = models.CharField(max_length=3, default='usd')
+    currency = models.CharField(max_length=3, default='eur')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PaymentStatus.PENDING)
     external_id = models.CharField(max_length=255, blank=True, null=True)  # External payment provider ID
     external_client_secret = models.CharField(max_length=255, blank=True, null=True)  # For client-side confirmation

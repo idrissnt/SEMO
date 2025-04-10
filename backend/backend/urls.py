@@ -16,13 +16,14 @@ urlpatterns = [
     
     # API URLs
     path('api/v1/', include([
-        path('auth/', include('the_user_app.urls', namespace='the_user_app')),
+        path('users/', include('the_user_app.urls', namespace='the_user_app')),
         path('stores/', include('store.urls', namespace='store')),
         path('orders/', include('orders.urls', namespace='orders')),
         path('payments/', include('payments.urls', namespace='payments')),
         path('deliveries/', include('deliveries.urls', namespace='deliveries')),
         path('cart/', include('cart.urls', namespace='cart')),
         path('tasks/', include('tasks.urls', namespace='tasks')),
+        path('messaging/', include('messaging.urls', namespace='messaging')),
     ])),
     
     # API Documentation

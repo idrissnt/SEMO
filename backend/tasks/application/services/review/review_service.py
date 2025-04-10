@@ -45,7 +45,7 @@ class ReviewService:
         """
         return self.review_repository.get_by_task_id(task_id)
     
-    def get_reviews_for_user(self, user_id: uuid.UUID) -> List[Review]:
+    def get_reviews_for_reviewee(self, user_id: uuid.UUID) -> List[Review]:
         """Get all reviews where the user is the reviewee
         
         Args:
@@ -54,9 +54,9 @@ class ReviewService:
         Returns:
             List of Review objects
         """
-        return self.review_repository.get_reviews_for_user(user_id)
+        return self.review_repository.get_reviews_for_reviewee(user_id)
     
-    def get_reviews_by_user(self, user_id: uuid.UUID) -> List[Review]:
+    def get_reviews_for_reviewer(self, user_id: uuid.UUID) -> List[Review]:
         """Get all reviews where the user is the reviewer
         
         Args:
@@ -65,7 +65,7 @@ class ReviewService:
         Returns:
             List of Review objects
         """
-        return self.review_repository.get_reviews_by_user(user_id)
+        return self.review_repository.get_reviews_for_reviewer(user_id)
     
     def create_review(self, review_data: Dict[str, Any]) -> Review:
         """Create a new review

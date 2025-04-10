@@ -38,6 +38,7 @@ class ConversationModel(models.Model):
     
     class Meta:
         """Meta options for the ConversationModel."""
+        app_label = 'messaging'
         db_table = 'messaging_conversation'
         ordering = ['-last_message_at', '-created_at']
         indexes = [
@@ -82,6 +83,7 @@ class ConversationParticipantModel(models.Model):
     
     class Meta:
         """Meta options for the ConversationParticipantModel."""
+        app_label = 'messaging'
         db_table = 'messaging_conversation_participant'
         unique_together = ('conversation', 'user')
         indexes = [

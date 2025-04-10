@@ -4,7 +4,7 @@ Conversation service for handling conversation-related business logic.
 This module contains the ConversationService class, which implements the business logic
 for creating, retrieving, and managing conversations.
 """
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 import uuid
 
 from ...domain.models import Conversation

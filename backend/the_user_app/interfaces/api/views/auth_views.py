@@ -19,6 +19,9 @@ logger = logging.getLogger(__name__)
 class AuthViewSet(viewsets.ViewSet):
     """ViewSet for authentication operations"""
     
+    def list(self, request):
+        return Response({})
+
     @extend_schema(
         request=UserSerializer,
         responses={
@@ -27,6 +30,7 @@ class AuthViewSet(viewsets.ViewSet):
         },
         description='Register a new user'
     )
+    
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def register(self, request):
         serializer = UserSerializer(data=request.data)

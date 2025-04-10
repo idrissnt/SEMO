@@ -40,7 +40,7 @@ class DjangoReviewRepository(ReviewRepository):
         review_models = ReviewModel.objects.filter(task_id=task_id)
         return [self._review_model_to_domain(model) for model in review_models]
     
-    def get_reviews_for_user(self, user_id: uuid.UUID) -> List[Review]:
+    def get_reviews_for_reviewee(self, user_id: uuid.UUID) -> List[Review]:
         """Get all reviews where the user is the reviewee
         
         Args:
@@ -50,6 +50,18 @@ class DjangoReviewRepository(ReviewRepository):
             List of Review objects
         """
         review_models = ReviewModel.objects.filter(reviewee_id=user_id)
+        return [self._review_model_to_domain(model) for model in review_models]
+
+    def get_reviews_for_reviewer(self, user_id: uuid.UUID) -> List[Review]:
+        """Get all reviews where the user is the reviewer
+        
+        Args:
+            user_id: UUID of the user
+            
+        Returns:
+            List of Review objects
+        """
+        review_models = ReviewModel.objects.filter(reviewer_id=user_id)
         return [self._review_model_to_domain(model) for model in review_models]
     
     @transaction.atomic

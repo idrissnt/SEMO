@@ -41,23 +41,31 @@ class ConversationViewSet(viewsets.ViewSet):
         
         Endpoint: GET /api/messaging/conversations/
         """
-        user_id = uuid.UUID(str(request.user.id))
-        
-        # Get conversations for the user
-        conversations = self.conversation_service.get_user_conversations(user_id)
-        
-        # Add unread count for each conversation
-        for conversation in conversations:
-            # Add unread count as an attribute
-            conversation.unread_count = self.message_service.get_unread_count(
-                user_id=user_id,
-                conversation_id=conversation.id
+        try:
+            user_id = uuid.UUID(str(request.user.id))
+            
+            # Get conversations for the user
+            conversations = self.conversation_service.get_user_conversations(user_id)
+            
+            # Add unread count for each conversation
+            for conversation in conversations:
+                # Add unread count as an attribute
+                conversation.unread_count = 0  # Default to 0 since get_unread_count is commented out
+                # Uncomment when get_unread_count is implemented
+                # conversation.unread_count = self.message_service.get_unread_count(
+                #     user_id=user_id,
+                #     conversation_id=conversation.id
+                # )
+            
+            # Serialize the conversations
+            serializer = ConversationSerializer(conversations, many=True)
+            
+            return Response(serializer.data)
+        except ValueError as e:
+            return Response(
+                {"error": f"Invalid UUID format: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        
-        # Serialize the conversations
-        serializer = ConversationSerializer(conversations, many=True)
-        
-        return Response(serializer.data)
     
     def retrieve(self, request, pk=None):
         """
@@ -129,7 +137,7 @@ class ConversationViewSet(viewsets.ViewSet):
             # Get pagination parameters
             limit = min(int(request.query_params.get("limit", 50)), 100)
             before_id = request.query_params.get("before_id")
-            before_uuid = uuid.UUID(before_id) if before_id else None
+            before_uuid = uuid.UUID(str(before_id)) if before_id else None
             
             # Get messages for the conversation
             result = self.message_service.get_conversation_messages(

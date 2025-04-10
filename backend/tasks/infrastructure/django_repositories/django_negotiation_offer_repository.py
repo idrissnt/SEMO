@@ -39,6 +39,18 @@ class DjangoNegotiationOfferRepository(NegotiationOfferRepository):
         """
         offer_models = NegotiationOfferModel.objects.filter(application_id=application_id).order_by('created_at')
         return [self._to_entity(offer_model) for offer_model in offer_models]
+
+    def get_latest_by_application_id(self, application_id: uuid.UUID) -> Optional[NegotiationOffer]:
+        """Get the latest offer for a task application
+        
+        Args:
+            application_id: UUID of the task application
+            
+        Returns:
+            Latest NegotiationOffer object if found, None otherwise
+        """
+        offer_models = NegotiationOfferModel.objects.filter(application_id=application_id).order_by('-created_at')
+        return self._to_entity(offer_models.first()) if offer_models.exists() else None
     
     def create(self, application_id: uuid.UUID, amount: Decimal, message: str, created_by: str) -> NegotiationOffer:
         """Create a new negotiation offer

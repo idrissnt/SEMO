@@ -44,7 +44,8 @@ class DeliveryApplicationViewSet(BaseViewSet):
         }
     )
     def create(self, request):
-        """Create a new delivery for an order"""
+        """Create a new delivery for an order
+        url: /delivery/"""
         try:
             # Validate input using command serializer
             validated_data = self.validate_serializer(
@@ -134,7 +135,8 @@ class DeliveryApplicationViewSet(BaseViewSet):
     )
     @action(detail=True, methods=['post'], url_path='update-status')
     def update_status(self, request, pk=None):
-        """Update the status of a delivery"""
+        """Update the status of a delivery
+        """
         try:
             # Validate input using command serializer
             validated_data = self.validate_serializer(
@@ -165,52 +167,13 @@ class DeliveryApplicationViewSet(BaseViewSet):
             return self.handle_exception(e)
     
     @swagger_auto_schema(
-        request_body=DeliveryAssignDriverInputSerializer,
-        responses={
-            200: openapi.Response('Updated delivery', DeliveryOutputSerializer),
-            400: openapi.Response('Invalid input'),
-            404: openapi.Response('Delivery not found'),
-        }
-    )
-    @action(detail=True, methods=['post'], url_path='assign-driver')
-    def assign_driver(self, request, pk=None):
-        """Assign a driver to a delivery"""
-        try:
-            # Validate input using command serializer
-            validated_data = self.validate_serializer(
-                DeliveryAssignDriverInputSerializer, 
-                request.data
-            )
-            
-            # Execute the command via application service
-            delivery_service = ApplicationServiceFactory.create_delivery_application_service()
-            success, message, delivery = delivery_service.assign_driver(
-                delivery_id=UUID(pk),
-                driver_id=validated_data['driver_id']
-            )
-            
-            if not success:
-                return Response(
-                    {'error': message},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
-            # Serialize the result using query serializer
-            serializer = DeliveryOutputSerializer(delivery)
-            
-            return Response(serializer.data)
-                
-        except Exception as e:
-            return self.handle_exception(e)
-    
-    @swagger_auto_schema(
         responses={
             200: openapi.Response('Driver accepted delivery', DeliveryOutputSerializer),
             400: openapi.Response('Invalid request'),
             404: openapi.Response('Delivery not found'),
         }
     )
-    @action(detail=True, methods=['post'], url_path='accept')
+    @action(detail=True, methods=['post'])
     def accept(self, request, pk=None):
         """Accept a delivery as a driver"""
         try:

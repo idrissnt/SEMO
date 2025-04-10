@@ -32,7 +32,18 @@ class CartItemViewSet(viewsets.ViewSet):
         description='Add an item to a cart'
     )
     def create(self, request):
-        """Add an item to a cart"""
+        """
+        Add an item to a cart
+        
+        URL: /api/v1/cart/cart-items/
+        Method: POST
+        Description: Adds a product to a cart; creates a new cart if needed
+        Request Body: {
+            "store_brand_id": "uuid",
+            "store_product_id": "uuid",
+            "quantity": int
+        }
+        """
         serializer = CartItemSerializer(data=request.data)
         if serializer.is_valid():
             # Get cart service
@@ -88,7 +99,13 @@ class CartItemViewSet(viewsets.ViewSet):
         description='Remove an item from a cart'
     )
     def destroy(self, request, pk=None):
-        """Remove an item from a cart"""
+        """
+        Remove an item from a cart
+        
+        URL: /api/v1/cart/cart-items/{item_id}/
+        Method: DELETE
+        Description: Completely removes an item from a cart
+        """
         try:
             # Get cart service
             cart_service = CartFactory.create_cart_service()
@@ -141,9 +158,18 @@ class CartItemViewSet(viewsets.ViewSet):
         },
         description='Update the quantity of a cart item'
     )
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], url_path='update-quantity')
     def update_quantity(self, request, pk=None):
-        """Update the quantity of a cart item"""
+        """
+        Update the quantity of a cart item
+        
+        URL: /api/v1/cart/cart-items/{item_id}/update-quantity/
+        Method: POST
+        Description: Changes the quantity of an item; removes item if quantity <= 0
+        Request Body: {
+            "quantity": int
+        }
+        """
         try:
             # Get quantity from request
             quantity = request.data.get('quantity', 1)

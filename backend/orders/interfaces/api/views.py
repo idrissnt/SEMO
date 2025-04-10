@@ -105,7 +105,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], url_name='create-from-cart')
     @transaction.atomic
     def create_from_cart(self, request):
         """Create a new order directly from a cart

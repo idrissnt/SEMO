@@ -83,24 +83,6 @@ class ConversationRepository(ABC):
         pass
     
     @abstractmethod
-    def get_direct_conversation(self, user_id1: uuid.UUID, 
-                               user_id2: uuid.UUID) -> Optional[Conversation]:
-        """
-        Get the direct conversation between two users.
-        
-        This is a convenience method for finding the one-to-one conversation
-        between two specific users.
-        
-        Args:
-            user_id1: ID of the first user
-            user_id2: ID of the second user
-            
-        Returns:
-            The direct conversation if found, None otherwise
-        """
-        pass
-    
-    @abstractmethod
     def get_by_task(self, task_id: uuid.UUID) -> Optional[Conversation]:
         """
         Get the conversation associated with a specific task.
@@ -110,28 +92,6 @@ class ConversationRepository(ABC):
             
         Returns:
             The task conversation if found, None otherwise
-        """
-        pass
-    
-    @abstractmethod
-    def find(self, criteria: Dict[str, Any], 
-            order_by: str = "-last_message_at", 
-            limit: int = 50, 
-            offset: int = 0) -> List[Conversation]:
-        """
-        Find conversations matching specific criteria.
-        
-        This is a flexible query method that allows searching for conversations
-        based on various criteria.
-        
-        Args:
-            criteria: Dictionary of search criteria
-            order_by: Field to order results by (prefix with - for descending)
-            limit: Maximum number of results to return
-            offset: Number of results to skip
-            
-        Returns:
-            List of conversations matching the criteria
         """
         pass
     

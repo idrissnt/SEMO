@@ -37,24 +37,14 @@ class TaskCategoryViewSet(viewsets.ViewSet):
 
     def list(self, request):
         """Get all task categories
-        
-        Endpoint: GET /api/categories/
-        
-        This endpoint returns all task categories with their UI details
-        like images, icons, and colors.
-        """
+        url: /tasks/categories/"""
         categories = self.task_category_service.get_all_categories()
         serializer = TaskCategorySerializer(categories, many=True)
         return Response(serializer.data)
     
     def retrieve(self, request, pk=None):
         """Get a specific task category by ID
-        
-        Endpoint: GET /api/categories/{pk}/
-        
-        Args:
-            pk: UUID of the category to retrieve
-        """
+        url: /tasks/categories/{pk}/"""
         try:
             category_id = uuid.UUID(pk)
             category = self.task_category_service.get_category_by_id(category_id)
@@ -75,9 +65,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
     
     def create(self, request):
         """Create a new task category
-        
-        Endpoint: POST /api/categories/
-        """
+        url: /tasks/categories/"""
         serializer = TaskCategorySerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -95,14 +83,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["get"], url_path="tasks", permission_classes=[AllowAny])
     def tasks(self, request, pk=None):
         """Get all tasks for a specific category
-        
-        Endpoint: GET /api/categories/{pk}/tasks/
-        
-        This endpoint returns all tasks that belong to a specific category.
-        
-        Args:
-            pk: UUID of the category
-        """
+        url: /tasks/categories/{pk}/tasks/"""
         try:
             category_id = uuid.UUID(pk)
             
@@ -133,16 +114,7 @@ class TaskCategoryViewSet(viewsets.ViewSet):
     @action(detail=True, url_path='task-detail/(?P<task_id>[^/.]+)', methods=["get"], permission_classes=[AllowAny])
     def task_detail(self, request, pk=None, task_id=None):
         """Get a single task in a specific category
-        
-        Endpoint: GET /api/categories/{pk}/task-detail/{task_id}/
-        
-        This endpoint returns a specific task that belongs to a specific category.
-        It verifies both that the category exists and that the task belongs to that category.
-        
-        Args:
-            pk: UUID of the category
-            task_id: UUID of the task
-        """
+        url: /tasks/categories/{pk}/task-detail/{task_id}/"""        
         try:
             category_id = uuid.UUID(pk)
             task_id = uuid.UUID(task_id)

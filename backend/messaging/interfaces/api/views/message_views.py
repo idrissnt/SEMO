@@ -160,36 +160,36 @@ class MessageViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["get"])
-    def unread_count(self, request):
-        """
-        Get the count of unread messages.
+    # @action(detail=False, methods=["get"])
+    # def unread_count(self, request):
+    #     """
+    #     Get the count of unread messages.
         
-        This endpoint returns the count of unread messages for the authenticated user,
-        optionally filtered by conversation.
+    #     This endpoint returns the count of unread messages for the authenticated user,
+    #     optionally filtered by conversation.
         
-        Endpoint: GET /api/messaging/messages/unread_count/
+    #     Endpoint: GET /api/messaging/messages/unread_count/
         
-        Query parameters:
-        - conversation_id: Optional, if provided, only count unread messages in this conversation
-        """
-        try:
-            user_id = uuid.UUID(str(request.user.id))
-            conversation_id = request.query_params.get("conversation_id")
-            conversation_uuid = uuid.UUID(conversation_id) if conversation_id else None
+    #     Query parameters:
+    #     - conversation_id: Optional, if provided, only count unread messages in this conversation
+    #     """
+    #     try:
+    #         user_id = uuid.UUID(str(request.user.id))
+    #         conversation_id = request.query_params.get("conversation_id")
+    #         conversation_uuid = uuid.UUID(conversation_id) if conversation_id else None
             
-            # Get the unread count
-            count = self.message_service.get_unread_count(
-                user_id=user_id,
-                conversation_id=conversation_uuid
-            )
+    #         # Get the unread count
+    #         count = self.message_service.get_unread_count(
+    #             user_id=user_id,
+    #             conversation_id=conversation_uuid
+    #         )
             
-            return Response({"count": count})
-        except ValueError as e:
-            return Response(
-                {"error": str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+    #         return Response({"count": count})
+    #     except ValueError as e:
+    #         return Response(
+    #             {"error": str(e)},
+    #             status=status.HTTP_400_BAD_REQUEST
+    #         )
     
     @action(detail=True, methods=["delete"])
     def delete(self, request, pk=None):

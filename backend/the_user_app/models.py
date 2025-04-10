@@ -8,7 +8,8 @@ from the_user_app.infrastructure.django_models.orm_models import (
     CustomUserModel,
     AddressModel,
     LogoutEventModel,
-    BlacklistedTokenModel
+    BlacklistedTokenModel,
+    TaskPerformerProfileModel
 )
 
 # Re-export the models with the names Django expects
@@ -16,6 +17,7 @@ CustomUser = CustomUserModel
 Address = AddressModel
 LogoutEvent = LogoutEventModel
 BlacklistedToken = BlacklistedTokenModel
+TaskPerformerProfile = TaskPerformerProfileModel
 
 # Define which models should be available for Django
-__all__ = ['CustomUser', 'Address', 'LogoutEvent', 'BlacklistedToken']
+__all__ = ['CustomUser', 'Address', 'LogoutEvent', 'BlacklistedToken', 'TaskPerformerProfile']

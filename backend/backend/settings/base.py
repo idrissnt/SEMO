@@ -15,11 +15,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # Application definition
-# Import MessagingConfig for WebSocket configuration
-from messaging.config import MessagingConfig
+# # Import MessagingConfig for WebSocket configuration
+# from ...messaging.config import MessagingConfig
 
 # Base INSTALLED_APPS before adding messaging-specific apps
-BASE_INSTALLED_APPS = [
+INSTALLED_APPS = [
     'django.contrib.gis',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,7 +36,7 @@ BASE_INSTALLED_APPS = [
     'drf_spectacular',
     'django_ltree',
     'imagekit',
-    # 'channels' is added by MessagingConfig.get_installed_apps()
+    'channels',
     
     # Celery apps
     'django_celery_results',
@@ -50,6 +50,7 @@ BASE_INSTALLED_APPS = [
     'cart',
     'deliveries',
     'tasks',
+    'messaging',
     
 ]
 
@@ -147,7 +148,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'the_user_app.interfaces.api.exceptions.custom_exception_handler',
+    # 'EXCEPTION_HANDLER': 'the_user_app.interfaces.api.exceptions.custom_exception_handler',
 }
 
 # API Documentation settings
@@ -193,7 +194,7 @@ CACHES = {
         "LOCATION": "redis://localhost:6379/1",  # Default for local development, DB 1 for caching
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PARSER_CLASS": "redis.connection.HiredisParser",  # Faster parser
+            # "PARSER_CLASS": "redis.connection.HiredisParser",  # Removed - requires hiredis package
         },
         "KEY_PREFIX": "django_cache"  # Prefix for cache keys
     }
@@ -211,9 +212,8 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
 # Celery Beat Schedule
-CELERY_BEAT_SCHEDULE = {}
-
 # Note: CELERY_BROKER_URL should be defined in environment-specific settings
+CELERY_BEAT_SCHEDULE = {}
 
 # -------------------------------------------------------------------------
 # Django Channels Configuration
@@ -223,19 +223,5 @@ CELERY_BEAT_SCHEDULE = {}
 # This tells Django which ASGI application to use for handling WebSocket connections
 ASGI_APPLICATION = 'backend.asgi.application'
 
-# -------------------------------------------------------------------------
-# Messaging Configuration
-# -------------------------------------------------------------------------
-
-# Add messaging-specific apps to INSTALLED_APPS
-INSTALLED_APPS = BASE_INSTALLED_APPS.copy()
-
-# Configure the messaging system using MessagingConfig
-# This will add required apps and set WebSocket URL
-settings_dict = locals()
-MessagingConfig.configure_django_settings(settings_dict)
-
 # WebSocket URL (base default for development)
-# This will be overridden in environment-specific settings (development.py, production.py)
-# Used by frontend clients to connect to the WebSocket server
 WEBSOCKET_URL = 'ws://localhost:8000'

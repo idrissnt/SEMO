@@ -37,12 +37,12 @@ class StoreFactory:
     def create_store_brand_location_service():
         """Create a StoreBrandLocationService with all dependencies"""
         store_brand_repository = DjangoStoreBrandRepository()
-        location_service = GoogleMapsService()
+        store_location_service = GoogleMapsService()
         cache_service = DjangoCacheService()    
         
         return StoreBrandLocationService(
             store_brand_repository=store_brand_repository,
-            location_service=location_service,
+            store_location_service=store_location_service,
             cache_service=cache_service
         )
     

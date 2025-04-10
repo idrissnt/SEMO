@@ -46,6 +46,7 @@ class MessageModel(models.Model):
     
     class Meta:
         """Meta options for the MessageModel."""
+        app_label = 'messaging'
         db_table = 'messaging_message'
         ordering = ['-sent_at']
         indexes = [

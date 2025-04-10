@@ -6,7 +6,9 @@ REST API endpoints and WebSocket routes.
 """
 from django.urls import path, include
 
+app_name = 'messaging'
+
 urlpatterns = [
     # REST API endpoints
-    path('api/messaging/', include('messaging.interfaces.api.urls')),
+    path('', include('messaging.interfaces.api.urls')),
 ]

@@ -230,31 +230,31 @@ class MessageService:
             
         return self.message_repository.delete(message_id)
     
-    def get_unread_count(self, user_id: uuid.UUID, conversation_id: Optional[uuid.UUID] = None) -> int:
-        """
-        Get the count of unread messages for a user.
+    # def get_unread_count(self, user_id: uuid.UUID, conversation_id: Optional[uuid.UUID] = None) -> int:
+    #     """
+    #     Get the count of unread messages for a user.
         
-        Args:
-            user_id: ID of the user
-            conversation_id: If provided, only count unread messages in this conversation
+    #     Args:
+    #         user_id: ID of the user
+    #         conversation_id: If provided, only count unread messages in this conversation
             
-        Returns:
-            Number of unread messages
-        """
-        criteria = {
-            "read_at": None,
-            "sender_id__ne": user_id  # Not from the user
-        }
+    #     Returns:
+    #         Number of unread messages
+    #     """
+    #     criteria = {
+    #         "read_at": None,
+    #         "sender_id__ne": user_id  # Not from the user
+    #     }
         
-        if conversation_id:
-            criteria["conversation_id"] = conversation_id
-        else:
-            # Only count messages in conversations the user is part of
-            conversations = self.conversation_repository.get_by_participant(user_id)
-            conversation_ids = [conv.id for conv in conversations]
-            if not conversation_ids:
-                return 0
-            criteria["conversation_id__in"] = conversation_ids
+    #     if conversation_id:
+    #         criteria["conversation_id"] = conversation_id
+    #     else:
+    #         # Only count messages in conversations the user is part of
+    #         conversations = self.conversation_repository.get_by_participant(user_id)
+    #         conversation_ids = [conv.id for conv in conversations]
+    #         if not conversation_ids:
+    #             return 0
+    #         criteria["conversation_id__in"] = conversation_ids
         
-        messages = self.message_repository.find(criteria)
-        return len(messages)
+    #     messages = self.message_repository.find(criteria)
+    #     return len(messages)

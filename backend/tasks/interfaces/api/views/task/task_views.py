@@ -27,7 +27,8 @@ class TaskViewSet(viewsets.ViewSet):
         return [IsAuthenticated()]
     
     def list(self, request):
-        """Get all tasks created by the authenticated user"""
+        """Get all tasks created by the authenticated user
+        url: /tasks/"""
         requester_id = uuid.UUID(str(request.user.id))
         tasks = self.task_service.get_tasks_by_requester(requester_id)
         # Use the TaskSerializer to convert the list of domain entities to a response
@@ -35,7 +36,8 @@ class TaskViewSet(viewsets.ViewSet):
         return Response(serializer.data)
     
     def retrieve(self, request, pk=None):
-        """Get a task by ID"""
+        """Get a task by ID
+        url: /tasks/{pk}/"""
         try:
             task_id = uuid.UUID(pk)
             task = self.task_service.get_task_by_id(task_id)
@@ -55,11 +57,7 @@ class TaskViewSet(viewsets.ViewSet):
     
     def create(self, request):
         """Create a new task
-        
-        Endpoint: POST /api/tasks/
-        
-        The frontend should send all required fields directly in the request body
-        """
+        url: /tasks/"""
         serializer = TaskCreateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -108,7 +106,8 @@ class TaskViewSet(viewsets.ViewSet):
     
     @action(detail=True, methods=["post"], url_path="publish")
     def publish(self, request, pk=None):
-        """Publish a task"""
+        """Publish a task
+        url: /tasks/{pk}/publish/"""
         try:
             task_id = uuid.UUID(pk)
             requester_id = uuid.UUID(str(request.user.id))
@@ -122,7 +121,8 @@ class TaskViewSet(viewsets.ViewSet):
     
     @action(detail=True, methods=["post"], url_path="cancel")
     def cancel(self, request, pk=None):
-        """Cancel a task"""
+        """Cancel a task
+        url: /tasks/{pk}/cancel/"""
         try:
             task_id = uuid.UUID(pk)
             user_id = uuid.UUID(str(request.user.id))
@@ -137,11 +137,7 @@ class TaskViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="search-by-location")
     def search_by_location(self, request):
         """Search for tasks near a location
-        
-        Endpoint: POST /api/tasks/search_by_location/
-        
-        This endpoint is publicly accessible (no authentication required).
-        """
+        url: /tasks/search-by-location/"""
         serializer = TaskSearchSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(

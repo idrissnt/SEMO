@@ -91,6 +91,18 @@ def handle_successful_payment(intent):
         logger.error(f"Error handling successful payment webhook: {message}")
     else:
         logger.info(f"Payment {payment.id} marked as completed")
+
+        # Publish domain event
+        from core.domain_events.event_bus import event_bus
+        from payments.domain.events.payment_events import PaymentCompletedEvent
+        
+        event = PaymentCompletedEvent.create(
+            payment_id=str(payment.id),
+            order_id=str(payment.order_id),
+            amount=payment.amount,
+            currency=payment.currency
+        )
+        event_bus.publish(event)
         
 def handle_failed_payment(intent):
     """Handle a failed payment intent

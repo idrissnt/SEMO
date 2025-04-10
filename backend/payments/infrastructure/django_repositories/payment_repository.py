@@ -61,7 +61,8 @@ class DjangoPaymentRepository(PaymentRepository):
             return None
     
     def get_by_user_id(self, user_id: UUID) -> List[Payment]:
-        payment_models = PaymentModel.objects.filter(order__user_id=user_id)
+        # Use the reverse relationship from OrderModel to PaymentModel
+        payment_models = PaymentModel.objects.filter(payment_order__user_id=user_id)
         return [self._to_domain_entity(model) for model in payment_models]
     
     def update(self, payment: Payment) -> Payment:
@@ -84,7 +85,8 @@ class DjangoPaymentRepository(PaymentRepository):
             raise ValueError(f"Payment with ID {payment.id} does not exist")
     
     def belongs_to_user(self, payment_id: UUID, user_id: UUID) -> bool:
-        return PaymentModel.objects.filter(id=payment_id, order__user_id=user_id).exists()
+        # Use the reverse relationship from OrderModel to PaymentModel
+        return PaymentModel.objects.filter(id=payment_id, payment_order__user_id=user_id).exists()
     
     def _to_domain_entity(self, model: PaymentModel) -> Payment:
         return Payment(

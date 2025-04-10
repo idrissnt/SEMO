@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 import logging
+import uuid
 
 from the_user_app.interfaces.api.serializers.user_serializers import UserProfileSerializer
 from the_user_app.infrastructure.factory import UserFactory
@@ -22,10 +23,23 @@ class UserProfileViewSet(viewsets.ViewSet):
         },
         description='Get user profile information including addresses'
     )
-    @action(detail=False, methods=['get'])
-    def me(self, request):
+
+    def list(self, request):
+        """
+        Get user profile information including addresses
+        url: /profiles/
+        """
+        return Response({})
+
+    def retrieve(self, request, pk=None):
+        """
+        Get user profile information including addresses
+        url: /profiles/{pk}/
+        """
+        user_id = uuid.UUID(pk)
+
         # Get user with addresses
-        user_with_addresses = self._get_user_with_addresses(request.user.id)
+        user_with_addresses = self._get_user_with_addresses(user_id)
         
         # Serialize and return
         serializer = UserProfileSerializer(user_with_addresses)
@@ -40,8 +54,14 @@ class UserProfileViewSet(viewsets.ViewSet):
         },
         description='Update user profile information'
     )
-    @action(detail=False, methods=['put', 'patch'])
-    def update_me(self, request):
+
+    @action(detail=True, methods=['put', 'patch'], url_path='update-profile')
+    def update_profile(self, request, pk=None):
+        """
+        Update user profile information
+        url: /profiles/{pk}/update-profile/
+        """
+        user_id = uuid.UUID(pk)
         serializer = UserProfileSerializer(data=request.data, partial=True)
         if serializer.is_valid():
             # Get user service from factory
@@ -49,13 +69,13 @@ class UserProfileViewSet(viewsets.ViewSet):
             
             # Update user profile
             user, error = user_service.update_user_profile(
-                user_id=request.user.id,
+                user_id=user_id,
                 profile_data=serializer.validated_data
             )
             
             if user:
                 # Get user with addresses
-                user_with_addresses = self._get_user_with_addresses(request.user.id)
+                user_with_addresses = self._get_user_with_addresses(user_id)
                 
                 # Serialize and return
                 return Response(UserProfileSerializer(user_with_addresses).data)
@@ -73,13 +93,18 @@ class UserProfileViewSet(viewsets.ViewSet):
         },
         description='Delete user account'
     )
-    @action(detail=False, methods=['delete'])
-    def delete_account(self, request):
+    @action(detail=True, methods=['delete'], url_path='delete-account')
+    def delete_account(self, request, pk=None):
+        """
+        Delete user account
+        url: /profiles/{pk}/delete-account/
+        """
+        user_id = uuid.UUID(pk)
         # Get user service from factory
         user_service = UserFactory.create_user_service()
         
         # Delete user
-        success, error = user_service.delete_user(request.user.id)
+        success, error = user_service.delete_user(user_id)
         
         if success:
             return Response(status=status.HTTP_204_NO_CONTENT)

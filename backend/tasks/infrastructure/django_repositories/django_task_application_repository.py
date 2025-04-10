@@ -93,6 +93,18 @@ class DjangoTaskApplicationRepository(TaskApplicationRepository):
             return self._application_model_to_domain(application_model)
         except TaskApplicationModel.DoesNotExist:
             return self.create(application)
+
+    def get_by_status(self, status: ApplicationStatus) -> List[TaskApplication]:
+        """Get all applications with a specific status
+        
+        Args:
+            status: Status of the applications to retrieve
+            
+        Returns:
+            List of TaskApplication objects
+        """
+        application_models = TaskApplicationModel.objects.filter(status=status.value)
+        return [self._application_model_to_domain(model) for model in application_models]
     
     @transaction.atomic
     def delete(self, application_id: uuid.UUID) -> bool:

@@ -1,7 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from deliveries.interfaces.api.views.notification.notification_viewset import NotificationViewSet
 from deliveries.interfaces.api.views.notification.delivery_notification_viewset import DeliveryNotificationViewSet
 from deliveries.interfaces.api.views.notification.driver_notification_viewset import DriverNotificationViewSet
 from deliveries.interfaces.api.views.delivery_application_viewset import DeliveryApplicationViewSet
@@ -12,7 +11,6 @@ app_name = 'deliveries'
 
 # Create a router and register our viewsets with it
 router = DefaultRouter()
-router.register(r'notifications', NotificationViewSet, basename='notification')
 router.register(r'delivery-notifications', DeliveryNotificationViewSet, basename='delivery-notification')
 router.register(r'driver-notifications', DriverNotificationViewSet, basename='driver-notification')
 

@@ -176,7 +176,7 @@ class ServiceFactory:
                 task_application_repository=RepositoryFactory.get_task_application_repository(),
                 negotiation_repository=RepositoryFactory.get_negotiation_offer_repository()
             )
-        return cls._application_service
+        return cls._task_application_service
     
     @classmethod
     def get_chat_service(cls) -> ChatService:

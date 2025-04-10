@@ -32,6 +32,10 @@ class DeliverySearchViewSet(BaseViewSet):
     """
     permission_classes = [IsAuthenticated]
     
+    def list(self, request):
+        """List all deliveries"""
+        return Response([])
+
     @swagger_auto_schema(
         query_serializer=NearbyLocationsInputSerializer,
         manual_parameters=[
@@ -85,35 +89,35 @@ class DeliverySearchViewSet(BaseViewSet):
         except Exception as e:
             return self.handle_exception(e)
     
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('query', openapi.IN_QUERY, description="Search query", type=openapi.TYPE_STRING, required=True),
-        ],
-        responses={
-            200: openapi.Response('List of matching deliveries', DeliveryOutputSerializer(many=True)),
-        }
-    )
-    @action(detail=False, methods=['get'], url_path='search')
-    def search_deliveries(self, request):
-        """Search for deliveries by query string"""
-        try:
-            # Get query parameter
-            query = request.query_params.get('query', '')
+    # @swagger_auto_schema(
+    #     manual_parameters=[
+    #         openapi.Parameter('query', openapi.IN_QUERY, description="Search query", type=openapi.TYPE_STRING, required=True),
+    #     ],
+    #     responses={
+    #         200: openapi.Response('List of matching deliveries', DeliveryOutputSerializer(many=True)),
+    #     }
+    # )
+    # @action(detail=False, methods=['get'], url_path='search')
+    # def search_deliveries(self, request):
+    #     """Search for deliveries by query string"""
+    #     try:
+    #         # Get query parameter
+    #         query = request.query_params.get('query', '')
             
-            if not query:
-                return Response(
-                    {'error': 'Query parameter is required'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+    #         if not query:
+    #             return Response(
+    #                 {'error': 'Query parameter is required'},
+    #                 status=status.HTTP_400_BAD_REQUEST
+    #             )
             
-            # Execute the query via application service
-            search_service = ApplicationServiceFactory.create_delivery_search_service()
-            deliveries = search_service.search_deliveries(query)
+    #         # Execute the query via application service
+    #         search_service = ApplicationServiceFactory.create_delivery_search_service()
+    #         deliveries = search_service.search_deliveries(query)
             
-            # Serialize the results using query serializer
-            serializer = DeliveryOutputSerializer(deliveries, many=True)
+    #         # Serialize the results using query serializer
+    #         serializer = DeliveryOutputSerializer(deliveries, many=True)
             
-            return Response(serializer.data)
+    #         return Response(serializer.data)
                 
-        except Exception as e:
-            return self.handle_exception(e)
+    #     except Exception as e:
+    #         return self.handle_exception(e)

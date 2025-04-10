@@ -10,7 +10,6 @@ import jwt
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
 from django.conf import settings
 from channels.middleware import BaseMiddleware
 from channels.db import database_sync_to_async
@@ -24,7 +23,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 # Set up logging
 logger = logging.getLogger(__name__)
 
-User = get_user_model()
+# We'll lazy-load the User model and AnonymousUser to avoid issues with Django initialization
 
 
 class JwtAuthMiddleware(BaseMiddleware):
@@ -34,6 +33,17 @@ class JwtAuthMiddleware(BaseMiddleware):
     This middleware authenticates WebSocket connections using JWT tokens
     provided in the query string or headers.
     """
+    
+    @property
+    def User(self):
+        """Lazy-load the User model to ensure Django is initialized."""
+        return get_user_model()
+        
+    @property
+    def AnonymousUser(self):
+        """Lazy-load the AnonymousUser class to ensure Django is initialized."""
+        from django.contrib.auth.models import AnonymousUser
+        return AnonymousUser
     
     async def __call__(self, scope, receive, send):
         """
@@ -60,7 +70,7 @@ class JwtAuthMiddleware(BaseMiddleware):
                 token = auth_header.split(" ")[1]
         
         # Default to anonymous user
-        scope["user"] = AnonymousUser()
+        scope["user"] = self.AnonymousUser()
         
         # If token found, authenticate
         if token:
@@ -107,8 +117,8 @@ class JwtAuthMiddleware(BaseMiddleware):
             User object if found, None otherwise
         """
         try:
-            return User.objects.get(id=user_id)
-        except User.DoesNotExist:
+            return self.User.objects.get(id=user_id)
+        except self.User.DoesNotExist:
             return None
     
     @database_sync_to_async

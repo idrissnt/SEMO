@@ -31,14 +31,23 @@ class PredefinedTaskTypeRepository(ABC):
         pass
     
     @abstractmethod
-    def get_by_category(self, category: TaskCategory) -> List[PredefinedTaskType]:
-        """Get template for a category
+    def get_by_category_id(self, category_id: uuid.UUID) -> List[PredefinedTaskType]:
+        """Get all predefined tasks for a category
         
         Args:
-            category: Category to get template for
+            category_id: UUID of the category
             
         Returns:
             List of PredefinedTaskType objects
+        """
+        pass
+
+    @abstractmethod
+    def get_all_categories(self) -> List[TaskCategory]:
+        """Get all task categories
+        
+        Returns:
+            List of TaskCategory objects
         """
         pass
     

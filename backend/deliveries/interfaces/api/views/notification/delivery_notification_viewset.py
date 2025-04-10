@@ -26,6 +26,11 @@ class DeliveryNotificationViewSet(viewsets.ViewSet):
         """Get the delivery notification service"""
         return ApplicationServiceFactory.create_delivery_notification_service()
     
+    def list(self, request: Request) -> Response:
+        """List all delivery notifications"""
+        return Response([])
+    
+
     @swagger_auto_schema(
         responses={
             200: openapi.Response('Delivery accepted successfully'),

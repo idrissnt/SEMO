@@ -52,6 +52,7 @@ class AttachmentModel(models.Model):
     
     class Meta:
         """Meta options for the AttachmentModel."""
+        app_label = 'messaging'
         db_table = 'messaging_attachment'
         ordering = ['-uploaded_at']
         indexes = [

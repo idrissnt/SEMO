@@ -36,6 +36,10 @@ class LocationApplicationViewSet(BaseViewSet):
     """
     permission_classes = [IsAuthenticated]
     
+    def list(self, request):
+        """Get a list of all delivery locations"""
+        return Response([])
+    
     @swagger_auto_schema(
         request_body=DeliveryLocationCreateInputSerializer,
         responses={
@@ -76,29 +80,29 @@ class LocationApplicationViewSet(BaseViewSet):
         except Exception as e:
             return self.handle_exception(e)
     
-    @swagger_auto_schema(
-        responses={
-            200: openapi.Response('Location history', DeliveryLocationOutputSerializer(many=True)),
-            404: openapi.Response('Delivery not found'),
-        }
-    )
-    @action(detail=True, methods=['get'], url_path='location-history')
-    def location_history(self, request, pk=None):
-        """Get the location history for a delivery"""
-        try:
-            # Execute the query via application service
-            location_service = ApplicationServiceFactory.create_location_application_service()
-            locations = location_service.get_delivery_location_history(
-                delivery_id=UUID(pk)
-            )
+    # @swagger_auto_schema(
+    #     responses={
+    #         200: openapi.Response('Location history', DeliveryLocationOutputSerializer(many=True)),
+    #         404: openapi.Response('Delivery not found'),
+    #     }
+    # )
+    # @action(detail=True, methods=['get'], url_path='location-history')
+    # def location_history(self, request, pk=None):
+    #     """Get the location history for a delivery"""
+    #     try:
+    #         # Execute the query via application service
+    #         location_service = ApplicationServiceFactory.create_location_application_service()
+    #         locations = location_service.get_delivery_location_history(
+    #             delivery_id=UUID(pk)
+    #         )
             
-            # Serialize the results using query serializer
-            serializer = DeliveryLocationOutputSerializer(locations, many=True)
+    #         # Serialize the results using query serializer
+    #         serializer = DeliveryLocationOutputSerializer(locations, many=True)
             
-            return Response(serializer.data)
+    #         return Response(serializer.data)
                 
-        except Exception as e:
-            return self.handle_exception(e)
+    #     except Exception as e:
+    #         return self.handle_exception(e)
     
     @swagger_auto_schema(
         query_serializer=NearbyLocationsInputSerializer,
@@ -133,9 +137,9 @@ class LocationApplicationViewSet(BaseViewSet):
             
             # Execute the query via application service
             location_service = ApplicationServiceFactory.create_location_application_service()
-            route_info = location_service.get_route_info(
+            route_info = location_service.get_delivery_route(
                 delivery_id=UUID(pk),
-                current_location=current_location
+                # current_location=current_location
             )
             
             if not route_info:
@@ -152,32 +156,32 @@ class LocationApplicationViewSet(BaseViewSet):
         except Exception as e:
             return self.handle_exception(e)
     
-    @swagger_auto_schema(
-        responses={
-            200: openapi.Response('Current location', GeoPointSerializer),
-            404: openapi.Response('Delivery not found or no location available'),
-        }
-    )
-    @action(detail=True, methods=['get'], url_path='current-location')
-    def current_location(self, request, pk=None):
-        """Get the current location for a delivery"""
-        try:
-            # Execute the query via application service
-            location_service = ApplicationServiceFactory.create_location_application_service()
-            location = location_service.get_current_delivery_location(
-                delivery_id=UUID(pk)
-            )
+    # @swagger_auto_schema(
+    #     responses={
+    #         200: openapi.Response('Current location', GeoPointSerializer),
+    #         404: openapi.Response('Delivery not found or no location available'),
+    #     }
+    # )
+    # @action(detail=True, methods=['get'], url_path='current-location')
+    # def current_location(self, request, pk=None):
+    #     """Get the current location for a delivery"""
+    #     try:
+    #         # Execute the query via application service
+    #         location_service = ApplicationServiceFactory.create_location_application_service()
+    #         location = location_service.get_current_delivery_location(
+    #             delivery_id=UUID(pk)
+    #         )
             
-            if not location:
-                return Response(
-                    {'error': 'No location available for this delivery'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
+    #         if not location:
+    #             return Response(
+    #                 {'error': 'No location available for this delivery'},
+    #                 status=status.HTTP_404_NOT_FOUND
+    #             )
             
-            # Serialize the result using query serializer
-            serializer = GeoPointSerializer(location)
+    #         # Serialize the result using query serializer
+    #         serializer = GeoPointSerializer(location)
             
-            return Response(serializer.data)
+    #         return Response(serializer.data)
                 
-        except Exception as e:
-            return self.handle_exception(e)
+    #     except Exception as e:
+    #         return self.handle_exception(e)

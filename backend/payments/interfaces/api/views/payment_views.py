@@ -88,7 +88,7 @@ class PaymentViewSet(viewsets.ViewSet):
             status=status.HTTP_201_CREATED
         )
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], url_path='create-intent')
     def create_intent(self, request, pk=None):
         """Create a payment intent for a payment
         
@@ -139,7 +139,7 @@ class PaymentViewSet(viewsets.ViewSet):
         logger.info(f"Payment intent created successfully for payment {payment_id}")
         return Response(result)
     
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], url_path='confirm-intent')
     def confirm_intent(self, request):
         """Confirm a payment after client-side confirmation
         

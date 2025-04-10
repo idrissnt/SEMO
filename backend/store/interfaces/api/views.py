@@ -21,13 +21,22 @@ class StoreBrandLocationViewSet(viewsets.ViewSet):
         super().__init__(**kwargs)
         self.store_brand_location_service = StoreFactory.create_store_brand_location_service()
 
-    @action(detail=False, methods=['get'])
+    def list(self, request):
+        """Get all store brands
+        url: stores/store-brands/
+        method: GET"""
+        return Response([])
+
+    @action(detail=False, methods=['get'], url_path='nearby-stores')
     def nearby_stores(self, request):
-        """Find for each store brand the nearest store using the user's address"""
+        """Find for each store brand the nearest store using the user's address
+        url: stores/store-brands/nearby-stores/
+        method: GET
+        query parameters: address, radius (optional), brand_slugs (optional)"""
         # Get parameters from request
         address = request.query_params.get('address')
         radius = request.query_params.get('radius', '5.0')
-        brand_slugs = request.query_params.getlist('brand_slugs', None)
+        # brand_slugs = request.query_params.getlist('brand_slugs', None)
         
         try:
             radius_km = float(radius)
@@ -39,7 +48,7 @@ class StoreBrandLocationViewSet(viewsets.ViewSet):
         nearby_brands = self.store_brand_location_service.find_nearby_store_brands_by_address(
             address=address,
             radius_km=radius_km,
-            brand_slugs=brand_slugs if brand_slugs else None
+            # brand_slugs=brand_slugs if brand_slugs else None
         )
         
         serializer = StoreBrandSerializer(nearby_brands, many=True)
@@ -52,9 +61,18 @@ class StoreProductViewSet(viewsets.ViewSet):
         super().__init__(**kwargs)
         self.store_products_service = StoreFactory.create_store_products_service()
     
-    @action(detail=False, methods=['get'])
+    def list(self, request):
+        """Get all products
+        url: stores/store-products/
+        method: GET"""
+        return Response([])
+
+    @action(detail=False, methods=['get'], url_path='all-products')
     def all_products(self, request):
-        """List products for a specific store"""
+        """List products for a specific store
+        url: stores/store-products/all-products/
+        method: GET
+        query parameters: store_id (required)"""
         store_id = request.query_params.get('store_id')
         if not store_id:
             return Response(
@@ -74,7 +92,10 @@ class StoreProductViewSet(viewsets.ViewSet):
     
     @action(detail=False, methods=['get'], url_path='by-category')
     def products_by_category(self, request):
-        """Get products by category slugs"""
+        """Get products by category slugs
+        url: stores/store-products/by-category/
+        method: GET
+        query parameters: category_path (optional)"""
         category_path = request.query_params.get('category_path', '')
         store_id = request.query_params.get('store_id')
         
@@ -102,9 +123,18 @@ class SearchViewSet(viewsets.ViewSet):
         super().__init__(**kwargs)
         self.search_service = StoreFactory.create_search_products_service()
     
+    def list(self, request):
+        """Get all products
+        url: stores/search/
+        method: GET"""
+        return Response([])
+
     @action(detail=False, methods=['get'])
     def autocomplete(self, request):
-        """Get autocomplete suggestions for a partial search query"""
+        """Get autocomplete suggestions for a partial search query
+        url: stores/search/autocomplete/
+        method: GET
+        query parameters: q (required)"""
         query = request.query_params.get('q', '')
             
         suggestions = self.search_service.autocomplete_query(
@@ -116,7 +146,10 @@ class SearchViewSet(viewsets.ViewSet):
     
     @action(detail=False, methods=['get'])
     def products(self, request):
-        """Search for products globally or within a specific store"""
+        """Search for products globally or within a specific store
+        url: stores/search/products/
+        method: GET
+        query parameters: q (required), page (default=1), page_size (default=10), store_id (optional)"""
         query = request.query_params.get('q', '')
         store_id = request.query_params.get('store_id')
         page = request.query_params.get('page', '1')

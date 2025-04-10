@@ -17,7 +17,8 @@ class ReviewViewSet(viewsets.ViewSet):
         self.review_service = ServiceFactory.get_review_service()
     
     def create(self, request):
-        """Create a review for a completed task"""
+        """Create a review for a completed task
+        url: /tasks/reviews/"""
         serializer = ReviewSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -99,19 +100,29 @@ class ReviewViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], url_path="my-reviews")
     def my_reviews(self, request):
-        """Get all reviews for the authenticated user"""
+        """Get all reviews made by the authenticated user
+        url: /tasks/reviews/my-reviews/"""
         user_id = uuid.UUID(str(request.user.id))
-        reviews = self.review_service.get_reviews_for_user(user_id)
+        reviews = self.review_service.get_reviews_for_reviewer(user_id)
         return Response(reviews)
-    
-    @action(detail=True, methods=["get"])
+
+    @action(detail=False, methods=["get"], url_path="my-reviews-received")
+    def my_reviews_received(self, request):
+        """Get all reviews received by the authenticated user
+        url: /tasks/reviews/my-reviews-received/"""
+        user_id = uuid.UUID(str(request.user.id))
+        reviews = self.review_service.get_reviews_for_reviewee(user_id)
+        return Response(reviews)
+
+    @action(detail=False, methods=["get"], url_path="user-reviews")
     def user_reviews(self, request, pk=None):
-        """Get all reviews for a specific user"""
+        """Get all reviews for a specific user
+        url: /tasks/reviews/user-reviews/{user_id}/"""
         try:
             user_id = uuid.UUID(pk)
-            reviews = self.review_service.get_reviews_for_user(user_id)
+            reviews = self.review_service.get_reviews_for_reviewee(user_id)
             return Response(reviews)
         except ValueError:
             return Response(

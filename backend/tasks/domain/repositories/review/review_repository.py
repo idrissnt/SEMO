@@ -36,7 +36,7 @@ class ReviewRepository(ABC):
         pass
     
     @abstractmethod
-    def get_reviews_for_user(self, user_id: uuid.UUID) -> List[Review]:
+    def get_reviews_for_reviewee(self, user_id: uuid.UUID) -> List[Review]:
         """Get all reviews where the user is the reviewee
         
         Args:
@@ -48,7 +48,7 @@ class ReviewRepository(ABC):
         pass
     
     @abstractmethod
-    def get_reviews_by_user(self, user_id: uuid.UUID) -> List[Review]:
+    def get_reviews_for_reviewer(self, user_id: uuid.UUID) -> List[Review]:
         """Get all reviews where the user is the reviewer
         
         Args:

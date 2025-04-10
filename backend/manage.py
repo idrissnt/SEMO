@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+from django.conf import settings
+print("INSTALLED_APPS:", settings.INSTALLED_APPS)
+
+
 """Django's command-line utility for administrative tasks."""
 import os
 import sys

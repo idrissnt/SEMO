@@ -18,7 +18,8 @@ class TaskApplicationViewSet(viewsets.ViewSet):
         self.task_service = ServiceFactory.get_task_service()
     
     def create(self, request):
-        """Apply for a task"""
+        """Apply for a task
+        url: /tasks/applications/"""
         serializer = TaskApplicationSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -68,21 +69,18 @@ class TaskApplicationViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], url_path='my-applications')
     def my_applications(self, request):
-        """Get all applications submitted by the authenticated user"""
+        """Get all applications submitted by the authenticated user
+        url: /tasks/applications/my-applications/"""
         performer_id = uuid.UUID(str(request.user.id))
         applications = self.task_application_service.get_applications_by_performer(performer_id)
         return Response(applications)
     
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["get"], url_path='task-applications')
     def task_applications(self, request, pk=None):
         """Get all applications for a task for the requester
-        
-        Endpoint: GET /api/applications/{task_id}/task_applications/
-        
-        Returns all applications for a specific task. Only the task requester can view these.
-        """
+        url: /tasks/applications/{task_id}/task-applications/"""
         try:
             task_id = uuid.UUID(pk)
             
@@ -117,12 +115,8 @@ class TaskApplicationViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["post"])
     def accept(self, request, pk=None):
         """Accept an application
-        
-        Endpoint: POST /api/applications/{application_id}/accept/
-        
-        Accepts an application for a task and updates its status to accepted.
-        Only the task requester can accept applications.
-        """
+        url: /tasks/applications/{application_id}/accept/"""
+
         try:
             application_id = uuid.UUID(pk)
             requester_id = uuid.UUID(str(request.user.id))

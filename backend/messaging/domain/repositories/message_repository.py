@@ -113,27 +113,27 @@ class MessageRepository(ABC):
         """
         pass
     
-    @abstractmethod
-    def find(self, criteria: Dict[str, Any], 
-            order_by: str = "-sent_at", 
-            limit: int = 50, 
-            offset: int = 0) -> List[Message]:
-        """
-        Find messages matching specific criteria.
+    # @abstractmethod
+    # def find(self, criteria: Dict[str, Any], 
+    #         order_by: str = "-sent_at", 
+    #         limit: int = 50, 
+    #         offset: int = 0) -> List[Message]:
+    #     """
+    #     Find messages matching specific criteria.
         
-        This is a flexible query method that allows searching for messages
-        based on various criteria.
+    #     This is a flexible query method that allows searching for messages
+    #     based on various criteria.
         
-        Args:
-            criteria: Dictionary of search criteria
-            order_by: Field to order results by (prefix with - for descending)
-            limit: Maximum number of results to return
-            offset: Number of results to skip
+    #     Args:
+    #         criteria: Dictionary of search criteria
+    #         order_by: Field to order results by (prefix with - for descending)
+    #         limit: Maximum number of results to return
+    #         offset: Number of results to skip
             
-        Returns:
-            List of messages matching the criteria
-        """
-        pass
+    #     Returns:
+    #         List of messages matching the criteria
+    #     """
+    #     pass
     
     @abstractmethod
     def delete(self, message_id: uuid.UUID) -> bool:
