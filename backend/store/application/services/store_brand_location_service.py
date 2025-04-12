@@ -42,12 +42,13 @@ class StoreBrandLocationService:
         Returns:
             List of StoreBrand objects with location information attached
         """
-        # First, geocode the address to get coordinates
-        geocode_result = self.store_location_service.geocode_address(address)
-        
-        if not geocode_result:
+
+        if not address:
             # If geocoding fails, return all brands without locations
             return self.store_brand_repository.get_all_store_brands()
+
+        # First, geocode the address to get coordinates
+        geocode_result = self.store_location_service.geocode_address(address)
         
         coordinates, address_obj = geocode_result
         

@@ -32,9 +32,9 @@ class StoreBrandLocationViewSet(viewsets.ViewSet):
         """Find for each store brand the nearest store using the user's address
         url: stores/store-brands/nearby-stores/
         method: GET
-        query parameters: address, radius (optional), brand_slugs (optional)"""
+        query parameters: address (optional), radius (optional), brand_slugs (optional)"""
         # Get parameters from request
-        address = request.query_params.get('address')
+        address = request.query_params.get('address', '')
         radius = request.query_params.get('radius', '5.0')
         # brand_slugs = request.query_params.getlist('brand_slugs', None)
         

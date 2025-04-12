@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-
-from django.conf import settings
-print("INSTALLED_APPS:", settings.INSTALLED_APPS)
-
-
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
@@ -15,7 +10,7 @@ def main():
     BASE_DIR = Path(__file__).resolve().parent
     sys.path.append(str(BASE_DIR))
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings.development')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings.dev')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

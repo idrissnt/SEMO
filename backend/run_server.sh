@@ -8,7 +8,7 @@ chmod +x run_server.sh
 set -e
 
 # Configuration
-SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-backend.settings.development}
+SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-backend.settings.dev}
 PORT=${PORT:-8000}
 HOST=${HOST:-0.0.0.0}
 WORKERS=${WORKERS:-0}  # 0 means auto-configure based on CPU cores

@@ -6,15 +6,21 @@ This centralizes the creation of dependencies throughout the application.
 from store.application.services.search_products_service import SearchProductsService
 from store.application.services.store_products_service import StoreProductsService
 from store.application.services.store_brand_location_service import StoreBrandLocationService
+from store.application.services.use_to_add_data.product_collection_service import ProductCollectionService
 
 # Repositories
 from store.infrastructure.django_repositories.django_store_product_repository import DjangoStoreProductRepository
 from store.infrastructure.django_repositories.django_store_brand_repository import DjangoStoreBrandRepository
 from store.infrastructure.django_repositories.django_product_repository import DjangoProductRepository
+from store.infrastructure.django_repositories.use_to_add_data.django_collection_repository import (
+    DjangoProductCollectionBatchRepository,
+    DjangoCollectedProductRepository
+)
 
 # External Services
 from store.infrastructure.external_services.cache_service import DjangoCacheService
 from store.infrastructure.external_services.store_location_google_maps_service import GoogleMapsService
+from store.infrastructure.external_services.use_to_add_data.s3_file_storage_service import S3FileStorageService
 from store.infrastructure.analytics.search_analytics_implementation import DjangoSearchAnalyticsService
 
 
@@ -45,6 +51,22 @@ class StoreFactory:
             store_location_service=store_location_service,
             cache_service=cache_service
         )
+    
+    @staticmethod
+    def create_product_collection_service():
+        """Create a ProductCollectionService with all dependencies"""
+        batch_repository = DjangoProductCollectionBatchRepository()
+        product_repository = DjangoCollectedProductRepository()
+        
+        return ProductCollectionService(
+            batch_repository=batch_repository,
+            product_repository=product_repository,
+        )
+    
+    @staticmethod
+    def create_file_storage_service():
+        """Create a FileStorageService implementation"""
+        return S3FileStorageService()
     
     @staticmethod
     def create_search_products_service():

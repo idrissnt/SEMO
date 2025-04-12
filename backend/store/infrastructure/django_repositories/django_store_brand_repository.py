@@ -24,6 +24,7 @@ class DjangoStoreBrandRepository(StoreBrandRepository):
             id=model.id,
             name=model.name,
             slug=model.slug,
+            type=model.type,
             image_logo=model.image_logo.url if model.image_logo else None,
             image_banner=model.image_banner.url if model.image_banner else None
         )

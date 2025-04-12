@@ -2,7 +2,6 @@
 
 These settings extend the base settings and add development-specific configurations.
 """
-import os
 from .base import *
 from decouple import config  # Install python-decouple first: pip install python-decouple
 
@@ -105,7 +104,7 @@ SIMPLE_JWT = {
     # Other JWT settings
     'UPDATE_LAST_LOGIN': False,
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': os.environ.get('DJANGO_SECRET_KEY_DEV'),  # Uses the development SECRET_KEY
+    'SIGNING_KEY': config('DJANGO_SECRET_KEY_DEV'),  # Uses the development SECRET_KEY
     'VERIFYING_KEY': None,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELD': 'id',
@@ -113,3 +112,48 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
+
+# AWS S3 Configuration
+# Core AWS credentials and bucket settings
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID_DEV')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY_DEV')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME_DEV')
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME_DEV')
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+
+# Security and access settings
+# Disable ACLs since the bucket has Object Ownership set to 'Bucket owner enforced'
+AWS_DEFAULT_ACL = None  # Don't set ACL on the files
+AWS_BUCKET_ACL = None  # Don't set ACL on the bucket
+AWS_QUERYSTRING_AUTH = False  # Disables signed URLs for cleaner URLs in mobile app
+
+# File handling settings
+AWS_S3_OVERWRITE = True  # Whether to overwrite files with the same name
+
+# Cache settings - optimized for mobile apps
+# Using 30 days cache to reduce bandwidth usage and improve mobile app performance
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=2592000',  # 30 days in seconds
+}
+
+# Using custom storage backend for better organization following DDD principles
+# This separates the storage concerns and puts media files in a dedicated location
+DEFAULT_FILE_STORAGE = 'backend.settings.storage_backends.MediaStorage'
+# previously : # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# CloudFront configuration
+# For development, we'll continue using the direct S3 URL
+# In production, this should be our CloudFront domain
+CLOUDFRONT_DOMAIN = config('CLOUDFRONT_DOMAIN', default=AWS_S3_CUSTOM_DOMAIN)
+
+# Media URL for accessing uploaded files
+# In development, this uses the S3 URL directly
+# In production, this will use CloudFront
+# for production # MEDIA_URL = f'https://{CLOUDFRONT_DOMAIN}/media/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+
+# Local fallback for development
+if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
+    print("WARNING: AWS credentials not found. S3 file storage will not work.")
+    # In this case, you might want to set up local file storage as fallback

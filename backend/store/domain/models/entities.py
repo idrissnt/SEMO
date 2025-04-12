@@ -66,7 +66,7 @@ class Product:
     unit: str
     description: str
     image_url: str  # Infrastructure handles processing
-    image_thumbnail: str
+    image_thumbnail: Optional[str]
     id: uuid.UUID = field(default_factory=uuid.uuid4)
 
     def generate_slug(self):

@@ -6,7 +6,7 @@ python -m venv venv
 pip install -r requirements.txt
 
 # Set environment variable for Django settings
-$env:DJANGO_SETTINGS_MODULE = "backend.settings.development"
+$env:DJANGO_SETTINGS_MODULE = "backend.settings.dev"
 
 # Run migrations
 python manage.py makemigrations

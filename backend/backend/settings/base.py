@@ -8,6 +8,12 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+# # Import S3 settings
+# try:
+#     from core.settings.s3_settings import *
+# except ImportError:
+#     print("WARNING: S3 settings not found. File uploads to S3 will not work.")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -37,6 +43,8 @@ INSTALLED_APPS = [
     'django_ltree',
     'imagekit',
     'channels',
+    'storages',
+
     
     # Celery apps
     'django_celery_results',

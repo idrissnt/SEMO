@@ -10,7 +10,7 @@ from .base import *
 DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('DJANGO_SECRET_KEY_PROD', default='django-insecure-production-key-for-testing-only')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY_PROD', default='django-insecure-production-key-for-testing-only')
 
 # Restrict allowed hosts in production to those specified in environment variable
 # Format should be: 'example.com,api.example.com,www.example.com'
