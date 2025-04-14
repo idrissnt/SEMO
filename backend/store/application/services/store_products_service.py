@@ -47,7 +47,7 @@ class StoreProductsService:
     
     def get_products_by_category_path(self, 
                              store_brand_id: uuid.UUID,
-                             category_path: Optional[str] = None, 
+                             category_path: str = "fruits_et_legumes.fruits", 
                              ) -> List[ProductWithDetails]:
         """Get store products by category path
         
@@ -60,9 +60,6 @@ class StoreProductsService:
         Returns:
             A list of ProductWithDetails domain entities
         """
-        if not category_path:
-            category_path = "fruits_et_legumes.fruits"
-        
         if self.cache_service:
             cache_key = f'store_products_by_category:{category_path}'
             cached_products = self.cache_service.get(cache_key)

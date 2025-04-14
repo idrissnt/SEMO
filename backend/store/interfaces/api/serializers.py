@@ -86,3 +86,32 @@ class SearchResultsByStoreSerializer(serializers.Serializer):
             }
             
         return result
+
+# 1. Create a response serializer in serializers.py
+class SearchResponseSerializer(serializers.Serializer):
+    """Serializer for search response with results and metadata"""
+    results = serializers.SerializerMethodField()
+    metadata = serializers.SerializerMethodField()
+    
+    def __init__(self, *args, **kwargs):
+        self.search_results = kwargs.pop('search_results', None)
+        self.search_metadata = kwargs.pop('search_metadata', None)
+        self.is_store_specific = kwargs.pop('is_store_specific', False)
+        super().__init__(*args, **kwargs)
+    
+    def get_results(self, obj):
+        if self.is_store_specific:
+            return ProductWithDetailsSerializer(self.search_results, many=True).data
+        else:
+            return SearchResultsByStoreSerializer(self.search_results).data
+    
+    def get_metadata(self, obj):
+        # Return only what's needed from metadata
+        if self.is_store_specific:
+            return {
+                'total_products': self.search_metadata.get('total_products', 0)
+            }
+        else:
+            return {
+                'store_counts': self.search_metadata.get('store_counts', {})
+            }

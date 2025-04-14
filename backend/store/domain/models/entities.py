@@ -39,7 +39,7 @@ class ProductWithDetails:
     unit: str
     description: str
     image_url: str
-    image_thumbnail: str
+    image_thumbnail: Optional[str]
     
     # Store product fields
     price: float

@@ -60,14 +60,17 @@ class SearchProductsService:
         
         return suggestions
     
-    def search_products(self, query: str, store_id: Optional[uuid.UUID] = None, pagination: Optional[PaginationParams] = None) -> Tuple[Dict[uuid.UUID, Tuple[str, List[ProductWithDetails]]], Dict[str, int]]:
+    def search_products(self, query: str, 
+                        store_id: Optional[uuid.UUID] = None,
+                        page: int = 1,
+                        page_size: int = 10,
+                        ) -> Tuple[Dict[uuid.UUID, Tuple[str, List[ProductWithDetails]]], Dict[str, int]]:
         """
         Search for products with optional store filtering
         
         Args:
             query: Search query string
             store_id: Optional store ID to filter by (None for global search)
-            pagination: Optional pagination parameters
             
         Returns:
             For store-specific search: List of matching products
@@ -78,9 +81,8 @@ class SearchProductsService:
         if not clean_query or len(clean_query) < 2:
             return {} if store_id is None else []
             
-        # Default pagination if not provided
-        if pagination is None:
-            pagination = PaginationParams(page=1, page_size=10)
+        # Default pagination
+        pagination = PaginationParams(page=page, page_size=page_size)
         
         # Generate cache key based on whether this is a global or store-specific search
         cache_key = self.cache_service.generate_search_key(
@@ -122,7 +124,7 @@ class SearchProductsService:
             )
             
             # Return paginated products and metadata
-            metadata = {'total_count': len(all_products)}
+            metadata = {'total_products': len(all_products)}
             return paginated_products, metadata
         else:
             # Global search across all stores
@@ -133,6 +135,7 @@ class SearchProductsService:
             paginated_results = {}
             total_products = 0
             cache_structure = {}
+            metadata = {'store_counts': {}}
             
             for store_id, (category_path, products) in products_by_store.items():
                 # Count total products for analytics
@@ -152,6 +155,8 @@ class SearchProductsService:
                 # Only include stores that have products after pagination
                 if paginated_store_products:
                     paginated_results[store_id] = (category_path, paginated_store_products)
+
+                metadata['store_counts'][str(store_id)] = len(products)
             
             # Record analytics if service is available
             if self.analytics_service:
@@ -167,12 +172,6 @@ class SearchProductsService:
                 complexity=query_complexity,
                 result_size=total_products
             )
-            
-            # Prepare metadata with counts for each store
-            metadata = {
-                'total_products': total_products,
-                'store_counts': {str(store_id): len(products) for store_id, (_, products) in products_by_store.items()}
-            }
             
             return paginated_results, metadata
             

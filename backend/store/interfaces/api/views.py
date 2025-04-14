@@ -7,7 +7,7 @@ from store.interfaces.api.serializers import (
     ProductNameSerializer,
     StoreBrandSerializer, 
     ProductWithDetailsSerializer,
-    SearchResultsByStoreSerializer
+    SearchResponseSerializer
 )
 
 # Factory imports for dependency injection
@@ -152,31 +152,15 @@ class SearchViewSet(viewsets.ViewSet):
         query parameters: q (required), page (default=1), page_size (default=10), store_id (optional)"""
         query = request.query_params.get('q', '')
         store_id = request.query_params.get('store_id')
-        page = request.query_params.get('page', '1')
-        page_size = request.query_params.get('page_size', '10')
+        page = request.query_params.get('page', 1)
+        page_size = request.query_params.get('page_size', 10)
         
         if not query:
             return Response(
                 {"error": "Search query (q) is required"}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        # Parse pagination parameters
-        try:
-            page = int(page)
-            page_size = int(page_size)
-            if page < 1 or page_size < 1:
-                raise ValueError("Invalid pagination values")
-        except ValueError:
-            return Response(
-                {"error": "Invalid pagination parameters"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Create pagination params
-        from backend.store.domain.value_objects.pagination import PaginationParams
-        pagination = PaginationParams(page=page, page_size=page_size)
-                
+
         # Parse store_id if provided
         store_uuid = None
         if store_id:
@@ -186,45 +170,21 @@ class SearchViewSet(viewsets.ViewSet):
                 return Response({"error": "Invalid UUID format"}, 
                                 status=status.HTTP_400_BAD_REQUEST)
         
-        # Use the search_products method with pagination - now returns (results, metadata)
         result, metadata = self.search_service.search_products(
             query=query,
             store_id=store_uuid,
-            pagination=pagination
+            page=page,
+            page_size=page_size
         )
 
-        # Use different serializers based on whether this is a global or store-specific search
-        if store_uuid:
-            # Store-specific search returns a list of products
-            serializer = ProductWithDetailsSerializer(result, many=True)
-            data = serializer.data
-            
-            # Calculate total pages for store-specific search using the metadata
-            total_count = metadata['total_count']
-            total_pages = (total_count + pagination.limit - 1) // pagination.limit
-        else:
-            # Global search returns products grouped by store
-            serializer = SearchResultsByStoreSerializer(result)
-            data = serializer.data
-            
-            # For global search, calculate pages for each store using the metadata
-            total_pages = {}
-            store_counts = metadata['store_counts']
-            
-            for store_id, count in store_counts.items():
-                store_total_pages = (count + pagination.limit - 1) // pagination.limit
-                total_pages[store_id] = store_total_pages
+        # Use the dedicated response serializer
+        response_serializer = SearchResponseSerializer(
+            instance={},  # Empty instance since we're using method fields
+            search_results=result,
+            search_metadata=metadata,
+            is_store_specific=store_uuid is not None
+        )
         
-        # Add pagination metadata to the response
-        response_data = {
-            'results': data,
-            'pagination': {
-                'current_page': page,
-                'page_size': page_size,
-                'total_pages': total_pages
-            }
-        }
-            
-        return Response(response_data)
-    
+        return Response(response_serializer.data)
+        
     

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../data/models/store/store_model.dart';
+import '../../../features/store/data/models/store_model.dart';
 import '../../../core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 

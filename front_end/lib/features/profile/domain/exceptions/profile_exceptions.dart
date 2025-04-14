@@ -1,4 +1,11 @@
-import 'package:semo/domain/exceptions/auth_exceptions.dart';
+/// Base class for all domain-specific exceptions
+abstract class DomainException implements Exception {
+  final String message;
+  DomainException(this.message);
+
+  @override
+  String toString() => message;
+}
 
 /// Exception thrown when user profile operations fail
 class BasicProfileException extends DomainException {

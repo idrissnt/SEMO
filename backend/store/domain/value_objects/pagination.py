@@ -9,8 +9,8 @@ T = TypeVar('T')
 @dataclass(frozen=True)
 class PaginationParams:
     """Value object representing pagination parameters"""
-    page: int
-    page_size: int
+    page: int = 1
+    page_size: int = 10
     
     def __post_init__(self):
         """Validate pagination parameters"""
@@ -18,8 +18,8 @@ class PaginationParams:
             object.__setattr__(self, 'page', 1)
         if self.page_size < 1:
             object.__setattr__(self, 'page_size', 10)
-        elif self.page_size > 100:
-            object.__setattr__(self, 'page_size', 100)
+        elif self.page_size > 20:
+            object.__setattr__(self, 'page_size', 20)
     
     @property
     def offset(self) -> int:

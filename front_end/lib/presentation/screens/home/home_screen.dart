@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/theme/responsive_theme.dart';
 
 import '../../../core/utils/logger.dart';
-import '../../blocs/store/store_bloc.dart';
-import '../../blocs/store/store_event.dart';
-import '../../blocs/store/store_state.dart';
+import '../../../features/store/bloc/store_bloc.dart';
+import '../../../features/store/bloc/store_event.dart';
+import '../../../features/store/bloc/store_state.dart';
 
 import '../../widgets/homescreen/store_section.dart';
 import '../../widgets/homescreen/custom_home_app_bar.dart';

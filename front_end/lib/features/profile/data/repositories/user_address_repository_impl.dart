@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:semo/core/services/token_service.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/result.dart';
-import 'package:semo/domain/exceptions/auth_exceptions.dart';
 import 'package:semo/features/profile/data/repositories/services/address_service.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
 import 'package:semo/features/profile/domain/exceptions/profile_exceptions.dart';
