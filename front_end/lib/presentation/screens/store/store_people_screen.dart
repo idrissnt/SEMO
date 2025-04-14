@@ -11,7 +11,8 @@ class StorePeopleScreen extends StatefulWidget {
   State<StorePeopleScreen> createState() => _StorePeopleScreenState();
 }
 
-class _StorePeopleScreenState extends State<StorePeopleScreen> with AutomaticKeepAliveClientMixin {
+class _StorePeopleScreenState extends State<StorePeopleScreen>
+    with AutomaticKeepAliveClientMixin {
   final AppLogger _logger = AppLogger();
 
   @override

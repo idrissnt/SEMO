@@ -34,7 +34,7 @@ class CollectedProductSerializer(serializers.Serializer):
     price = serializers.FloatField()
     price_per_unit = serializers.FloatField()
     barcode = serializers.CharField(max_length=100, allow_blank=True, allow_null=True, required=False)
-    image_data = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+    image_url = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     notes = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     status = serializers.CharField(read_only=True)
     error_message = serializers.CharField(read_only=True, allow_null=True)
@@ -51,15 +51,17 @@ class BatchCreateSerializer(serializers.Serializer):
 class ProductCreateSerializer(serializers.Serializer):
     """Serializer for creating a new collected product"""
     name = serializers.CharField(max_length=255)
+    slug = serializers.CharField(max_length=255, required=False)  # Added missing field
     quantity = serializers.IntegerField()
     unit = serializers.CharField(max_length=10)
     description = serializers.CharField(allow_blank=True, required=False)
     category_name = serializers.CharField(max_length=255)
     category_path = serializers.CharField(max_length=255)
+    category_slug = serializers.CharField(max_length=255, required=False)  # Added missing field
     price = serializers.FloatField()
     price_per_unit = serializers.FloatField()
     barcode = serializers.CharField(max_length=100, allow_blank=True, allow_null=True, required=False)
-    image_data = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+    image_url = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     notes = serializers.CharField(allow_blank=True, allow_null=True, required=False)
 
 class BulkProductCreateSerializer(serializers.Serializer):

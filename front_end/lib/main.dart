@@ -2,57 +2,40 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'core/config/router/app_router.dart';
-import 'core/theme/app_colors.dart';
+import 'package:semo/features/auth/bloc/auth_bloc.dart';
+import 'package:semo/features/auth/bloc/auth_event.dart';
+import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
+import 'core/config/router_services/app_router.dart';
+import 'core/di/injection_container.dart'; //sl = service locator
+import 'core/theme/theme_services/app_colors.dart';
 import 'core/utils/logger.dart';
-import 'data/repositories/user_auth/auth_repository_impl.dart';
-import 'data/repositories/store/store_repository_impl.dart';
-import 'domain/repositories/user_auth/auth_repository.dart';
 import 'domain/repositories/store/store_repository.dart';
-import 'data/repositories/store/usecases/get_stores_usecase.dart';
-import 'presentation/blocs/auth/auth_bloc.dart';
-import 'presentation/blocs/auth/auth_event.dart';
 import 'presentation/blocs/store/store_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize logger first
-  final logger = AppLogger();
-  await logger.initialize();
-
   try {
-    // Initialize services
-    logger.debug('Initializing other services');
-    final client = http.Client();
-    const secureStorage = FlutterSecureStorage();
+    // Initialize dependencies
+    await initializeDependencies();
+    final logger = sl<AppLogger>();
+    await logger.initialize();
 
-    // Initialize repositories
-    logger.debug('Initializing repositories');
-    final authRepository = AuthRepositoryImpl(
-      client: client,
-      secureStorage: secureStorage,
-    );
-    final storeRepository = StoreRepositoryImpl(
-      client: client,
-    );
+    logger.debug('Dependencies initialized successfully');
 
     // Initialize service locator
     runApp(
       MultiRepositoryProvider(
         providers: [
-          RepositoryProvider<http.Client>.value(value: client),
-          RepositoryProvider<AuthRepository>.value(value: authRepository),
-          RepositoryProvider<StoreRepository>.value(value: storeRepository),
+          RepositoryProvider<UserAuthRepository>.value(value: sl()),
+          RepositoryProvider<StoreRepository>.value(value: sl()),
         ],
         child: MultiBlocProvider(
           providers: [
             BlocProvider<AuthBloc>(
               create: (context) {
                 final bloc = AuthBloc(
-                  authRepository: context.read<AuthRepository>(),
+                  authRepository: sl(),
                 );
                 bloc.add(AuthCheckRequested());
                 return bloc;
@@ -60,10 +43,8 @@ void main() async {
             ),
             BlocProvider<StoreBloc>(
               create: (context) => StoreBloc(
-                getStoresUseCase: GetStoresUseCase(
-                  storeRepository: context.read<StoreRepository>(),
-                ),
-                storeRepository: context.read<StoreRepository>(),
+                getStoresUseCase: sl(),
+                storeRepository: sl(),
               ),
             ),
           ],
@@ -72,7 +53,7 @@ void main() async {
       ),
     );
   } catch (e, stackTrace) {
-    logger.error('Error in main()', error: e, stackTrace: stackTrace);
+    sl<AppLogger>().error('Error in main()', error: e, stackTrace: stackTrace);
     rethrow;
   }
 }

@@ -15,23 +15,25 @@ class AppConfig {
   static const String loginEndpoint = '/auth/login/';
   static const String logoutEndpoint = '/auth/logout/';
   static const String registerEndpoint = '/auth/register/';
+  static const String changePasswordEndpoint = '/auth/change-password/';
 
   // Token Endpoints
-  static const String refreshTokenEndpoint = '/auth/token/refresh/';
-  static const String tokenVerifyEndpoint = '/auth/token/verify/';
+  static const String refreshTokenEndpoint = '/token/refresh/';
+  static const String tokenVerifyEndpoint = '/token/verify/';
 
   // User Endpoints
-  static const String profileEndpoint = '/auth/profile/';
+  static const String profileEndpoint = '/profiles/';
+  static const String updateProfileEndpoint = '/profiles/update-profile/';
+  static const String deleteAccountEndpoint = '/profiles/delete-account/';
+
+  // Address Endpoints
+  static const String listUserAddressesEndpoint = '/addresses/';
+  static const String createUserAddressEndpoint = '/addresses/';
+  static const String retrieveAddressEndpoint = '/addresses/';
+  static const String updateUserAddressEndpoint = '/update-address/';
+  static const String deleteUserAddressEndpoint = '/delete-address/';
 
   // Store endpoints
   static const String allStores = '/stores/';
   static const String storesFullDetails = '/stores/full_details/';
-
-  // App settings
-  static const String appName = 'SEMO';
-  static const String appVersion = '1.0.0';
-
-  // Cache settings
-  static const int maxCacheAge = 3600; // seconds
-  static const int maxCacheSize = 10 * 1024 * 1024; // 10MB
 }

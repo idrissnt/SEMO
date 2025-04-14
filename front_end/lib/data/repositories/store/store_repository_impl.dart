@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import '../../../core/config/app_config.dart';
 import '../../../core/utils/logger.dart';
@@ -9,7 +8,7 @@ import '../../../domain/repositories/store/store_repository.dart';
 import '../../models/store/store_model.dart';
 
 class StoreRepositoryImpl implements StoreRepository {
-  final http.Client client;
+  final Dio dio;
   final String baseUrl = AppConfig.apiBaseUrl;
   final String allStoresUrl = '${AppConfig.apiBaseUrl}${AppConfig.allStores}';
   final String storeDetailsUrl =
@@ -17,8 +16,13 @@ class StoreRepositoryImpl implements StoreRepository {
   final AppLogger _logger = AppLogger();
 
   StoreRepositoryImpl({
-    http.Client? client,
-  }) : client = client ?? http.Client();
+    Dio? dio,
+  }) : dio = dio ??
+            Dio(BaseOptions(
+              connectTimeout: const Duration(seconds: 10),
+              receiveTimeout: const Duration(seconds: 10),
+              contentType: 'application/json',
+            ));
 
   @override
   Future<Map<String, List<Store>>> getStores({
@@ -34,24 +38,17 @@ class StoreRepositoryImpl implements StoreRepository {
 
       _logger.debug('[store_repository_impl.dart] Calling URL: $allStoresUrl');
 
-      final response = await client
-          .get(
-        Uri.parse(allStoresUrl),
-        headers: await _getHeaders(),
-      )
-          .timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          throw TimeoutException('Connection timeout');
-        },
+      final response = await dio.get(
+        allStoresUrl,
+        options: Options(headers: await _getHeaders()),
       );
 
       _logger.debug(
           '[store_repository_impl.dart] Got response with status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
-        // Handle the response as a List instead of a Map
-        final List<dynamic> responseData = json.decode(response.body);
+        // Handle the response as a List
+        final List<dynamic> responseData = response.data;
         _logger.debug(
             '[store_repository_impl.dart] Received list with ${responseData.length} stores');
 
@@ -96,6 +93,12 @@ class StoreRepositoryImpl implements StoreRepository {
     } catch (e) {
       _logger.error('[store_repository_impl.dart] Error getting stores',
           error: e);
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          throw TimeoutException('Connection timeout');
+        }
+      }
       rethrow;
     }
   }
@@ -109,16 +112,9 @@ class StoreRepositoryImpl implements StoreRepository {
       final fullUrl = '$storeDetailsUrl?store_id=$storeId';
       _logger.debug('[store_repository_impl.dart] Calling URL: $fullUrl');
 
-      final response = await client
-          .get(
-        Uri.parse(fullUrl),
-        headers: await _getHeaders(),
-      )
-          .timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          throw TimeoutException('Connection timeout');
-        },
+      final response = await dio.get(
+        fullUrl,
+        options: Options(headers: await _getHeaders()),
       );
 
       _logger.debug(
@@ -126,7 +122,7 @@ class StoreRepositoryImpl implements StoreRepository {
 
       if (response.statusCode == 200) {
         // Handle the response as a List
-        final List<dynamic> responseData = json.decode(response.body);
+        final List<dynamic> responseData = response.data;
 
         // Find the store with the matching ID
         for (var storeJson in responseData) {
@@ -149,6 +145,12 @@ class StoreRepositoryImpl implements StoreRepository {
     } catch (e) {
       _logger.error('[store_repository_impl.dart] Error getting store by ID',
           error: e);
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          throw TimeoutException('Connection timeout');
+        }
+      }
       rethrow;
     }
   }

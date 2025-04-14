@@ -1,6 +1,8 @@
 from typing import Tuple, Dict, Any, Optional
 import logging
 from datetime import datetime
+from django.utils.timezone import now
+import uuid
 
 from the_user_app.domain.models.entities import User
 from the_user_app.domain.repositories.repository_interfaces import UserRepository, AuthRepository
@@ -18,12 +20,13 @@ class AuthApplicationService:
         self.auth_repository = auth_repository
         self.domain_service = AuthDomainService()
     
-    def login_user(self, email: str, password: str) -> Tuple[Optional[Dict[str, str]], str]:
+    def login_user(self, email: str, password: str, last_login: datetime = now()) -> Tuple[Optional[Dict[str, str]], str]:
         """Login a user with email and password
         
         Args:
             email: User email
             password: User password
+            last_login: Last login time
             
         Returns:
             Tuple of (auth_data, error_message)
@@ -41,7 +44,7 @@ class AuthApplicationService:
             return None, "Invalid credentials"
         
         # Check password
-        if not self.user_repository.check_password(user.id, password):
+        if not self.user_repository.check_password(user.id, password, last_login):
             return None, "Invalid credentials"
         
         # Create tokens
@@ -50,15 +53,10 @@ class AuthApplicationService:
             
             # Return tokens and user data
             return {
-                'access': access_token,
-                'refresh': refresh_token,
-                'user': {
-                    'id': str(user.id),
-                    'email': user.email,
-                    'first_name': user.first_name,
-                    'last_name': user.last_name
-                }
-            }, ""
+                'access_token': access_token,
+                'refresh_token': refresh_token,
+                'user': user
+            }, "login success"
         except Exception as e:
             logger.error(f"Error creating tokens: {str(e)}")
             return None, "Error creating authentication tokens"
@@ -90,22 +88,27 @@ class AuthApplicationService:
             first_name=user_data['first_name'],
             last_name=user_data.get('last_name'),
             phone_number=user_data.get('phone_number'),
+            profile_photo_url=user_data.get('profile_photo_url'),
         )
         
         # Create user in repository
         try:
             created_user = self.user_repository.create(user, user_data['password'])
-            
+
+            access_token, refresh_token = self.auth_repository.create_tokens(user)
+
             # Publish user registered event
             event_bus.publish(UserRegisteredEvent.create(
                 user_id=created_user.id))
             
-            return created_user, ""
+            return {'access_token': access_token, 
+                    'refresh_token': refresh_token, 
+                    'user': created_user}, ""
         except Exception as e:
             logger.error(f"Error creating user: {str(e)}")
             return None, "Error creating user"
     
-    def logout_user(self, user: User, refresh_token: str, device_info: str = "", ip_address: str = "") -> Tuple[bool, str]:
+    def logout_user(self, user_id: uuid.UUID, refresh_token: str, device_info: str = "", ip_address: str = "") -> Tuple[bool, str]:
         """Logout a user and blacklist their refresh token
         
         Args:
@@ -129,7 +132,7 @@ class AuthApplicationService:
             
             # Create logout event
             logout_event = self.domain_service.prepare_logout_event(
-                user_id=user.id,
+                user_id=user_id,
                 device_info=device_info,
                 ip_address=ip_address
             )
@@ -141,7 +144,7 @@ class AuthApplicationService:
             # In a real implementation, we would decode the token to get the expiration time
             # For simplicity, we'll use a placeholder expiration time
             expiration = datetime.now().isoformat()
-            self.auth_repository.blacklist_token(refresh_token, user.id, expiration)
+            self.auth_repository.blacklist_token(refresh_token, user_id, expiration)
             
             return True, ""
         except Exception as e:

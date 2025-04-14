@@ -27,7 +27,7 @@ class _SemoAIScreenState extends State<SemoAIScreen> {
     }
 
     _logger.info('Sending message: $message');
-    
+
     setState(() {
       _messages.add({
         'sender': 'user',
@@ -42,7 +42,7 @@ class _SemoAIScreenState extends State<SemoAIScreen> {
 
   void _simulateAIResponse(String userMessage) {
     _logger.debug('Simulating AI response for: $userMessage');
-    
+
     setState(() {
       _messages.add({
         'sender': 'ai',
@@ -62,7 +62,7 @@ class _SemoAIScreenState extends State<SemoAIScreen> {
   Widget build(BuildContext context) {
     try {
       _logger.debug('Building SemoAIScreen');
-      
+
       return Scaffold(
         appBar: AppBar(
           title: const Text('SEMO AI'),
@@ -117,17 +117,16 @@ class _SemoAIScreenState extends State<SemoAIScreen> {
                           ),
                         );
                       }
-                      
+
                       final message = _messages[index - 1];
                       return Card(
-                        color: message['sender'] == 'user' 
-                            ? Colors.blue[50] 
+                        color: message['sender'] == 'user'
+                            ? Colors.blue[50]
                             : Colors.green[50],
                         child: ListTile(
                           title: Text(message['message'] ?? ''),
-                          subtitle: Text(message['sender'] == 'user' 
-                              ? 'You' 
-                              : 'SEMO AI'),
+                          subtitle: Text(
+                              message['sender'] == 'user' ? 'You' : 'SEMO AI'),
                         ),
                       );
                     },
@@ -154,7 +153,8 @@ class _SemoAIScreenState extends State<SemoAIScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
+                      icon: Icon(Icons.send,
+                          color: Theme.of(context).primaryColor),
                       onPressed: _sendMessage,
                     ),
                   ],
@@ -165,7 +165,8 @@ class _SemoAIScreenState extends State<SemoAIScreen> {
         ),
       );
     } catch (e, stackTrace) {
-      _logger.error('Error building SemoAIScreen', error: e, stackTrace: stackTrace);
+      _logger.error('Error building SemoAIScreen',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }

@@ -83,6 +83,8 @@ class DjangoAuthRepository(AuthRepository):
         """
         try:
             user_model = CustomUserModel.objects.get(id=logout_event.user_id)
+            user_model.last_login = logout_event.created_at
+            user_model.save()
             
             logout_event_model = LogoutEventModel.objects.create(
                 id=logout_event.id,

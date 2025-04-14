@@ -1,5 +1,6 @@
 from typing import Optional
 import uuid
+from datetime import datetime
 
 from django.contrib.auth import get_user_model
 
@@ -56,6 +57,7 @@ class DjangoUserRepository(UserRepository):
             first_name=user.first_name,
             last_name=user.last_name,
             phone_number=user.phone_number,
+            profile_photo_url=user.profile_photo_url,
         )
         return self._to_domain(user_model)
     
@@ -74,8 +76,7 @@ class DjangoUserRepository(UserRepository):
             # Update fields
             user_model.first_name = user.first_name
             user_model.last_name = user.last_name
-            user_model.phone_number = user.phone_number
-            
+            user_model.phone_number = user.phone_number            
             user_model.save()
             return self._to_domain(user_model)
         except CustomUserModel.DoesNotExist:
@@ -99,7 +100,11 @@ class DjangoUserRepository(UserRepository):
         except CustomUserModel.DoesNotExist:
             return False
     
-    def check_password(self, user_id: uuid.UUID, password: str) -> bool:
+    def check_password(self, 
+        user_id: uuid.UUID, 
+        password: str,
+        last_login: Optional[datetime] = None
+    ) -> bool:
         """Check if password is correct for a user
         
         Args:
@@ -111,7 +116,12 @@ class DjangoUserRepository(UserRepository):
         """
         try:
             user_model = CustomUserModel.objects.get(id=user_id)
-            return user_model.check_password(password)
+            if user_model.check_password(password):
+                if last_login:
+                    user_model.last_login = last_login
+                    user_model.save()
+                return True
+            return False
         except CustomUserModel.DoesNotExist:
             return False
 
@@ -139,4 +149,8 @@ class DjangoUserRepository(UserRepository):
             first_name=model.first_name,
             last_name=model.last_name,
             phone_number=model.phone_number,
+            profile_photo_url=model.profile_photo_url,
+            last_login=model.last_login,
+            created_at=model.created_at,
+            updated_at=model.updated_at
         )

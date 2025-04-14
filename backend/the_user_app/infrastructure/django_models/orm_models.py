@@ -35,9 +35,14 @@ class CustomUserModel(AbstractUser):
                                null=True, blank=True)
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(max_length=255)
+    profile_photo_url = models.URLField(null=True, blank=True, default=None)
     last_name = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=15, unique=True, 
                                    null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    last_login = models.DateTimeField(null=True, blank=True)
+    last_logout = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name']

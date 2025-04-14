@@ -24,19 +24,19 @@ class UserSerializer(serializers.Serializer):
         required=True,
         validators=[validate_password]
     )
+    profile_photo_url = serializers.URLField(required=False, allow_null=True)
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255, required=False, allow_null=True)
     phone_number = serializers.CharField(max_length=15, required=False, allow_null=True)
-    role = serializers.ChoiceField(choices=['customer', 'driver'], default='customer', required=False)
 
 class UserProfileSerializer(serializers.Serializer):
     """Serializer for User with addresses"""
     id = serializers.UUIDField(read_only=True)
     email = serializers.EmailField(read_only=True)
+    profile_photo_url = serializers.URLField(required=False, allow_null=True)
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255, required=False, allow_null=True)
     phone_number = serializers.CharField(max_length=15, required=False, allow_null=True)
-    role = serializers.ChoiceField(choices=['customer', 'driver'], required=False)
     addresses = AddressSerializer(many=True, read_only=True)
 
 class LoginRequestSerializer(serializers.Serializer):
@@ -46,9 +46,9 @@ class LoginRequestSerializer(serializers.Serializer):
 
 class LoginResponseSerializer(serializers.Serializer):
     """Serializer for login response data"""
-    access = serializers.CharField()
-    refresh = serializers.CharField()
-    message = serializers.CharField()
+    access_token = serializers.CharField()
+    refresh_token = serializers.CharField()
+    user = UserSerializer()
 
 class PasswordChangeSerializer(serializers.Serializer):
     """Serializer for password change request data"""

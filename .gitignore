@@ -6,7 +6,12 @@
 # Ignore all migration files
 **/migrations/*
 !**/migrations/__init__.py
-*.pyc
+
+# Ignore all Python cache files
+**/*.pyc
+**/__pycache__
+
+# Ignore image files
 *.png
 *.jpg
 *.jpeg
@@ -15,4 +20,3 @@ backend/venv/
 front_end/lib/setup.ps1
 *.env
 .venv_semo
-*__init__.py

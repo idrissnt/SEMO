@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 import logging
+import uuid
 
 from the_user_app.interfaces.api.serializers.user_serializers import (
     UserSerializer,
@@ -39,11 +40,12 @@ class AuthViewSet(viewsets.ViewSet):
             auth_service = UserFactory.create_auth_service()
             
             # Register user
-            user, error = auth_service.register_user(serializer.validated_data)
+            result, error = auth_service.register_user(serializer.validated_data)
             
-            if user:
+            if result:
                 # Return serialized user data
-                return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+                return Response(LoginResponseSerializer(result).data, 
+                                status=status.HTTP_201_CREATED)
             else:
                 # Return error
                 return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
@@ -81,11 +83,7 @@ class AuthViewSet(viewsets.ViewSet):
         if result:
             # Authentication successful
             logger.info(f"Successful login for user: {email}")
-            return Response({
-                'access': result['access'],
-                'refresh': result['refresh'],
-                'message': 'Login successful'
-            })
+            return Response(LoginResponseSerializer(result).data, status=status.HTTP_200_OK)
         
         # Authentication failed
         if 'required' in error.lower():
@@ -106,18 +104,34 @@ class AuthViewSet(viewsets.ViewSet):
     )
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def logout(self, request):
+        # Extract refresh token from request data
         refresh_token = request.data.get('refresh_token')
+        
+        # Extract metadata from request
+        device_info = request.META.get('HTTP_USER_AGENT', '')
+        ip_address = request.META.get('REMOTE_ADDR', '')
+        
+        # Get user ID from authenticated user
+        try:
+            user_id = request.user.id  # Assuming user.id is a UUID field
+        except AttributeError:
+            return Response(
+                {'error': 'User not authenticated properly'}, 
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        
+        # Validate refresh token
         if not refresh_token:
             return Response(
                 {'error': 'Refresh token is required'}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         # Get auth service from factory
         auth_service = UserFactory.create_auth_service()
         
         # Logout user
-        success, error = auth_service.logout_user(refresh_token)
+        success, error = auth_service.logout_user(user_id, refresh_token, device_info, ip_address)
         
         if success:
             return Response({'message': 'Logout successful'})
@@ -133,7 +147,7 @@ class AuthViewSet(viewsets.ViewSet):
         },
         description='Change user password'
     )
-    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated], url_path='change-password')
     def change_password(self, request):
         serializer = PasswordChangeSerializer(data=request.data)
         if serializer.is_valid():
@@ -142,7 +156,7 @@ class AuthViewSet(viewsets.ViewSet):
             
             # Change password
             success, error = user_service.change_password(
-                user_id=request.user.id,
+                user_id=uuid.UUID(request.user_id),
                 old_password=serializer.validated_data['old_password'],
                 new_password=serializer.validated_data['new_password']
             )

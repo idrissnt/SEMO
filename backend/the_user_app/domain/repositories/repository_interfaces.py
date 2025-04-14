@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple
 import uuid
+from datetime import datetime
 from ..models.entities import User, Address, LogoutEvent, BlacklistedToken, TaskPerformerProfile
 
 class UserRepository(ABC):
@@ -69,12 +70,17 @@ class UserRepository(ABC):
         pass
     
     @abstractmethod
-    def check_password(self, user_id: uuid.UUID, password: str) -> bool:
+    def check_password(self, 
+        user_id: uuid.UUID, 
+        password: str, 
+        last_login: Optional[datetime] = None
+    ) -> bool:
         """Check if password is correct for a user
         
         Args:
             user_id: UUID of the user
             password: Password to check
+            last_login: Last login time
             
         Returns:
             True if password is correct, False otherwise
@@ -198,11 +204,12 @@ class AuthRepository(ABC):
         pass
     
     @abstractmethod
-    def record_logout(self, logout_event: LogoutEvent) -> LogoutEvent:
+    def record_logout(self, logout_event: LogoutEvent, last_logout: Optional[datetime] = None) -> LogoutEvent:
         """Record a logout event
         
         Args:
             logout_event: LogoutEvent object to record
+            last_logout: Last logout time
             
         Returns:
             Created LogoutEvent object

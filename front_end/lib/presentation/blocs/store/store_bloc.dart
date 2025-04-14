@@ -4,8 +4,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/utils/logger.dart';
+import '../../../data/models/store/store_model.dart';
 import '../../../domain/repositories/store/store_repository.dart';
-import '../../../data/repositories/store/usecases/get_stores_usecase.dart';
+import '../../../domain/usecases/store/get_stores_usecase.dart';
 import 'store_event.dart';
 import 'store_state.dart';
 
@@ -32,9 +33,21 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
       final storesData = await getStoresUseCase.getStoresData();
 
       emit(AllStoresLoaded(
-        bigStores: storesData['bigStores'] ?? [],
-        smallStores: storesData['smallStores'] ?? [],
-        storesByName: storesData['storesByName'] ?? [],
+        bigStores: storesData['bigStores']
+                ?.map((store) =>
+                    store is StoreModel ? store : StoreModel.fromEntity(store))
+                .toList() ??
+            [],
+        smallStores: storesData['smallStores']
+                ?.map((store) =>
+                    store is StoreModel ? store : StoreModel.fromEntity(store))
+                .toList() ??
+            [],
+        storesByName: storesData['storesByName']
+                ?.map((store) =>
+                    store is StoreModel ? store : StoreModel.fromEntity(store))
+                .toList() ??
+            [],
       ));
 
       _logger.debug('Successfully loaded all stores (lightweight)');
@@ -54,7 +67,9 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
       final store = await storeRepository.getStoreById(event.storeId);
 
       if (store != null) {
-        emit(StoreLoaded(store));
+        final storeModel =
+            store is StoreModel ? store : StoreModel.fromEntity(store);
+        emit(StoreLoaded(storeModel));
         _logger.debug(
             'Successfully loaded store details: ${store.name} (ID: ${store.id})');
       } else {

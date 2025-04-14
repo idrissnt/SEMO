@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/extensions/theme_extension.dart';
+import '../../../core/theme/responsive_theme.dart';
 import '../../../domain/entities/stores/store.dart';
 
 class StoreSection extends StatelessWidget {

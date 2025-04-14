@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:semo/core/extensions/theme_extension.dart';
+import 'package:semo/core/theme/responsive_theme.dart';
 
 import '../../../core/utils/logger.dart';
 import '../../blocs/store/store_bloc.dart';

@@ -11,7 +11,8 @@ class StoreHistoryScreen extends StatefulWidget {
   State<StoreHistoryScreen> createState() => _StoreHistoryScreenState();
 }
 
-class _StoreHistoryScreenState extends State<StoreHistoryScreen> with AutomaticKeepAliveClientMixin {
+class _StoreHistoryScreenState extends State<StoreHistoryScreen>
+    with AutomaticKeepAliveClientMixin {
   final AppLogger _logger = AppLogger();
 
   @override

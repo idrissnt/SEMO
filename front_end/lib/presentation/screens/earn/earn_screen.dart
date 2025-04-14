@@ -45,7 +45,8 @@ class _EarnScreenState extends State<EarnScreen> {
         ),
       );
     } catch (e, stackTrace) {
-      _logger.error('Error building EarnScreen', error: e, stackTrace: stackTrace);
+      _logger.error('Error building EarnScreen',
+          error: e, stackTrace: stackTrace);
       return Scaffold(
         body: Center(
           child: Text('Error: ${e.toString()}'),

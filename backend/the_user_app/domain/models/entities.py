@@ -12,10 +12,17 @@ class User:
     first_name: str
     last_name: Optional[str] = None
     phone_number: Optional[str] = None
+    profile_photo_url: Optional[str] = None
+    last_login: Optional[datetime] = None
+    last_logout: Optional[datetime] = None
+    created_at: datetime
+    updated_at: Optional[datetime] = None
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     
     def __str__(self) -> str:
         return self.email
+
+    # export 'user_entity.dart';
 
 @dataclass
 class Address:

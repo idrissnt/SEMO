@@ -11,11 +11,36 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   final AppLogger _logger = AppLogger();
   final List<Map<String, dynamic>> _messages = [
-    {'user': 'User 1', 'message': 'Latest message from user 1', 'time': '12:10 PM', 'unread': 1},
-    {'user': 'User 2', 'message': 'Latest message from user 2', 'time': '12:20 PM', 'unread': 0},
-    {'user': 'User 3', 'message': 'Latest message from user 3', 'time': '12:30 PM', 'unread': 2},
-    {'user': 'User 4', 'message': 'Latest message from user 4', 'time': '12:40 PM', 'unread': 0},
-    {'user': 'User 5', 'message': 'Latest message from user 5', 'time': '12:50 PM', 'unread': 3},
+    {
+      'user': 'User 1',
+      'message': 'Latest message from user 1',
+      'time': '12:10 PM',
+      'unread': 1
+    },
+    {
+      'user': 'User 2',
+      'message': 'Latest message from user 2',
+      'time': '12:20 PM',
+      'unread': 0
+    },
+    {
+      'user': 'User 3',
+      'message': 'Latest message from user 3',
+      'time': '12:30 PM',
+      'unread': 2
+    },
+    {
+      'user': 'User 4',
+      'message': 'Latest message from user 4',
+      'time': '12:40 PM',
+      'unread': 0
+    },
+    {
+      'user': 'User 5',
+      'message': 'Latest message from user 5',
+      'time': '12:50 PM',
+      'unread': 3
+    },
   ];
 
   @override
@@ -29,8 +54,7 @@ class _MessageScreenState extends State<MessageScreen> {
     _logger.info('Tapped on message from: ${message['user']}');
     // TODO: Navigate to chat detail screen
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Opening chat with ${message['user']}'))
-    );
+        SnackBar(content: Text('Opening chat with ${message['user']}')));
   }
 
   @override
@@ -64,7 +88,8 @@ class _MessageScreenState extends State<MessageScreen> {
               final message = _messages[index];
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.primaries[index % Colors.primaries.length],
+                  backgroundColor:
+                      Colors.primaries[index % Colors.primaries.length],
                   child: Text(message['user'][0]),
                 ),
                 title: Text(message['user']),
@@ -99,15 +124,15 @@ class _MessageScreenState extends State<MessageScreen> {
           onPressed: () {
             _logger.info('User wants to start a new message');
             // TODO: Implement new message functionality
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('New message feature coming soon!'))
-            );
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('New message feature coming soon!')));
           },
           child: const Icon(Icons.add),
         ),
       );
     } catch (e, stackTrace) {
-      _logger.error('Error building MessageScreen', error: e, stackTrace: stackTrace);
+      _logger.error('Error building MessageScreen',
+          error: e, stackTrace: stackTrace);
       return Scaffold(
         body: Center(
           child: Text('Error: ${e.toString()}'),

@@ -16,26 +16,6 @@ class AddressViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = AddressSerializer
     
-    def get_address(self, pk, user_id):
-        """Helper method to get address by ID and verify ownership"""
-        try:
-            # Convert string to UUID
-            address_id = uuid.UUID(pk)
-            
-            # Get address service from factory
-            address_service = UserFactory.create_address_service()
-            
-            # Get address by ID and verify ownership
-            address, error = address_service.get_address_by_id(address_id, user_id)
-            
-            if error:
-                raise Http404(error)
-                
-            return address
-            
-        except ValueError:
-            raise Http404("Invalid address ID format")
-    
     @extend_schema(
         responses={
             200: AddressSerializer(many=True),
@@ -44,6 +24,7 @@ class AddressViewSet(viewsets.ViewSet):
         description='Get all addresses for the authenticated user'
     )
     def list(self, request):
+        'url : /addresses/'
         # Get address service from factory
         address_service = UserFactory.create_address_service()
         
@@ -64,6 +45,7 @@ class AddressViewSet(viewsets.ViewSet):
         description='Create a new address for the authenticated user'
     )
     def create(self, request):
+        'url : /addresses/'
         serializer = AddressSerializer(data=request.data)
         if serializer.is_valid():
             # Get address service from factory
@@ -93,8 +75,9 @@ class AddressViewSet(viewsets.ViewSet):
         description='Get address details by ID'
     )
     def retrieve(self, request, pk=None):
+        'url : /addresses/{id}/'
         # Get address
-        address = self.get_address(pk, request.user.id)
+        address = self._get_address(pk, request.user.id)
         
         # Serialize and return
         serializer = AddressSerializer(address)
@@ -110,9 +93,11 @@ class AddressViewSet(viewsets.ViewSet):
         },
         description='Update address by ID'
     )
+    @action(detail=True, methods=['put'], url_path='update-address')
     def update(self, request, pk=None):
+        'url : /addresses/{id}/update-address/'
         # Verify address exists and belongs to user
-        self.get_address(pk, request.user.id)
+        self._get_address(pk, request.user.id)
         
         # Validate request data
         serializer = AddressSerializer(data=request.data, partial=True)
@@ -144,9 +129,11 @@ class AddressViewSet(viewsets.ViewSet):
         },
         description='Delete address by ID'
     )
+    @action(detail=True, methods=['delete'], url_path='delete-address')
     def destroy(self, request, pk=None):
+        'url : /addresses/{id}/delete-address/'
         # Verify address exists and belongs to user
-        self.get_address(pk, request.user.id)
+        self._get_address(pk, request.user.id)
         
         # Get address service from factory
         address_service = UserFactory.create_address_service()
@@ -161,3 +148,23 @@ class AddressViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def _get_address(self, pk, user_id):
+        """Helper method to get address by ID and verify ownership"""
+        try:
+            # Convert string to UUID
+            address_id = uuid.UUID(pk)
+            
+            # Get address service from factory
+            address_service = UserFactory.create_address_service()
+            
+            # Get address by ID and verify ownership
+            address, error = address_service.get_address_by_id(address_id, user_id)
+            
+            if error:
+                raise Http404(error)
+                
+            return address
+            
+        except ValueError:
+            raise Http404("Invalid address ID format")

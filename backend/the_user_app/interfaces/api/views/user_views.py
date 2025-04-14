@@ -24,25 +24,25 @@ class UserProfileViewSet(viewsets.ViewSet):
         description='Get user profile information including addresses'
     )
 
-    def list(self, request):
-        """
-        Get user profile information including addresses
-        url: /profiles/
-        """
-        return Response({})
+    # def list(self, request):
+    #     """
+    #     Get user profile information including addresses
+    #     url: /profiles/
+    #     """
+    #     return Response({})
 
     def retrieve(self, request, pk=None):
         """
         Get user profile information including addresses
         url: /profiles/{pk}/
         """
-        user_id = uuid.UUID(pk)
+        user_service = UserFactory.create_user_service()
 
-        # Get user with addresses
-        user_with_addresses = self._get_user_with_addresses(user_id)
+        user_id = uuid.UUID(pk)
+        user = user_service.get_user_by_id(user_id)
         
         # Serialize and return
-        serializer = UserProfileSerializer(user_with_addresses)
+        serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
     @extend_schema(
@@ -75,10 +75,10 @@ class UserProfileViewSet(viewsets.ViewSet):
             
             if user:
                 # Get user with addresses
-                user_with_addresses = self._get_user_with_addresses(user_id)
+                user = user_service.get_user_by_id(user_id)
                 
                 # Serialize and return
-                return Response(UserProfileSerializer(user_with_addresses).data)
+                return Response(UserProfileSerializer(user).data)
             else:
                 # Return error
                 return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
@@ -110,29 +110,3 @@ class UserProfileViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
-
-    def _get_user_with_addresses(self, user_id):
-        """Helper method to get user with addresses"""
-        # Get user service from factory
-        user_service = UserFactory.create_user_service()
-        
-        # Get address service from factory
-        address_service = UserFactory.create_address_service()
-            
-        # Get user by ID
-        user = user_service.get_user_by_id(user_id)
-            
-        # Get addresses for user
-        addresses = address_service.get_user_addresses(user_id)
-            
-        # Create user with addresses object
-        user_with_addresses = {
-            'id': user.id,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'phone_number': user.phone_number,
-            'addresses': addresses
-        }
-            
-        return user_with_addresses
