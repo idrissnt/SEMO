@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/responsive_theme.dart';
+import '../../core/theme/responsive_theme.dart';
 
 class SectionSeparator extends StatelessWidget {
   const SectionSeparator({

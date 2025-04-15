@@ -6,11 +6,11 @@ import '../../../bloc/store_bloc.dart';
 import '../../../bloc/store_event.dart';
 import '../../../bloc/store_state.dart';
 import '../../../data/models/store_model.dart';
-import '../../../../../presentation/widgets/common/loading_view.dart';
-import '../../../../../presentation/widgets/common/error_view.dart';
+import '../../../../../shared/widgets/loading_view.dart';
+import '../../../../../shared/widgets/error_view.dart';
 import '../../widgets/store_search_bar.dart';
 import 'category_products_screen.dart';
-import '../../../../../presentation/widgets/common/gesture_navigation_wrapper.dart';
+import '../../../../../shared/widgets/gesture_navigation_wrapper.dart';
 
 class StoreAislesScreen extends StatefulWidget {
   final String storeId;

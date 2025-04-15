@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/utils/logger.dart';
-import '../../../features/store/data/models/store_model.dart';
-import '../../../features/store/bloc/store_bloc.dart';
-import '../../../features/store/bloc/store_event.dart';
-import '../../../features/store/bloc/store_state.dart';
+import '../../../../../core/utils/logger.dart';
+import '../../../../store/data/models/store_model.dart';
+import '../../../../store/bloc/store_bloc.dart';
+import '../../../../store/bloc/store_event.dart';
+import '../../../../store/bloc/store_state.dart';
 import 'product_category_section.dart';
 
 class StoreProductCategorySection extends StatefulWidget {

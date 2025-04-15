@@ -26,21 +26,25 @@ class StoreRepositoryImpl implements StoreRepository {
   @override
   Future<List<StoreBrand>> getAllStoreBrands() async {
     try {
-      final data = await _apiClient.get<List<dynamic>>(StoreRoutes.storeBrands);
+      final data =
+          await _apiClient.get<List<dynamic>>(StoreApiRoutes.storeBrands);
       return data
           .map((json) => StoreBrandModel.fromJson(json).toEntity())
           .toList();
     } catch (e) {
       _logger.error('Error getting store brands', error: e);
       if (e is DioException) {
-        if (e.type == DioExceptionType.connectionTimeout || 
+        if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout ||
             e.type == DioExceptionType.connectionError) {
-          throw StoreNetworkException('Network error while fetching store brands', e);
+          throw StoreNetworkException(
+              'Network error while fetching store brands', e);
         } else if (e.response?.statusCode == 404) {
           throw StoreNotFoundException('Store brands not found', e);
-        } else if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
-          throw StoreAuthenticationException('Authentication required to access store brands', e);
+        } else if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 403) {
+          throw StoreAuthenticationException(
+              'Authentication required to access store brands', e);
         }
       }
       throw StoreException('Failed to get store brands', e);
@@ -59,7 +63,7 @@ class StoreRepositoryImpl implements StoreRepository {
       };
 
       final data = await _apiClient.get<List<dynamic>>(
-        StoreRoutes.nearbyStores,
+        StoreApiRoutes.nearbyStores,
         queryParameters: queryParams,
       );
 
@@ -69,14 +73,18 @@ class StoreRepositoryImpl implements StoreRepository {
     } catch (e) {
       _logger.error('Error finding nearby stores', error: e);
       if (e is DioException) {
-        if (e.type == DioExceptionType.connectionTimeout || 
+        if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout ||
             e.type == DioExceptionType.connectionError) {
-          throw StoreNetworkException('Network error while finding nearby stores', e);
+          throw StoreNetworkException(
+              'Network error while finding nearby stores', e);
         } else if (e.response?.statusCode == 404) {
-          throw StoreNotFoundException('No nearby stores found for the given address', e);
-        } else if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
-          throw StoreAuthenticationException('Authentication required to find nearby stores', e);
+          throw StoreNotFoundException(
+              'No nearby stores found for the given address', e);
+        } else if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 403) {
+          throw StoreAuthenticationException(
+              'Authentication required to find nearby stores', e);
         }
       }
       throw StoreException('Failed to find nearby stores', e);
@@ -88,24 +96,28 @@ class StoreRepositoryImpl implements StoreRepository {
   Future<List<ProductWithDetails>> getProductsByStoreId(String storeId) async {
     try {
       final data = await _apiClient.get<List<dynamic>>(
-        StoreRoutes.allProducts,
+        StoreApiRoutes.allProducts,
         queryParameters: {'store_id': storeId},
       );
-      
+
       return data
           .map((json) => ProductWithDetailsModel.fromJson(json).toEntity())
           .toList();
     } catch (e) {
       _logger.error('Error getting products by store ID', error: e);
       if (e is DioException) {
-        if (e.type == DioExceptionType.connectionTimeout || 
+        if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout ||
             e.type == DioExceptionType.connectionError) {
-          throw StoreNetworkException('Network error while fetching products for store $storeId', e);
+          throw StoreNetworkException(
+              'Network error while fetching products for store $storeId', e);
         } else if (e.response?.statusCode == 404) {
-          throw ProductNotFoundException('No products found for store $storeId', e);
-        } else if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
-          throw StoreAuthenticationException('Authentication required to access products', e);
+          throw ProductNotFoundException(
+              'No products found for store $storeId', e);
+        } else if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 403) {
+          throw StoreAuthenticationException(
+              'Authentication required to access products', e);
         }
       }
       throw StoreException('Failed to get products for store $storeId', e);
@@ -119,7 +131,7 @@ class StoreRepositoryImpl implements StoreRepository {
   }) async {
     try {
       final data = await _apiClient.get<List<dynamic>>(
-        StoreRoutes.productsByCategory,
+        StoreApiRoutes.productsByCategory,
         queryParameters: {
           'store_id': storeId,
         },
@@ -131,42 +143,64 @@ class StoreRepositoryImpl implements StoreRepository {
     } catch (e) {
       _logger.error('Error getting products by category', error: e);
       if (e is DioException) {
-        if (e.type == DioExceptionType.connectionTimeout || 
+        if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout ||
             e.type == DioExceptionType.connectionError) {
-          throw StoreNetworkException('Network error while fetching products by category for store $storeId', e);
+          throw StoreNetworkException(
+              'Network error while fetching products by category for store $storeId',
+              e);
         } else if (e.response?.statusCode == 404) {
-          throw ProductNotFoundException('No products found in the specified category for store $storeId', e);
-        } else if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
-          throw StoreAuthenticationException('Authentication required to access category products', e);
+          throw ProductNotFoundException(
+              'No products found in the specified category for store $storeId',
+              e);
+        } else if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 403) {
+          throw StoreAuthenticationException(
+              'Authentication required to access category products', e);
         }
       }
-      throw StoreException('Failed to get products by category for store $storeId', e);
+      throw StoreException(
+          'Failed to get products by category for store $storeId', e);
     }
   }
 
   /// Get autocomplete suggestions for a partial search query
   @override
-  Future<List<String>> getAutocompleteSuggestions(String query) async {
+  Future<List<String>> getAutocompleteSuggestions(String query,
+      {String? storeId}) async {
     try {
+      // Build query parameters
+      final queryParams = {
+        'q': query,
+      };
+
+      // Add store_id if provided
+      if (storeId != null) {
+        queryParams['store_id'] = storeId;
+      }
+
       final data = await _apiClient.get<List<dynamic>>(
-        StoreSearchRoutes.autocomplete,
-        queryParameters: {'q': query},
+        StoreSearchApiRoutes.autocomplete,
+        queryParameters: queryParams,
       );
-      
+
       return data.map((item) => item['name'].toString()).toList();
     } catch (e) {
       _logger.error('Error getting autocomplete suggestions', error: e);
       if (e is DioException) {
-        if (e.type == DioExceptionType.connectionTimeout || 
+        if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout ||
             e.type == DioExceptionType.connectionError) {
-          throw StoreNetworkException('Network error while fetching autocomplete suggestions', e);
-        } else if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
-          throw StoreAuthenticationException('Authentication required to access autocomplete suggestions', e);
+          throw StoreNetworkException(
+              'Network error while fetching autocomplete suggestions', e);
+        } else if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 403) {
+          throw StoreAuthenticationException(
+              'Authentication required to access autocomplete suggestions', e);
         }
       }
-      throw StoreSearchException('Failed to get autocomplete suggestions for "$query"', e);
+      throw StoreSearchException(
+          'Failed to get autocomplete suggestions for "$query"', e);
     }
   }
 
@@ -199,80 +233,82 @@ class StoreRepositoryImpl implements StoreRepository {
       }
 
       final responseData = await _apiClient.get<Map<String, dynamic>>(
-        StoreSearchRoutes.products,
+        StoreSearchApiRoutes.products,
         queryParameters: queryParams,
       );
-      
+
       final resultsData = responseData['results'];
       final metadataData = responseData['metadata'];
 
-        // Parse metadata based on search type
-        final searchMetadata = storeId != null
-            ? SearchMetadata(
-                totalProducts: metadataData['total_products'],
-              )
-            : SearchMetadata(
-                storeCounts:
-                    Map<String, int>.from(metadataData['store_counts']),
-              );
+      // Parse metadata based on search type
+      final searchMetadata = storeId != null
+          ? SearchMetadata(
+              totalProducts: metadataData['total_products'],
+            )
+          : SearchMetadata(
+              storeCounts: Map<String, int>.from(metadataData['store_counts']),
+            );
 
-        // Check if this is a store-specific search or global search
-        if (storeId != null) {
-          // Store-specific search - results is a list of products
-          final List<dynamic> productsData = resultsData;
+      // Check if this is a store-specific search or global search
+      if (storeId != null) {
+        // Store-specific search - results is a list of products
+        final List<dynamic> productsData = resultsData;
+        final products = productsData
+            .map((json) => ProductWithDetailsModel.fromJson(json).toEntity())
+            .toList();
+
+        return SearchResult(
+          products: products,
+          metadata: searchMetadata,
+        );
+      } else {
+        // Global search - results is a map of store IDs to store data
+        final Map<String, dynamic> storeResultsData = resultsData;
+        final Map<String, StoreSearchResult> storeResults = {};
+
+        storeResultsData.forEach((storeId, storeData) {
+          final storeInfo = storeData['store_info'];
+          final storeBrand = StoreBrand(
+            id: storeInfo['id'],
+            name: storeInfo['name'],
+            slug: '', // Not provided in the API response
+            type: '', // Not provided in the API response
+            imageLogo: storeInfo['image_logo'],
+            imageBanner: '', // Not provided in the API response
+          );
+
+          final List<dynamic> productsData = storeData['products'];
           final products = productsData
               .map((json) => ProductWithDetailsModel.fromJson(json).toEntity())
               .toList();
 
-          return SearchResult(
+          storeResults[storeId] = StoreSearchResult(
+            store: storeBrand,
+            categoryPath: storeData['category_path'],
             products: products,
-            metadata: searchMetadata,
           );
-        } else {
-          // Global search - results is a map of store IDs to store data
-          final Map<String, dynamic> storeResultsData = resultsData;
-          final Map<String, StoreSearchResult> storeResults = {};
+        });
 
-          storeResultsData.forEach((storeId, storeData) {
-            final storeInfo = storeData['store_info'];
-            final storeBrand = StoreBrand(
-              id: storeInfo['id'],
-              name: storeInfo['name'],
-              slug: '', // Not provided in the API response
-              type: '', // Not provided in the API response
-              imageLogo: storeInfo['image_logo'],
-              imageBanner: '', // Not provided in the API response
-            );
-
-            final List<dynamic> productsData = storeData['products'];
-            final products = productsData
-                .map(
-                    (json) => ProductWithDetailsModel.fromJson(json).toEntity())
-                .toList();
-
-            storeResults[storeId] = StoreSearchResult(
-              store: storeBrand,
-              categoryPath: storeData['category_path'],
-              products: products,
-            );
-          });
-
-          return SearchResult(
-            storeResults: storeResults,
-            metadata: searchMetadata,
-          );
-        }
+        return SearchResult(
+          storeResults: storeResults,
+          metadata: searchMetadata,
+        );
+      }
     } catch (e) {
       _logger.error('Error searching products', error: e);
       if (e is DioException) {
-        if (e.type == DioExceptionType.connectionTimeout || 
+        if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout ||
             e.type == DioExceptionType.connectionError) {
-          throw StoreNetworkException('Network error while searching products', e);
+          throw StoreNetworkException(
+              'Network error while searching products', e);
         } else if (e.response?.statusCode == 404) {
-          throw ProductNotFoundException('No products found matching the search criteria', e);
-        } else if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
-          throw StoreAuthenticationException('Authentication required to search products', e);
+          throw ProductNotFoundException(
+              'No products found matching the search criteria', e);
+        } else if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 403) {
+          throw StoreAuthenticationException(
+              'Authentication required to search products', e);
         }
       }
       throw StoreSearchException('Failed to search products for "$query"', e);

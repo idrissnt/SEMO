@@ -48,11 +48,14 @@ class ProductRepository(ABC):
         pass
         
     @abstractmethod
-    def get_autocomplete_suggestions(self, partial_query: str, limit: int = 10) -> List[str]:
+    def get_autocomplete_suggestions(self, partial_query: str, 
+            store_brand_id: Optional[uuid.UUID] = None, 
+            limit: int = 10) -> List[str]:
         """Get autocomplete suggestions for a partial query string
         
         Args:
             partial_query: The partial search query typed by the user
+            store_brand_id: Optional UUID of the store brand to limit suggestions to
             limit: Maximum number of suggestions to return
             
         Returns:

@@ -77,7 +77,7 @@ class ApiClient {
       if (refreshToken == null) return false;
 
       final response = await _dio.post(
-        TokenRoutes.refresh,
+        TokenApiRoutes.refresh,
         data: {'refresh': refreshToken},
       );
 

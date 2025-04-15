@@ -1,6 +1,6 @@
-import '../entities/product.dart';
-import '../entities/search_result.dart';
-import '../entities/store.dart';
+import 'package:semo/features/store/domain/entities/product.dart';
+import 'package:semo/features/store/domain/entities/search_result.dart';
+import 'package:semo/features/store/domain/entities/store.dart';
 
 /// Repository interface for store-related operations
 /// Following clean architecture, this defines the contract that data layer must implement
@@ -21,8 +21,9 @@ abstract class StoreRepository {
     required String storeId,
   });
 
-  /// Get autocomplete suggestions for a partial search query
-  Future<List<String>> getAutocompleteSuggestions(String query);
+  /// Get autocomplete suggestions for a partial search query globally or within a specific store
+  Future<List<String>> getAutocompleteSuggestions(String query,
+      {String? storeId});
 
   /// Search for products globally or within a specific store
   Future<SearchResult> searchProducts({

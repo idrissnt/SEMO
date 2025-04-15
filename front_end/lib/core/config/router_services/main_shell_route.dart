@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../presentation/screens/home/home_screen.dart';
+import '../../../features/home/presentation/screens/home/home_screen.dart';
 import '../../../presentation/screens/mission/mission_screen.dart';
 import '../../../presentation/screens/earn/earn_screen.dart';
 import '../../../presentation/screens/message/message_screen.dart';

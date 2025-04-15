@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 
-from store.domain.models.entities import StoreBrand
+from store.domain.models.entities import StoreBrand, StoreBrandLocation
 from store.domain.services.cache_service import CacheService
 from store.domain.services.store_location_service import StoreLocationService
 from store.domain.value_objects.coordinates import Coordinates
@@ -28,11 +28,14 @@ class StoreBrandLocationService:
         self.store_location_service = store_location_service
         self.cache_service = cache_service
     
+    def list_all_store_brands(self) -> List[StoreBrand]:
+        return self.store_brand_repository.get_all_store_brands()
+
     def find_nearby_store_brands_by_address(
         self,
         address: str,
         radius_km: float = DEFAULT_SEARCH_RADIUS,
-    ) -> List[StoreBrand]:
+    ) -> List[StoreBrandLocation]:
         """Find nearby store brands using a user-provided address
         
         Args:
@@ -40,12 +43,8 @@ class StoreBrandLocationService:
             radius_km: Search radius in kilometers
             
         Returns:
-            List of StoreBrand objects with location information attached
+            List of StoreBrandLocation entities
         """
-
-        if not address:
-            # If geocoding fails, return all brands without locations
-            return self.store_brand_repository.get_all_store_brands()
 
         # First, geocode the address to get coordinates
         geocode_result = self.store_location_service.geocode_address(address)
@@ -68,7 +67,7 @@ class StoreBrandLocationService:
         coordinates: Coordinates,
         radius_km: float,
         cache_key: str = None
-    ) -> List[StoreBrand]:
+    ) -> List[StoreBrandLocation]:
         """Find nearby store brands and cache the results
         
         Args:
@@ -77,7 +76,7 @@ class StoreBrandLocationService:
             cache_key: Optional cache key to store results under
             
         Returns:
-            List of StoreBrand objects with location information attached
+            List of StoreBrandLocation entities
         """
         # Get all store brands we need to search for
         store_brands = self.store_brand_repository.get_all_store_brands()
@@ -108,48 +107,30 @@ class StoreBrandLocationService:
         
         return results
     
-    def _create_brand_with_location(self, brand: StoreBrand, place: Dict[str, Any]) -> StoreBrand:
-        """Create a copy of a store brand with location information attached
+    def _create_brand_with_location(self, brand: StoreBrand, place: Dict[str, Any]) -> StoreBrandLocation:
+        """Create a StoreBrandLocation entity from brand and place info
         
         Args:
-            brand: StoreBrand object to copy
-            place: Place information from Google Maps API
-            
+            brand: StoreBrand object
+            place: Place information from location service
         Returns:
-            Copy of StoreBrand with location attributes added
+            StoreBrandLocation entity
         """
-        # Create a copy of the brand
-        store_brand = StoreBrand(
+        distance_km = float(place['distance']) / 1000 if 'distance' in place else None
+        address = place.get('address') or place.get('vicinity')
+        place_id = place.get('place_id')
+        coordinates = None
+        if 'latitude' in place and 'longitude' in place:
+            coordinates = Coordinates(latitude=place['latitude'], longitude=place['longitude'])
+        return StoreBrandLocation(
             id=brand.id,
             name=brand.name,
-            type=brand.type,
             slug=brand.slug,
+            type=brand.type,
             image_logo=brand.image_logo,
-            image_banner=brand.image_banner
+            image_banner=brand.image_banner,
+            distance_km=distance_km,
+            address=address,
+            place_id=place_id,
+            coordinates=coordinates
         )
-        
-        # Add place information as attributes
-        if 'distance' in place:
-            # Convert from meters to kilometers
-            distance_km = float(place['distance']) / 1000
-            setattr(store_brand, 'distance_km', distance_km)
-        
-        # Add address information if available
-        if 'address' in place:
-            setattr(store_brand, 'address', place['address'])
-        elif 'vicinity' in place:
-            setattr(store_brand, 'address', place['vicinity'])
-        
-        # Add place_id for reference
-        if 'place_id' in place:
-            setattr(store_brand, 'place_id', place['place_id'])
-            
-        # Add coordinates if available
-        if 'latitude' in place and 'longitude' in place:
-            coordinates = Coordinates(
-                latitude=place['latitude'],
-                longitude=place['longitude']
-            )
-            setattr(store_brand, 'coordinates', coordinates)
-            
-        return store_brand

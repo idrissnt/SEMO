@@ -23,12 +23,15 @@ class SearchProductsService:
         self.cache_service = cache_service
         self.analytics_service = analytics_service
         
-    def autocomplete_query(self, partial_query: str, limit: int = 10) -> List[ProductName]:
+    def autocomplete_query(self, partial_query: str, 
+                           store_brand_id: Optional[uuid.UUID] = None, 
+                           limit: int = 10) -> List[ProductName]:
         """
         Get autocomplete suggestions for a partial search query
-        
+            
         Args:
             partial_query: The partial query to autocomplete
+            store_brand_id: Optional UUID of the store brand to limit suggestions to
             limit: Maximum number of suggestions to return
             
         Returns:
@@ -41,7 +44,9 @@ class SearchProductsService:
             return []
         
         # Try to get from cache first
-        cache_key = f'autocomplete:{clean_query}'
+        # Include store_brand_id in cache key if provided
+        store_key = f':{store_brand_id}' if store_brand_id else ''
+        cache_key = f'autocomplete{store_key}:{clean_query}'
         cached_results = self.cache_service.get(cache_key)
         
         if cached_results:
@@ -50,6 +55,7 @@ class SearchProductsService:
         # Get suggestions from repository
         suggestions = self.product_repository.get_autocomplete_suggestions(
             partial_query=clean_query,
+            store_brand_id=store_brand_id,
             limit=limit
         )
         

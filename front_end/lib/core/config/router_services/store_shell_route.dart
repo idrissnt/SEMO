@@ -6,7 +6,7 @@ import '../../../features/store/presentation/screens/store_aisles_screen/categor
 import '../../../features/store/presentation/screens/store_products_screen.dart';
 import '../../../features/store/presentation/screens/store_history_screen.dart';
 import '../../../features/store/presentation/screens/store_people_screen.dart';
-import '../../../presentation/widgets/common/gesture_navigation_wrapper.dart';
+import '../../../shared/widgets/gesture_navigation_wrapper.dart';
 
 // Global keys to maintain state across navigations
 final _storeProductsKey = GlobalKey();

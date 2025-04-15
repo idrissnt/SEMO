@@ -7,7 +7,8 @@ from store.interfaces.api.serializers import (
     ProductNameSerializer,
     StoreBrandSerializer, 
     ProductWithDetailsSerializer,
-    SearchResponseSerializer
+    SearchResponseSerializer,
+    StoreBrandLocationSerializer
 )
 
 # Factory imports for dependency injection
@@ -25,7 +26,9 @@ class StoreBrandLocationViewSet(viewsets.ViewSet):
         """Get all store brands
         url: stores/store-brands/
         method: GET"""
-        return Response([])
+        store_brands = self.store_brand_location_service.list_all_store_brands()
+        serializer = StoreBrandSerializer(store_brands, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='nearby-stores')
     def nearby_stores(self, request):
@@ -34,24 +37,14 @@ class StoreBrandLocationViewSet(viewsets.ViewSet):
         method: GET
         query parameters: address (optional), radius (optional), brand_slugs (optional)"""
         # Get parameters from request
-        address = request.query_params.get('address', '')
-        radius = request.query_params.get('radius', '5.0')
-        # brand_slugs = request.query_params.getlist('brand_slugs', None)
-        
-        try:
-            radius_km = float(radius)
-        except ValueError:
-            return Response({"error": "Invalid radius value"}, 
-                            status=status.HTTP_400_BAD_REQUEST)
+        address = request.query_params.get('address')
         
         # Find by address
         nearby_brands = self.store_brand_location_service.find_nearby_store_brands_by_address(
             address=address,
-            radius_km=radius_km,
-            # brand_slugs=brand_slugs if brand_slugs else None
         )
         
-        serializer = StoreBrandSerializer(nearby_brands, many=True)
+        serializer = StoreBrandLocationSerializer(nearby_brands, many=True)
         return Response(serializer.data)
     
 class StoreProductViewSet(viewsets.ViewSet):
@@ -134,11 +127,24 @@ class SearchViewSet(viewsets.ViewSet):
         """Get autocomplete suggestions for a partial search query
         url: stores/search/autocomplete/
         method: GET
-        query parameters: q (required)"""
+        query parameters: q (required), store_id (optional)"""
         query = request.query_params.get('q', '')
-            
+        store_id = request.query_params.get('store_id')
+        
+        # Convert store_id to UUID if provided
+        store_uuid = None
+        if store_id:
+            try:
+                store_uuid = uuid.UUID(store_id)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid UUID format for store_id"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
         suggestions = self.search_service.autocomplete_query(
-            partial_query=query
+            partial_query=query,
+            store_brand_id=store_uuid
         )
 
         serializer = ProductNameSerializer(suggestions, many=True)

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../core/theme/responsive_theme.dart';
-import '../../../core/utils/logger.dart';
+import '../../../../../core/theme/responsive_theme.dart';
+import '../../../../../core/utils/logger.dart';
 
 class TaskSuggestionsSection extends StatelessWidget {
   final String title;

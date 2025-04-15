@@ -12,6 +12,32 @@ class StoreBrandSerializer(serializers.Serializer):
         data = super().to_representation(instance)
         return data
 
+class CoordinatesSerializer(serializers.Serializer):
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+
+class StoreBrandLocationSerializer(serializers.Serializer):
+    """Serializer for StoreBrandLocation domain entity"""
+    id = serializers.UUIDField()
+    name = serializers.CharField()
+    slug = serializers.SlugField()
+    type = serializers.CharField()
+    image_logo = serializers.CharField()
+    image_banner = serializers.CharField()
+    distance_km = serializers.FloatField(required=False, allow_null=True)
+    address = serializers.CharField(required=False, allow_null=True)
+    place_id = serializers.CharField(required=False, allow_null=True)
+    coordinates = CoordinatesSerializer(required=False, allow_null=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Handle coordinates as nested object if present
+        if hasattr(instance, 'coordinates') and instance.coordinates:
+            data['coordinates'] = CoordinatesSerializer(instance.coordinates).data
+        else:
+            data['coordinates'] = None
+        return data
+
 
 class ProductWithDetailsSerializer(serializers.Serializer):
     """Serializer for ProductWithDetails domain entity"""

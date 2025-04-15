@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../core/utils/logger.dart';
+import '../../../../../core/utils/logger.dart';
 
 class EarnTasksSection extends StatelessWidget {
   final String title;

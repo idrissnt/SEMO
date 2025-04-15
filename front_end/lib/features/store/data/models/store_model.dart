@@ -85,12 +85,40 @@ class NearbyStoreModel {
 
   /// Creates a NearbyStoreModel from JSON data
   factory NearbyStoreModel.fromJson(Map<String, dynamic> json) {
+    // Handle the new StoreBrandLocation format from backend
+    // The JSON now contains direct store brand fields and location data
+    final storeBrand = StoreBrandModel(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      slug: json['slug'] ?? '',
+      type: json['type'] ?? '',
+      imageLogo: json['image_logo'] ?? '',
+      imageBanner: json['image_banner'] ?? '',
+    );
+    
+    // Extract distance_km from the response
+    final distance = (json['distance_km'] ?? 0.0).toDouble();
+    
+    // Extract address
+    final address = json['address'] ?? '';
+    
+    // Extract coordinates (which may be a nested object)
+    double latitude = 0.0;
+    double longitude = 0.0;
+    
+    if (json['coordinates'] != null) {
+      // Handle nested coordinates object
+      final coordinates = json['coordinates'];
+      latitude = (coordinates['latitude'] ?? 0.0).toDouble();
+      longitude = (coordinates['longitude'] ?? 0.0).toDouble();
+    }
+    
     return NearbyStoreModel(
-      storeBrand: StoreBrandModel.fromJson(json['store_brand'] ?? {}),
-      distance: (json['distance'] ?? 0.0).toDouble(),
-      address: json['address'] ?? '',
-      latitude: (json['latitude'] ?? 0.0).toDouble(),
-      longitude: (json['longitude'] ?? 0.0).toDouble(),
+      storeBrand: storeBrand,
+      distance: distance,
+      address: address,
+      latitude: latitude,
+      longitude: longitude,
     );
   }
 

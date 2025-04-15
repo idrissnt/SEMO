@@ -2,10 +2,11 @@
 /// Organized by feature for better maintainability and discoverability
 class ApiRoutes {
   static const String base = '/api'; // Base API path
+  static const String baseMedia = '/media'; // Base media path
 }
 
 /// Authentication related routes
-class AuthRoutes {
+class AuthApiRoutes {
   static const String base = '${ApiRoutes.base}/auth';
   static const String login = '$base/login/';
   static const String logout = '$base/logout/';
@@ -14,40 +15,39 @@ class AuthRoutes {
 }
 
 /// Token related routes
-class TokenRoutes {
+class TokenApiRoutes {
   static const String base = '${ApiRoutes.base}/token';
   static const String refresh = '$base/refresh/';
   static const String verify = '$base/verify/';
 }
 
 /// User profile related routes
-class ProfileRoutes {
+class ProfileApiRoutes {
   static const String base = '${ApiRoutes.base}/profiles';
   static const String update = '$base/update-profile/';
   static const String delete = '$base/delete-account/';
 }
 
 /// Address related routes
-class AddressRoutes {
+class AddressApiRoutes {
   static const String base = '${ApiRoutes.base}/addresses';
   static const String update = '$base/update-address/';
   static const String delete = '$base/delete-address/';
 }
 
 /// Store related routes
-class StoreRoutes {
+class StoreApiRoutes {
   static const String base = '${ApiRoutes.base}/stores';
   static const String storeBrands = '$base/store-brands/';
   static const String nearbyStores = '$storeBrands/nearby-stores/';
   static const String storeProducts = '$base/store-products/';
   static const String allProducts = '$storeProducts/all-products/';
   static const String productsByCategory = '$storeProducts/by-category/';
-  static const String fullDetails = '$base/full_details/';
 }
 
 /// Search related routes within store
-class StoreSearchRoutes {
-  static const String base = '${StoreRoutes.base}/search';
+class StoreSearchApiRoutes {
+  static const String base = '${StoreApiRoutes.base}/search';
   static const String autocomplete = '$base/autocomplete/';
   static const String products = '$base/products/';
 }

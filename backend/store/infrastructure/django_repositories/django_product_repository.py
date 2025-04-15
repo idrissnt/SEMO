@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 import uuid
 
 from store.domain.models.entities import ProductWithDetails
@@ -73,48 +73,68 @@ class DjangoProductRepository(ProductRepository):
         
         return products_by_store
     
-    def get_autocomplete_suggestions(self, partial_query: str, limit: int = 10) -> List[str]:
-        """Get autocomplete suggestions for a partial query string"""
+    def get_autocomplete_suggestions(self, partial_query: str, store_brand_id: Optional[uuid.UUID] = None, limit: int = 10) -> List[str]:
+        """Get autocomplete suggestions for a partial query string
         
-        # Import needed for trigram similarity
+        Args:
+            partial_query: The partial search query typed by the user
+            store_brand_id: Optional UUID of the store brand to limit suggestions to
+            limit: Maximum number of suggestions to return
+            
+        Returns:
+            List of ProductName objects that match the partial query
+        """
         from django.contrib.postgres.search import TrigramSimilarity
+        from django.db.models import Q, Value, F, Case, When, BooleanField
+        from store.domain.models.entities import ProductName
+        from store.infrastructure.django_models.orm_models import StoreProductModel
         
-        # Clean the query
+        # Clean the query (remove whitespace and convert to lowercase)
         clean_query = partial_query.strip().lower()
+        if not clean_query:
+            return []
         
-        # First try prefix matching (words that start with the query)
-        # This gives priority to words that actually start with what the user typed
-        prefix_matches = list(
-            ProductModel.objects
-            .filter(name__istartswith=clean_query)
+        # Base queryset
+        base_queryset = ProductModel.objects
+        
+        # If store_brand_id is provided, use a more efficient JOIN approach
+        if store_brand_id:
+            # Get product IDs that exist in the specified store using StoreProductModel directly
+            product_ids_in_store = StoreProductModel.objects.filter(
+                store_brand_id=store_brand_id
+            ).values_list('product_id', flat=True)
+            
+            # Filter base queryset to only include these products
+            base_queryset = base_queryset.filter(id__in=product_ids_in_store)
+        
+        # Combine prefix and similarity matching in a single query with ranking
+        # This avoids multiple database hits and in-memory processing
+        results = (
+            base_queryset
+            # Add a boolean field to indicate if it's a prefix match
+            .annotate(
+                is_prefix_match=Case(
+                    When(name__istartswith=clean_query, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField()
+                ),
+                # Add similarity score for all products
+                similarity=TrigramSimilarity('name', clean_query)
+            )
+            # Filter to include only relevant matches
+            .filter(
+                # Either it's a prefix match OR it has sufficient similarity
+                # similarity__gt=0.3 means that the product name has a similarity of at least 30%
+                Q(is_prefix_match=True) | Q(similarity__gt=0.3)
+            )
+            # Order by prefix match first (True sorts before False), then by similarity
+            .order_by('-is_prefix_match', '-similarity')
+            # Get distinct product names
             .values_list('name', flat=True)
             .distinct()[:limit]
         )
         
-        # If we have enough prefix matches, return them
-        if len(prefix_matches) >= limit:
-            from store.domain.models.entities import ProductName
-            return [ProductName(name) for name in prefix_matches[:limit]]
-            
-        # Otherwise, supplement with trigram similarity matches
-        # Calculate how many more results we need
-        remaining_slots = limit - len(prefix_matches)
-        
-        # Get trigram similarity matches, excluding exact prefix matches we already have
-        similarity_matches = list(
-            ProductModel.objects
-            .annotate(similarity=TrigramSimilarity('name', clean_query))
-            .filter(similarity__gt=0.3)  # Adjust threshold as needed
-            .exclude(name__in=prefix_matches)  # Exclude items we already have
-            .order_by('-similarity')
-            .values_list('name', flat=True)
-            .distinct()[:remaining_slots]
-        )
-        
-        # Combine results, with prefix matches first
-        from store.domain.models.entities import ProductName
-        # Flatten the list and ensure we don't exceed the limit
-        combined_matches = prefix_matches + similarity_matches
-        return [ProductName(name) for name in combined_matches[:limit]]
+        # Convert to domain entities
+        return [ProductName(name) for name in results]
 
     

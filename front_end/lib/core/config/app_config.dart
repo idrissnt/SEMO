@@ -9,8 +9,6 @@ class AppConfig {
   // static const String mediaBaseUrl = 'http://172.20.10.5:8000';
   static const String mediaBaseUrl = 'http://192.168.187.184:8000';
 
-  static const int apiTimeout = 30000; // milliseconds
-
   // Authentication Endpoints
   static const String loginEndpoint = '/auth/login/';
   static const String logoutEndpoint = '/auth/logout/';

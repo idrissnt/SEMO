@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../features/store/data/models/store_model.dart';
-import '../../../core/utils/logger.dart';
+import '../../../../store/data/models/store_model.dart';
+import '../../../../../core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 
 class ProductCategorySection extends StatelessWidget {

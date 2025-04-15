@@ -3,19 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/theme/responsive_theme.dart';
 
-import '../../../core/utils/logger.dart';
-import '../../../features/store/bloc/store_bloc.dart';
-import '../../../features/store/bloc/store_event.dart';
-import '../../../features/store/bloc/store_state.dart';
+import '../../../../../core/utils/logger.dart';
+import '../../../../store/bloc/store_bloc.dart';
+import '../../../../store/bloc/store_event.dart';
+import '../../../../store/bloc/store_state.dart';
 
 import '../../widgets/homescreen/store_section.dart';
 import '../../widgets/homescreen/custom_home_app_bar.dart';
-import '../../widgets/common/error_view.dart';
-import '../../widgets/common/loading_view.dart';
+import '../../../../../shared/widgets/error_view.dart';
+import '../../../../../shared/widgets/loading_view.dart';
 import '../../widgets/homescreen/task_suggestions_section.dart';
 import '../../widgets/homescreen/earn_tasks_section.dart';
 import '../../widgets/homescreen/weekly_recipes_section.dart';
-import '../../widgets/common/section_separator.dart';
+import '../../../../../shared/widgets/section_separator.dart';
 // import '../../widgets/homescreen/store_product_category_section.dart';
 
 class HomeScreen extends StatefulWidget {

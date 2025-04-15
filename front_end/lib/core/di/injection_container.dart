@@ -4,12 +4,16 @@ import 'package:dio/dio.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/services/api_client.dart';
 import 'package:semo/core/config/app_config.dart';
+
+// Feature-specific dependency injection
+import 'package:semo/features/store/di/store_injection.dart';
+import 'package:semo/features/home/di/home_screen_injection.dart';
+
+// Repositories
 import 'package:semo/features/store/data/repositories/store_repository_impl.dart';
 import 'package:semo/features/store/domain/repositories/store_repository.dart';
-
 import 'package:semo/features/auth/data/repositories/user_repository_impl.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
-
 import 'package:semo/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:semo/features/profile/domain/repositories/profile_repository.dart';
 
@@ -56,8 +60,12 @@ Future<void> initializeDependencies() async {
     ),
   );
 
-  // // Use Cases
-  // sl.registerLazySingleton<GetStoresUseCase>(
-  //   () => GetStoresUseCaseImpl(storeRepository: sl()),
+  // Register feature-specific dependencies
+  registerStoreDependencies();
+  registerHomeScreenDependencies();
+
+  // TODO: Add other feature-specific registrations here
+  // registerAuthDependencies();
+  // registerProfileDependencies();
   // );
 }

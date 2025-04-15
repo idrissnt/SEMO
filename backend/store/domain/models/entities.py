@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 import uuid
+from store.domain.value_objects.coordinates import Coordinates
 
 @dataclass
 class StoreBrand:
@@ -17,6 +18,20 @@ class StoreBrand:
 
     def __str__(self) -> str:
         return self.name
+
+@dataclass
+class StoreBrandLocation:
+    """Domain model representing a store brand with attached location info"""
+    id: uuid.UUID
+    name: str
+    slug: str
+    type: str
+    image_logo: str
+    image_banner: str
+    distance_km: Optional[float] = None
+    address: Optional[str] = None
+    place_id: Optional[str] = None
+    coordinates: Optional[Coordinates] = None
 
 @dataclass
 class ProductWithDetails:
