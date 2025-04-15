@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../data/models/store_model.dart';
+import '../../../infrastructure/models/store_model.dart';
 
 class StoreHeader extends StatelessWidget {
   final StoreModel store;

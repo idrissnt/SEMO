@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/utils/logger.dart';
-import '../../../data/models/product_model.dart';
+import '../../../infrastructure/models/product_model.dart';
 import '../../widgets/store_aisles_screen/product_card.dart';
 
 class CategoryProductsScreen extends StatefulWidget {

@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/logger.dart';
-import '../../data/models/store_model.dart';
+import '../../infrastructure/models/store_model.dart';
 import '../../bloc/store_bloc.dart';
 import '../../bloc/store_event.dart';
 import '../../bloc/store_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/loading_view.dart';
+import '../../../../core/presentation/widgets/common_widgets/error_view.dart';
+import '../../../../core/presentation/widgets/common_widgets/loading_view.dart';
 import '../widgets/store_products_screen.dart/store_header.dart';
 import '../widgets/store_products_screen.dart/category_tabs.dart';
 import '../widgets/store_products_screen.dart/product_grid.dart';

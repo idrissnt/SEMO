@@ -1,1 +1,1 @@
-export 'package:semo/shared/entities/user_entity.dart';
+export 'package:semo/core/domain/entities/user_entity.dart';

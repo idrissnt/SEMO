@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/responsive_theme.dart';
 
 /// A header widget for authentication screens
 class AuthHeader extends StatelessWidget {
