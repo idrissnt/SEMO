@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional, Dict, Any
 
@@ -43,3 +44,27 @@ class ExperienceLevel(str, Enum):
             'value': self.value,
             'display_name': self.name.capitalize()
         }
+
+
+@dataclass(frozen=True)
+class AuthTokens:
+    """Value object representing authentication tokens
+    
+    This value object encapsulates the structure of authentication tokens
+    returned by the authentication system. It ensures that all token-related
+    data is consistently structured throughout the application.
+    
+    Attributes:
+        access_token: JWT access token for API authentication
+        refresh_token: JWT refresh token for obtaining new access tokens
+        user_id: UUID of the authenticated user
+        email: Email of the authenticated user
+        first_name: First name of the authenticated user
+        last_name: Last name of the authenticated user
+    """
+    access_token: str
+    refresh_token: str
+    user_id: str
+    email: str
+    first_name: str
+    last_name: Optional[str] = None

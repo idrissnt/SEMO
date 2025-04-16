@@ -16,7 +16,7 @@ class ApiRoutes {
 
 /// Authentication related routes
 class AuthApiRoutes {
-  static const String path = '/auth';
+  static const String path = '/users/auth';
   static String get base => '${ApiRoutes.base}$path';
   static String get login => '$base/login/';
   static String get logout => '$base/logout/';
@@ -26,7 +26,7 @@ class AuthApiRoutes {
 
 /// Token related routes
 class TokenApiRoutes {
-  static const String path = '/token';
+  static const String path = '/users/token';
   static String get base => '${ApiRoutes.base}$path';
   static String get refresh => '$base/refresh/';
   static String get verify => '$base/verify/';
@@ -34,7 +34,7 @@ class TokenApiRoutes {
 
 /// User profile related routes
 class ProfileApiRoutes {
-  static const String path = '/profiles';
+  static const String path = '/users/profiles';
   static String get base => '${ApiRoutes.base}$path';
   static String get updateProfile => '/update-profile/';
   static String get deleteAccount => '/delete-account/';
@@ -42,7 +42,7 @@ class ProfileApiRoutes {
 
 /// User address related routes
 class UserAddressApiRoutes {
-  static const String path = '/addresses';
+  static const String path = '/users/addresses';
   static String get base => '${ApiRoutes.base}$path';
   static String get getUserAddresses => '$base/';
   static String get createAddress => '$base/';

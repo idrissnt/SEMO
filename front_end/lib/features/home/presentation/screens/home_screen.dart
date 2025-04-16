@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
 
 import '../../../../core/utils/logger.dart';
-import '../../../store/bloc/store_bloc.dart';
-import '../../../store/bloc/store_event.dart';
-import '../../../store/bloc/store_state.dart';
+import '../bloc/home_store/home_store_bloc.dart';
+import '../bloc/home_store/home_store_event.dart';
+import '../bloc/home_store/home_store_state.dart';
+import '../bloc/user_address/user_address_bloc.dart';
+import '../bloc/user_address/user_address_event.dart';
+import '../bloc/user_address/user_address_state.dart';
 
 import '../widgets/store_section.dart';
 import '../widgets/custom_home_app_bar.dart';
@@ -47,9 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       _logger.debug('HomeScreen: Loading data');
 
-      // Single event to load all stores
-      context.read<StoreBloc>().add(LoadAllStoresEvent());
-      //
+      // Load all store brands
+      context.read<HomeStoreBloc>().add(const LoadAllStoreBrandsEvent());
+      
+      // Load user address
+      context.read<HomeUserAddressBloc>().add(const HomeGetUserAddressEvent());
     } catch (e) {
       _logger.error('Error in HomeScreen._loadInitialData', error: e);
     }
@@ -78,8 +83,13 @@ class _HomeTabState extends State<_HomeTab> {
   }
 
   Future<void> _refreshData() {
-    final storeBloc = context.read<StoreBloc>();
-    storeBloc.add(LoadAllStoresEvent());
+    final homeStoreBloc = context.read<HomeStoreBloc>();
+    homeStoreBloc.add(const LoadAllStoreBrandsEvent());
+    
+    // Refresh user address
+    final userAddressBloc = context.read<HomeUserAddressBloc>();
+    userAddressBloc.add(const HomeGetUserAddressEvent());
+    
     // Return a completed future to satisfy RefreshIndicator
     return Future.delayed(const Duration(seconds: 2));
   }
@@ -90,11 +100,20 @@ class _HomeTabState extends State<_HomeTab> {
       backgroundColor: context.backgroundColor,
       body: MultiBlocListener(
         listeners: [
-          BlocListener<StoreBloc, StoreState>(
+          BlocListener<HomeStoreBloc, HomeStoreState>(
             listener: (context, state) {
-              if (state is StoreError) {
+              if (state is HomeStoreError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.message)),
+                );
+              }
+            },
+          ),
+          BlocListener<HomeUserAddressBloc, HomeUserAddressState>(
+            listener: (context, state) {
+              if (state is HomeUserAddressError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.exception.toString())),
                 );
               }
             },
@@ -172,24 +191,24 @@ class _HomeTabState extends State<_HomeTab> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BlocBuilder<StoreBloc, StoreState>(
+                      BlocBuilder<HomeStoreBloc, HomeStoreState>(
                         buildWhen: (previous, current) =>
-                            current is AllStoresLoaded ||
-                            current is StoreLoading ||
-                            current is StoreError,
+                            current is StoreBrandsLoaded ||
+                            current is HomeStoreLoading ||
+                            current is HomeStoreError,
                         builder: (context, state) {
-                          if (state is StoreLoading) {
+                          if (state is HomeStoreLoading) {
                             return const LoadingView();
-                          } else if (state is StoreError) {
+                          } else if (state is HomeStoreError) {
                             return ErrorView(message: state.message);
-                          } else if (state is AllStoresLoaded) {
+                          } else if (state is StoreBrandsLoaded) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (state.bigStores.isNotEmpty)
+                                if (state.storeBrands.isNotEmpty)
                                   StoreSection(
                                     title: 'Fais tes courses chez :',
-                                    stores: state.bigStores,
+                                    stores: state.storeBrands,
                                     isLarge: true,
                                   ),
                                 const SectionSeparator(),

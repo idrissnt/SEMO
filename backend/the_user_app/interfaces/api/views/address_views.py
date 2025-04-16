@@ -2,6 +2,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.http import Http404
+from rest_framework.decorators import action
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 import logging
 import uuid
@@ -94,7 +95,7 @@ class AddressViewSet(viewsets.ViewSet):
         description='Update address by ID'
     )
     @action(detail=True, methods=['put'], url_path='update-address')
-    def update(self, request, pk=None):
+    def update_address(self, request, pk=None):
         'url : /addresses/{id}/update-address/'
         # Verify address exists and belongs to user
         self._get_address(pk, request.user.id)
@@ -130,7 +131,7 @@ class AddressViewSet(viewsets.ViewSet):
         description='Delete address by ID'
     )
     @action(detail=True, methods=['delete'], url_path='delete-address')
-    def destroy(self, request, pk=None):
+    def destroy_address(self, request, pk=None):
         'url : /addresses/{id}/delete-address/'
         # Verify address exists and belongs to user
         self._get_address(pk, request.user.id)

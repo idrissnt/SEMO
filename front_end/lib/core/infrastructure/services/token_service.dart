@@ -137,9 +137,10 @@ class TokenService {
         return false;
       }
 
+      _logger.debug('Sending refresh token request to: ${TokenApiRoutes.refresh}');
       final response = await _dio.post(
         TokenApiRoutes.refresh,
-        data: {'refresh_token': refreshToken},
+        data: {'refresh': refreshToken},
         options: Options(headers: {'Content-Type': 'application/json'}),
       );
 

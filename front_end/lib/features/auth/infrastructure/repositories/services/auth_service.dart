@@ -24,6 +24,7 @@ class AuthService {
     required String password,
   }) async {
     try {
+      _logger.debug('Sending login request for user: $email');
       final response = await _dio.post(
         AuthApiRoutes.login,
         data: {
@@ -32,6 +33,9 @@ class AuthService {
         },
         options: Options(headers: {'Content-Type': 'application/json'}),
       );
+
+      _logger.debug('Login Response status: ${response.statusCode}');
+      _logger.debug('Login Response data: ${response.data}');
 
       if (response.statusCode == 200) {
         final data = response.data;

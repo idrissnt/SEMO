@@ -1,7 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import '../bloc/home_store/home_store_bloc.dart';
+import '../bloc/home_store/home_store_event.dart';
+import '../bloc/home_store/home_store_state.dart';
+import '../bloc/user_address/user_address_bloc.dart';
+import '../bloc/user_address/user_address_state.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
   final bool isCollapsed;
@@ -74,24 +80,48 @@ class CustomHomeAppBar extends StatelessWidget {
   }
 
   Widget _buildLocationWidget(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        context.iconMedium(
-            icon: Icons.location_on, color: context.textPrimaryColor),
-        SizedBox(width: context.xxs),
-        SizedBox(
-          width: context.responsiveItemSize(100),
-          child: Text(
-            '1226 UniverS of',
-            style: context.appBarTitle,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+    return BlocBuilder<HomeUserAddressBloc, HomeUserAddressState>(
+      buildWhen: (previous, current) => 
+          current is HomeUserAddressLoaded || 
+          current is HomeAddressCreated || 
+          current is HomeAddressUpdated,
+      builder: (context, state) {
+        // Extract address from state
+        String addressText = 'Select Address';
+        if (state is HomeUserAddressLoaded) {
+          addressText = '${state.address.streetNumber} ${state.address.streetName}';
+        } else if (state is HomeAddressCreated) {
+          addressText = '${state.address.streetNumber} ${state.address.streetName}';
+        } else if (state is HomeAddressUpdated) {
+          addressText = '${state.address.streetNumber} ${state.address.streetName}';
+        }
+        
+        return GestureDetector(
+          onTap: () {
+            // Navigate to address selection/update screen
+            // This could be implemented with GoRouter or Navigator
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              context.iconMedium(
+                  icon: Icons.location_on, color: context.textPrimaryColor),
+              SizedBox(width: context.xxs),
+              SizedBox(
+                width: context.responsiveItemSize(100),
+                child: Text(
+                  addressText,
+                  style: context.appBarTitle,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              context.iconMedium(
+                  icon: Icons.keyboard_arrow_down, color: context.textPrimaryColor),
+            ],
           ),
-        ),
-        context.iconMedium(
-            icon: Icons.keyboard_arrow_down, color: context.textPrimaryColor),
-      ],
+        );
+      },
     );
   }
 
@@ -142,38 +172,66 @@ class CustomHomeAppBar extends StatelessWidget {
   }
 
   Widget _buildSearchBar(BuildContext context) {
-    return Material(
-      color: context.surfaceColor,
-      borderRadius: BorderRadius.circular(context.borderRadiusXLarge),
-      child: SizedBox(
-        height: context.buttonHeightMedium,
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: context.m),
-              child: context.iconMedium(
-                  icon: Icons.search, color: context.textSurfaceColor),
-            ),
-            Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  hintStyle: context.appBarTitle.copyWith(
-                    color: context.textSurfaceColor,
+    return BlocBuilder<HomeStoreBloc, HomeStoreState>(
+      buildWhen: (previous, current) => 
+          current is HomeStoreAutocompleteSuggestionsLoaded,
+      builder: (context, state) {
+        return Material(
+          color: context.surfaceColor,
+          borderRadius: BorderRadius.circular(context.borderRadiusXLarge),
+          child: SizedBox(
+            height: context.buttonHeightMedium,
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: context.m),
+                  child: context.iconMedium(
+                      icon: Icons.search, color: context.textSurfaceColor),
+                ),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search products...',
+                      hintStyle: context.appBarTitle.copyWith(
+                        color: context.textSurfaceColor,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: context.s, horizontal: context.xs),
+                      isDense: true,
+                      // Show autocomplete suggestions if available
+                      suffixIcon: state is HomeStoreAutocompleteSuggestionsLoaded && 
+                                  state.suggestions.isNotEmpty
+                          ? Icon(Icons.arrow_drop_down, color: context.textSurfaceColor)
+                          : null,
+                    ),
+                    style: context.bodyMedium.copyWith(
+                      color: context.textPrimaryColor,
+                    ),
+                    onChanged: (query) {
+                      if (query.length >= 2) {
+                        // Trigger autocomplete suggestions
+                        context.read<HomeStoreBloc>().add(
+                          HomeStoreSearchQueryChangedEvent(query: query),
+                        );
+                      }
+                    },
+                    onSubmitted: (query) {
+                      if (query.isNotEmpty) {
+                        // Trigger search with submitted query
+                        context.read<HomeStoreBloc>().add(
+                          HomeStoreSearchSubmittedEvent(query: query),
+                        );
+                        // You could navigate to search results page here
+                      }
+                    },
                   ),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: context.s, horizontal: context.xs),
-                  isDense: true,
                 ),
-                style: context.bodyMedium.copyWith(
-                  color: context.textPrimaryColor,
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

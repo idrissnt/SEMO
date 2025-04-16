@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Tuple
+from typing import List, Optional
 import uuid
 from datetime import datetime
-from ..models.entities import User, Address, LogoutEvent, BlacklistedToken, TaskPerformerProfile
+from the_user_app.domain.models.entities import User, Address, LogoutEvent, BlacklistedToken, TaskPerformerProfile
+from the_user_app.domain.value_objects.value_objects import AuthTokens
 
 class UserRepository(ABC):
     """Repository interface for User domain model"""
@@ -166,14 +167,14 @@ class AuthRepository(ABC):
     """Repository interface for authentication operations"""
     
     @abstractmethod
-    def create_tokens(self, user: User) -> Tuple[str, str]:
+    def create_tokens(self, user_id: uuid.UUID) -> AuthTokens:
         """Create access and refresh tokens for a user
         
         Args:
-            user: User to create tokens for
+            user_id: UUID of the user to create tokens for
             
         Returns:
-            Tuple of (access_token, refresh_token)
+            AuthTokens value object containing token data and user information
         """
         pass
     

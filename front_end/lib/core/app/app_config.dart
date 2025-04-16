@@ -6,8 +6,8 @@ class AppConfig {
   static String get baseUrl {
     switch (environment) {
       case Environment.dev:
-        return 'http://192.168.187.184:8000'; // idriss NN For every device
-      // return 'http://192.168.187.184:8000/'; // coco NN For every device
+        return 'http://172.20.10.5:8000'; // idriss NN For every device
+      // return 'http://192.168.187.184:8000'; // coco NN For every device
       case Environment.staging:
         return 'https://staging-api.semo.com';
       case Environment.prod:

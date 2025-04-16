@@ -1,8 +1,10 @@
 from typing import Tuple, Dict, Any, Optional
-import logging
 from datetime import datetime
 from django.utils.timezone import now
 import uuid
+
+from the_user_app.domain.services.logging_service_interface import LoggingServiceInterface
+from the_user_app.domain.value_objects.value_objects import AuthTokens
 
 from the_user_app.domain.models.entities import User
 from the_user_app.domain.repositories.repository_interfaces import UserRepository, AuthRepository
@@ -15,10 +17,11 @@ logger = logging.getLogger(__name__)
 class AuthApplicationService:
     """Application service for authentication-related use cases"""
     
-    def __init__(self, user_repository: UserRepository, auth_repository: AuthRepository):
+    def __init__(self, user_repository: UserRepository, auth_repository: AuthRepository, logging_service: LoggingServiceInterface):
         self.user_repository = user_repository
         self.auth_repository = auth_repository
         self.domain_service = AuthDomainService()
+        self.logger = logging_service
     
     def login_user(self, email: str, password: str, last_login: datetime = now()) -> Tuple[Optional[Dict[str, str]], str]:
         """Login a user with email and password
@@ -33,35 +36,30 @@ class AuthApplicationService:
             auth_data is a dictionary with access and refresh tokens if login is successful
             error_message is empty if login is successful, otherwise contains the error
         """
-        # Validate credentials format
-        is_valid, error = self.domain_service.validate_credentials(email, password)
-        if not is_valid:
-            return None, error
+        # Log login attempt
+        self.logger.info(f"Login attempt for user: {email}", {"email": email})
         
         # Get user by email
         user = self.user_repository.get_by_email(email)
         if not user:
+            self.logger.warning("User not found", {"email": email})
             return None, "Invalid credentials"
         
         # Check password
         if not self.user_repository.check_password(user.id, password, last_login):
+            self.logger.warning("Invalid password", {"email": email, "user_id": str(user.id)})
             return None, "Invalid credentials"
         
         # Create tokens
         try:
-            access_token, refresh_token = self.auth_repository.create_tokens(user)
-            
-            # Return tokens and user data
-            return {
-                'access_token': access_token,
-                'refresh_token': refresh_token,
-                'user': user
-            }, "login success"
+            auth_tokens = self.auth_repository.create_tokens(user.id)
+            self.logger.info("Login successful", {"email": email, "user_id": str(user.id)})
+            return auth_tokens, ""
         except Exception as e:
-            logger.error(f"Error creating tokens: {str(e)}")
+            self.logger.error("Error creating tokens", {"email": email, "user_id": str(user.id)}, e)
             return None, "Error creating authentication tokens"
     
-    def register_user(self, user_data: Dict[str, Any]) -> Tuple[Optional[User], str]:
+    def register_user(self, user_data: Dict[str, Any]) -> Tuple[Optional[AuthTokens], str]:
         """Register a new user
         
         Args:
@@ -72,10 +70,6 @@ class AuthApplicationService:
             user is a User object if registration is successful
             error_message is empty if registration is successful, otherwise contains the error
         """
-        # Validate registration data
-        is_valid, error = self.domain_service.validate_registration_data(user_data)
-        if not is_valid:
-            return None, error
         
         # Check if user with this email already exists
         existing_user = self.user_repository.get_by_email(user_data['email'])
@@ -95,15 +89,13 @@ class AuthApplicationService:
         try:
             created_user = self.user_repository.create(user, user_data['password'])
 
-            access_token, refresh_token = self.auth_repository.create_tokens(user)
+            auth_tokens = self.auth_repository.create_tokens(created_user.id)
 
             # Publish user registered event
             event_bus.publish(UserRegisteredEvent.create(
                 user_id=created_user.id))
             
-            return {'access_token': access_token, 
-                    'refresh_token': refresh_token, 
-                    'user': created_user}, ""
+            return auth_tokens, ""
         except Exception as e:
             logger.error(f"Error creating user: {str(e)}")
             return None, "Error creating user"

@@ -7,13 +7,14 @@ import 'package:semo/core/infrastructure/services/token_service.dart';
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
 import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
+import 'package:semo/core/utils/logger.dart';
 
 /// Implementation of the AuthRepository interface that delegates to specialized services
 class UserAuthRepositoryImpl implements UserAuthRepository {
   late final TokenService _tokenService;
   late final AuthService _authService;
   late final UserService _userService;
-
+  final _logger = AppLogger();
   UserAuthRepositoryImpl({
     required Dio dio,
     required FlutterSecureStorage secureStorage,
@@ -42,6 +43,7 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
     required String password,
   }) async {
     try {
+      _logger.debug('Sending user : $email to the dedicated service');
       final user = await _authService.login(email: email, password: password);
       return Result.success(user);
     } catch (e) {

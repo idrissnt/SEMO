@@ -15,15 +15,13 @@ class User:
     profile_photo_url: Optional[str] = None
     last_login: Optional[datetime] = None
     last_logout: Optional[datetime] = None
-    created_at: datetime
+    created_at: datetime = field(default_factory=datetime.now)
     updated_at: Optional[datetime] = None
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     
     def __str__(self) -> str:
         return self.email
-
-    # export 'user_entity.dart';
-
+            
 @dataclass
 class Address:
     """Domain model representing a user address"""

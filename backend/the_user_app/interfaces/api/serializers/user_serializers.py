@@ -44,11 +44,18 @@ class LoginRequestSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
-class LoginResponseSerializer(serializers.Serializer):
-    """Serializer for login response data"""
+class AuthTokensSerializer(serializers.Serializer):
+    """Serializer for AuthTokens value object
+    
+    This serializer maps directly to the AuthTokens value object in the domain layer,
+    ensuring consistent structure between domain objects and API responses.
+    """
     access_token = serializers.CharField()
     refresh_token = serializers.CharField()
-    user = UserSerializer()
+    user_id = serializers.CharField()
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField(allow_null=True)
 
 class PasswordChangeSerializer(serializers.Serializer):
     """Serializer for password change request data"""

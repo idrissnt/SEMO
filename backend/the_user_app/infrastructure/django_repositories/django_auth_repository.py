@@ -6,22 +6,23 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from the_user_app.domain.models.entities import User, LogoutEvent, BlacklistedToken
 from the_user_app.domain.repositories.repository_interfaces import AuthRepository
+from the_user_app.domain.value_objects.value_objects import AuthTokens
 from the_user_app.infrastructure.django_models.orm_models import CustomUserModel, LogoutEventModel, BlacklistedTokenModel
 
 class DjangoAuthRepository(AuthRepository):
     """Django ORM implementation of AuthRepository"""   
     
-    def create_tokens(self, user: User) -> Tuple[str, str]:
+    def create_tokens(self, user_id: uuid.UUID) -> AuthTokens:
         """Create access and refresh tokens for a user
         
         Args:
-            user: User to create tokens for
+            user_id: UUID of the user to create tokens for
             
         Returns:
-            Tuple of (access_token, refresh_token)
+            AuthTokens value object containing token data and user information
         """
         try:
-            user_model = CustomUserModel.objects.get(id=user.id)
+            user_model = CustomUserModel.objects.get(id=user_id)
             refresh = RefreshToken.for_user(user_model)
             
             # Add custom claims to the token
@@ -30,9 +31,17 @@ class DjangoAuthRepository(AuthRepository):
             refresh['first_name'] = user_model.first_name
             refresh['last_name'] = user_model.last_name
             
-            return str(refresh.access_token), str(refresh)
+            # Create and return the AuthTokens value object
+            return AuthTokens(
+                access_token=str(refresh.access_token),
+                refresh_token=str(refresh),
+                user_id=str(user_model.id),
+                email=user_model.email,
+                first_name=user_model.first_name,
+                last_name=user_model.last_name
+            )
         except CustomUserModel.DoesNotExist:
-            raise ValueError(f"User with ID {user.id} not found")
+            raise ValueError(f"User with ID {user_id} not found")
     
     def blacklist_token(self, token: str, user_id: uuid.UUID, expires_at: str) -> BlacklistedToken:
         """Blacklist a refresh token

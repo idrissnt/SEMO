@@ -5,12 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
-import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_routes.dart';
 import 'main_shell_route.dart';
-import 'store_shell_route.dart';
+// import 'store_shell_route.dart';
 export 'route_extensions.dart';
 
 class AppRouter {
@@ -19,25 +18,11 @@ class AppRouter {
     redirect: (context, state) async {
       // Get AuthBloc state first before any async operations
       final authState = context.read<AuthBloc>().state;
-
-      // Get the AuthRepository from the provider
-      final authRepository = context.read<UserAuthRepository>();
       final prefs = await SharedPreferences.getInstance();
 
-      // Get tokens from the repository
-      final accessToken = await authRepository.getAccessToken();
-      final refreshToken = await authRepository.getRefreshToken();
-
-      // Comprehensive token validation
-      final hasValidTokens = accessToken != null &&
-          refreshToken != null &&
-          accessToken.isNotEmpty &&
-          refreshToken.isNotEmpty;
-
-      // Combine token check with authentication state
-      final isAuthenticated = hasValidTokens &&
-          (authState is AuthAuthenticated ||
-              await authRepository.hasValidToken());
+      // Check if authenticated based on AuthBloc state only
+      // AuthBloc already handles token validation internally
+      final isAuthenticated = authState is AuthAuthenticated;
 
       // Check onboarding status
       final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
@@ -71,7 +56,7 @@ class AppRouter {
     routes: [
       ...getAuthRoutes(),
       getMainShellRoute(),
-      getStoreShellRoute(),
+      // getStoreShellRoute(),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(

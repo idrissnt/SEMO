@@ -10,7 +10,7 @@ from the_user_app.interfaces.api.serializers.user_serializers import (
     UserSerializer,
     PasswordChangeSerializer,
     LoginRequestSerializer,
-    LoginResponseSerializer
+    AuthTokensSerializer
 )
 from the_user_app.infrastructure.factory import UserFactory
 
@@ -43,65 +43,85 @@ class AuthViewSet(viewsets.ViewSet):
             result, error = auth_service.register_user(serializer.validated_data)
             
             if result:
-                # Return serialized user data
-                return Response(LoginResponseSerializer(result).data, 
-                                status=status.HTTP_201_CREATED)
+                # Serialize the AuthTokens value object and add success message
+                serialized_data = AuthTokensSerializer(result).data
+                return Response(serialized_data, status=status.HTTP_201_CREATED)
             else:
                 # Return error
-                return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': error, 'code': 'registration_error'}, status=status.HTTP_400_BAD_REQUEST)
                 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @extend_schema(
-        request=LoginRequestSerializer,
-        responses={
-            200: LoginResponseSerializer,
-            401: OpenApiResponse(description='Unauthorized'),
-            400: OpenApiResponse(description='Bad Request')
-        },
-        description='Login user and obtain JWT token'
-    )
+
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def login(self, request):
+        # Extract request metadata for logging context
+        client_ip = request.META.get('REMOTE_ADDR', 'unknown')
+        user_agent = request.META.get('HTTP_USER_AGENT', 'unknown')
+        request_id = request.META.get('HTTP_X_REQUEST_ID', str(uuid.uuid4()))
+        
+        # Create logging context
+        log_context = {
+            'client_ip': client_ip,
+            'user_agent': user_agent,
+            'request_id': request_id,
+        }
+        
         # Extract credentials from request
         serializer = LoginRequestSerializer(data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Get auth service for logging
+            auth_service = UserFactory.create_auth_service()
+            auth_service.logger.warning(
+                "Login validation failed", 
+                {**log_context, 'errors': str(serializer.errors)}
+            )
+            return Response(
+                {
+                    'error': 'Invalid input data',
+                    'details': serializer.errors,
+                    'code': 'validation_error'
+                }, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
             
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
         
-        # Log authentication attempt (without password)
-        logger.info(f"Login attempt for email: {email}")
+        log_context['email'] = email
         
         # Get auth service from factory
         auth_service = UserFactory.create_auth_service()
         
-        # Attempt to authenticate user
+        # Attempt authentication
         result, error = auth_service.login_user(email, password)
         
         if result:
-            # Authentication successful
-            logger.info(f"Successful login for user: {email}")
-            return Response(LoginResponseSerializer(result).data, status=status.HTTP_200_OK)
+            # Serialize the AuthTokens value object and add success message
+            serialized_data = AuthTokensSerializer(result).data
+            return Response(serialized_data, status=status.HTTP_200_OK)
         
-        # Authentication failed
-        if 'required' in error.lower():
-            # Missing credentials
-            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+        # Handle different error cases with appropriate status codes and messages
+        if error == "Invalid credentials":
+            # Invalid credentials - return 401 with user-friendly message
+            return Response({
+                'error': 'The email or password you entered is incorrect',
+                'code': 'invalid_credentials',
+                'request_id': request_id  # Include request ID for support reference
+            }, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            # Invalid credentials or other errors
-            return Response({'error': error}, status=status.HTTP_401_UNAUTHORIZED)
+            # Other errors - return 500 with generic message
+            auth_service.logger.error(
+                f"Unexpected login error: {error}", 
+                log_context
+            )
+            return Response({
+                'error': 'An unexpected error occurred during login',
+                'code': 'server_error',
+                'request_id': request_id  # For tracking in logs
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @extend_schema(
-        request={"application/json": {"example": {"refresh_token": "string"}}},
-        responses={
-            200: OpenApiResponse(description='Success'),
-            400: OpenApiResponse(description='Bad Request'),
-            401: OpenApiResponse(description='Unauthorized')
-        },
-        description='Logout user and invalidate refresh token'
-    )
+
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def logout(self, request):
         # Extract refresh token from request data

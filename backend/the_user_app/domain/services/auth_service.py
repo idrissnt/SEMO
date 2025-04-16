@@ -1,4 +1,3 @@
-from typing import Tuple, Dict, Any
 import uuid
 from datetime import datetime
 
@@ -6,46 +5,6 @@ from ..models.entities import LogoutEvent, AuthCredentials
 
 class AuthDomainService:
     """Domain service for authentication-related operations"""
-    
-    @staticmethod
-    def validate_credentials(email: str, password: str) -> Tuple[bool, str]:
-        """Validate login credentials format
-        
-        Args:
-            email: User email
-            password: User password
-            
-        Returns:
-            Tuple of (is_valid, error_message)
-        """
-        if not email:
-            return False, "Email is required"
-        
-        if not password:
-            return False, "Password is required"
-        
-        return True, ""
-    
-    @staticmethod
-    def validate_registration_data(user_data: Dict[str, Any]) -> Tuple[bool, str]:
-        """Validate user registration data
-        
-        Args:
-            user_data: Dictionary containing user registration data
-            
-        Returns:
-            Tuple of (is_valid, error_message)
-        """
-        if not user_data.get('email'):
-            return False, "Email is required"
-        
-        if not user_data.get('password'):
-            return False, "Password is required"
-        
-        if not user_data.get('first_name'):
-            return False, "First name is required"
-        
-        return True, ""
     
     @staticmethod
     def prepare_logout_event(user_id: uuid.UUID, device_info: str, ip_address: str) -> LogoutEvent:

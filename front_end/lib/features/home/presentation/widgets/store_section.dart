@@ -9,7 +9,7 @@ import '../../../store/domain/entities/store.dart';
 
 class StoreSection extends StatelessWidget {
   final String title;
-  final List<Store> stores;
+  final List<StoreBrand> stores;
   final bool isLarge;
 
   final AppLogger _logger = AppLogger();
@@ -85,7 +85,7 @@ class StoreSection extends StatelessWidget {
 }
 
 class StoreImageButton extends StatefulWidget {
-  final Store store;
+  final StoreBrand store;
   final bool isLarge;
   final VoidCallback onTap;
 
@@ -189,9 +189,9 @@ class _StoreImageButtonState extends State<StoreImageButton>
                     });
                   });
                 },
-                child: widget.store.logoUrl != null
+                child: widget.store.imageLogo.isNotEmpty
                     ? Image.network(
-                        widget.store.logoUrl!,
+                        widget.store.imageLogo,
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
