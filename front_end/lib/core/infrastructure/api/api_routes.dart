@@ -36,6 +36,7 @@ class TokenApiRoutes {
 class ProfileApiRoutes {
   static const String path = '/users/profiles';
   static String get base => '${ApiRoutes.base}$path';
+  static String get me => '$base/me/';
   static String get updateProfile => '/update-profile/';
   static String get deleteAccount => '/delete-account/';
 }

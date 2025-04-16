@@ -6,14 +6,14 @@ import 'package:semo/core/utils/result.dart';
 abstract class UserAuthRepository {
   /// Authenticates a user with email and password
   /// Returns a Result containing either a User object on success or an AuthenticationException on failure
-  Future<Result<User, DomainException>> login({
+  Future<Result<AuthTokens, DomainException>> login({
     required String email,
     required String password,
   });
 
   /// Registers a new user with the provided information
   /// Returns a Result containing either the created User object on success or an AuthenticationException on failure
-  Future<Result<User, DomainException>> register({
+  Future<Result<AuthTokens, DomainException>> register({
     required String email,
     required String password,
     required String firstName,
@@ -25,7 +25,7 @@ abstract class UserAuthRepository {
   /// Retrieves the currently authenticated user
   /// Returns a Result containing either the User object or a UserProfileException
   /// If no user is authenticated, the Result will contain a UserProfileException
-  Future<Result<User, DomainException>> getCurrentUser();
+  Future<Result<AuthTokens, DomainException>> getCurrentUser();
 
   /// Logs out the current user and invalidates their tokens
   /// Returns a Result indicating success or failure with an error message

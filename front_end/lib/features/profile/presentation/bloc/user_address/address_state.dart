@@ -18,7 +18,7 @@ class UserAddressLoading extends UserAddressState {
 }
 
 class UserAddressError extends UserAddressState {
-  final DomainException exception;
+  final UserAddressException exception;
 
   const UserAddressError({required this.exception});
 

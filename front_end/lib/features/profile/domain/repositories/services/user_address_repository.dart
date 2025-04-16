@@ -4,16 +4,17 @@ import 'package:semo/features/profile/domain/entities/profile_entity.dart';
 
 abstract class UserAddressRepository {
   /// Retrieves address for the authenticated user
-  Future<Result<UserAddress, DomainException>> getUserAddress();
+  Future<Result<UserAddress, UserAddressException>> getUserAddress();
 
   /// Retrieves a specific address by ID
-  Future<Result<UserAddress, DomainException>> getAddressById(String addressId);
+  Future<Result<UserAddress, UserAddressException>> getAddressById(
+      String addressId);
 
   /// Creates a new address for the authenticated user
-  Future<Result<UserAddress, DomainException>> createAddress(
+  Future<Result<UserAddress, UserAddressException>> createAddress(
       UserAddress address);
 
   /// Updates an existing address
-  Future<Result<UserAddress, DomainException>> updateAddress(
+  Future<Result<UserAddress, UserAddressException>> updateAddress(
       UserAddress address);
 }

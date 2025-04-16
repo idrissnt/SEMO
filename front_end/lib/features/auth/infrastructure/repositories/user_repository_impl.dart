@@ -4,6 +4,7 @@ import 'package:semo/core/utils/result.dart';
 import 'package:semo/features/auth/infrastructure/repositories/services/user_service.dart';
 import 'package:semo/features/auth/infrastructure/repositories/services/auth_service.dart';
 import 'package:semo/core/infrastructure/services/token_service.dart';
+import 'package:semo/core/infrastructure/api/api_client.dart';
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
 import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
@@ -25,34 +26,47 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
       storage: secureStorage,
     );
 
-    // Use the shared TokenService instance
-    _authService = AuthService(
+    // Create the API client
+    final apiClient = ApiClient(
       dio: dio,
+      secureStorage: secureStorage,
+      logger: _logger,
+    );
+
+    // Use the shared TokenService instance and API client
+    _authService = AuthService(
+      apiClient: apiClient,
       tokenService: _tokenService,
     );
 
     _userService = UserService(
-      dio: dio,
-      tokenService: _tokenService,
+      apiClient: apiClient,
     );
   }
 
   @override
-  Future<Result<User, DomainException>> login({
+  Future<Result<AuthTokens, DomainException>> login({
     required String email,
     required String password,
   }) async {
     try {
       _logger.debug('Sending user : $email to the dedicated service');
-      final user = await _authService.login(email: email, password: password);
-      return Result.success(user);
+      final authTokens =
+          await _authService.login(email: email, password: password);
+
+      return Result.success(authTokens);
     } catch (e) {
+      // The error is already a DomainException from the ApiClient
+      if (e is DomainException) {
+        return Result.failure(e);
+      }
+      // Fallback for any unexpected errors
       return Result.failure(AuthenticationException(e.toString()));
     }
   }
 
   @override
-  Future<Result<User, DomainException>> register({
+  Future<Result<AuthTokens, DomainException>> register({
     required String email,
     required String password,
     required String firstName,
@@ -61,7 +75,7 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
     required String? profilePhotoUrl,
   }) async {
     try {
-      final user = await _authService.register(
+      final authTokens = await _authService.register(
         email: email,
         password: password,
         firstName: firstName,
@@ -69,14 +83,21 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
         phoneNumber: phoneNumber,
         profilePhotoUrl: profilePhotoUrl,
       );
-      return Result.success(user);
+
+      // Return the AuthTokens directly
+      return Result.success(authTokens);
     } catch (e) {
+      // The error is already a DomainException from the ApiClient
+      if (e is DomainException) {
+        return Result.failure(e);
+      }
+      // Fallback for any unexpected errors
       return Result.failure(AuthenticationException(e.toString()));
     }
   }
 
   @override
-  Future<Result<User, DomainException>> getCurrentUser() async {
+  Future<Result<AuthTokens, DomainException>> getCurrentUser() async {
     try {
       final user = await _userService.getCurrentUser();
       return Result.success(user);

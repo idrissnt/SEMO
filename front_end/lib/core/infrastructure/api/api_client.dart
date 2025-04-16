@@ -3,6 +3,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/infrastructure/api/api_routes.dart';
+import 'package:semo/core/infrastructure/models/error_response_model.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
 
 /// A centralized API client for handling all network requests
 /// Provides consistent error handling, authentication, and logging
@@ -149,7 +151,7 @@ class ApiClient {
       return _handleError<T>(e);
     }
   }
-
+  
   /// Performs a PUT request to the specified endpoint
   Future<T> put<T>(
     String endpoint, {
@@ -189,6 +191,26 @@ class ApiClient {
       return _handleError<T>(e);
     }
   }
+  
+  /// Performs a PATCH request to the specified endpoint
+  Future<T> patch<T>(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        endpoint,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
+      return _handleResponse<T>(response);
+    } catch (e) {
+      return _handleError<T>(e);
+    }
+  }
 
   /// Handles successful API responses
   T _handleResponse<T>(Response response) {
@@ -206,24 +228,79 @@ class ApiClient {
     }
   }
 
-  /// Handles API errors
+  /// Handles API errors and maps them to domain exceptions
   T _handleError<T>(dynamic error) {
     if (error is DioException) {
       final response = error.response;
       if (response != null) {
+        final statusCode = response.statusCode;
+        final path = response.requestOptions.path;
+        
         _logger.error(
-          'API Error: ${response.statusCode} ${response.requestOptions.path}',
+          'API Error: $statusCode $path',
           error: error,
         );
-        throw Exception(
-            'Request failed with status: ${response.statusCode}, message: ${response.statusMessage}');
+        
+        // Parse error response
+        final errorResponse = ErrorResponseModel.fromDioError(error);
+        final errorMessage = errorResponse?.error ?? 'Unknown error';
+        final errorCode = errorResponse?.code;
+        final requestId = errorResponse?.requestId;
+        final details = errorResponse?.details;
+        
+        // Map status codes to domain exceptions
+        switch (statusCode) {
+          case 400:
+            throw ValidationException(
+              message: errorMessage,
+              validationErrors: details,
+              code: errorCode,
+              requestId: requestId
+            );
+          case 401:
+            throw InvalidCredentialsException(
+              message: errorMessage,
+              code: errorCode,
+              requestId: requestId
+            );
+          case 403:
+            throw AuthorizationException(
+              message: errorMessage,
+              code: errorCode,
+              requestId: requestId
+            );
+          case 404:
+            throw GenericDomainException(
+              'Resource not found: $path',
+              code: errorCode ?? 'not_found',
+              requestId: requestId
+            );
+          case 500:
+          case 502:
+          case 503:
+          case 504:
+            throw ServerException(
+              message: errorMessage,
+              code: errorCode,
+              requestId: requestId
+            );
+          default:
+            throw GenericDomainException(
+              'Request failed with status: $statusCode, message: $errorMessage',
+              code: errorCode,
+              requestId: requestId
+            );
+        }
       } else {
         _logger.error('API Error: No response', error: error);
-        throw Exception('No response from server: ${error.message}');
+        throw NetworkException(
+          message: 'No response from server: ${error.message}',
+          code: 'connection_error'
+        );
       }
     } else {
       _logger.error('API Error: Unknown error', error: error);
-      throw Exception('Unknown error: $error');
+      throw GenericDomainException('Unknown error: $error', code: 'unknown_error');
     }
   }
 }

@@ -30,9 +30,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (user) {
+      (authTokens) {
         _logger.info('Login successful');
-        emit(AuthAuthenticated(user));
+        emit(AuthAuthenticated(authTokens));
       },
       (error) {
         // Emit failure state with user-friendly message
@@ -59,9 +59,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (user) {
+      (authTokens) {
         _logger.info('Registration and auto-login successful');
-        emit(AuthAuthenticated(user));
+        emit(AuthAuthenticated(authTokens));
       },
       (error) {
         // Emit failure state with user-friendly message

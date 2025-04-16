@@ -12,24 +12,24 @@ class UserAddressUseCases {
   }) : _userAddressRepository = userAddressRepository;
 
   /// Get the user's address
-  Future<Result<UserAddress, DomainException>> getUserAddress() {
+  Future<Result<UserAddress, UserAddressException>> getUserAddress() {
     return _userAddressRepository.getUserAddress();
   }
 
   /// Get a specific address by ID
-  Future<Result<UserAddress, DomainException>> getAddressById(
+  Future<Result<UserAddress, UserAddressException>> getAddressById(
       String addressId) {
     return _userAddressRepository.getAddressById(addressId);
   }
 
   /// Create a new address
-  Future<Result<UserAddress, DomainException>> createAddress(
+  Future<Result<UserAddress, UserAddressException>> createAddress(
       UserAddress address) {
     return _userAddressRepository.createAddress(address);
   }
 
   /// Update an existing address
-  Future<Result<UserAddress, DomainException>> updateAddress(
+  Future<Result<UserAddress, UserAddressException>> updateAddress(
       UserAddress address) {
     return _userAddressRepository.updateAddress(address);
   }
