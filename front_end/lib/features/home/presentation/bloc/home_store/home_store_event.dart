@@ -22,11 +22,15 @@ class LoadNearbyStoresEvent extends HomeStoreEvent {
 
 class LoadProductsByCategoryEvent extends HomeStoreEvent {
   final String storeId;
+  final String storeSlug;
 
-  const LoadProductsByCategoryEvent({required this.storeId});
+  const LoadProductsByCategoryEvent({
+    required this.storeId,
+    required this.storeSlug,
+  });
 
   @override
-  List<Object?> get props => [storeId];
+  List<Object?> get props => [storeId, storeSlug];
 }
 
 class HomeStoreSearchQueryChangedEvent extends HomeStoreEvent {

@@ -21,8 +21,9 @@ class HomeStoreUseCases {
 
   /// Get products by category for a specific store
   Future<List<ProductWithDetails>> getProductsByCategory(
-      {required String storeId}) {
-    return _storeRepository.getProductsByCategory(storeId: storeId);
+      {required String storeSlug, required String storeId}) {
+    return _storeRepository.getStoreProductsForCategory(
+        storeSlug: storeSlug, storeId: storeId);
   }
 
   /// Get autocomplete suggestions globally (without store filter)

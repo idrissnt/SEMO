@@ -1,53 +1,76 @@
+import 'package:semo/core/app/app_config.dart';
+
 /// API route constants for the application
 /// Organized by feature for better maintainability and discoverability
 class ApiRoutes {
-  static const String base = '/api'; // Base API path
-  static const String baseMedia = '/media'; // Base media path
+  // API paths (not full URLs)
+  static const String apiPath = '/api';
+  static const String apiVersion = '/v1';
+
+  // Full API base URL with environment awareness
+  static String get base => '${AppConfig.baseUrl}$apiPath$apiVersion';
+
+  // Media URL
+  static String get mediaBase => AppConfig.mediaBaseUrl;
 }
 
 /// Authentication related routes
 class AuthApiRoutes {
-  static const String base = '${ApiRoutes.base}/auth';
-  static const String login = '$base/login/';
-  static const String logout = '$base/logout/';
-  static const String register = '$base/register/';
-  static const String changePassword = '$base/change-password/';
+  static const String path = '/auth';
+  static String get base => '${ApiRoutes.base}$path';
+  static String get login => '$base/login/';
+  static String get logout => '$base/logout/';
+  static String get register => '$base/register/';
+  static String get changePassword => '$base/change-password/';
 }
 
 /// Token related routes
 class TokenApiRoutes {
-  static const String base = '${ApiRoutes.base}/token';
-  static const String refresh = '$base/refresh/';
-  static const String verify = '$base/verify/';
+  static const String path = '/token';
+  static String get base => '${ApiRoutes.base}$path';
+  static String get refresh => '$base/refresh/';
+  static String get verify => '$base/verify/';
 }
 
 /// User profile related routes
 class ProfileApiRoutes {
-  static const String base = '${ApiRoutes.base}/profiles';
-  static const String update = '/update-profile/';
-  static const String delete = '/delete-account/';
+  static const String path = '/profiles';
+  static String get base => '${ApiRoutes.base}$path';
+  static String get updateProfile => '/update-profile/';
+  static String get deleteAccount => '/delete-account/';
 }
 
-/// Address related routes
-class AddressApiRoutes {
-  static const String base = '${ApiRoutes.base}/addresses/';
-  static const String update = '/update-address/';
-  static const String delete = '/delete-address/';
+/// User address related routes
+class UserAddressApiRoutes {
+  static const String path = '/addresses';
+  static String get base => '${ApiRoutes.base}$path';
+  static String get getUserAddresses => '$base/';
+  static String get createAddress => '$base/';
+
+  static String getAddressById(String addressId) => '$base/$addressId/';
+  static String deleteAddressById(String addressId) =>
+      '$base/$addressId/delete-address/';
+  static String updateAddressById(String addressId) =>
+      '$base/$addressId/update-address/';
 }
 
 /// Store related routes
 class StoreApiRoutes {
-  static const String base = '${ApiRoutes.base}/stores';
-  static const String storeBrands = '$base/store-brands/';
-  static const String nearbyStores = '$storeBrands/nearby-stores/';
-  static const String storeProducts = '$base/store-products/';
-  static const String allProducts = '$storeProducts/all-products/';
-  static const String productsByCategory = '$storeProducts/by-category/';
+  static const String path = '/stores';
+  static String get base => '${ApiRoutes.base}$path';
+  static String get storeBrands => '$base/store-brands/';
+  static String get nearbyStores => '$storeBrands/nearby-stores/';
+
+  static String getProductsByStore(String storeSlug) =>
+      '$base/$storeSlug/products/';
+  static String getStoreProductsForCategory(String storeSlug) =>
+      '$base/$storeSlug/category/products/';
 }
 
 /// Search related routes within store
 class StoreSearchApiRoutes {
-  static const String base = '${StoreApiRoutes.base}/search';
-  static const String autocomplete = '$base/autocomplete/';
-  static const String products = '$base/products/';
+  static const String path = '/search';
+  static String get base => '${StoreApiRoutes.base}$path';
+  static String get searchProducts => '$base/products/';
+  static String get autocomplete => '$base/autocomplete/';
 }

@@ -93,10 +93,11 @@ class StoreRepositoryImpl implements StoreRepository {
 
   /// Get all products for a specific store
   @override
-  Future<List<ProductWithDetails>> getProductsByStoreId(String storeId) async {
+  Future<List<ProductWithDetails>> getProductsByStore(
+      String storeSlug, String storeId) async {
     try {
       final data = await _apiClient.get<List<dynamic>>(
-        StoreApiRoutes.allProducts,
+        StoreApiRoutes.getProductsByStore(storeSlug),
         queryParameters: {'store_id': storeId},
       );
 
@@ -126,12 +127,13 @@ class StoreRepositoryImpl implements StoreRepository {
 
   /// Get products by category path for a specific store
   @override
-  Future<List<ProductWithDetails>> getProductsByCategory({
+  Future<List<ProductWithDetails>> getStoreProductsForCategory({
     required String storeId,
+    required String storeSlug,
   }) async {
     try {
       final data = await _apiClient.get<List<dynamic>>(
-        StoreApiRoutes.productsByCategory,
+        StoreApiRoutes.getStoreProductsForCategory(storeSlug),
         queryParameters: {
           'store_id': storeId,
         },
@@ -233,7 +235,7 @@ class StoreRepositoryImpl implements StoreRepository {
       }
 
       final responseData = await _apiClient.get<Map<String, dynamic>>(
-        StoreSearchApiRoutes.products,
+        StoreSearchApiRoutes.searchProducts,
         queryParameters: queryParams,
       );
 

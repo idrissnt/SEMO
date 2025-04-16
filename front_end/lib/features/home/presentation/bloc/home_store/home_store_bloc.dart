@@ -66,6 +66,7 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
 
     try {
       final products = await _homeStoreUseCases.getProductsByCategory(
+        storeSlug: event.storeSlug,
         storeId: event.storeId,
       );
       emit(ProductsByCategoryLoaded(

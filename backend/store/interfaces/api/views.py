@@ -60,10 +60,9 @@ class StoreProductViewSet(viewsets.ViewSet):
         method: GET"""
         return Response([])
 
-    @action(detail=False, methods=['get'], url_path='all-products')
-    def all_products(self, request):
+    def products(self, request, store_slug):
         """List products for a specific store
-        url: stores/store-products/all-products/
+        url: stores/store-products/<store_slug>/products/
         method: GET
         query parameters: store_id (required)"""
         store_id = request.query_params.get('store_id')
@@ -83,13 +82,11 @@ class StoreProductViewSet(viewsets.ViewSet):
         serializer = ProductWithDetailsSerializer(products, many=True)
         return Response(serializer.data)
     
-    @action(detail=False, methods=['get'], url_path='by-category')
-    def products_by_category(self, request):
+    def products_by_category(self, request, store_slug):
         """Get products by category slugs
-        url: stores/store-products/by-category/
+        url: stores/store-products/<store_slug>/category/products/
         method: GET
         query parameters: category_path (optional)"""
-        category_path = request.query_params.get('category_path', '')
         store_id = request.query_params.get('store_id')
         
         store_uuid = None
@@ -101,7 +98,6 @@ class StoreProductViewSet(viewsets.ViewSet):
                                 status=status.HTTP_400_BAD_REQUEST)
                 
         products_by_category = self.store_products_service.get_products_by_category_path(
-            category_path=category_path,
             store_brand_id=store_uuid
         )
         

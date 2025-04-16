@@ -14,11 +14,13 @@ abstract class StoreRepository {
   });
 
   /// Get all products for a specific store
-  Future<List<ProductWithDetails>> getProductsByStoreId(String storeId);
+  Future<List<ProductWithDetails>> getProductsByStore(
+      String storeSlug, String storeId);
 
   /// Get products by category path for a specific store
-  Future<List<ProductWithDetails>> getProductsByCategory({
+  Future<List<ProductWithDetails>> getStoreProductsForCategory({
     required String storeId,
+    required String storeSlug,
   });
 
   /// Get autocomplete suggestions for a partial search query globally or within a specific store

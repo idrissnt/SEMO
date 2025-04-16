@@ -22,25 +22,28 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
     InitializeStoreEvent event,
     Emitter<StoreState> emit,
   ) async {
-    _logger.debug('Initializing store screen for store ID: ${event.storeId}');
-    add(LoadStoreProductsEvent(storeId: event.storeId));
+    _logger
+        .debug('Initializing store screen for store slug: ${event.storeSlug}');
+    add(LoadStoreProductsEvent(
+        storeId: event.storeId, storeSlug: event.storeSlug));
   }
 
   Future<void> _onLoadStoreProducts(
     LoadStoreProductsEvent event,
     Emitter<StoreState> emit,
   ) async {
-    _logger.debug('Loading products for store: ${event.storeId}');
+    _logger.debug('Loading products for store slug: ${event.storeSlug}');
     emit(const StoreLoading());
 
     try {
-      final products = await _storeUseCases.getProductsByStoreId(event.storeId);
+      final products = await _storeUseCases.getProductsByStore(
+          event.storeId, event.storeSlug);
       emit(StoreProductsLoaded(
         products: products,
         storeId: event.storeId,
       ));
       _logger.debug(
-          'Successfully loaded ${products.length} products for store ${event.storeId}');
+          'Successfully loaded ${products.length} products for store ${event.storeSlug}');
     } catch (e, stackTrace) {
       _logger.error('Error loading store products',
           error: e, stackTrace: stackTrace);

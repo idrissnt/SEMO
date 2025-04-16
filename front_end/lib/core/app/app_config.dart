@@ -1,11 +1,40 @@
-// // This file contains configuration settings for the app api.
+class AppConfig {
+  // Environment is set via --dart-define=ENVIRONMENT=dev|staging|prod
+  static final Environment environment = _getEnvironment();
 
-// class AppConfig {
-//   static const String apiBaseUrl =
-//       // 'http://172.20.10.5:8000/api/v1'; // idriss NN For every device
-//       'http://192.168.187.184:8000/api/v1'; // coco NN For every device
+  // Base URLs - the main environment-specific config
+  static String get baseUrl {
+    switch (environment) {
+      case Environment.dev:
+        return 'http://192.168.187.184:8000'; // idriss NN For every device
+      // return 'http://192.168.187.184:8000/'; // coco NN For every device
+      case Environment.staging:
+        return 'https://staging-api.semo.com';
+      case Environment.prod:
+        return 'https://api.semo.com';
+    }
+  }
 
-//   // Base URL for media files (images)
-//   // static const String mediaBaseUrl = 'http://172.20.10.5:8000';
-//   static const String mediaBaseUrl = 'http://192.168.187.184:8000';
-// }
+  // Media URL
+  static String get mediaBaseUrl => '$baseUrl/media';
+
+  // App metadata
+  static const String appName = 'SEMO';
+  static const String appVersion = '1.0.0';
+}
+
+enum Environment { dev, staging, prod }
+
+// Helper function to get environment from dart-define
+Environment _getEnvironment() {
+  const envName = String.fromEnvironment('ENVIRONMENT', defaultValue: 'dev');
+  switch (envName) {
+    case 'prod':
+      return Environment.prod;
+    case 'staging':
+      return Environment.staging;
+    case 'dev':
+    default:
+      return Environment.dev;
+  }
+}

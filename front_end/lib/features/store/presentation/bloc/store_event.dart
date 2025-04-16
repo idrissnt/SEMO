@@ -9,20 +9,28 @@ abstract class StoreEvent extends Equatable {
 
 class InitializeStoreEvent extends StoreEvent {
   final String storeId;
+  final String storeSlug;
 
-  const InitializeStoreEvent({required this.storeId});
+  const InitializeStoreEvent({
+    required this.storeId,
+    required this.storeSlug,
+  });
 
   @override
-  List<Object?> get props => [storeId];
+  List<Object?> get props => [storeId, storeSlug];
 }
 
 class LoadStoreProductsEvent extends StoreEvent {
   final String storeId;
+  final String storeSlug;
 
-  const LoadStoreProductsEvent({required this.storeId});
+  const LoadStoreProductsEvent({
+    required this.storeId,
+    required this.storeSlug,
+  });
 
   @override
-  List<Object?> get props => [storeId];
+  List<Object?> get props => [storeId, storeSlug];
 }
 
 class StoreSearchQueryChangedEvent extends StoreEvent {

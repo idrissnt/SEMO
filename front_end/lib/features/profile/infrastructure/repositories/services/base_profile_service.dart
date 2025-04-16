@@ -76,7 +76,7 @@ class BaseProfileService {
 
         // Make the API request with the correct endpoint
         final response = await _dio.patch(
-          '${ProfileApiRoutes.base}$userId${ProfileApiRoutes.update}',
+          '${ProfileApiRoutes.base}/$userId${ProfileApiRoutes.updateProfile}',
           data: updateData,
           options: Options(headers: {
             'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ class BaseProfileService {
         _logger.debug('Deleting account for user ID: $userId');
 
         final response = await _dio.delete(
-          '${ProfileApiRoutes.base}$userId${ProfileApiRoutes.delete}',
+          '${ProfileApiRoutes.base}/$userId${ProfileApiRoutes.deleteAccount}',
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token',

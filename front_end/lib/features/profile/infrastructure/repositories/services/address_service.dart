@@ -26,7 +26,7 @@ class AddressService {
       }
 
       final response = await _dio.get(
-        AddressApiRoutes.base,
+        UserAddressApiRoutes.getUserAddresses,
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
@@ -56,7 +56,7 @@ class AddressService {
       }
 
       final response = await _dio.get(
-        '${AddressApiRoutes.base}$addressId/',
+        UserAddressApiRoutes.getAddressById(addressId),
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
@@ -83,7 +83,7 @@ class AddressService {
 
       final addressModel = UserAddressModel.fromEntity(address);
       final response = await _dio.post(
-        AddressApiRoutes.base,
+        UserAddressApiRoutes.createAddress,
         data: addressModel.toJson(),
         options: Options(headers: {
           'Authorization': 'Bearer $token',
@@ -114,7 +114,7 @@ class AddressService {
 
       final addressModel = UserAddressModel.fromEntity(address);
       final response = await _dio.put(
-        '${AddressApiRoutes.base}${address.addressId}${AddressApiRoutes.update}',
+        UserAddressApiRoutes.updateAddressById(address.addressId),
         data: addressModel.toJson(),
         options: Options(headers: {
           'Authorization': 'Bearer $token',
@@ -144,7 +144,7 @@ class AddressService {
       }
 
       final response = await _dio.delete(
-        '${AddressApiRoutes.base}$addressId${AddressApiRoutes.delete}',
+        UserAddressApiRoutes.deleteAddressById(addressId),
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 

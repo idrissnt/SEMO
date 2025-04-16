@@ -9,8 +9,9 @@ class StoreUseCases {
   StoreUseCases(this._storeRepository);
 
   /// Get all products for a specific store
-  Future<List<ProductWithDetails>> getProductsByStoreId(String storeId) {
-    return _storeRepository.getProductsByStoreId(storeId);
+  Future<List<ProductWithDetails>> getProductsByStore(
+      String storeSlug, String storeId) {
+    return _storeRepository.getProductsByStore(storeSlug, storeId);
   }
 
   /// Get autocomplete suggestions for a specific store
