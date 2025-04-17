@@ -11,6 +11,7 @@ import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
 
 import 'package:semo/features/auth/presentation/widgets/auth_header.dart';
+import 'package:semo/features/auth/presentation/widgets/auth_state_handler.dart';
 import 'package:semo/features/auth/presentation/widgets/login_form.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -63,114 +64,79 @@ class _LoginScreenState extends State<LoginScreen>
           context.go('/homeScreen');
         }
       },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    context.primaryColor,
-                    context.secondaryColor,
-                  ],
-                ),
-              ),
-            ),
-            SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(context.xl),
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_ios,
-                              color: Colors.white),
-                          onPressed: () => context.go('/welcome'),
-                        ),
-                        const SizedBox(height: 32),
-                        const AuthHeader(
-                          title: 'Welcome\nBack',
-                          subtitle: 'Sign in to continue',
-                        ),
-                        const SizedBox(height: 48),
-                        LoginFormWidget(authBloc: context.read<AuthBloc>()),
-                        const SizedBox(height: 24),
-                        // SocialLoginWidget(),
-                        // const SizedBox(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Don\'t have an account? ',
-                              style: context.bodyMedium.copyWith(
-                                color: Colors.white,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                context.go('/register');
-                              },
-                              child: Text(
-                                'Register',
-                                style: context.bodyMedium.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+      child: AuthStateHandler(
+        loadingWidget: const CircularProgressIndicator(color: Colors.white),
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      context.primaryColor,
+                      context.secondaryColor,
+                    ],
                   ),
                 ),
               ),
-            ),
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                if (state is AuthFailure) {
-                  return Positioned(
-                    top: MediaQuery.of(context).size.height * 0.1,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade100,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.red.shade300),
-                      ),
-                      child: Row(
+              SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(context.xl),
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.red.shade700,
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios,
+                                color: Colors.white),
+                            onPressed: () => context.go('/welcome'),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              state.error,
-                              style: context.bodyMedium.copyWith(
-                                color: Colors.red.shade700,
+                          const SizedBox(height: 32),
+                          const AuthHeader(
+                            title: 'Welcome\nBack',
+                            subtitle: 'Sign in to continue',
+                          ),
+                          const SizedBox(height: 48),
+                          LoginFormWidget(authBloc: context.read<AuthBloc>()),
+                          const SizedBox(height: 24),
+                          // SocialLoginWidget(),
+                          // const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Don\'t have an account? ',
+                                style: context.bodyMedium.copyWith(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
+                              GestureDetector(
+                                onTap: () {
+                                  context.go('/register');
+                                },
+                                child: Text(
+                                  'Register',
+                                  style: context.bodyMedium.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

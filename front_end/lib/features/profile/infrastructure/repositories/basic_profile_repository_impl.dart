@@ -1,26 +1,23 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:dio/dio.dart';
-
+import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/utils/result.dart';
+import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
 import 'package:semo/features/profile/domain/repositories/profile_repository.dart';
 import 'package:semo/features/profile/domain/exceptions/profile_exceptions.dart';
-import 'package:semo/core/infrastructure/services/token_service.dart';
 import 'package:semo/features/profile/infrastructure/repositories/services/base_profile_service.dart';
 
 /// Implementation of the BasicProfileRepository interface that delegates to specialized services
 class BasicProfileRepositoryImpl implements BasicProfileRepository {
   final BaseProfileService _profileService;
+  final AppLogger _logger;
 
   BasicProfileRepositoryImpl({
-    required Dio dio,
-    required FlutterSecureStorage secureStorage,
-  }) : _profileService = BaseProfileService(
-          dio: dio,
-          tokenService: TokenService(
-            dio: dio,
-            storage: secureStorage,
-          ),
+    required ApiClient apiClient,
+    required AppLogger logger,
+  }) : _logger = logger,
+       _profileService = BaseProfileService(
+          apiClient: apiClient,
+          logger: logger,
         );
 
   @override
@@ -28,7 +25,8 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
     try {
       final user = await _profileService.getCurrentUser();
       return Result.success(user);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      _logger.error('Error getting current user', error: e, stackTrace: stackTrace);
       return Result.failure(BasicProfileException(e.toString()));
     }
   }
@@ -36,8 +34,7 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
   @override
   Future<Result<User, BasicProfileException>> updateUserProfile({
     required String firstName,
-    required String lastName,
-    String? email,
+    String? lastName,
     String? profilePhotoUrl,
     String? phoneNumber,
   }) async {
@@ -45,12 +42,12 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
       final user = await _profileService.updateUserProfile(
         firstName: firstName,
         lastName: lastName,
-        email: email,
         profilePhotoUrl: profilePhotoUrl,
         phoneNumber: phoneNumber,
       );
       return Result.success(user);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      _logger.error('Error updating user profile', error: e, stackTrace: stackTrace);
       return Result.failure(BasicProfileException(e.toString()));
     }
   }
@@ -58,9 +55,10 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
   @override
   Future<Result<bool, BasicProfileException>> deleteAccount() async {
     try {
-      final result = await _profileService.deleteAccount();
-      return Result.success(result);
-    } catch (e) {
+      final success = await _profileService.deleteAccount();
+      return Result.success(success);
+    } catch (e, stackTrace) {
+      _logger.error('Error deleting account', error: e, stackTrace: stackTrace);
       return Result.failure(BasicProfileException(e.toString()));
     }
   }

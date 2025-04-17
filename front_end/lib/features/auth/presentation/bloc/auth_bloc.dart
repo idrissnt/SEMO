@@ -1,15 +1,23 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
+import 'package:semo/core/utils/logger.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
+import 'package:semo/features/auth/domain/usecases/auth_check_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserAuthRepository _authRepository;
-  final _logger = Logger('AuthBloc');
+  final UserProfileUseCase _userProfileUseCase;
+  final AppLogger _logger;
 
-  AuthBloc({required UserAuthRepository authRepository})
-      : _authRepository = authRepository,
+  AuthBloc({
+    required UserAuthRepository authRepository,
+    required UserProfileUseCase userProfileUseCase,
+    required AppLogger logger,
+  })  : _authRepository = authRepository,
+        _userProfileUseCase = userProfileUseCase,
+        _logger = logger,
         super(AuthInitial()) {
     on<AuthLoginRequested>(_onAuthLoginRequested);
     on<AuthRegisterRequested>(_onAuthRegisterRequested);
@@ -30,14 +38,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (authTokens) {
-        _logger.info('Login successful');
-        emit(AuthAuthenticated(authTokens));
+      (authTokens) async {
+        _logger.info('Login successful, fetching user profile');
+        // After successful login, fetch the user profile
+        final userResult = await _userProfileUseCase.getCurrentUser();
+        userResult.fold(
+          (user) {
+            _logger.info('User profile fetched: ${user.email}');
+            emit(AuthAuthenticated(user));
+          },
+          (error) {
+            _logger.error('Failed to get user profile after login',
+                error: error);
+            // Use specific profile fetch error state with retry option
+            emit(const ProfileFetchFailure(
+                'Login successful but failed to get user profile'));
+            // Don't immediately transition to unauthenticated - let UI handle retry
+          },
+        );
       },
       (error) {
-        // Emit failure state with user-friendly message
-        emit(AuthFailure(error.message));
-        emit(AuthUnauthenticated());
+        _logger.error('Login error', error: error);
+
+        // Map domain exceptions to specific UI states
+        if (error is InvalidCredentialsException) {
+          emit(InvalidCredentialsFailure(error.message));
+        } else if (error is ValidationException) {
+          emit(ValidationFailure(error.message,
+              validationErrors: error.validationErrors));
+        } else if (error is NetworkException) {
+          emit(NetworkFailure('Network error: ${error.message}'));
+        } else if (error is ServerException) {
+          emit(ServerFailure('Server error: ${error.message}'));
+        } else {
+          // Generic fallback
+          emit(AuthFailure(error.message));
+        }
       },
     );
   }
@@ -50,23 +86,52 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
 
     final result = await _authRepository.register(
-      firstName: event.firstName,
-      lastName: event.lastName,
       email: event.email,
       password: event.password,
+      firstName: event.firstName,
+      lastName: event.lastName,
       phoneNumber: event.phoneNumber,
       profilePhotoUrl: event.profilePhotoUrl,
     );
 
     result.fold(
-      (authTokens) {
-        _logger.info('Registration and auto-login successful');
-        emit(AuthAuthenticated(authTokens));
+      (authTokens) async {
+        _logger.info('Registration successful, fetching user profile');
+        // After successful registration, fetch the user profile
+        final userResult = await _userProfileUseCase.getCurrentUser();
+        userResult.fold(
+          (user) {
+            _logger.info('User profile fetched: ${user.email}');
+            emit(AuthAuthenticated(user));
+          },
+          (error) {
+            _logger.error('Failed to get user profile after registration',
+                error: error);
+            // Use specific profile fetch error state with retry option
+            emit(const ProfileFetchFailure(
+                'Registration successful but failed to get user profile'));
+            // Don't immediately transition to unauthenticated - let UI handle retry
+          },
+        );
       },
       (error) {
-        // Emit failure state with user-friendly message
-        emit(AuthFailure(error.message));
-        emit(AuthUnauthenticated());
+        _logger.error('Registration error', error: error);
+
+        // Map domain exceptions to specific UI states
+        if (error is ValidationException) {
+          emit(ValidationFailure(
+              'Registration validation error: ${error.message}',
+              validationErrors: error.validationErrors));
+        } else if (error is NetworkException) {
+          emit(NetworkFailure(
+              'Network error during registration: ${error.message}'));
+        } else if (error is ServerException) {
+          emit(ServerFailure(
+              'Server error during registration: ${error.message}'));
+        } else {
+          // Generic fallback
+          emit(AuthFailure(error.message));
+        }
       },
     );
   }
@@ -101,48 +166,54 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _logger.info('AuthCheckRequested: Starting authentication check');
     emit(AuthLoading());
     try {
-      // First, log all available tokens
-      final accessToken = await _authRepository.getAccessToken();
-      final refreshToken = await _authRepository.getRefreshToken();
-      _logger.info(
-          'Access Token Status: ${accessToken != null ? 'EXISTS' : 'NULL'}');
-      _logger.info(
-          'Refresh Token Status: ${refreshToken != null ? 'EXISTS' : 'NULL'}');
+      // First, check if tokens exist
+      final hasAccessToken = await _userProfileUseCase.getAccessToken();
+      final hasRefreshToken = await _userProfileUseCase.getRefreshToken();
+      _logger
+          .info('Access Token Status: ${hasAccessToken ? 'EXISTS' : 'NULL'}');
+      _logger
+          .info('Refresh Token Status: ${hasRefreshToken ? 'EXISTS' : 'NULL'}');
 
       // If no refresh token, user must log in
-      if (refreshToken == null) {
+      if (!hasRefreshToken) {
         _logger.info('No refresh token found. Emitting Unauthenticated state.');
         emit(AuthUnauthenticated());
         return;
       }
 
       // Try to refresh the token
-      final tokenRefreshed = await _authRepository.refreshToken();
+      final tokenRefreshed = await _userProfileUseCase.refreshToken();
       _logger.info('Token Refresh Attempt: $tokenRefreshed');
 
       if (!tokenRefreshed) {
-        _logger.info('Token refresh failed. Emitting Unauthenticated state.');
+        _logger.info('Token refresh failed. Emitting token error state.');
+        emit(const AuthFailure('Session expired. Please log in again.',
+            canRetry: false));
         emit(AuthUnauthenticated());
         return;
       }
 
       // Get the current user
-      final userResult = await _authRepository.getCurrentUser();
+      final userResult = await _userProfileUseCase.getCurrentUser();
       userResult.fold(
         (user) {
           _logger.info('User authenticated: ${user.email}');
           emit(AuthAuthenticated(user));
         },
         (error) {
-          _logger.info(
-              'Failed to get user: ${error.message}. Emitting Unauthenticated state.');
-          emit(AuthUnauthenticated());
+          _logger.error('Failed to get user data', error: error);
+          // Use profile fetch error with retry option
+          emit(const ProfileFetchFailure(
+              'Could not retrieve your profile. Tap to retry.'));
+          // Don't immediately go to unauthenticated - let the user decide to retry or logout
         },
       );
     } catch (e) {
       // Log detailed error information
-      _logger.severe('Authentication check failed: $e', e);
-      emit(AuthUnauthenticated());
+      _logger.error('Authentication check failed', error: e);
+      // Use network error with retry option
+      emit(const NetworkFailure(
+          'Connection error during authentication check. Tap to retry.'));
     }
   }
 }

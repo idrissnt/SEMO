@@ -12,8 +12,8 @@ abstract class BasicProfileRepository {
   /// Returns a Result containing either the updated User object on success or a BasicProfileException on failure
   Future<Result<User, BasicProfileException>> updateUserProfile({
     required String firstName,
-    required String lastName,
-    String? email,
+    // String? email,
+    String? lastName,
     String? profilePhotoUrl,
     String? phoneNumber,
   });

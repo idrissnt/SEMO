@@ -3,9 +3,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:semo/core/infrastructure/api/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/core/domain/services/token_service.dart';
 
 /// Handles all token-related operations including storage, retrieval, and validation
-class TokenService {
+class TokenServiceImpl implements TokenService {
   final Dio _dio;
   final FlutterSecureStorage _secureStorage;
   final AppLogger _logger = AppLogger();
@@ -13,13 +14,14 @@ class TokenService {
   static const String _tokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
 
-  TokenService({
+  TokenServiceImpl({
     required Dio dio,
     required FlutterSecureStorage storage,
   })  : _dio = dio,
         _secureStorage = storage;
 
   /// Retrieves the current access token from secure storage
+  @override
   Future<String?> getAccessToken() async {
     try {
       final token = await _secureStorage.read(key: _tokenKey);
@@ -32,6 +34,7 @@ class TokenService {
   }
 
   /// Retrieves the current refresh token from secure storage
+  @override
   Future<String?> getRefreshToken() async {
     try {
       final token = await _secureStorage.read(key: _refreshTokenKey);
@@ -44,6 +47,7 @@ class TokenService {
   }
 
   /// Saves the access token to secure storage
+  @override
   Future<void> saveAccessToken(String token) async {
     try {
       await _secureStorage.write(key: _tokenKey, value: token);
@@ -56,6 +60,7 @@ class TokenService {
   }
 
   /// Saves the refresh token to secure storage
+  @override
   Future<void> saveRefreshToken(String token) async {
     try {
       await _secureStorage.write(key: _refreshTokenKey, value: token);
@@ -68,6 +73,7 @@ class TokenService {
   }
 
   /// Deletes the access token from secure storage
+  @override
   Future<void> deleteAccessToken() async {
     try {
       await _secureStorage.delete(key: _tokenKey);
@@ -79,6 +85,7 @@ class TokenService {
   }
 
   /// Deletes the refresh token from secure storage
+  @override
   Future<void> deleteRefreshToken() async {
     try {
       await _secureStorage.delete(key: _refreshTokenKey);
@@ -90,6 +97,7 @@ class TokenService {
   }
 
   /// Checks if the current token is valid by verifying with the backend
+  @override
   Future<bool> hasValidToken() async {
     try {
       final token = await getAccessToken();
@@ -129,6 +137,7 @@ class TokenService {
   }
 
   /// Attempts to refresh the access token using the refresh token
+  @override
   Future<bool> refreshToken() async {
     try {
       final refreshToken = await getRefreshToken();
@@ -137,7 +146,8 @@ class TokenService {
         return false;
       }
 
-      _logger.debug('Sending refresh token request to: ${TokenApiRoutes.refresh}');
+      _logger
+          .debug('Sending refresh token request to: ${TokenApiRoutes.refresh}');
       final response = await _dio.post(
         TokenApiRoutes.refresh,
         data: {'refresh': refreshToken},

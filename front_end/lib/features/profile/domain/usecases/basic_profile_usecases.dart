@@ -20,15 +20,15 @@ class BasicProfileUseCases {
   /// Update the user's profile
   Future<Result<User, BasicProfileException>> updateUserProfile({
     required String firstName,
-    required String lastName,
-    String? email,
+    // String? email,
+    String? lastName,
     String? profilePhotoUrl,
     String? phoneNumber,
   }) async {
     return await _profileRepository.updateUserProfile(
       firstName: firstName,
+      // email: email,
       lastName: lastName,
-      email: email,
       profilePhotoUrl: profilePhotoUrl,
       phoneNumber: phoneNumber,
     );

@@ -37,8 +37,8 @@ class ProfileApiRoutes {
   static const String path = '/users/profiles';
   static String get base => '${ApiRoutes.base}$path';
   static String get me => '$base/me/';
-  static String get updateProfile => '/update-profile/';
-  static String get deleteAccount => '/delete-account/';
+  static String get updateProfile => '$base/update-profile/';
+  static String get deleteAccount => '$base/delete-account/';
 }
 
 /// User address related routes

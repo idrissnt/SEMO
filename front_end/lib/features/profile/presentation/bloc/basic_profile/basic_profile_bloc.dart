@@ -49,7 +49,7 @@ class BasicProfileBloc extends Bloc<BasicProfileEvent, BasicProfileState> {
     final result = await _profileUseCases.updateUserProfile(
       firstName: event.firstName,
       lastName: event.lastName,
-      email: event.email,
+      // email: event.email,
       profilePhotoUrl: event.profilePhotoUrl,
       phoneNumber: event.phoneNumber,
     );

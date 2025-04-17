@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:semo/core/domain/services/api_client.dart';
+import 'package:semo/core/domain/services/token_service.dart';
 import 'package:semo/core/infrastructure/api/api_routes.dart';
-import 'package:semo/core/infrastructure/api/api_client.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/infrastructure/models/auth_model.dart';
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
-import 'package:semo/core/infrastructure/services/token_service.dart';
 
 /// Handles authentication operations like login, register, and logout
 class AuthService {
@@ -55,7 +55,7 @@ class AuthService {
       // The ApiClient now throws domain-specific exceptions
       // We can add additional logging or handling here if needed
       _logger.error('Login error', error: e, stackTrace: stackTrace);
-      
+
       // Re-throw the domain exception - it will be handled by the repository layer
       rethrow;
     }
@@ -108,7 +108,7 @@ class AuthService {
     } catch (e, stackTrace) {
       // The ApiClient now throws domain-specific exceptions
       _logger.error('Registration error', error: e, stackTrace: stackTrace);
-      
+
       // Re-throw the domain exception - it will be handled by the repository layer
       rethrow;
     }

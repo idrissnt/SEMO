@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/app/app.dart';
 import 'package:semo/core/di/injection_container.dart'; //sl = service locator
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/core/utils/app_bloc_observer.dart';
 
 // BLoC imports
 import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
@@ -20,6 +21,9 @@ void main() async {
     final logger = sl<AppLogger>();
     await logger.initialize();
 
+    // Register the BlocObserver to monitor all bloc events and state changes
+    Bloc.observer = AppBlocObserver(logger);
+
     logger.debug('Dependencies initialized successfully');
 
     // Initialize app
@@ -27,11 +31,8 @@ void main() async {
       // Provide the AuthBloc to the widget tree
       BlocProvider<AuthBloc>(
         create: (context) {
-          final bloc = AuthBloc(
-            // Gets the authRepository from the service locator
-            // Creates the AuthBloc with this repository
-            authRepository: sl(),
-          );
+          // Get the AuthBloc directly from the service locator
+          final bloc = sl<AuthBloc>();
           // Immediately check if the user is already authenticated
           bloc.add(AuthCheckRequested());
           return bloc;

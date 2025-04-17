@@ -5,15 +5,16 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/infrastructure/api/api_routes.dart';
 import 'package:semo/core/infrastructure/models/error_response_model.dart';
 import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/core/domain/services/api_client.dart';
 
-/// A centralized API client for handling all network requests
+/// Implementation of the ApiClient interface for handling all network requests
 /// Provides consistent error handling, authentication, and logging
-class ApiClient {
+class ApiClientImpl implements ApiClient {
   final Dio _dio;
   final FlutterSecureStorage _secureStorage;
   final AppLogger _logger;
 
-  ApiClient({
+  ApiClientImpl({
     required Dio dio,
     required FlutterSecureStorage secureStorage,
     required AppLogger logger,
