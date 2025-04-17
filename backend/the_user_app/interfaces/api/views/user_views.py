@@ -16,35 +16,37 @@ class UserProfileViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = UserProfileSerializer    
 
+    def list(self, request):
+        """
+        Get user profile information including addresses
+        url: /profiles/
+        """
+        return Response({})
+    
+    @action(detail=False, methods=['get'], url_path='me')
     @extend_schema(
         responses={
             200: UserProfileSerializer,
             401: OpenApiResponse(description='Unauthorized')
         },
-        description='Get user profile information including addresses'
+        description='Get current user profile information'
     )
-
-    # def list(self, request):
-    #     """
-    #     Get user profile information including addresses
-    #     url: /profiles/
-    #     """
-    #     return Response({})
-
-    def retrieve(self, request, pk=None):
+    def me(self, request):
         """
-        Get user profile information including addresses
-        url: /profiles/{pk}/
+        Get current user profile information
+        url: /profiles/me/
         """
         user_service = UserFactory.create_user_service()
-
-        user_id = uuid.UUID(pk)
+        
+        # Get the current user's ID from the request
+        user_id = request.user.id
         user = user_service.get_user_by_id(user_id)
         
         # Serialize and return
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
-
+                
+    @action(detail=False, methods=['patch'], url_path='update-profile')
     @extend_schema(
         request=UserProfileSerializer,
         responses={
@@ -52,16 +54,14 @@ class UserProfileViewSet(viewsets.ViewSet):
             400: OpenApiResponse(description='Bad Request'),
             401: OpenApiResponse(description='Unauthorized')
         },
-        description='Update user profile information'
+        description='Update current user profile information'
     )
-
-    @action(detail=True, methods=['put', 'patch'], url_path='update-profile')
-    def update_profile(self, request, pk=None):
+    def update_my_profile(self, request):
         """
-        Update user profile information
-        url: /profiles/{pk}/update-profile/
+        Update current user profile information
+        url: /profiles/update-profile/
         """
-        user_id = uuid.UUID(pk)
+        user_id = request.user.id
         serializer = UserProfileSerializer(data=request.data, partial=True)
         if serializer.is_valid():
             # Get user service from factory
@@ -81,32 +81,39 @@ class UserProfileViewSet(viewsets.ViewSet):
                 return Response(UserProfileSerializer(user).data)
             else:
                 # Return error
-                return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {'error': error or 'Failed to update profile'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
                 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+            
+    @action(detail=False, methods=['delete'], url_path='delete-account')
     @extend_schema(
         responses={
-            204: OpenApiResponse(description='No Content - Account deleted successfully'),
+            204: OpenApiResponse(description='No Content'),
             400: OpenApiResponse(description='Bad Request'),
             401: OpenApiResponse(description='Unauthorized')
         },
-        description='Delete user account'
+        description='Delete current user account'
     )
-    @action(detail=True, methods=['delete'], url_path='delete-account')
-    def delete_account(self, request, pk=None):
+    def delete_my_account(self, request):
         """
-        Delete user account
-        url: /profiles/{pk}/delete-account/
+        Delete current user account
+        url: /profiles/delete-account/
         """
-        user_id = uuid.UUID(pk)
+        user_id = request.user.id
+        
         # Get user service from factory
         user_service = UserFactory.create_user_service()
         
-        # Delete user
+        # Delete user account
         success, error = user_service.delete_user(user_id)
         
         if success:
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': error or 'Failed to delete account'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
