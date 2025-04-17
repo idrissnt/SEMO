@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/domain/services/token_service.dart';
 import 'package:semo/core/infrastructure/api/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
 import 'package:semo/features/auth/infrastructure/models/auth_model.dart';
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
 
@@ -18,16 +20,15 @@ class AuthService {
   })  : _apiClient = apiClient,
         _tokenService = tokenService;
 
-  /// Authenticates a user with email and password
-  /// Returns an AuthTokens object on success
+  /// Performs login with email and password
+  /// Returns AuthTokens on success
+  /// Throws domain-specific exceptions on failure
   Future<AuthTokens> login({
     required String email,
     required String password,
   }) async {
     try {
-      _logger.debug('Sending login request for user: $email');
-
-      // Use the ApiClient to handle the request
+      // Send login request to API
       final data = await _apiClient.post<Map<String, dynamic>>(
         AuthApiRoutes.login,
         data: {
@@ -36,28 +37,19 @@ class AuthService {
         },
       );
 
-      _logger.debug('Login successful');
-      _logger.debug('Login response data: $data');
-
-      // Parse the response using our model
+      // Parse response and save tokens
       final authTokens = AuthTokensModel.fromJson(data);
 
-      // Save tokens
-      _logger.debug('Saving access and refresh tokens');
+      // Save tokens securely
       await _tokenService.saveAccessToken(authTokens.accessToken);
       await _tokenService.saveRefreshToken(authTokens.refreshToken);
 
-      _logger.debug('Tokens saved successfully');
-
       // Return domain entity
       return authTokens.toEntity();
-    } catch (e, stackTrace) {
-      // The ApiClient now throws domain-specific exceptions
-      // We can add additional logging or handling here if needed
-      _logger.error('Login error', error: e, stackTrace: stackTrace);
-
-      // Re-throw the domain exception - it will be handled by the repository layer
-      rethrow;
+    } catch (e) {
+      // Convert API exceptions to domain exceptions without logging
+      // Logging will be handled by the repository layer
+      return _mapApiExceptionToDomainException(e);
     }
   }
 
@@ -148,6 +140,39 @@ class AuthService {
     } catch (e, stackTrace) {
       _logger.error('Error during logout', error: e, stackTrace: stackTrace);
       throw Exception('Failed to logout: ${e.toString()}');
+    }
+  }
+
+  /// Maps API exceptions to domain-specific auth exceptions
+  Never _mapApiExceptionToDomainException(dynamic e) {
+    if (e is UnauthorizedException) {
+      throw InvalidCredentialsException(
+        message: e.message,
+        code: e.code,
+        requestId: e.requestId,
+      );
+    } else if (e is BadRequestException) {
+      throw ValidationException(
+        message: e.message,
+        validationErrors: e.validationErrors,
+        code: e.code,
+        requestId: e.requestId,
+      );
+    } else if (e is ApiServerException) {
+      throw ServerException(
+        message: e.message,
+        code: e.code,
+        requestId: e.requestId,
+      );
+    } else if (e is ApiNetworkException || e is ApiTimeoutException) {
+      throw NetworkException(
+        message: e is ApiException ? e.message : 'Network error',
+        code: e is ApiException ? e.code : 'network_error',
+        requestId: e is ApiException ? e.requestId : null,
+      );
+    } else {
+      // Generic fallback for any other types of errors
+      throw AuthenticationException('Authentication error: ${e.toString()}');
     }
   }
 }

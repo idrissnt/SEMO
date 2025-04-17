@@ -25,18 +25,30 @@ final sl = GetIt.instance; // Service Locator accessible anywhere in the app
 Future<void> initializeDependencies() async {
   // Core
   sl.registerLazySingleton(() => AppLogger());
-  sl.registerLazySingleton(() => Dio(BaseOptions(
-        baseUrl: ApiRoutes.base,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-        contentType: 'application/json',
-      )));
+  sl.registerLazySingleton(() {
+    final dio = Dio(BaseOptions(
+      baseUrl: ApiRoutes.base,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      contentType: 'application/json',
+    ));
+    
+    // Customize error handling to avoid verbose default Dio error messages
+    dio.interceptors.add(InterceptorsWrapper(
+      onError: (DioException e, handler) {
+        // Strip the default Dio error message and just pass the error
+        // The actual error handling will be done in the ApiClient
+        handler.next(e);
+      },
+    ));
+    
+    return dio;
+  });
   sl.registerLazySingleton(() => const FlutterSecureStorage());
 
   // API Client - Register interface with implementation
   sl.registerLazySingleton<ApiClient>(() => ApiClientImpl(
         dio: sl(),
-        secureStorage: sl(),
         logger: sl(),
       ));
 

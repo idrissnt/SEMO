@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:semo/core/presentation/global/app_globals.dart';
 import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
@@ -59,6 +60,7 @@ class AuthStateHandler extends StatelessWidget {
   
   /// Shows an appropriate snackbar based on the failure state
   void _showErrorSnackBar(BuildContext context, AuthFailureState state) {
+    // Create the snackbar with appropriate styling and actions
     final snackBar = SnackBar(
       content: Text(state.message),
       backgroundColor: _getErrorColor(state),
@@ -79,9 +81,18 @@ class AuthStateHandler extends StatelessWidget {
       duration: const Duration(seconds: 5),
     );
 
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
+    // Use the global ScaffoldMessengerKey to show the snackbar
+    // This works regardless of the current context's position in the widget tree
+    Future.microtask(() {
+      final messenger = AppGlobals.scaffoldMessengerKey.currentState;
+      if (messenger != null) {
+        messenger
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      } else {
+        debugPrint('Could not show error snackbar: ScaffoldMessengerState is null');
+      }
+    });
   }
   
   /// Returns an appropriate color based on the error type

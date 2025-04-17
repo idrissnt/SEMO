@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any, Union
 import uuid
 from datetime import datetime
 
-from .value_objects import ExperienceLevel
+from ..value_objects.value_objects import ExperienceLevel
 
 @dataclass
 class User:

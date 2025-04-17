@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
-from ...domain.models.value_objects import ExperienceLevel
+from ...domain.value_objects.value_objects import ExperienceLevel
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):

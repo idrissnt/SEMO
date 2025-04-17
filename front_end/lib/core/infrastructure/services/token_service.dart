@@ -146,39 +146,78 @@ class TokenServiceImpl implements TokenService {
         return false;
       }
 
-      _logger
-          .debug('Sending refresh token request to: ${TokenApiRoutes.refresh}');
-      final response = await _dio.post(
-        TokenApiRoutes.refresh,
-        data: {'refresh': refreshToken},
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
+      _logger.debug('Sending refresh token request to: ${TokenApiRoutes.refresh}');
+      _logger.debug('Refresh token payload: {"refresh": "${refreshToken.substring(0, 10)}..."}');
+      
+      try {
+        final response = await _dio.post(
+          TokenApiRoutes.refresh,
+          data: {'refresh': refreshToken},
+          options: Options(headers: {'Content-Type': 'application/json'}),
+        );
 
-      if (response.statusCode == 200) {
-        final data = response.data;
-        if (data['access_token'] != null) {
-          _logger.debug('Token refresh successful');
-          await saveAccessToken(data['access_token']);
+        _logger.debug('Token refresh response status: ${response.statusCode}');
+        _logger.debug('Token refresh response data: ${response.data}');
 
-          // If a new refresh token is provided, save it
-          if (data['refresh_token'] != null) {
-            await saveRefreshToken(data['refresh_token']);
+        if (response.statusCode == 200) {
+          final data = response.data;
+          
+          // Check both possible field names (access_token and access)
+          final accessToken = data['access_token'] ?? data['access'];
+          final newRefreshToken = data['refresh_token'] ?? data['refresh'];
+          
+          if (accessToken != null) {
+            _logger.debug('Token refresh successful, received access token');
+            await saveAccessToken(accessToken);
+
+            // If a new refresh token is provided, save it
+            if (newRefreshToken != null) {
+              _logger.debug('New refresh token received and saved');
+              await saveRefreshToken(newRefreshToken);
+            } else {
+              _logger.debug('No new refresh token received, keeping existing one');
+            }
+
+            return true;
+          } else {
+            _logger.error('Token refresh response missing access token');
           }
-
-          return true;
         }
+
+        // If we get here, refresh failed but no exception was thrown
+        _logger.error('Token refresh failed with status: ${response.statusCode}');
+        
+        // Clear tokens
+        await Future.wait([
+          deleteAccessToken(),
+          deleteRefreshToken(),
+        ]);
+        
+        return false;
+        
+      } catch (e) {
+        if (e is DioException) {
+          _logger.error('Token refresh DioException', error: e);
+          if (e.response != null) {
+            _logger.error('Response status: ${e.response?.statusCode}');
+            _logger.error('Response data: ${e.response?.data}');
+          } else {
+            _logger.error('No response data available');
+          }
+        } else {
+          _logger.error('Token refresh failed with unexpected error', error: e);
+        }
+        
+        // Clear tokens on error
+        await Future.wait([
+          deleteAccessToken(),
+          deleteRefreshToken(),
+        ]);
+        
+        return false;
       }
-
-      // If refresh failed, clear tokens
-      await Future.wait([
-        deleteAccessToken(),
-        deleteRefreshToken(),
-      ]);
-
-      _logger.error('Token refresh failed: ${response.statusCode}');
-      return false;
-    } catch (e, stackTrace) {
-      _logger.error('Error refreshing token', error: e, stackTrace: stackTrace);
+    } catch (e) {
+      _logger.error('Token refresh outer exception', error: e);
       return false;
     }
   }

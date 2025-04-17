@@ -3,7 +3,7 @@
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/result.dart';
 
-import 'package:semo/core/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/domain/services/token_service.dart';
 
@@ -33,47 +33,36 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
     required String password,
   }) async {
     try {
+      // The service layer handles API communication and maps API exceptions to domain exceptions
+      _logger.debug('Sending login request for user: $email');
       final authTokens =
           await _authService.login(email: email, password: password);
+
+      _logger.debug('Backend Login successful');
+
       return Result.success(authTokens);
     } catch (e) {
-      _logger.error('Login error', error: e);
+      // Log the error once at the repository level
+      _logger.error('Backend Login error',
+          error: e is DomainException ? e.message : e.toString());
 
-      // Handle different types of exceptions from the ApiClient
-      if (e is InvalidCredentialsException) {
-        // HTTP 401 - Invalid credentials
+      // Map domain exceptions to Result.failure with appropriate types
+      if (e is AuthenticationException) {
+        // Domain exceptions can be directly returned
         return Result.failure(e);
-      } else if (e is ValidationException) {
-        // HTTP 400 - Bad request/validation error
+      } else if (e is DomainException) {
+        // Handle other domain exceptions
         return Result.failure(AuthenticationException(
-          'Invalid login data: ${e.message}',
+          e.message,
           code: e.code,
           requestId: e.requestId,
         ));
-      } else if (e is ServerException) {
-        // HTTP 500 - Server error
+      } else {
+        // Fallback for unexpected exceptions
         return Result.failure(AuthenticationException(
-          'Server error during login: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
+          'Unexpected error during login: ${e.toString()}',
         ));
-      } else if (e is NetworkException) {
-        // Network connectivity issues
-        return Result.failure(AuthenticationException(
-          'Network error during login: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else if (e is AuthenticationException) {
-        // Other authentication exceptions
-        return Result.failure(e);
       }
-
-      // Fallback for any unexpected errors
-      return Result.failure(AuthenticationException(
-        'Login failed: ${e.toString()}',
-        code: 'unknown_error',
-      ));
     }
   }
 
@@ -87,6 +76,7 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
     String? profilePhotoUrl,
   }) async {
     try {
+      _logger.debug('Sending registration request for user: $email');
       final authTokens = await _authService.register(
         email: email,
         password: password,
@@ -97,91 +87,58 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
       );
       return Result.success(authTokens);
     } catch (e) {
-      _logger.error('Registration error', error: e);
+      // Log the error once at the repository level
+      _logger.error('Registration error',
+          error: e is DomainException ? e.message : e.toString());
 
-      // Handle different types of exceptions from the ApiClient
-      if (e is ValidationException) {
-        // HTTP 400 - Bad request/validation error
-        return Result.failure(AuthenticationException(
-          'Invalid registration data: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else if (e is ServerException) {
-        // HTTP 500 - Server error
-        return Result.failure(AuthenticationException(
-          'Server error during registration: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else if (e is NetworkException) {
-        // Network connectivity issues
-        return Result.failure(AuthenticationException(
-          'Network error during registration: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else if (e is AuthenticationException) {
-        // Other authentication exceptions
+      // Map domain exceptions to Result.failure with appropriate types
+      if (e is AuthenticationException) {
+        // Domain exceptions can be directly returned
         return Result.failure(e);
       } else if (e is DomainException) {
         // Handle other domain exceptions
-        return Result.failure(AuthenticationException(e.message,
-            code: e.code, requestId: e.requestId));
+        return Result.failure(AuthenticationException(
+          e.message,
+          code: e.code,
+          requestId: e.requestId,
+        ));
+      } else {
+        // Fallback for unexpected exceptions
+        return Result.failure(AuthenticationException(
+          'Registration failed: ${e.toString()}',
+        ));
       }
-
-      // Fallback for any unexpected errors
-      return Result.failure(AuthenticationException(
-        'Registration failed: ${e.toString()}',
-        code: 'unknown_error',
-      ));
     }
   }
 
   @override
   Future<Result<bool, AuthenticationException>> logout() async {
     try {
+      _logger.debug('Sending logout request');
       await _authService.logout();
       return Result.success(true);
     } catch (e) {
-      _logger.error('Logout error', error: e);
+      // Log the error once at the repository level
+      _logger.error('Logout error',
+          error: e is DomainException ? e.message : e.toString());
 
-      // Handle different types of exceptions from the ApiClient
-      if (e is AuthorizationException) {
-        // HTTP 403 - Forbidden
-        return Result.failure(AuthenticationException(
-          'Not authorized to logout: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else if (e is ServerException) {
-        // HTTP 500 - Server error
-        return Result.failure(AuthenticationException(
-          'Server error during logout: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else if (e is NetworkException) {
-        // Network connectivity issues
-        return Result.failure(AuthenticationException(
-          'Network error during logout: ${e.message}',
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else if (e is AuthenticationException) {
-        // Other authentication exceptions
+      // Map domain exceptions to Result.failure with appropriate types
+      if (e is AuthenticationException) {
+        // Domain exceptions can be directly returned
         return Result.failure(e);
       } else if (e is DomainException) {
         // Handle other domain exceptions
-        return Result.failure(AuthenticationException(e.message,
-            code: e.code, requestId: e.requestId));
+        return Result.failure(AuthenticationException(
+          e.message,
+          code: e.code,
+          requestId: e.requestId,
+        ));
+      } else {
+        // Fallback for unexpected exceptions
+        return Result.failure(AuthenticationException(
+          'Logout failed: ${e.toString()}',
+        ));
       }
-
-      // Fallback for any unexpected errors
-      return Result.failure(AuthenticationException(
-        'Logout failed: ${e.toString()}',
-        code: 'unknown_error',
-      ));
     }
   }
 }

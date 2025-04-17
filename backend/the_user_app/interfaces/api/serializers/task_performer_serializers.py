@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
 from ....domain.models.entities import TaskPerformerProfile
-from ....domain.models.value_objects import ExperienceLevel
+from ....domain.value_objects.value_objects import ExperienceLevel
 
 
 class TaskPerformerProfileCreateSerializer(serializers.Serializer):
@@ -12,7 +12,7 @@ class TaskPerformerProfileCreateSerializer(serializers.Serializer):
         required=True
     )
     experience_level = serializers.ChoiceField(
-        choices=['beginner', 'intermediate', 'expert'],
+        choices=ExperienceLevel.values(),
         required=True
     )
     availability = serializers.JSONField(required=True)
@@ -37,7 +37,7 @@ class TaskPerformerProfileUpdateSerializer(serializers.Serializer):
         required=False
     )
     experience_level = serializers.ChoiceField(
-        choices=['beginner', 'intermediate', 'expert'],
+        choices=ExperienceLevel.values(),
         required=False
     )
     availability = serializers.JSONField(required=False)
@@ -62,7 +62,7 @@ class TaskPerformerProfileSerializer(serializers.Serializer):
     user_name = serializers.CharField()
     user_email = serializers.EmailField()
     skills = serializers.ListField(child=serializers.CharField())
-    experience_level = serializers.CharField()
+    experience_level = serializers.ChoiceField(choices=ExperienceLevel.values())
     availability = serializers.JSONField()
     preferred_radius_km = serializers.IntegerField()
     bio = serializers.CharField(allow_null=True)
@@ -100,7 +100,7 @@ class TaskPerformerSearchSerializer(serializers.Serializer):
         required=False
     )
     experience_level = serializers.ChoiceField(
-        choices=['beginner', 'intermediate', 'expert', 'any'],
+        choices=ExperienceLevel.values(),
         default='any',
         required=False
     )

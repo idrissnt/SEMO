@@ -11,7 +11,7 @@ from .user_serializers import (
     AddressSerializer,
     UserProfileSerializer,
     LoginRequestSerializer,
-    LoginResponseSerializer,
+    AuthTokensSerializer,
     PasswordChangeSerializer
 )
 
@@ -24,6 +24,6 @@ __all__ = [
     'AddressSerializer',
     'UserProfileSerializer',
     'LoginRequestSerializer',
-    'LoginResponseSerializer',
+    'AuthTokensSerializer',
     'PasswordChangeSerializer'
 ]

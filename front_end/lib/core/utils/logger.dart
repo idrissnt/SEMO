@@ -106,20 +106,22 @@ class AppLogger {
       _lastStateLogTime = now;
     }
 
-    // Build the log message with minimal newlines
-    final List<String> logParts = [
-      '[${record.time}] ${record.level.name}: ${record.message}'
-    ];
+    // Format timestamp and level prefix
+    final prefix = '[${record.time}] ${record.level.name}: ';
 
+    // Build the log message with consistent formatting
+    String logMessage = prefix + record.message;
+
+    // Format error with the same prefix style
     if (record.error != null) {
-      logParts.add('Error: ${record.error}');
+      // Instead of adding on a new line, include it in the same formatted line
+      logMessage = '$prefix${record.message} - ${record.error}';
     }
 
+    // Only add stacktrace on a new line if present
     if (record.stackTrace != null) {
-      logParts.add('Stacktrace: ${record.stackTrace}');
+      logMessage += '\nStacktrace: ${record.stackTrace}';
     }
-
-    final logMessage = logParts.join('\n');
 
     // Write to file if possible
     try {

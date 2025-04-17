@@ -1,4 +1,4 @@
-import 'package:semo/core/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 
 /// Base class for all domain-specific exceptions
 

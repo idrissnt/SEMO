@@ -12,6 +12,7 @@ from the_user_app.domain.services.auth_service import AuthDomainService
 from the_user_app.domain.models.events.user_events import UserRegisteredEvent
 from core.domain_events.event_bus import event_bus
 
+import logging
 logger = logging.getLogger(__name__)
 
 class AuthApplicationService:

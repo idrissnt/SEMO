@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/navigation/router_services/app_router.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/global/app_globals.dart';
 
 /// Root widget of the application
 /// Configures the app theme and routing
@@ -13,6 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'SEMO',
       debugShowCheckedModeBanner: false,
+      // Use the global scaffoldMessengerKey for consistent SnackBar handling
+      scaffoldMessengerKey: AppGlobals.scaffoldMessengerKey,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: AppColors.background,

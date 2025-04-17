@@ -58,7 +58,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       },
       (error) {
-        _logger.error('Login error', error: error);
+        // Log the error without stack trace
+        _logger.error('Bloc Login error', error: error.message);
 
         // Map domain exceptions to specific UI states
         if (error is InvalidCredentialsException) {
@@ -182,8 +183,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       // Try to refresh the token
+      _logger.debug('About to attempt token refresh');
       final tokenRefreshed = await _userProfileUseCase.refreshToken();
-      _logger.info('Token Refresh Attempt: $tokenRefreshed');
+      _logger.info('Token Refresh Attempt Result: $tokenRefreshed');
 
       if (!tokenRefreshed) {
         _logger.info('Token refresh failed. Emitting token error state.');

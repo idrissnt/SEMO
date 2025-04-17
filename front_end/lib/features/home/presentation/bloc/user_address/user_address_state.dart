@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:semo/core/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
 
 abstract class HomeUserAddressState extends Equatable {
