@@ -156,7 +156,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    # 'EXCEPTION_HANDLER': 'the_user_app.interfaces.api.exceptions.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'core.interface.api.exception_handlers.domain_exception_handler',
 }
 
 # API Documentation settings

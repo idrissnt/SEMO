@@ -37,7 +37,6 @@ class UserProfileSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255, required=False, allow_null=True)
     phone_number = serializers.CharField(max_length=15, required=False, allow_null=True)
-    addresses = AddressSerializer(many=True, read_only=True)
 
 class LoginRequestSerializer(serializers.Serializer):
     """Serializer for login request data"""
