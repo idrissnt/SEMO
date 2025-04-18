@@ -28,9 +28,9 @@ class AuthUnauthenticated extends AuthState {}
 abstract class AuthFailureState extends AuthState {
   final String message;
   final bool canRetry;
-  
+
   const AuthFailureState(this.message, {this.canRetry = false});
-  
+
   @override
   List<Object?> get props => [message, canRetry];
 }
@@ -39,42 +39,45 @@ abstract class AuthFailureState extends AuthState {
 class AuthFailure extends AuthFailureState {
   /// Get the error message (for backward compatibility)
   String get error => message;
-  
-  const AuthFailure(String message, {bool canRetry = false}) 
+
+  const AuthFailure(String message, {bool canRetry = false})
       : super(message, canRetry: canRetry);
 }
 
 /// Credentials error (wrong email/password)
 class InvalidCredentialsFailure extends AuthFailureState {
-  const InvalidCredentialsFailure(String message) 
+  const InvalidCredentialsFailure(String message)
       : super(message, canRetry: true);
 }
 
-/// Validation error (invalid input data)
-class ValidationFailure extends AuthFailureState {
-  final Map<String, dynamic>? validationErrors;
-  
-  const ValidationFailure(String message, {this.validationErrors}) 
+/// User already exists (409 Conflict)
+class UserAlreadyExistsFailure extends AuthFailureState {
+  const UserAlreadyExistsFailure(String message)
       : super(message, canRetry: true);
-  
-  @override
-  List<Object?> get props => [message, canRetry, validationErrors];
 }
+
+// /// Validation error (invalid input data)
+// class ValidationFailure extends AuthFailureState {
+//   final Map<String, dynamic>? validationErrors;
+
+//   const ValidationFailure(String message, {this.validationErrors})
+//       : super(message, canRetry: true);
+
+//   @override
+//   List<Object?> get props => [message, canRetry, validationErrors];
+// }
 
 /// Network error (no internet connection)
 class NetworkFailure extends AuthFailureState {
-  const NetworkFailure(String message) 
-      : super(message, canRetry: true);
+  const NetworkFailure(String message) : super(message, canRetry: true);
 }
 
 /// Server error (backend issue)
 class ServerFailure extends AuthFailureState {
-  const ServerFailure(String message) 
-      : super(message, canRetry: false);
+  const ServerFailure(String message) : super(message, canRetry: false);
 }
 
 /// Profile fetch error (login succeeded but profile fetch failed)
 class ProfileFetchFailure extends AuthFailureState {
-  const ProfileFetchFailure(String message) 
-      : super(message, canRetry: true);
+  const ProfileFetchFailure(String message) : super(message, canRetry: true);
 }

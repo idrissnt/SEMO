@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:semo/core/domain/services/api_client.dart';
-import 'package:semo/core/infrastructure/api/api_routes.dart';
+import 'package:semo/core/infrastructure/services/api/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
 
 import 'package:semo/features/store/domain/repositories/store_repository.dart';
@@ -21,8 +21,8 @@ class StoreRepositoryImpl implements StoreRepository {
   StoreRepositoryImpl({
     required ApiClient apiClient,
     required AppLogger logger,
-  }) : _apiClient = apiClient,
-       _logger = logger;
+  })  : _apiClient = apiClient,
+        _logger = logger;
 
   /// Get all store brands
   @override

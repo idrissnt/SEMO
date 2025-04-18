@@ -10,7 +10,7 @@ from the_user_app.domain.value_objects.value_objects import AuthTokens
 from the_user_app.domain.user_exceptions import (
     UserAlreadyExistsException,
     InvalidCredentialsException,
-    TokenBlacklistedException,
+    MissingRefreshTokenException,
 )
 
 from the_user_app.domain.models.entities import User
@@ -122,14 +122,9 @@ class AuthApplicationService:
         """
         if not refresh_token:
             self.logger.warning("Missing refresh token", {"user_id": str(user_id)})
-            return Result.failure(TokenBlacklistedException("Refresh token is required"))
+            return Result.failure(MissingRefreshTokenException())
         
         try:
-            # Check if token is already blacklisted
-            if self.auth_repository.is_token_blacklisted(refresh_token):
-                self.logger.warning("Token already blacklisted", {"user_id": str(user_id)})
-                return Result.failure(TokenBlacklistedException())
-            
             # Create logout event
             logout_event = self.domain_service.prepare_logout_event(
                 user_id=user_id,
@@ -139,6 +134,15 @@ class AuthApplicationService:
             
             # Record logout event
             self.auth_repository.record_logout(logout_event)
+            
+            # Check if token is already blacklisted
+            if self.auth_repository.is_token_blacklisted(refresh_token):
+                self.logger.warning("Token already blacklisted", {"user_id": str(user_id)})
+                self.logger.info("User logged out successfully", {
+                    'user_id': str(user_id),
+                    'ip_address': ip_address
+                })
+                return Result.success(True)
             
             # Blacklist token
             # In a real implementation, we would decode the token to get the expiration time

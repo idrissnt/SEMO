@@ -226,8 +226,7 @@ class ApiClientImpl implements ApiClient {
       }
     } else {
       _logger.error('API Error: Unknown error', error: error);
-      throw ApiException('Unknown error: $error',
-          code: 'unknown_error');
+      throw ApiException('Unknown error: $error', code: 'unknown_error');
     }
   }
 }

@@ -105,7 +105,6 @@ class AuthViewSet(viewsets.ViewSet):
         request=LoginRequestSerializer,
         responses={
             200: AuthTokensSerializer,
-            400: OpenApiResponse(description='Validation error or server error'),
             401: OpenApiResponse(description='Invalid credentials (code: invalid_credentials)')
         },
         description='Login with email and password',
@@ -222,7 +221,9 @@ class AuthViewSet(viewsets.ViewSet):
         # Check if logout was successful
         if result.is_success():
             # Log success
-            logger.info("User logged out successfully", {"user_id": str(user_id), "request_id": request_id})
+            logger.info("User logged out successfully", 
+                {"user_id": str(user_id), 
+                "request_id": request_id})
             
             # Return success response
             return Response({

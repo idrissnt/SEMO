@@ -1,7 +1,7 @@
 // No need for dart:convert with Dio
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
-import 'package:semo/core/infrastructure/api/api_routes.dart';
+import 'package:semo/core/infrastructure/services/api/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/domain/services/token_service.dart';
 
@@ -146,9 +146,11 @@ class TokenServiceImpl implements TokenService {
         return false;
       }
 
-      _logger.debug('Sending refresh token request to: ${TokenApiRoutes.refresh}');
-      _logger.debug('Refresh token payload: {"refresh": "${refreshToken.substring(0, 10)}..."}');
-      
+      _logger
+          .debug('Sending refresh token request to: ${TokenApiRoutes.refresh}');
+      _logger.debug(
+          'Refresh token payload: {"refresh": "${refreshToken.substring(0, 10)}..."}');
+
       try {
         final response = await _dio.post(
           TokenApiRoutes.refresh,
@@ -161,11 +163,11 @@ class TokenServiceImpl implements TokenService {
 
         if (response.statusCode == 200) {
           final data = response.data;
-          
+
           // Check both possible field names (access_token and access)
           final accessToken = data['access_token'] ?? data['access'];
           final newRefreshToken = data['refresh_token'] ?? data['refresh'];
-          
+
           if (accessToken != null) {
             _logger.debug('Token refresh successful, received access token');
             await saveAccessToken(accessToken);
@@ -175,7 +177,8 @@ class TokenServiceImpl implements TokenService {
               _logger.debug('New refresh token received and saved');
               await saveRefreshToken(newRefreshToken);
             } else {
-              _logger.debug('No new refresh token received, keeping existing one');
+              _logger
+                  .debug('No new refresh token received, keeping existing one');
             }
 
             return true;
@@ -185,16 +188,16 @@ class TokenServiceImpl implements TokenService {
         }
 
         // If we get here, refresh failed but no exception was thrown
-        _logger.error('Token refresh failed with status: ${response.statusCode}');
-        
+        _logger
+            .error('Token refresh failed with status: ${response.statusCode}');
+
         // Clear tokens
         await Future.wait([
           deleteAccessToken(),
           deleteRefreshToken(),
         ]);
-        
+
         return false;
-        
       } catch (e) {
         if (e is DioException) {
           _logger.error('Token refresh DioException', error: e);
@@ -207,13 +210,13 @@ class TokenServiceImpl implements TokenService {
         } else {
           _logger.error('Token refresh failed with unexpected error', error: e);
         }
-        
+
         // Clear tokens on error
         await Future.wait([
           deleteAccessToken(),
           deleteRefreshToken(),
         ]);
-        
+
         return false;
       }
     } catch (e) {

@@ -1,9 +1,13 @@
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_error_codes.dart';
 
-/// Exception thrown when authentication operations fail
+/// Domain exceptions for authentication and authorization
 class AuthenticationException extends DomainException {
-  AuthenticationException(String message, {String? code, String? requestId})
-      : super(message, code: code, requestId: requestId);
+  AuthenticationException(
+    String message, {
+    String? code,
+    String? requestId,
+  }) : super(message, code: code, requestId: requestId);
 }
 
 /// Exception for invalid credentials (401 Unauthorized)
@@ -13,55 +17,34 @@ class InvalidCredentialsException extends AuthenticationException {
       String? code,
       String? requestId})
       : super(message,
-            code: code ?? 'invalid_credentials', requestId: requestId);
+            code: code ?? AuthErrorCodes.invalidCredentials,
+            requestId: requestId);
 }
 
-/// Exception for validation errors (400 Bad Request)
-class ValidationException extends AuthenticationException {
-  final Map<String, dynamic>? validationErrors;
-
-  ValidationException(
-      {String message = 'Validation error',
-      this.validationErrors,
+/// Exception for user already exists errors (409 Conflict)
+class UserAlreadyExistsException extends AuthenticationException {
+  UserAlreadyExistsException(
+      {String message = 'User with this email already exists',
       String? code,
       String? requestId})
-      : super(message, code: code ?? 'validation_error', requestId: requestId);
+      : super(message,
+            code: code ?? AuthErrorCodes.userAlreadyExists,
+            requestId: requestId);
 }
 
-/// Exception for server errors (500 Internal Server Error)
-class ServerException extends DomainException {
-  ServerException(
-      {String message = 'An unexpected error occurred',
-      String? code,
-      String? requestId})
-      : super(message, code: code ?? 'server_error', requestId: requestId);
+/// Exception for token errors (400 Bad Request)
+class MissingRefreshTokenException extends AuthenticationException {
+  MissingRefreshTokenException({
+    String message = 'Refresh token is required',
+    String? code,
+    String? requestId,
+  }) : super(message,
+            code: code ?? AuthErrorCodes.missingToken, requestId: requestId);
 }
 
-/// Exception thrown when authorization operations fail
-class AuthorizationException extends DomainException {
-  AuthorizationException(
-      {String message = 'You are not authorized to perform this action',
-      String? code,
-      String? requestId})
-      : super(message, code: code ?? 'unauthorized', requestId: requestId);
-}
-
-/// Exception thrown when token operations fail
-class TokenException extends DomainException {
-  TokenException(
-      {String message = 'Token error', String? code, String? requestId})
-      : super(message, code: code ?? 'token_error', requestId: requestId);
-}
-
-/// Exception thrown when network operations fail
-class NetworkException extends DomainException {
-  NetworkException(
-      {String message = 'Network error', String? code, String? requestId})
-      : super(message, code: code ?? 'network_error', requestId: requestId);
-}
-
-/// Generic domain exception for cases that don't fit other categories
-class GenericDomainException extends DomainException {
+/// Generic domain exception for cases that don't fit other categories (500 Internal Server Error)
+class GenericDomainException extends AuthenticationException {
   GenericDomainException(String message, {String? code, String? requestId})
-      : super(message, code: code ?? 'generic_error', requestId: requestId);
+      : super(message,
+            code: code ?? AuthErrorCodes.genericError, requestId: requestId);
 }

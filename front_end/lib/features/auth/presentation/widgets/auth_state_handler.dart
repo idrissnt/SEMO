@@ -10,12 +10,12 @@ import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
 class AuthStateHandler extends StatelessWidget {
   /// The child widget to display when authenticated or during normal operation
   final Widget child;
-  
+
   /// Optional widget to show during loading state, defaults to CircularProgressIndicator
   final Widget? loadingWidget;
-  
+
   const AuthStateHandler({
-    Key? key, 
+    Key? key,
     required this.child,
     this.loadingWidget,
   }) : super(key: key);
@@ -25,8 +25,8 @@ class AuthStateHandler extends StatelessWidget {
     return BlocConsumer<AuthBloc, AuthState>(
       listenWhen: (previous, current) {
         // Only trigger listener for state changes that require user feedback
-        return current is AuthFailureState || 
-               (previous is AuthLoading && current is AuthAuthenticated);
+        return current is AuthFailureState ||
+            (previous is AuthLoading && current is AuthAuthenticated);
       },
       listener: (context, state) {
         // Handle side effects based on state
@@ -51,13 +51,13 @@ class AuthStateHandler extends StatelessWidget {
             child: loadingWidget ?? const CircularProgressIndicator(),
           );
         }
-        
+
         // For all other states, show the child widget
         return child;
       },
     );
   }
-  
+
   /// Shows an appropriate snackbar based on the failure state
   void _showErrorSnackBar(BuildContext context, AuthFailureState state) {
     // Create the snackbar with appropriate styling and actions
@@ -90,17 +90,21 @@ class AuthStateHandler extends StatelessWidget {
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar);
       } else {
-        debugPrint('Could not show error snackbar: ScaffoldMessengerState is null');
+        debugPrint(
+            'Could not show error snackbar: ScaffoldMessengerState is null');
       }
     });
   }
-  
+
   /// Returns an appropriate color based on the error type
   Color _getErrorColor(AuthFailureState state) {
     if (state is InvalidCredentialsFailure) {
       return Colors.orange;
-    } else if (state is ValidationFailure) {
-      return Colors.amber;
+
+      // } else if (state is ValidationFailure) {
+      //   return Colors.amber;
+    } else if (state is UserAlreadyExistsFailure) {
+      return Colors.orange;
     } else if (state is NetworkFailure) {
       return Colors.blue;
     } else if (state is ServerFailure) {

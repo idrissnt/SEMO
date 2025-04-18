@@ -38,31 +38,11 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
       final authTokens =
           await _authService.login(email: email, password: password);
 
-      _logger.debug('Backend Login successful');
+      _logger.debug('Backend successful Login user with email: $email');
 
       return Result.success(authTokens);
     } catch (e) {
-      // Log the error once at the repository level
-      _logger.error('Backend Login error',
-          error: e is DomainException ? e.message : e.toString());
-
-      // Map domain exceptions to Result.failure with appropriate types
-      if (e is AuthenticationException) {
-        // Domain exceptions can be directly returned
-        return Result.failure(e);
-      } else if (e is DomainException) {
-        // Handle other domain exceptions
-        return Result.failure(AuthenticationException(
-          e.message,
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else {
-        // Fallback for unexpected exceptions
-        return Result.failure(AuthenticationException(
-          'Unexpected error during login: ${e.toString()}',
-        ));
-      }
+      return _handleAuthError(e, 'Login');
     }
   }
 
@@ -85,60 +65,54 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
         phoneNumber: phoneNumber,
         profilePhotoUrl: profilePhotoUrl,
       );
+      _logger.debug('Backend successful Registration user with email: $email');
       return Result.success(authTokens);
     } catch (e) {
-      // Log the error once at the repository level
-      _logger.error('Registration error',
-          error: e is DomainException ? e.message : e.toString());
-
-      // Map domain exceptions to Result.failure with appropriate types
-      if (e is AuthenticationException) {
-        // Domain exceptions can be directly returned
-        return Result.failure(e);
-      } else if (e is DomainException) {
-        // Handle other domain exceptions
-        return Result.failure(AuthenticationException(
-          e.message,
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else {
-        // Fallback for unexpected exceptions
-        return Result.failure(AuthenticationException(
-          'Registration failed: ${e.toString()}',
-        ));
-      }
+      return _handleAuthError(e, 'Registration');
     }
   }
 
   @override
-  Future<Result<bool, AuthenticationException>> logout() async {
+  Future<Result<bool, AuthenticationException>> logout({
+    required String email,
+  }) async {
     try {
-      _logger.debug('Sending logout request');
+      _logger.debug('Sending logout request for user: $email');
       await _authService.logout();
+      _logger.debug('Backend successful Logout user with email: $email');
       return Result.success(true);
     } catch (e) {
-      // Log the error once at the repository level
-      _logger.error('Logout error',
-          error: e is DomainException ? e.message : e.toString());
+      return _handleAuthError(e, 'Logout');
+    }
+  }
 
-      // Map domain exceptions to Result.failure with appropriate types
-      if (e is AuthenticationException) {
-        // Domain exceptions can be directly returned
-        return Result.failure(e);
-      } else if (e is DomainException) {
-        // Handle other domain exceptions
-        return Result.failure(AuthenticationException(
-          e.message,
-          code: e.code,
-          requestId: e.requestId,
-        ));
-      } else {
-        // Fallback for unexpected exceptions
-        return Result.failure(AuthenticationException(
-          'Logout failed: ${e.toString()}',
-        ));
-      }
+  /// Handles errors from authentication operations and returns appropriate Result objects
+  /// @param e The exception that was thrown
+  /// @param operation The name of the operation (Login, Registration, Logout)
+  /// @returns A Result.failure with the appropriate exception
+  Result<T, AuthenticationException> _handleAuthError<T>(
+      dynamic e, String operation) {
+    // Log the error once at the repository level
+    _logger.error('$operation error',
+        error: e is DomainException ? e.message : e.toString());
+
+    // Handle domain-specific exceptions
+    if (e is AuthenticationException) {
+      // Authentication exceptions can be directly returned
+      return Result.failure(e);
+    } else if (e is ApiException) {
+      // API exceptions can be directly returned as they extend DomainException
+      // We need to wrap them in an AuthenticationException to match the return type
+      return Result.failure(AuthenticationException(
+        '$operation failed: ${e.message}',
+        code: e.code,
+        requestId: e.requestId,
+      ));
+    } else {
+      // Fallback for unexpected exceptions
+      return Result.failure(GenericDomainException(
+        '$operation failed: ${e.toString()}',
+      ));
     }
   }
 }

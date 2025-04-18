@@ -24,5 +24,7 @@ abstract class UserAuthRepository {
 
   /// Logs out the current user and invalidates their tokens
   /// Returns a Result indicating success or failure with an error message
-  Future<Result<bool, AuthenticationException>> logout();
+  Future<Result<bool, AuthenticationException>> logout({
+    required String email,
+  });
 }

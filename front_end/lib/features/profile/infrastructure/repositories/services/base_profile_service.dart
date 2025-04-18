@@ -1,5 +1,5 @@
 import 'package:semo/core/domain/services/api_client.dart';
-import 'package:semo/core/infrastructure/api/api_routes.dart';
+import 'package:semo/core/infrastructure/services/api/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/profile/infrastructure/models/profile_model.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
@@ -12,8 +12,8 @@ class BaseProfileService {
   BaseProfileService({
     required ApiClient apiClient,
     required AppLogger logger,
-  }) : _apiClient = apiClient,
-       _logger = logger;
+  })  : _apiClient = apiClient,
+        _logger = logger;
 
   /// Retrieves the current user's profile information
   Future<User> getCurrentUser() async {

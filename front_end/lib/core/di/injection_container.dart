@@ -1,12 +1,12 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/domain/services/token_service.dart';
-import 'package:semo/core/utils/logger.dart';
-import 'package:semo/core/infrastructure/api/api_client.dart';
-import 'package:semo/core/infrastructure/api/api_routes.dart';
+import 'package:semo/core/infrastructure/services/api/api_client.dart';
 import 'package:semo/core/infrastructure/services/token_service.dart';
+import 'package:semo/core/infrastructure/services/api/api_routes.dart';
 
 // Feature-specific dependency injection
 import 'package:semo/features/auth/di/auth_injection.dart';
@@ -32,7 +32,7 @@ Future<void> initializeDependencies() async {
       receiveTimeout: const Duration(seconds: 10),
       contentType: 'application/json',
     ));
-    
+
     // Customize error handling to avoid verbose default Dio error messages
     dio.interceptors.add(InterceptorsWrapper(
       onError: (DioException e, handler) {
@@ -41,7 +41,7 @@ Future<void> initializeDependencies() async {
         handler.next(e);
       },
     ));
-    
+
     return dio;
   });
   sl.registerLazySingleton(() => const FlutterSecureStorage());

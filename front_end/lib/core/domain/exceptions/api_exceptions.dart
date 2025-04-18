@@ -1,3 +1,17 @@
+/// Core error code constants for domain exceptions
+/// Only contains error codes that are truly cross-cutting concerns
+class ErrorCodes {
+  // Network error codes
+  static const String networkError = 'network_error';
+  static const String timeout = 'timeout';
+
+  // Server error codes
+  static const String serverError = 'server_error';
+
+  // // Generic error code
+  // static const String genericError = 'generic_error';
+}
+
 /// Base class for all domain-specific exceptions
 abstract class DomainException implements Exception {
   final String message;
@@ -59,6 +73,25 @@ class BadRequestException extends ApiException {
         );
 }
 
+/// Exception for conflicts (409)
+class ConflictException extends ApiException {
+  final Map<String, dynamic>? validationErrors;
+
+  ConflictException({
+    String message = 'Conflict',
+    this.validationErrors,
+    Map<String, dynamic>? details,
+    String? code,
+    String? requestId,
+  }) : super(
+          message,
+          statusCode: 409,
+          details: details,
+          code: code ?? 'conflict',
+          requestId: requestId,
+        );
+}
+
 /// Exception for server errors (500)
 class ApiServerException extends ApiException {
   ApiServerException({
@@ -70,7 +103,7 @@ class ApiServerException extends ApiException {
           message,
           statusCode: 500,
           details: details,
-          code: code ?? 'server_error',
+          code: code ?? ErrorCodes.serverError,
           requestId: requestId,
         );
 }
@@ -101,7 +134,7 @@ class ApiNetworkException extends ApiException {
   }) : super(
           message,
           details: details,
-          code: code ?? 'network_error',
+          code: code ?? ErrorCodes.networkError,
           requestId: requestId,
         );
 }
@@ -116,7 +149,7 @@ class ApiTimeoutException extends ApiNetworkException {
   }) : super(
           message: message,
           details: details,
-          code: code ?? 'timeout',
+          code: code ?? ErrorCodes.timeout,
           requestId: requestId,
         );
 }

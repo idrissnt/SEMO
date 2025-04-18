@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
-import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/domain/services/token_service.dart';
-import 'package:semo/core/infrastructure/api/api_routes.dart';
+import 'package:semo/core/domain/services/api_client.dart';
+import 'package:semo/core/infrastructure/services/api/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_error_codes.dart';
 import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
 import 'package:semo/features/auth/infrastructure/models/auth_model.dart';
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
@@ -64,8 +65,6 @@ class AuthService {
     String? profilePhotoUrl,
   }) async {
     try {
-      _logger.debug('Sending registration request for user: $email');
-
       // Prepare request data
       final requestData = {
         'email': email,
@@ -97,12 +96,9 @@ class AuthService {
 
       // Return domain entity
       return authTokens.toEntity();
-    } catch (e, stackTrace) {
-      // The ApiClient now throws domain-specific exceptions
-      _logger.error('Registration error', error: e, stackTrace: stackTrace);
-
-      // Re-throw the domain exception - it will be handled by the repository layer
-      rethrow;
+    } catch (e) {
+      // Map API exceptions to domain exceptions
+      return _mapApiExceptionToDomainException(e);
     }
   }
 
@@ -114,16 +110,12 @@ class AuthService {
       final refreshToken = await _tokenService.getRefreshToken();
 
       if (accessToken != null && refreshToken != null) {
-        // Send the refresh token in the request body as required by the backend
-        // The user ID will be extracted from the access token on the backend
+        // Send the refresh token in the request body for blacklisting a
+        // specific token
         await _apiClient.post<Map<String, dynamic>>(
           AuthApiRoutes.logout,
-          data: {
-            'refresh_token': refreshToken,
-          },
-          options: Options(headers: {
-            'Authorization': 'Bearer $accessToken',
-          }),
+          data: {'refresh_token': refreshToken},
+          options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
         );
         _logger.debug('Logout request sent successfully');
       } else {
@@ -137,42 +129,72 @@ class AuthService {
         _tokenService.deleteRefreshToken(),
       ]);
       _logger.debug('Successfully cleared all tokens');
-    } catch (e, stackTrace) {
-      _logger.error('Error during logout', error: e, stackTrace: stackTrace);
-      throw Exception('Failed to logout: ${e.toString()}');
+    } catch (e) {
+      _mapApiExceptionToDomainException(e);
     }
   }
 
   /// Maps API exceptions to domain-specific auth exceptions
   Never _mapApiExceptionToDomainException(dynamic e) {
+    _logger.error('API Exception: ${e.message}, Code: ${e.code}');
+
+    // First check for domain exceptions that might have been thrown already
+    if (e is AuthenticationException) {
+      // If it's already a domain exception, just rethrow it
+      throw e;
+    }
+
+    // We override backend error codes with our frontend constants for consistency
+    // The original code is still logged above for debugging purposes
+
     if (e is UnauthorizedException) {
       throw InvalidCredentialsException(
         message: e.message,
-        code: e.code,
+        // Override with our frontend constant for consistency
+        code: AuthErrorCodes.invalidCredentials,
+        requestId: e.requestId,
+      );
+    } else if (e is ConflictException) {
+      throw UserAlreadyExistsException(
+        message: e.message,
+        code: AuthErrorCodes.userAlreadyExists,
         requestId: e.requestId,
       );
     } else if (e is BadRequestException) {
-      throw ValidationException(
-        message: e.message,
-        validationErrors: e.validationErrors,
-        code: e.code,
+      // Check if this is related to missing refresh token
+      if (e.message.toLowerCase().contains('refresh token')) {
+        throw MissingRefreshTokenException(
+          message: e.message,
+          code: AuthErrorCodes.missingToken,
+          requestId: e.requestId,
+        );
+      }
+    } else if (e is ApiNetworkException || e is ApiTimeoutException) {
+      // Handle network-specific errors
+      // Determine the specific network error type
+      final String networkCode = e is ApiTimeoutException
+          ? ErrorCodes.timeout
+          : ErrorCodes.networkError;
+
+      throw GenericDomainException(
+        e.message,
+        code: networkCode, // Use our consistent error code
         requestId: e.requestId,
       );
     } else if (e is ApiServerException) {
-      throw ServerException(
-        message: e.message,
-        code: e.code,
+      // Handle server-specific errors
+      throw GenericDomainException(
+        e.message,
+        code: ErrorCodes.serverError, // Use our consistent error code
         requestId: e.requestId,
       );
-    } else if (e is ApiNetworkException || e is ApiTimeoutException) {
-      throw NetworkException(
-        message: e is ApiException ? e.message : 'Network error',
-        code: e is ApiException ? e.code : 'network_error',
-        requestId: e is ApiException ? e.requestId : null,
-      );
-    } else {
-      // Generic fallback for any other types of errors
-      throw AuthenticationException('Authentication error: ${e.toString()}');
     }
+
+    // For all other cases, throw a generic domain exception
+    throw GenericDomainException(
+      e.message,
+      code: AuthErrorCodes.genericError, // Use our consistent error code
+      requestId: e.requestId,
+    );
   }
 }

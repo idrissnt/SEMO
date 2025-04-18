@@ -1,5 +1,5 @@
 import 'package:semo/core/domain/services/api_client.dart';
-import 'package:semo/core/infrastructure/api/api_routes.dart';
+import 'package:semo/core/infrastructure/services/api/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/profile/infrastructure/models/profile_model.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
@@ -12,8 +12,8 @@ class AddressService {
   AddressService({
     required ApiClient apiClient,
     required AppLogger logger,
-  }) : _apiClient = apiClient,
-       _logger = logger;
+  })  : _apiClient = apiClient,
+        _logger = logger;
 
   /// Retrieves all addresses for the authenticated user
   Future<List<UserAddress>> getUserAddresses() async {

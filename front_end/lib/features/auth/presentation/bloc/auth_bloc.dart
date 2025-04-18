@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_error_extensions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:semo/features/auth/domain/usecases/auth_check_usecase.dart';
-import 'auth_event.dart';
-import 'auth_state.dart';
+import 'package:semo/features/auth/presentation/bloc/auth_event.dart';
+import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserAuthRepository _authRepository;
@@ -64,13 +65,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // Map domain exceptions to specific UI states
         if (error is InvalidCredentialsException) {
           emit(InvalidCredentialsFailure(error.message));
-        } else if (error is ValidationException) {
-          emit(ValidationFailure(error.message,
-              validationErrors: error.validationErrors));
-        } else if (error is NetworkException) {
-          emit(NetworkFailure('Network error: ${error.message}'));
-        } else if (error is ServerException) {
-          emit(ServerFailure('Server error: ${error.message}'));
+        } else if (error is GenericDomainException) {
+          // Use extension methods for cleaner error type checking
+          if (error.isNetworkError) {
+            emit(NetworkFailure(error.getNetworkErrorMessage('login')));
+          } else if (error.isServerError) {
+            emit(ServerFailure(error.getServerErrorMessage('login')));
+          } else {
+            // Generic fallback
+            emit(AuthFailure(error.message));
+          }
         } else {
           // Generic fallback
           emit(AuthFailure(error.message));
@@ -119,16 +123,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _logger.error('Registration error', error: error);
 
         // Map domain exceptions to specific UI states
-        if (error is ValidationException) {
-          emit(ValidationFailure(
-              'Registration validation error: ${error.message}',
-              validationErrors: error.validationErrors));
-        } else if (error is NetworkException) {
-          emit(NetworkFailure(
-              'Network error during registration: ${error.message}'));
-        } else if (error is ServerException) {
-          emit(ServerFailure(
-              'Server error during registration: ${error.message}'));
+        if (error is UserAlreadyExistsException) {
+          emit(UserAlreadyExistsFailure(error.message));
+        } else if (error is GenericDomainException) {
+          // Use extension methods for cleaner error type checking
+          if (error.isNetworkError) {
+            emit(NetworkFailure(error.getNetworkErrorMessage('registration')));
+          } else if (error.isServerError) {
+            emit(ServerFailure(error.getServerErrorMessage('registration')));
+          } else {
+            // Generic fallback
+            emit(AuthFailure(error.message));
+          }
         } else {
           // Generic fallback
           emit(AuthFailure(error.message));
@@ -141,20 +147,41 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
-    _logger.info('Starting logout process');
+    _logger.info('BLOC Starting logout process for user: ${event.email}');
     emit(AuthLoading());
 
-    final result = await _authRepository.logout();
+    final result = await _authRepository.logout(email: event.email);
 
     // Even if the server request fails, we want to log out locally
     result.fold(
       (_) {
-        _logger.info('Logout successful');
+        _logger.info('BLOC Logout successful for user: ${event.email}');
         emit(AuthUnauthenticated());
       },
       (error) {
-        // Emit failure state with user-friendly message
-        emit(AuthFailure(error.message));
+        // Map domain exceptions to specific UI states
+        if (error is MissingRefreshTokenException) {
+          // We can handle this gracefully - just log out locally
+          _logger
+              .warning('Missing refresh token during logout: ${error.message}');
+          emit(AuthUnauthenticated());
+          return;
+        } else if (error is GenericDomainException) {
+          // Use extension methods for cleaner error type checking
+          if (error.isNetworkError) {
+            emit(NetworkFailure(error.getNetworkErrorMessage('logout')));
+          } else if (error.isServerError) {
+            emit(ServerFailure(error.getServerErrorMessage('logout')));
+          } else {
+            // Generic fallback
+            emit(AuthFailure(error.message));
+          }
+        } else {
+          // Generic fallback
+          emit(AuthFailure(error.message));
+        }
+
+        // Even if there was an error, we still want to log out locally
         emit(AuthUnauthenticated());
       },
     );
@@ -164,7 +191,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthCheckRequested event,
     Emitter<AuthState> emit,
   ) async {
-    _logger.info('AuthCheckRequested: Starting authentication check');
+    _logger.info('BLOC AuthCheckRequested: Starting authentication check');
     emit(AuthLoading());
     try {
       // First, check if tokens exist
@@ -177,18 +204,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       // If no refresh token, user must log in
       if (!hasRefreshToken) {
-        _logger.info('No refresh token found. Emitting Unauthenticated state.');
+        _logger.info(
+            'BLOC No refresh token found. Emitting Unauthenticated state.');
         emit(AuthUnauthenticated());
         return;
       }
 
       // Try to refresh the token
-      _logger.debug('About to attempt token refresh');
+      _logger.debug('BLOC About to attempt token refresh');
       final tokenRefreshed = await _userProfileUseCase.refreshToken();
-      _logger.info('Token Refresh Attempt Result: $tokenRefreshed');
+      _logger.info('BLOC Token Refresh Attempt Result: $tokenRefreshed');
 
       if (!tokenRefreshed) {
-        _logger.info('Token refresh failed. Emitting token error state.');
+        _logger.info('BLOC Token refresh failed. Emitting token error state.');
         emit(const AuthFailure('Session expired. Please log in again.',
             canRetry: false));
         emit(AuthUnauthenticated());
@@ -199,11 +227,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final userResult = await _userProfileUseCase.getCurrentUser();
       userResult.fold(
         (user) {
-          _logger.info('User authenticated: ${user.email}');
+          _logger.info('BLOC User authenticated: ${user.email}');
           emit(AuthAuthenticated(user));
         },
         (error) {
-          _logger.error('Failed to get user data', error: error);
+          _logger.error('BLOC Failed to get user data', error: error);
           // Use profile fetch error with retry option
           emit(const ProfileFetchFailure(
               'Could not retrieve your profile. Tap to retry.'));
@@ -212,7 +240,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     } catch (e) {
       // Log detailed error information
-      _logger.error('Authentication check failed', error: e);
+      _logger.error('BLOC Authentication check failed', error: e);
       // Use network error with retry option
       emit(const NetworkFailure(
           'Connection error during authentication check. Tap to retry.'));

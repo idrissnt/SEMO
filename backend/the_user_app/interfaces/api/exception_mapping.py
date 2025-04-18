@@ -9,10 +9,6 @@ from rest_framework import status
 from the_user_app.domain.user_exceptions import (
     UserAlreadyExistsException,
     InvalidCredentialsException,
-    TokenBlacklistedException,
-    TokenValidationException,
-    UserNotFoundException,
-    AuthenticationException,
     PasswordChangeException,
     MissingRefreshTokenException,
 )
@@ -26,14 +22,6 @@ USER_EXCEPTION_MAPPING = {
         (status.HTTP_409_CONFLICT, 'user_already_exists', 'warning'),
     get_fully_qualified_name(InvalidCredentialsException): 
         (status.HTTP_401_UNAUTHORIZED, 'invalid_credentials', 'warning'),
-    get_fully_qualified_name(TokenBlacklistedException): 
-        (status.HTTP_400_BAD_REQUEST, 'token_blacklisted', 'warning'),
-    get_fully_qualified_name(TokenValidationException): 
-        (status.HTTP_401_UNAUTHORIZED, 'token_validation_error', 'warning'),
-    get_fully_qualified_name(UserNotFoundException): 
-        (status.HTTP_404_NOT_FOUND, 'user_not_found', 'warning'),
-    get_fully_qualified_name(AuthenticationException): 
-        (status.HTTP_401_UNAUTHORIZED, 'authentication_error', 'warning'),
     get_fully_qualified_name(PasswordChangeException): 
         (status.HTTP_400_BAD_REQUEST, 'password_change_error', 'warning'),
     get_fully_qualified_name(MissingRefreshTokenException): 
