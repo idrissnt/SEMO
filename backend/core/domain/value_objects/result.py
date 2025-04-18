@@ -4,7 +4,7 @@ Result pattern implementation for domain operations.
 This module provides a Result class that can be used to represent the outcome of domain operations.
 It allows for explicit handling of success and failure cases, making error handling more robust.
 """
-from typing import TypeVar, Generic, Optional, Any, Union
+from typing import TypeVar, Generic, Optional
 
 T = TypeVar('T')  # Success type
 E = TypeVar('E')  # Error type

@@ -4,8 +4,7 @@ from the_user_app.infrastructure.django_repositories.django_address_repository i
 from the_user_app.infrastructure.django_repositories.django_auth_repository import DjangoAuthRepository
 from the_user_app.infrastructure.django_repositories.django_task_performer_profile_repository import DjangoTaskPerformerProfileRepository
 
-from the_user_app.domain.services.logging_service_interface import LoggingServiceInterface
-from the_user_app.infrastructure.services.django_logging_service import DjangoLoggingService
+from core.infrastructure.factories.logging_factory import CoreLoggingFactory
 
 from the_user_app.application.services.auth_service import AuthApplicationService
 from the_user_app.application.services.user_service import UserApplicationService
@@ -46,20 +45,6 @@ class UserFactory:
         return DjangoAuthRepository()
     
     @staticmethod
-    def create_logging_service(logger_name: str = "semo") -> LoggingServiceInterface:
-        """Create or get the singleton LoggingService instance
-        
-        Args:
-            logger_name: Name of the logger
-            
-        Returns:
-            LoggingServiceInterface implementation
-        """
-        if UserFactory._logging_service is None:
-            UserFactory._logging_service = DjangoLoggingService(logger_name)
-        return UserFactory._logging_service
-    
-    @staticmethod
     def create_auth_service() -> AuthApplicationService:
         """Create an AuthApplicationService
         
@@ -68,8 +53,8 @@ class UserFactory:
         """
         user_repository = UserFactory.create_user_repository()
         auth_repository = UserFactory.create_auth_repository()
-        logging_service = UserFactory.create_logging_service("auth")
-        return AuthApplicationService(user_repository, auth_repository, logging_service)
+        logger = CoreLoggingFactory.create_logger("auth")
+        return AuthApplicationService(user_repository, auth_repository, logger)
     
     @staticmethod
     def create_user_service() -> UserApplicationService:

@@ -4,8 +4,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from drf_spectacular.utils import extend_schema, OpenApiResponse
-import logging
+from drf_spectacular.utils import OpenApiExample
 import uuid
+
+from core.infrastructure.factories.logging_factory import CoreLoggingFactory
 
 from the_user_app.interfaces.api.serializers import (
     UserSerializer,
@@ -14,7 +16,8 @@ from the_user_app.interfaces.api.serializers import (
 )
 from the_user_app.infrastructure.factory import UserFactory
 
-logger = logging.getLogger(__name__)
+# Create a logger using our custom logging service
+logger = CoreLoggingFactory.create_logger("auth_views")
 
 @extend_schema(tags=['Authentication'])
 class AuthViewSet(viewsets.ViewSet):
@@ -54,16 +57,6 @@ class AuthViewSet(viewsets.ViewSet):
                     'request_id': '123e4567-e89b-12d3-a456-426614174000'
                 },
                 status_codes=['409']
-            ),
-            OpenApiExample(
-                'Error: Validation error',
-                value={
-                    'error': 'Invalid registration data',
-                    'details': {'email': ['Enter a valid email address.']},
-                    'code': 'validation_error',
-                    'request_id': '123e4567-e89b-12d3-a456-426614174000'
-                },
-                status_codes=['400']
             )
         ]
     )
@@ -81,20 +74,31 @@ class AuthViewSet(viewsets.ViewSet):
         # Get auth service from factory
         auth_service = UserFactory.create_auth_service()
         
-        # Register user - domain exceptions will bubble up to global handler
+        # Register user and get Result object
         result = auth_service.register_user(serializer.validated_data)
         
-        # On success, return the tokens
-        serialized_data = AuthTokensSerializer(result.value).data
-        serialized_data['request_id'] = request_id
-        
-        # Log success
-        logger.info(
-            'User registered successfully',
-            {'email': serializer.validated_data.get('email')}
-        )
-        
-        return Response(serialized_data, status=status.HTTP_201_CREATED)
+        # Check if registration was successful
+        if result.is_success():
+            # On success, return the tokens
+            serialized_data = AuthTokensSerializer(result.value).data
+            serialized_data['request_id'] = request_id
+            
+            # Log success
+            logger.info(
+                'User registered successfully',
+                {'email': serializer.validated_data.get('email'), 'request_id': request_id}
+            )
+            
+            return Response(serialized_data, status=status.HTTP_201_CREATED)
+        else:
+            # If registration failed, raise the exception from the Result
+            # This will be caught by the global exception handler
+            if hasattr(result.error, '__call__'):
+                # If it's a callable (like a function), call it
+                raise result.error
+            else:
+                # Otherwise, raise it directly
+                raise result.error
 
 
     @extend_schema(
@@ -114,16 +118,6 @@ class AuthViewSet(viewsets.ViewSet):
                     'request_id': '123e4567-e89b-12d3-a456-426614174000'
                 },
                 status_codes=['401']
-            ),
-            OpenApiExample(
-                'Error: Validation error',
-                value={
-                    'error': 'Invalid input data',
-                    'details': {'email': ['This field is required.']},
-                    'code': 'validation_error',
-                    'request_id': '123e4567-e89b-12d3-a456-426614174000'
-                },
-                status_codes=['400']
             )
         ]
     )
@@ -144,17 +138,28 @@ class AuthViewSet(viewsets.ViewSet):
         # Get auth service from factory
         auth_service = UserFactory.create_auth_service()
         
-        # Attempt login - domain exceptions will bubble up to global handler
+        # Attempt login - get Result object
         result = auth_service.login_user(email, password)
         
-        # On success, return the tokens
-        serialized_data = AuthTokensSerializer(result.value).data
-        serialized_data['request_id'] = request_id
-        
-        # Log success
-        logger.info(f"Login successful for user: {email}")
-        
-        return Response(serialized_data, status=status.HTTP_200_OK)
+        # Check if login was successful
+        if result.is_success():
+            # On success, return the tokens
+            serialized_data = AuthTokensSerializer(result.value).data
+            serialized_data['request_id'] = request_id
+            
+            # Log success
+            logger.info("Login successful", {"user_email": email, "request_id": request_id})
+            
+            return Response(serialized_data, status=status.HTTP_200_OK)
+        else:
+            # If login failed, raise the exception from the Result
+            # This will be caught by the global exception handler
+            if hasattr(result.error, '__call__'):
+                # If it's a callable (like a function), call it
+                raise result.error
+            else:
+                # Otherwise, raise it directly
+                raise result.error
 
 
     @extend_schema(
@@ -192,15 +197,6 @@ class AuthViewSet(viewsets.ViewSet):
                     'request_id': '123e4567-e89b-12d3-a456-426614174000'
                 },
                 status_codes=['400']
-            ),
-            OpenApiExample(
-                'Error: Token blacklisted',
-                value={
-                    'error': 'Token is already blacklisted',
-                    'code': 'token_blacklisted',
-                    'request_id': '123e4567-e89b-12d3-a456-426614174000'
-                },
-                status_codes=['400']
             )
         ]
     )
@@ -217,26 +213,29 @@ class AuthViewSet(viewsets.ViewSet):
         # Get user ID from authenticated user
         user_id = request.user.id  # Will raise 401 if not authenticated
         
-        # Validate refresh token
-        if not refresh_token:
-            return Response({
-                'error': 'Refresh token is required',
-                'code': 'missing_token',
-                'request_id': request_id
-            }, status=status.HTTP_400_BAD_REQUEST)
-        
         # Get auth service from factory
         auth_service = UserFactory.create_auth_service()
         
-        # Logout user - domain exceptions will bubble up to global handler
+        # Logout user and get Result object
         result = auth_service.logout_user(user_id, refresh_token, device_info, ip_address)
         
-        # Log success
-        logger.info(f"User {user_id} logged out successfully")
-        
-        # Return success response
-        return Response({
-            'message': 'Logout successful',
-            'request_id': request_id
-        })
+        # Check if logout was successful
+        if result.is_success():
+            # Log success
+            logger.info("User logged out successfully", {"user_id": str(user_id), "request_id": request_id})
+            
+            # Return success response
+            return Response({
+                'message': 'Logout successful',
+                'request_id': request_id
+            })
+        else:
+            # If logout failed, raise the exception from the Result
+            # This will be caught by the global exception handler
+            if hasattr(result.error, '__call__'):
+                # If it's a callable (like a function), call it
+                raise result.error
+            else:
+                # Otherwise, raise it directly
+                raise result.error
 

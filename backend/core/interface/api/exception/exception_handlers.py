@@ -5,15 +5,16 @@ This module contains custom exception handlers that convert domain exceptions an
 to standardized API responses following clean architecture principles.
 """
 import uuid
-import logging
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError, AuthenticationFailed, NotAuthenticated
 
 from .exception_config import get_exception_mapping
+from core.infrastructure.factories.logging_factory import CoreLoggingFactory
 
-logger = logging.getLogger(__name__)
+# Create a logger using our custom logging service
+logger = CoreLoggingFactory.create_logger("exception_handlers")
 
 def get_request_meta(request):
     """Extract useful metadata from request for logging"""
@@ -52,10 +53,7 @@ def domain_exception_handler(exc, context):
     # Handle DRF's built-in exceptions
     if isinstance(exc, ValidationError):
         # Format validation errors
-        logger.warning(
-            f"Validation error: {str(exc.detail)}",
-            {'context': request_meta}
-        )
+        logger.warning(f"Validation error: {str(exc.detail)}", request_meta)
         
         return Response({
             'error': 'Invalid input data',
@@ -66,10 +64,7 @@ def domain_exception_handler(exc, context):
     
     elif isinstance(exc, (AuthenticationFailed, NotAuthenticated)):
         # Format authentication errors
-        logger.warning(
-            f"Authentication error: {str(exc)}",
-            {'context': request_meta}
-        )
+        logger.warning(f"Authentication error: {str(exc)}", request_meta)
         
         return Response({
             'error': str(exc),
@@ -112,15 +107,15 @@ def domain_exception_handler(exc, context):
     # Log the exception with the appropriate level
     log_message = f"{exc.__class__.__name__}: {str(exc)}"
     if log_level == 'debug':
-        logger.debug(log_message, {'context': request_meta})
+        logger.debug(log_message, request_meta)
     elif log_level == 'info':
-        logger.info(log_message, {'context': request_meta})
+        logger.info(log_message, request_meta)
     elif log_level == 'warning':
-        logger.warning(log_message, {'context': request_meta})
+        logger.warning(log_message, request_meta)
     elif log_level == 'error':
-        logger.error(log_message, {'context': request_meta})
+        logger.error(log_message, request_meta, exc)
     else:  # Default to exception for unknown levels or critical errors
-        logger.exception(log_message, {'context': request_meta})
+        logger.critical(log_message, request_meta, exc)
     
     # Return the standardized error response
     return Response(data, status=status_code)

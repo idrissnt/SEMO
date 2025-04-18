@@ -31,16 +31,21 @@ class LoggingServiceInterface(ABC):
         pass
     
     def debug(self, message: str, context: Optional[Dict[str, Any]] = None) -> None:
+        """Log a debug message"""
         self.log(LogLevel.DEBUG, message, context)
     
     def info(self, message: str, context: Optional[Dict[str, Any]] = None) -> None:
+        """Log an info message"""
         self.log(LogLevel.INFO, message, context)
     
     def warning(self, message: str, context: Optional[Dict[str, Any]] = None) -> None:
+        """Log a warning message"""
         self.log(LogLevel.WARNING, message, context)
     
     def error(self, message: str, context: Optional[Dict[str, Any]] = None, exception: Optional[Exception] = None) -> None:
+        """Log an error message with optional exception"""
         self.log(LogLevel.ERROR, message, context, exception)
     
     def critical(self, message: str, context: Optional[Dict[str, Any]] = None, exception: Optional[Exception] = None) -> None:
+        """Log a critical message with optional exception"""
         self.log(LogLevel.CRITICAL, message, context, exception)

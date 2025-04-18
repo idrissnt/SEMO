@@ -1,17 +1,16 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from datetime import datetime
 from django.utils.timezone import now
 import uuid
 
-from the_user_app.domain.services.logging_service_interface import LoggingServiceInterface
+from core.domain.services.logging_service_interface import LoggingServiceInterface
+from core.domain.value_objects.result import Result
+
 from the_user_app.domain.value_objects.value_objects import AuthTokens
-from the_user_app.domain.value_objects.result import Result
-from the_user_app.domain.exceptions import (
+from the_user_app.domain.user_exceptions import (
     UserAlreadyExistsException,
     InvalidCredentialsException,
     TokenBlacklistedException,
-    UserNotFoundException,
-    AuthenticationException
 )
 
 from the_user_app.domain.models.entities import User
@@ -20,17 +19,14 @@ from the_user_app.domain.services.auth_service import AuthDomainService
 from the_user_app.domain.models.events.user_events import UserRegisteredEvent
 from core.domain_events.event_bus import event_bus
 
-import logging
-logger = logging.getLogger(__name__)
-
 class AuthApplicationService:
     """Application service for authentication-related use cases"""
     
-    def __init__(self, user_repository: UserRepository, auth_repository: AuthRepository, logging_service: LoggingServiceInterface):
+    def __init__(self, user_repository: UserRepository, auth_repository: AuthRepository, logger: LoggingServiceInterface):
         self.user_repository = user_repository
         self.auth_repository = auth_repository
         self.domain_service = AuthDomainService()
-        self.logger = logging_service
+        self.logger = logger
     
     def login_user(self, email: str, password: str, last_login: datetime = now()) -> Result[AuthTokens, str]:
         """Login a user with email and password
@@ -51,23 +47,21 @@ class AuthApplicationService:
             user = self.user_repository.get_by_email(email)
             if not user:
                 self.logger.warning("User not found", {"email": email})
-                raise InvalidCredentialsException()
+                return Result.failure(InvalidCredentialsException())
             
             # Check password
             if not self.user_repository.check_password(user.id, password, last_login):
                 self.logger.warning("Invalid password", {"email": email, "user_id": str(user.id)})
-                raise InvalidCredentialsException()
+                return Result.failure(InvalidCredentialsException())
             
             # Create tokens
             auth_tokens = self.auth_repository.create_tokens(user.id)
             self.logger.info("Login successful", {"email": email, "user_id": str(user.id)})
             return Result.success(auth_tokens)
             
-        except InvalidCredentialsException as e:
-            return Result.failure(e)
         except Exception as e:
-            self.logger.error("Error during login", {"email": email}, exc_info=True)
-            return Result.failure(f"Error during login: {str(e)}")
+            self.logger.error("Error during login", {"email": email, "exception": str(e)})
+            return Result.failure(e)
     
     def register_user(self, user_data: Dict[str, Any]) -> Result[AuthTokens, str]:
         """Register a new user
@@ -82,7 +76,8 @@ class AuthApplicationService:
             # Check if user with this email already exists
             existing_user = self.user_repository.get_by_email(user_data['email'])
             if existing_user:
-                raise UserAlreadyExistsException(user_data['email'])
+                self.logger.warning("User already exists", {"email": user_data['email']})
+                return Result.failure(UserAlreadyExistsException(user_data['email']))
             
             # Create user domain entity
             user = User(
@@ -103,17 +98,15 @@ class AuthApplicationService:
             event_bus.publish(UserRegisteredEvent.create(
                 user_id=created_user.id))
             
+            self.logger.info("User registered successfully", {"email": user_data['email'], "user_id": str(created_user.id)})
             return Result.success(auth_tokens)
             
-        except UserAlreadyExistsException as e:
-            # Re-raise domain exceptions to be handled by the controller
-            raise
         except Exception as e:
-            self.logger.error(f"Error creating user: {str(e)}", {
+            self.logger.error("Error creating user", {
                 'email': user_data.get('email'),
-                'error': str(e)
-            }, exc_info=True)
-            return Result.failure(f"Error creating user: {str(e)}")
+                'exception': str(e)
+            })
+            return Result.failure(e)
     
     def logout_user(self, user_id: uuid.UUID, refresh_token: str, device_info: str = "", ip_address: str = "") -> Result[bool, str]:
         """Logout a user and blacklist their refresh token
@@ -128,12 +121,14 @@ class AuthApplicationService:
             Result containing True on success or error message on failure
         """
         if not refresh_token:
-            return Result.failure("Refresh token is required")
+            self.logger.warning("Missing refresh token", {"user_id": str(user_id)})
+            return Result.failure(TokenBlacklistedException("Refresh token is required"))
         
         try:
             # Check if token is already blacklisted
             if self.auth_repository.is_token_blacklisted(refresh_token):
-                raise TokenBlacklistedException()
+                self.logger.warning("Token already blacklisted", {"user_id": str(user_id)})
+                return Result.failure(TokenBlacklistedException())
             
             # Create logout event
             logout_event = self.domain_service.prepare_logout_event(
@@ -158,12 +153,9 @@ class AuthApplicationService:
             
             return Result.success(True)
             
-        except TokenBlacklistedException as e:
-            # Re-raise domain exceptions to be handled by the controller
-            raise
         except Exception as e:
-            self.logger.error(f"Error during logout: {str(e)}", {
+            self.logger.error("Error during logout", {
                 'user_id': str(user_id),
-                'error': str(e)
-            }, exc_info=True)
-            return Result.failure(f"Error during logout: {str(e)}")
+                'exception': str(e)
+            })
+            return Result.failure(e)

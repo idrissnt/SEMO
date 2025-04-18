@@ -156,7 +156,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'core.interface.api.exception_handlers.domain_exception_handler',
+    'EXCEPTION_HANDLER': 'core.interface.api.exception.exception_handlers.domain_exception_handler',
 }
 
 # API Documentation settings
@@ -176,6 +176,14 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'json': {
+            'format': '%(message)s %(context)s',
+            'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+        },
     },
     'handlers': {
         'file': {
@@ -184,10 +192,15 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'debug.log'),
             'formatter': 'verbose',
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
     },
     'loggers': {
         '': {
-            'handlers': ['file'],
+            'handlers': ['file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },

@@ -3,7 +3,7 @@ import logging
 import traceback
 from typing import Any, Dict, Optional
 
-from the_user_app.domain.services.logging_service_interface import LoggingServiceInterface, LogLevel
+from core.domain.services.logging_service_interface import LoggingServiceInterface, LogLevel
 
 class DjangoLoggingService(LoggingServiceInterface):
     """Django implementation of the logging service interface"""
@@ -24,25 +24,22 @@ class DjangoLoggingService(LoggingServiceInterface):
             context: Additional context data (user_id, request_id, etc.)
             exception: Optional exception to log
         """
-        # Format context as JSON if provided
-        context_str = ""
+        # Process context for logging
+        log_context = {}
         if context:
             try:
                 # Filter out None values and convert to string for JSON serialization
-                filtered_context = {k: str(v) if v is not None else "" for k, v in context.items() if v is not None}
-                context_str = f" | Context: {json.dumps(filtered_context)}"
+                log_context = {k: str(v) if v is not None else "" for k, v in context.items() if v is not None}
             except Exception:
-                context_str = f" | Context: {str(context)}"
+                log_context = {"raw_context": str(context)}
         
-        # Format exception if provided
-        exception_str = ""
+        # Add exception info to context if provided
         if exception:
-            exception_str = f" | Exception: {str(exception)}"
+            log_context["exception"] = str(exception)
             if level in [LogLevel.ERROR, LogLevel.CRITICAL]:
-                exception_str += f"\n{traceback.format_exc()}"
+                log_context["traceback"] = traceback.format_exc()
         
-        # Combine message components
-        full_message = f"{message}{context_str}{exception_str}"
+        # Use the message as is - context will be formatted by the JSON logger
         
         # Map domain log level to Python logging level
         log_method = {
@@ -53,5 +50,5 @@ class DjangoLoggingService(LoggingServiceInterface):
             LogLevel.CRITICAL: self.logger.critical
         }.get(level, self.logger.info)
         
-        # Log the message
-        log_method(full_message)
+        # Log the message with context
+        log_method(message, extra={"context": log_context})
