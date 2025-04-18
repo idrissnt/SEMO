@@ -14,13 +14,13 @@ class _EarnScreenState extends State<EarnScreen> {
   @override
   void initState() {
     super.initState();
-    _logger.debug('EarnScreen: Initializing');
+    _logger.debug('EarnScreen: Initializing', {'component': 'EarnScreen'});
   }
 
   @override
   Widget build(BuildContext context) {
     try {
-      _logger.debug('Building EarnScreen');
+      _logger.debug('Building EarnScreen', {'component': 'EarnScreen'});
       return Scaffold(
         appBar: AppBar(
           title: const Text('Earn Money'),
@@ -57,7 +57,7 @@ class _EarnScreenState extends State<EarnScreen> {
 
   @override
   void dispose() {
-    _logger.debug('EarnScreen disposed');
+    _logger.debug('EarnScreen disposed', {'component': 'EarnScreen'});
     super.dispose();
   }
 }

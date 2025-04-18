@@ -30,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-    _logger.debug('LoginScreen: Initializing animation controllers');
+    _logger.debug('LoginScreen: Initializing animation controllers',
+        {'component': 'LoginScreen'});
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -46,7 +47,8 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
-    _logger.debug('LoginScreen: Disposing controllers');
+    _logger.debug(
+        'LoginScreen: Disposing controllers', {'component': 'LoginScreen'});
     _animationController.dispose();
     super.dispose();
   }
@@ -57,7 +59,10 @@ class _LoginScreenState extends State<LoginScreen>
       listener: (context, state) {
         _logger.debug(
           'Login State',
-          error: {'state': state},
+          {
+            'component': 'LoginScreen',
+            'state': state.toString()
+          },
         );
         if (state is AuthAuthenticated) {
           _logger.info('Navigating to main screen');

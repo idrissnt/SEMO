@@ -9,12 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_routes.dart';
 import 'main_shell_route.dart';
+import 'navigation_logger.dart';
+import 'route_constants.dart';
 // import 'store_shell_route.dart';
 export 'route_extensions.dart';
 
 class AppRouter {
-  static final GoRouter router = GoRouter(
-    initialLocation: '/onboarding',
+  /// The main router for the app with navigation logging enabled
+  static final GoRouter router = createRouterWithLogging(
+    initialLocation: AppRoutes.onboarding,
     redirect: (context, state) async {
       // Get AuthBloc state first before any async operations
       final authState = context.read<AuthBloc>().state;
@@ -28,27 +31,27 @@ class AppRouter {
       final hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
 
       // Routing logic
-      if (!hasSeenOnboarding && state.uri.path != '/onboarding') {
-        return '/onboarding';
+      if (!hasSeenOnboarding && state.uri.path != AppRoutes.onboarding) {
+        return AppRoutes.onboarding;
       }
 
-      if (hasSeenOnboarding && state.uri.path == '/onboarding') {
-        return '/welcome';
+      if (hasSeenOnboarding && state.uri.path == AppRoutes.onboarding) {
+        return AppRoutes.welcome;
       }
 
       // Authentication routes
-      final isAuthRoute = state.uri.path == '/login' ||
-          state.uri.path == '/register' ||
-          state.uri.path == '/welcome';
+      final isAuthRoute = state.uri.path == AppRoutes.login ||
+          state.uri.path == AppRoutes.register ||
+          state.uri.path == AppRoutes.welcome;
 
       // If authenticated, prevent access to auth routes
       if (isAuthenticated && isAuthRoute) {
-        return '/homeScreen';
+        return AppRoutes.home;
       }
 
       // If not authenticated, redirect to login
-      if (!isAuthenticated && !isAuthRoute && state.uri.path != '/onboarding') {
-        return '/login';
+      if (!isAuthenticated && !isAuthRoute && state.uri.path != AppRoutes.onboarding) {
+        return AppRoutes.login;
       }
 
       return null; // no redirect needed
@@ -63,5 +66,5 @@ class AppRouter {
         child: Text('Route not found: ${state.error}'),
       ),
     ),
-  );
+  ); // Router with navigation logging enabled
 }

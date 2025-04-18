@@ -37,13 +37,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
-    _logger.debug('OnboardingScreen: Initializing');
+    _logger.debug('OnboardingScreen: Initializing', {'component': 'OnboardingScreen'});
     _logger.info('Total onboarding pages: ${_pages.length}');
   }
 
   @override
   void dispose() {
-    _logger.debug('OnboardingScreen: Disposing page controller');
+    _logger.debug('OnboardingScreen: Disposing page controller', {'component': 'OnboardingScreen'});
     _pageController.dispose();
     super.dispose();
   }
@@ -56,11 +56,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         await prefs.setBool('hasSeenOnboarding', true);
 
         if (mounted) {
-          _logger.debug('Navigating to welcome screen');
+          _logger.debug('Navigating to welcome screen', {'component': 'OnboardingScreen', 'action': 'navigation'});
           context.go('/welcome');
         }
       } else {
-        _logger.debug('Moving to next onboarding page');
+        _logger.debug('Moving to next onboarding page', {'component': 'OnboardingScreen', 'action': 'page_change'});
         _pageController.nextPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       await prefs.setBool('hasSeenOnboarding', true);
 
       if (mounted) {
-        _logger.debug('Navigating to welcome screen after skipping');
+        _logger.debug('Navigating to welcome screen after skipping', {'component': 'OnboardingScreen', 'action': 'skip'});
         context.go('/welcome');
       }
     } catch (e, stackTrace) {
@@ -91,7 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     try {
-      _logger.debug('Building OnboardingScreen');
+      _logger.debug('Building OnboardingScreen', {'component': 'OnboardingScreen'});
       return Scaffold(
         body: SafeArea(
           child: Column(
@@ -103,7 +103,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onPageChanged: (index) {
                     setState(() {
                       _currentPage = index;
-                      _logger.debug('Onboarding page changed to: $index');
+                      _logger.debug('Onboarding page changed to: $index', {'component': 'OnboardingScreen', 'page_index': '$index'});
                     });
                   },
                   itemBuilder: (context, index) {
@@ -184,7 +184,7 @@ class OnboardingPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
-      _logger.debug('Building OnboardingPageWidget for: ${page.title}');
+      _logger.debug('Building OnboardingPageWidget for: ${page.title}', {'component': 'OnboardingPageWidget', 'page_title': page.title});
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -43,7 +43,11 @@ class TaskSuggestionsSection extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  _logger.debug('Show more tasks button pressed');
+                  _logger.debug('Show more tasks button pressed', {
+                    'route': '/mission',
+                    'component': 'TaskSuggestionsSection',
+                    'action': 'navigation'
+                  });
                   context.go('/mission');
                 },
                 style: TextButton.styleFrom(

@@ -26,7 +26,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void initState() {
     super.initState();
-    _logger.debug('RegisterScreen: Initializing animation controllers');
+    _logger.debug('RegisterScreen: Initializing animation controllers',
+        {'component': 'RegisterScreen'});
 
     _animationController = AnimationController(
       vsync: this,
@@ -43,7 +44,8 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   @override
   void dispose() {
-    _logger.debug('RegisterScreen: Disposing controllers');
+    _logger.debug('RegisterScreen: Disposing controllers',
+        {'component': 'RegisterScreen'});
     _animationController.dispose();
     super.dispose();
   }

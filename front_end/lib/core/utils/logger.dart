@@ -148,8 +148,8 @@ class AppLogger {
   }
 
   // Public logging methods
-  void debug(String message, {Object? error, StackTrace? stackTrace}) {
-    _logger.fine(message, error, stackTrace);
+  void debug(String message, [Map<String, String>? contextMap]) {
+    _logger.fine(message);
   }
 
   void info(String message, {Object? error, StackTrace? stackTrace}) {

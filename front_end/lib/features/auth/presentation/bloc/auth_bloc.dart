@@ -211,7 +211,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       // Try to refresh the token
-      _logger.debug('BLOC About to attempt token refresh');
+      _logger.debug('BLOC About to attempt token refresh', {
+        'component': 'AuthBloc',
+        'action': 'token_refresh',
+        'event': 'attempt'
+      });
       final tokenRefreshed = await _userProfileUseCase.refreshToken();
       _logger.info('BLOC Token Refresh Attempt Result: $tokenRefreshed');
 

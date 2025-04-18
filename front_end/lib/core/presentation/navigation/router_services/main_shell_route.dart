@@ -6,6 +6,7 @@ import '../../../../features/mission/mission_screen.dart';
 import '../../../../features/earn/earn_screen.dart';
 import '../../../../features/message/message_screen.dart';
 import '../../../../features/semo_ai/semo_ai_screen.dart';
+import 'route_constants.dart';
 
 ShellRoute getMainShellRoute() {
   return ShellRoute(
@@ -13,13 +14,13 @@ ShellRoute getMainShellRoute() {
       int initialIndex = 0;
       final location = state.uri.path;
 
-      if (location.startsWith('/mission')) {
+      if (location.startsWith(AppRoutes.mission)) {
         initialIndex = 1;
-      } else if (location.startsWith('/earn')) {
+      } else if (location.startsWith(AppRoutes.earn)) {
         initialIndex = 2;
-      } else if (location.startsWith('/message')) {
+      } else if (location.startsWith(AppRoutes.message)) {
         initialIndex = 3;
-      } else if (location.startsWith('/semo-ai')) {
+      } else if (location.startsWith(AppRoutes.semoAi)) {
         initialIndex = 4;
       }
 
@@ -44,19 +45,19 @@ ShellRoute getMainShellRoute() {
           onTap: (index) {
             switch (index) {
               case 0:
-                context.go('/homeScreen');
+                context.go(AppRoutes.home);
                 break;
               case 1:
-                context.go('/mission');
+                context.go(AppRoutes.mission);
                 break;
               case 2:
-                context.go('/earn');
+                context.go(AppRoutes.earn);
                 break;
               case 3:
-                context.go('/message');
+                context.go(AppRoutes.message);
                 break;
               case 4:
-                context.go('/semo-ai');
+                context.go(AppRoutes.semoAi);
                 break;
             }
           },

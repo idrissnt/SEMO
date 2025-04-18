@@ -48,7 +48,7 @@ class _MissionScreenState extends State<MissionScreen> {
   @override
   void initState() {
     super.initState();
-    _logger.debug('MissionScreen: Initializing');
+    _logger.debug('MissionScreen: Initializing', {'component': 'MissionScreen'});
     _logger.info('Total missions available: ${_missions.length}');
   }
 
@@ -62,7 +62,7 @@ class _MissionScreenState extends State<MissionScreen> {
   @override
   Widget build(BuildContext context) {
     try {
-      _logger.debug('Building MissionScreen');
+      _logger.debug('Building MissionScreen', {'component': 'MissionScreen'});
       return Scaffold(
         appBar: AppBar(
           title: const Text('Missions'),
@@ -147,7 +147,7 @@ class _MissionScreenState extends State<MissionScreen> {
 
   @override
   void dispose() {
-    _logger.debug('MissionScreen disposed');
+    _logger.debug('MissionScreen disposed', {'component': 'MissionScreen'});
     super.dispose();
   }
 }

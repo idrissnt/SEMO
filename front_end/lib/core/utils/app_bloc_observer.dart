@@ -11,19 +11,32 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    _logger.debug('onCreate -- ${bloc.runtimeType}');
+    _logger.debug('onCreate -- ${bloc.runtimeType}', {
+      'component': 'BlocObserver',
+      'bloc_type': '${bloc.runtimeType}',
+      'event_type': 'create'
+    });
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    _logger.debug('onEvent -- ${bloc.runtimeType}, $event');
+    _logger.debug('onEvent -- ${bloc.runtimeType}, $event', {
+      'component': 'BlocObserver',
+      'bloc_type': '${bloc.runtimeType}',
+      'event_type': '${event.runtimeType}'
+    });
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    _logger.debug('onChange -- ${bloc.runtimeType}, ${change.currentState.runtimeType} → ${change.nextState.runtimeType}');
+    _logger.debug('onChange -- ${bloc.runtimeType}, ${change.currentState.runtimeType} → ${change.nextState.runtimeType}', {
+      'component': 'BlocObserver',
+      'bloc_type': '${bloc.runtimeType}',
+      'current_state': '${change.currentState.runtimeType}',
+      'next_state': '${change.nextState.runtimeType}'
+    });
   }
 
   @override
@@ -34,7 +47,13 @@ class AppBlocObserver extends BlocObserver {
     final nextState = transition.nextState.runtimeType.toString();
     final event = transition.event.runtimeType.toString();
     
-    _logger.debug('onTransition -- ${bloc.runtimeType}, Event: $event, $currentState → $nextState');
+    _logger.debug('onTransition -- ${bloc.runtimeType}, Event: $event, $currentState → $nextState', {
+      'component': 'BlocObserver',
+      'bloc_type': '${bloc.runtimeType}',
+      'event': event,
+      'current_state': currentState,
+      'next_state': nextState
+    });
     
     // Track error states for better monitoring
     if (transition.nextState.toString().contains('Failure')) {
@@ -45,7 +64,7 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     _logger.error(
-      'onError -- ${bloc.runtimeType}', 
+      'onError -- ${bloc.runtimeType}',
       error: error, 
       stackTrace: stackTrace
     );
@@ -55,6 +74,10 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
-    _logger.debug('onClose -- ${bloc.runtimeType}');
+    _logger.debug('onClose -- ${bloc.runtimeType}', {
+      'component': 'BlocObserver',
+      'bloc_type': '${bloc.runtimeType}',
+      'event_type': 'close'
+    });
   }
 }

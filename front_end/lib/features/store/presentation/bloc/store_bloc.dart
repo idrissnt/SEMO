@@ -32,7 +32,11 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
     LoadStoreProductsEvent event,
     Emitter<StoreState> emit,
   ) async {
-    _logger.debug('Loading products for store slug: ${event.storeSlug}');
+    _logger.debug('Loading products for store slug: ${event.storeSlug}', {
+      'component': 'StoreBloc',
+      'action': 'load_products',
+      'store_slug': event.storeSlug
+    });
     emit(const StoreLoading());
 
     try {
@@ -43,7 +47,14 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
         storeId: event.storeId,
       ));
       _logger.debug(
-          'Successfully loaded ${products.length} products for store ${event.storeSlug}');
+          'Successfully loaded ${products.length} products for store ${event.storeSlug}',
+          {
+            'component': 'StoreBloc',
+            'action': 'load_products',
+            'status': 'success',
+            'product_count': '${products.length}',
+            'store_slug': event.storeSlug
+          });
     } catch (e, stackTrace) {
       _logger.error('Error loading store products',
           error: e, stackTrace: stackTrace);
@@ -71,7 +82,14 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
         storeId: event.storeId,
       ));
       _logger.debug(
-          'Successfully loaded ${suggestions.length} store-specific autocomplete suggestions');
+          'Successfully loaded ${suggestions.length} store-specific autocomplete suggestions',
+          {
+            'component': 'StoreBloc',
+            'action': 'get_autocomplete_suggestions',
+            'status': 'success',
+            'suggestion_count': '${suggestions.length}',
+            'store_id': event.storeId
+          });
     } catch (e, stackTrace) {
       _logger.error('Error getting store-specific autocomplete suggestions',
           error: e, stackTrace: stackTrace);
@@ -84,8 +102,19 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
     StoreSearchSubmittedEvent event,
     Emitter<StoreState> emit,
   ) async {
+    _logger.debug('Loading store details for store ID: ${event.storeId}', {
+      'component': 'StoreBloc',
+      'action': 'load_store_details',
+      'store_id': event.storeId
+    });
     _logger.debug(
-        'Searching products in store ${event.storeId} for query: ${event.query}');
+        'Searching products in store ${event.storeId} for query: ${event.query}',
+        {
+          'component': 'StoreBloc',
+          'action': 'search_products',
+          'query': event.query,
+          'store_id': event.storeId
+        });
     emit(const StoreLoading());
 
     try {
@@ -99,7 +128,13 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
         searchResult: searchResult,
         storeId: event.storeId,
       ));
-      _logger.debug('Successfully loaded store-specific search results');
+      _logger.debug('Successfully loaded store-specific search results', {
+        'component': 'StoreBloc',
+        'action': 'search_products',
+        'status': 'success',
+        'query': event.query,
+        'store_id': event.storeId
+      });
     } catch (e, stackTrace) {
       _logger.error('Error searching products in store',
           error: e, stackTrace: stackTrace);

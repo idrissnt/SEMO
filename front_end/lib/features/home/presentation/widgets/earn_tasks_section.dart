@@ -40,7 +40,11 @@ class EarnTasksSection extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  _logger.debug('Show more earn tasks button pressed');
+                  _logger.debug('Show more earn tasks button pressed', {
+                    'route': '/earn',
+                    'component': 'EarnTasksSection',
+                    'action': 'navigation'
+                  });
                   context.go('/earn');
                 },
                 style: TextButton.styleFrom(
