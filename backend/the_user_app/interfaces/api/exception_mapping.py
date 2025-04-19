@@ -11,6 +11,7 @@ from the_user_app.domain.user_exceptions import (
     InvalidCredentialsException,
     PasswordChangeException,
     MissingRefreshTokenException,
+    InvalidInputException,
 )
 
 def get_fully_qualified_name(cls):
@@ -26,6 +27,8 @@ USER_EXCEPTION_MAPPING = {
         (status.HTTP_400_BAD_REQUEST, 'password_change_error', 'warning'),
     get_fully_qualified_name(MissingRefreshTokenException): 
         (status.HTTP_400_BAD_REQUEST, 'missing_token', 'warning'),
+    get_fully_qualified_name(InvalidInputException): 
+        (status.HTTP_400_BAD_REQUEST, 'invalid_input', 'warning'),
 }
 
 # Note: The base domain exception (CoreDomainException) is defined in the core app

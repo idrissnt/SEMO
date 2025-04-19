@@ -19,6 +19,7 @@ ALLOWED_HOSTS = [
     '172.20.10.5',   # Physical device IP
     '172.20.10.10',  # Physical device IP
     '192.168.187.184',  # Physical device IP
+    '192.168.172.184',  # Current Mac IP address
 ]
 
 # Development WebSocket URL - used by frontend clients to connect to the WebSocket server

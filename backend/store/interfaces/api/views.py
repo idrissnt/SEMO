@@ -1,7 +1,14 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 import uuid
+
+from store.domain.exceptions import (
+    AddressRequiredException,
+    StoreIdRequiredException,
+    QuerySearchRequiredException,
+    InvalidUuidException,
+)
 
 from store.interfaces.api.serializers import (
     ProductNameSerializer,
@@ -30,14 +37,15 @@ class StoreBrandLocationViewSet(viewsets.ViewSet):
         serializer = StoreBrandSerializer(store_brands, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['get'], url_path='nearby-stores')
-    def nearby_stores(self, request):
+    @action(detail=False, methods=['get'], url_path='nearby-stores/(?P<address>[^/.]+)')
+    def nearby_stores(self, request, address=None):
         """Find for each store brand the nearest store using the user's address
-        url: stores/store-brands/nearby-stores/
+        url: /api/v1/stores/store-brands/nearby-stores/{address}/
         method: GET
-        query parameters: address (optional), radius (optional), brand_slugs (optional)"""
-        # Get parameters from request
-        address = request.query_params.get('address')
+        path parameters: address (required)"""
+        # Validate the address parameter
+        if not address:
+            raise AddressRequiredException()
         
         # Find by address
         nearby_brands = self.store_brand_location_service.find_nearby_store_brands_by_address(
@@ -64,19 +72,16 @@ class StoreProductViewSet(viewsets.ViewSet):
         """List products for a specific store
         url: stores/store-products/<store_slug>/products/
         method: GET
+        path parameters: store_slug (required), it is just used for routing
         query parameters: store_id (required)"""
         store_id = request.query_params.get('store_id')
         if not store_id:
-            return Response(
-                {"error": "store_id query parameter is required"},  
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            raise StoreIdRequiredException()
 
         try:
             store_uuid = uuid.UUID(store_id)
         except ValueError:
-            return Response({"error": "Invalid UUID format"}, 
-                            status=status.HTTP_400_BAD_REQUEST)
+            raise InvalidUuidException()
             
         products = self.store_products_service.get_products_by_store_id(store_uuid)
         serializer = ProductWithDetailsSerializer(products, many=True)
@@ -86,6 +91,7 @@ class StoreProductViewSet(viewsets.ViewSet):
         """Get products by category slugs
         url: stores/store-products/<store_slug>/category/products/
         method: GET
+        path parameters: store_slug (required), it is just used for routing
         query parameters: category_path (optional)"""
         store_id = request.query_params.get('store_id')
         
@@ -94,8 +100,7 @@ class StoreProductViewSet(viewsets.ViewSet):
             try:
                 store_uuid = uuid.UUID(store_id)
             except ValueError:
-                return Response({"error": "Invalid UUID format"}, 
-                                status=status.HTTP_400_BAD_REQUEST)
+                raise InvalidUuidException()
                 
         products_by_category = self.store_products_service.get_products_by_category_path(
             store_brand_id=store_uuid
@@ -133,10 +138,7 @@ class SearchViewSet(viewsets.ViewSet):
             try:
                 store_uuid = uuid.UUID(store_id)
             except ValueError:
-                return Response(
-                    {"error": "Invalid UUID format for store_id"}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                raise InvalidUuidException()
         
         suggestions = self.search_service.autocomplete_query(
             partial_query=query,
@@ -158,10 +160,7 @@ class SearchViewSet(viewsets.ViewSet):
         page_size = request.query_params.get('page_size', 10)
         
         if not query:
-            return Response(
-                {"error": "Search query (q) is required"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            raise QuerySearchRequiredException()
 
         # Parse store_id if provided
         store_uuid = None
@@ -169,8 +168,7 @@ class SearchViewSet(viewsets.ViewSet):
             try:
                 store_uuid = uuid.UUID(store_id)
             except ValueError:
-                return Response({"error": "Invalid UUID format"}, 
-                                status=status.HTTP_400_BAD_REQUEST)
+                raise InvalidUuidException()
         
         result, metadata = self.search_service.search_products(
             query=query,

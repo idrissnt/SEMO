@@ -2,12 +2,12 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from drf_spectacular.utils import OpenApiExample
 import uuid
 
 from core.infrastructure.factories.logging_factory import CoreLoggingFactory
+from the_user_app.domain.user_exceptions import InvalidInputException
 
 from the_user_app.interfaces.api.serializers import (
     UserSerializer,
@@ -69,7 +69,7 @@ class AuthViewSet(viewsets.ViewSet):
         # Validate input data
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
-            raise ValidationError(serializer.errors)
+            raise InvalidInputException(serializer.errors)
         
         # Get auth service from factory
         auth_service = UserFactory.create_auth_service()
@@ -100,26 +100,6 @@ class AuthViewSet(viewsets.ViewSet):
                 # Otherwise, raise it directly
                 raise result.error
 
-
-    @extend_schema(
-        request=LoginRequestSerializer,
-        responses={
-            200: AuthTokensSerializer,
-            401: OpenApiResponse(description='Invalid credentials (code: invalid_credentials)')
-        },
-        description='Login with email and password',
-        examples=[
-            OpenApiExample(
-                'Error: Invalid credentials',
-                value={
-                    'error': 'The email or password you entered is incorrect',
-                    'code': 'invalid_credentials',
-                    'request_id': '123e4567-e89b-12d3-a456-426614174000'
-                },
-                status_codes=['401']
-            )
-        ]
-    )
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def login(self, request):
         # Extract request ID or generate a new one
@@ -128,7 +108,8 @@ class AuthViewSet(viewsets.ViewSet):
         # Validate input data
         serializer = LoginRequestSerializer(data=request.data)
         if not serializer.is_valid():
-            raise ValidationError(serializer.errors)
+            error_message = "; ".join([f"{field}: {', '.join(errors)}" for field, errors in serializer.errors.items()])
+            raise InvalidInputException(error_message)
         
         # Extract credentials
         email = serializer.validated_data['email']
@@ -160,45 +141,6 @@ class AuthViewSet(viewsets.ViewSet):
                 # Otherwise, raise it directly
                 raise result.error
 
-
-    @extend_schema(
-        request={
-            'type': 'object',
-            'properties': {
-                'refresh_token': {
-                    'type': 'string',
-                    'description': 'JWT refresh token to blacklist'
-                }
-            },
-            'required': ['refresh_token']
-        },
-        responses={
-            200: OpenApiResponse(
-                description='Logout successful',
-                response={
-                    'type': 'object',
-                    'properties': {
-                        'message': {'type': 'string'},
-                        'request_id': {'type': 'string'}
-                    }
-                }
-            ),
-            400: OpenApiResponse(description='Missing token or token already blacklisted'),
-            401: OpenApiResponse(description='Authentication required or invalid token')
-        },
-        description='Logout and blacklist the refresh token',
-        examples=[
-            OpenApiExample(
-                'Error: Missing token',
-                value={
-                    'error': 'Refresh token is required',
-                    'code': 'missing_token',
-                    'request_id': '123e4567-e89b-12d3-a456-426614174000'
-                },
-                status_codes=['400']
-            )
-        ]
-    )
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def logout(self, request):
         # Extract request ID or generate a new one

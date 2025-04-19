@@ -29,7 +29,12 @@ class StoreBrandLocationService:
         self.cache_service = cache_service
     
     def list_all_store_brands(self) -> List[StoreBrand]:
-        return self.store_brand_repository.get_all_store_brands()
+        
+        all_store_brands = self.store_brand_repository.get_all_store_brands()
+
+        
+        return all_store_brands
+
 
     def find_nearby_store_brands_by_address(
         self,
