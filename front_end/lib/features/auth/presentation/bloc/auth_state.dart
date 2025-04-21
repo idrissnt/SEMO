@@ -56,16 +56,16 @@ class UserAlreadyExistsFailure extends AuthFailureState {
       : super(message, canRetry: true);
 }
 
-// /// Validation error (invalid input data)
-// class ValidationFailure extends AuthFailureState {
-//   final Map<String, dynamic>? validationErrors;
+/// Invalid input error (invalid input data)
+class InvalidInputFailure extends AuthFailureState {
+  final Map<String, dynamic>? validationErrors;
 
-//   const ValidationFailure(String message, {this.validationErrors})
-//       : super(message, canRetry: true);
+  const InvalidInputFailure(String message, {this.validationErrors})
+      : super(message, canRetry: true);
 
-//   @override
-//   List<Object?> get props => [message, canRetry, validationErrors];
-// }
+  @override
+  List<Object?> get props => [message, canRetry, validationErrors];
+}
 
 /// Network error (no internet connection)
 class NetworkFailure extends AuthFailureState {

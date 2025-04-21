@@ -28,6 +28,7 @@ class StoreRepositoryImpl implements StoreRepository {
   @override
   Future<List<StoreBrand>> getAllStoreBrands() async {
     try {
+      _logger.info('Fetching store brands, url: ${StoreApiRoutes.storeBrands}');
       final data =
           await _apiClient.get<List<dynamic>>(StoreApiRoutes.storeBrands);
       return data

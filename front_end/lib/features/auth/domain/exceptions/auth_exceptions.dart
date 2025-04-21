@@ -10,6 +10,15 @@ class AuthenticationException extends DomainException {
   }) : super(message, code: code, requestId: requestId);
 }
 
+class InvalidInputException extends AuthenticationException {
+  InvalidInputException(
+      {String message = 'Invalid input provided',
+      String? code,
+      String? requestId})
+      : super(message,
+            code: code ?? AuthErrorCodes.invalidInput, requestId: requestId);
+}
+
 /// Exception for invalid credentials (401 Unauthorized)
 class InvalidCredentialsException extends AuthenticationException {
   InvalidCredentialsException(

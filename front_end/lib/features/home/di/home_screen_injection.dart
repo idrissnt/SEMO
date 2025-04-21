@@ -16,7 +16,8 @@ void registerHomeScreenDependencies() {
       ));
 
   // Register BLoCs
-  sl.registerFactory(() => HomeStoreBloc(
+  // see difference between registerLazySingleton and registerFactory
+  sl.registerLazySingleton(() => HomeStoreBloc(
         homeStoreUseCases: sl<HomeStoreUseCases>(),
       ));
   sl.registerFactory(() => HomeUserAddressBloc(

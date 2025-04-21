@@ -19,6 +19,13 @@ class AppTextStyles {
     return baseSize;
   }
 
+  static TextStyle semoWelcome(BuildContext context) => GoogleFonts.poppins(
+        fontSize: _getResponsiveFontSize(context, 50),
+        fontWeight: FontWeight.bold,
+        color: AppColors.semoWelcome,
+        height: 1.2,
+      );
+
   // Headline Styles - Context-aware versions
   static TextStyle headline1(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 32),

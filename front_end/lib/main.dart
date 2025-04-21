@@ -11,6 +11,8 @@ import 'package:semo/core/utils/app_bloc_observer.dart';
 // BLoC imports
 import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth_event.dart';
+import 'package:semo/features/home/presentation/bloc/home_store/home_store_bloc.dart';
+import 'package:semo/features/home/presentation/bloc/home_store/home_store_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,15 +30,28 @@ void main() async {
 
     // Initialize app
     runApp(
-      // Provide the AuthBloc to the widget tree
-      BlocProvider<AuthBloc>(
-        create: (context) {
-          // Get the AuthBloc directly from the service locator
-          final bloc = sl<AuthBloc>();
-          // Immediately check if the user is already authenticated
-          bloc.add(AuthCheckRequested());
-          return bloc;
-        },
+      // Provide multiple BLoCs to the widget tree
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (context) {
+              // Get the AuthBloc directly from the service locator
+              final bloc = sl<AuthBloc>();
+              // Immediately check if the user is already authenticated
+              bloc.add(AuthCheckRequested());
+              return bloc;
+            },
+          ),
+          BlocProvider<HomeStoreBloc>(
+            create: (context) {
+              // Get the HomeStoreBloc from the service locator
+              final bloc = sl<HomeStoreBloc>();
+              // Immediately load store brands
+              bloc.add(const LoadAllStoreBrandsEvent());
+              return bloc;
+            },
+          ),
+        ],
         // MyApp is the root widget of the app
         child: const MyApp(),
       ),

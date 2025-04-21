@@ -5,9 +5,10 @@ class AuthErrorCodes {
   static const String invalidCredentials = 'invalid_credentials';
   static const String userAlreadyExists = 'user_already_exists';
   static const String missingToken = 'missing_token';
+  static const String invalidInput = 'invalid_input';
 
   // Generic error code
-  static const String genericError = 'generic_error';
+  static const String genericError = 'generic_auth_error';
 
   // Private constructor to prevent instantiation
   AuthErrorCodes._();

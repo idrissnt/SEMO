@@ -7,9 +7,6 @@ class ErrorCodes {
 
   // Server error codes
   static const String serverError = 'server_error';
-
-  // // Generic error code
-  // static const String genericError = 'generic_error';
 }
 
 /// Base class for all domain-specific exceptions

@@ -6,8 +6,9 @@ class AppConfig {
   static String get baseUrl {
     switch (environment) {
       case Environment.dev:
-        // return 'http://172.20.10.5:8000'; // id NN For every device
-        return 'http://192.168.187.184:8000'; // coco NN For every device
+
+        // Update with the Mac's current IP address on the local network actually used
+        return 'http://192.168.172.184:8000'; // Current Mac IP address
       case Environment.staging:
         return 'https://staging-api.semo.com';
       case Environment.prod:

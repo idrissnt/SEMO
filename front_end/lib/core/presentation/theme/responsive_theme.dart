@@ -7,6 +7,7 @@ import 'theme_services/app_icons.dart';
 /// Extension on BuildContext to easily access theme properties
 extension ThemeExtension on BuildContext {
   /// Access to app text styles
+  TextStyle get semoWelcome => AppTextStyles.semoWelcome(this);
   TextStyle get headline1 => AppTextStyles.headline1(this);
   TextStyle get headline2 => AppTextStyles.headline2(this);
   TextStyle get headline3 => AppTextStyles.headline3(this);

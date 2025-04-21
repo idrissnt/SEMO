@@ -24,7 +24,11 @@ void registerStoreDependencies() {
   sl.registerFactory(() => StoreUseCases(sl<StoreRepository>()));
 
   // Register BLoCs
-  // Use factory pattern for BLoCs to ensure fresh instances for each screen
+  // Use registerFactory when we want a new BLoC instance for each screen
+  // (current approach - StoreBloc will be recreated each time it's requested)
+  //
+  // Use registerLazySingleton instead if we want to share the same BLoC
+  // instance across multiple screens (like we do with HomeStoreBloc)
   sl.registerFactory(() => StoreBloc(
         storeUseCases: sl<StoreUseCases>(),
       ));

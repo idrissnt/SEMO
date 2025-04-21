@@ -25,6 +25,7 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
         _authService = AuthService(
           apiClient: apiClient,
           tokenService: tokenService,
+          logger: logger,
         );
 
   @override

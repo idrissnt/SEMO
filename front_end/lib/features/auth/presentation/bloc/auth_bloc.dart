@@ -65,6 +65,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // Map domain exceptions to specific UI states
         if (error is InvalidCredentialsException) {
           emit(InvalidCredentialsFailure(error.message));
+        } else if (error is InvalidInputException) {
+          emit(InvalidInputFailure(error.message));
         } else if (error is GenericDomainException) {
           // Use extension methods for cleaner error type checking
           if (error.isNetworkError) {
@@ -125,6 +127,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // Map domain exceptions to specific UI states
         if (error is UserAlreadyExistsException) {
           emit(UserAlreadyExistsFailure(error.message));
+        } else if (error is InvalidInputException) {
+          emit(InvalidInputFailure(error.message));
         } else if (error is GenericDomainException) {
           // Use extension methods for cleaner error type checking
           if (error.isNetworkError) {

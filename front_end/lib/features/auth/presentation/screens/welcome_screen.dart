@@ -1,12 +1,32 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:semo/core/presentation/navigation/router_services/route_constants.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/features/home/presentation/bloc/home_store/home_store_bloc.dart';
+import 'package:semo/features/home/presentation/bloc/home_store/home_store_state.dart';
+import 'package:semo/features/auth/presentation/widgets/welcom_store.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  final PageController _pageController = PageController();
+  final TextEditingController _appNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _appNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +41,84 @@ class WelcomeScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Welcome to\nGrocery App',
-                    style: context.headline1,
+                    'SEMO',
+                    style: context.semoWelcome,
                     textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 10),
+                  // Horizontally scrollable widget section
+                  SizedBox(
+                    height: 210,
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        _buildCard(
+                          context,
+                          'Earnings',
+                          '\$834.12',
+                          'Current balance',
+                          Colors.blue,
+                        ),
+                        _buildCard(
+                          context,
+                          'Tasks',
+                          '5',
+                          'Pending tasks',
+                          Colors.orange,
+                        ),
+                        _buildCard(
+                          context,
+                          'Projects',
+                          '3',
+                          'Active projects',
+                          Colors.green,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    'Your one-stop solution for all your grocery needs',
-                    style: context.bodyLarge,
-                    textAlign: TextAlign.center,
+                  // Pagination indicators
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: SmoothPageIndicator(
+                        controller: _pageController,
+                        count: 3,
+                        effect: const ExpandingDotsEffect(
+                          activeDotColor: Colors.blue,
+                          dotColor: Colors.grey,
+                          dotHeight: 8,
+                          dotWidth: 8,
+                          expansionFactor: 2,
+                          spacing: 4,
+                        ),
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 64),
+                  // Display store brands from HomeStoreBloc
+                  BlocBuilder<HomeStoreBloc, HomeStoreState>(
+                    builder: (context, state) {
+                      if (state is StoreBrandsLoaded) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            StoreSection(stores: state.storeBrands),
+                            const SizedBox(height: 20),
+                          ],
+                        );
+                      }
+                      return const SizedBox(height: 10);
+                    },
+                  ),
+                  const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () => context.go(AppRoutes.login),
                     style: ElevatedButton.styleFrom(
@@ -44,7 +127,7 @@ class WelcomeScreen extends StatelessWidget {
                       foregroundColor: context.primaryColor,
                     ),
                     child: Text(
-                      'Login',
+                      'Se connecter',
                       style: context.bodyLarge.copyWith(
                         fontWeight: FontWeight.w900,
                         color: Colors.black,
@@ -57,12 +140,11 @@ class WelcomeScreen extends StatelessWidget {
                     onPressed: () => context.go(AppRoutes.register),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      // side: const BorderSide(color: Colors.white),
                       backgroundColor: const Color.fromARGB(255, 24, 24, 24),
                       foregroundColor: Colors.white,
                     ),
                     child: Text(
-                      'Register',
+                      'Créer un compte',
                       style: context.bodyLarge.copyWith(
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
@@ -70,11 +152,85 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  // App name text field at the bottom
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCard(BuildContext context, String title, String value,
+      String subtitle, Color color) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              color,
+              color.withOpacity(0.7),
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.8),
+                  fontSize: 14,
+                ),
+              ),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      'View more',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
