@@ -59,11 +59,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: [
                         _buildCard(
                           context,
-                          'Vos courses livrées\nen 1 heure',
                         ),
                         _buildCard(
                           context,
-                          'Vos Courses',
                         )
                       ],
                     ),
@@ -100,7 +98,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  Widget _buildCard(BuildContext context, String title) {
+  Widget _buildCard(BuildContext context) {
     return Card(
       color: Colors.white,
       elevation: 4,
@@ -114,10 +112,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style: context.headline1,
+              RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: context.headline1,
+                  children: const [
+                    TextSpan(
+                      text: 'Vos courses livrées\n en',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' 1 heure',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 243, 33, 33),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Column(
                 children: [
@@ -246,7 +260,7 @@ class AuthBackgroundPainter extends CustomPainter {
         colors: [
           Color.fromARGB(
               255, 38, 39, 40), // Very light blue with slight pink tint
-          Color(0xFFEDF0F7), // Light blue-gray
+          Color.fromARGB(255, 17, 17, 18), // Light blue-gray
           Color.fromARGB(
               255, 153, 153, 180), // Light blue-gray with slight pink tint
         ],

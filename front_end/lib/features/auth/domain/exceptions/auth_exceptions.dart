@@ -51,9 +51,9 @@ class MissingRefreshTokenException extends AuthenticationException {
             code: code ?? AuthErrorCodes.missingToken, requestId: requestId);
 }
 
-/// Generic domain exception for cases that don't fit other categories (500 Internal Server Error)
-class GenericDomainException extends AuthenticationException {
-  GenericDomainException(String message, {String? code, String? requestId})
+/// Generic authentication exception for cases that don't fit other categories (500 Internal Server Error)
+class GenericAuthException extends AuthenticationException {
+  GenericAuthException(String message, {String? code, String? requestId})
       : super(message,
             code: code ?? AuthErrorCodes.genericError, requestId: requestId);
 }

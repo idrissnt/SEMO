@@ -1,7 +1,7 @@
 // No need for dart:convert with Dio
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
-import 'package:semo/core/infrastructure/services/api/api_routes.dart';
+import 'package:semo/core/infrastructure/api_routes/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/domain/services/token_service.dart';
 

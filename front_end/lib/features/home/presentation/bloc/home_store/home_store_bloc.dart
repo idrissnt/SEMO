@@ -26,15 +26,18 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     _logger.debug('Loading all store brands');
     emit(const HomeStoreLoading());
 
-    try {
-      final storeBrands = await _homeStoreUseCases.getAllStoreBrands();
-      emit(StoreBrandsLoaded(storeBrands));
-      _logger.debug('Successfully loaded ${storeBrands.length} store brands');
-    } catch (e, stackTrace) {
-      _logger.error('Error loading store brands',
-          error: e, stackTrace: stackTrace);
-      emit(HomeStoreError('Failed to load store brands: ${e.toString()}'));
-    }
+    final result = await _homeStoreUseCases.getAllStoreBrands();
+    
+    result.fold(
+      (storeBrands) {
+        emit(StoreBrandsLoaded(storeBrands));
+        _logger.debug('Successfully loaded ${storeBrands.length} store brands');
+      },
+      (error) {
+        _logger.error('Error loading store brands', error: error);
+        emit(HomeStoreError('Failed to load store brands: ${error.message}'));
+      },
+    );
   }
 
   Future<void> _onLoadNearbyStores(
@@ -44,17 +47,20 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     _logger.debug('Loading nearby stores for address: ${event.address}');
     emit(const HomeStoreLoading());
 
-    try {
-      final nearbyStores = await _homeStoreUseCases.findNearbyStores(
-        address: event.address,
-      );
-      emit(NearbyStoresLoaded(nearbyStores));
-      _logger.debug('Successfully loaded ${nearbyStores.length} nearby stores');
-    } catch (e, stackTrace) {
-      _logger.error('Error loading nearby stores',
-          error: e, stackTrace: stackTrace);
-      emit(HomeStoreError('Failed to load nearby stores: ${e.toString()}'));
-    }
+    final result = await _homeStoreUseCases.findNearbyStores(
+      address: event.address,
+    );
+    
+    result.fold(
+      (nearbyStores) {
+        emit(NearbyStoresLoaded(nearbyStores));
+        _logger.debug('Successfully loaded ${nearbyStores.length} nearby stores');
+      },
+      (error) {
+        _logger.error('Error loading nearby stores', error: error);
+        emit(HomeStoreError('Failed to load nearby stores: ${error.message}'));
+      },
+    );
   }
 
   Future<void> _onLoadProductsByCategory(
@@ -64,22 +70,25 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     _logger.debug('Loading products by category for store: ${event.storeId}');
     emit(const HomeStoreLoading());
 
-    try {
-      final products = await _homeStoreUseCases.getProductsByCategory(
-        storeSlug: event.storeSlug,
-        storeId: event.storeId,
-      );
-      emit(ProductsByCategoryLoaded(
-        products: products,
-        storeId: event.storeId,
-      ));
-      _logger.debug('Successfully loaded ${products.length} products');
-    } catch (e, stackTrace) {
-      _logger.error('Error loading products by category',
-          error: e, stackTrace: stackTrace);
-      emit(HomeStoreError(
-          'Failed to load products by category: ${e.toString()}'));
-    }
+    final result = await _homeStoreUseCases.getProductsByCategory(
+      storeSlug: event.storeSlug,
+      storeId: event.storeId,
+    );
+    
+    result.fold(
+      (products) {
+        emit(ProductsByCategoryLoaded(
+          products: products,
+          storeId: event.storeId,
+        ));
+        _logger.debug('Successfully loaded ${products.length} products');
+      },
+      (error) {
+        _logger.error('Error loading products by category', error: error);
+        emit(HomeStoreError(
+            'Failed to load products by category: ${error.message}'));
+      },
+    );
   }
 
   Future<void> _onSearchQueryChanged(
@@ -91,18 +100,20 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     _logger.debug('Getting autocomplete suggestions for query: ${event.query}');
     emit(const HomeStoreLoading());
 
-    try {
-      final suggestions =
-          await _homeStoreUseCases.getAutocompleteSuggestions(event.query);
-      emit(HomeStoreAutocompleteSuggestionsLoaded(suggestions));
-      _logger.debug(
-          'Successfully loaded ${suggestions.length} autocomplete suggestions');
-    } catch (e, stackTrace) {
-      _logger.error('Error getting autocomplete suggestions',
-          error: e, stackTrace: stackTrace);
-      emit(HomeStoreError(
-          'Failed to get autocomplete suggestions: ${e.toString()}'));
-    }
+    final result = await _homeStoreUseCases.getAutocompleteSuggestions(event.query);
+    
+    result.fold(
+      (suggestions) {
+        emit(HomeStoreAutocompleteSuggestionsLoaded(suggestions));
+        _logger.debug(
+            'Successfully loaded ${suggestions.length} autocomplete suggestions');
+      },
+      (error) {
+        _logger.error('Error getting autocomplete suggestions', error: error);
+        emit(HomeStoreError(
+            'Failed to get autocomplete suggestions: ${error.message}'));
+      },
+    );
   }
 
   Future<void> _onSearchSubmitted(
@@ -112,18 +123,21 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     _logger.debug('Searching products globally for query: ${event.query}');
     emit(const HomeStoreLoading());
 
-    try {
-      final searchResult = await _homeStoreUseCases.searchProducts(
-        query: event.query,
-        page: event.page,
-        pageSize: event.pageSize,
-      );
-      emit(HomeStoreSearchResultsLoaded(searchResult));
-      _logger.debug('Successfully loaded search results');
-    } catch (e, stackTrace) {
-      _logger.error('Error searching products',
-          error: e, stackTrace: stackTrace);
-      emit(HomeStoreError('Failed to search products: ${e.toString()}'));
-    }
+    final result = await _homeStoreUseCases.searchProducts(
+      query: event.query,
+      page: event.page,
+      pageSize: event.pageSize,
+    );
+    
+    result.fold(
+      (searchResult) {
+        emit(HomeStoreSearchResultsLoaded(searchResult));
+        _logger.debug('Successfully loaded search results');
+      },
+      (error) {
+        _logger.error('Error searching products', error: error);
+        emit(HomeStoreError('Failed to search products: ${error.message}'));
+      },
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:semo/core/domain/services/api_client.dart';
-import 'package:semo/core/infrastructure/services/api/api_routes.dart';
+import 'package:semo/core/infrastructure/api_routes/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/profile/infrastructure/models/profile_model.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';

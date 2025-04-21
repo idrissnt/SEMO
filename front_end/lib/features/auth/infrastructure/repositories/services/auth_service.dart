@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:semo/core/domain/services/token_service.dart';
 import 'package:semo/core/domain/services/api_client.dart';
-import 'package:semo/core/infrastructure/services/api/api_routes.dart';
+import 'package:semo/core/infrastructure/api_routes/api_routes.dart';
 import 'package:semo/core/utils/logger.dart';
+
 import 'package:semo/features/auth/infrastructure/models/auth_model.dart';
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
-import 'package:semo/features/auth/infrastructure/repositories/services/helper/auth_exception_mapper.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_exception_mapper.dart';
 
 /// Handles authentication operations like login, register, and logout
 class AuthService {
@@ -18,10 +19,11 @@ class AuthService {
     required ApiClient apiClient,
     required TokenService tokenService,
     required AppLogger logger,
+    required AuthExceptionMapper exceptionMapper,
   })  : _apiClient = apiClient,
         _tokenService = tokenService,
         _logger = logger,
-        _exceptionMapper = AuthExceptionMapper(logger: logger);
+        _exceptionMapper = exceptionMapper;
 
   /// Performs login with email and password
   /// Returns AuthTokens on success
@@ -31,6 +33,7 @@ class AuthService {
     required String password,
   }) async {
     try {
+      _logger.debug('Sending login request for user: $email');
       // Send login request to API
       final data = await _apiClient.post<Map<String, dynamic>>(
         AuthApiRoutes.login,
@@ -47,11 +50,14 @@ class AuthService {
       await _tokenService.saveAccessToken(authTokens.accessToken);
       await _tokenService.saveRefreshToken(authTokens.refreshToken);
 
+      _logger.debug('Login successful for user: $email');
+
       // Return domain entity
       return authTokens.toEntity();
     } catch (e) {
-      // Convert API exceptions to domain exceptions without logging
+      // Convert API exceptions to domain exceptions
       // Logging will be handled by the repository layer
+      _logger.error('Failed to login', error: e);
       return _exceptionMapper.mapApiExceptionToDomainException(e);
     }
   }
@@ -67,6 +73,7 @@ class AuthService {
     String? profilePhotoUrl,
   }) async {
     try {
+      _logger.debug('Sending registration request for user: $email');
       // Prepare request data
       final requestData = {
         'email': email,
@@ -86,8 +93,7 @@ class AuthService {
         data: requestData,
       );
 
-      _logger.debug('Registration successful');
-      _logger.debug('Registration response data: $data');
+      _logger.debug('Registration successful for user: $email');
 
       // Parse the response using our model
       final authTokens = AuthTokensModel.fromJson(data);
@@ -100,13 +106,18 @@ class AuthService {
       return authTokens.toEntity();
     } catch (e) {
       // Map API exceptions to domain exceptions
+      _logger.error('Failed to register', error: e);
       return _exceptionMapper.mapApiExceptionToDomainException(e);
     }
   }
 
   /// Logs out the current user and invalidates their tokens
-  Future<void> logout() async {
+  Future<void> logout(
+    String email,
+  ) async {
     try {
+      _logger.debug('Sending logout request for user: $email');
+
       // Get both access and refresh tokens
       final accessToken = await _tokenService.getAccessToken();
       final refreshToken = await _tokenService.getRefreshToken();
@@ -119,7 +130,7 @@ class AuthService {
           data: {'refresh_token': refreshToken},
           options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
         );
-        _logger.debug('Logout request sent successfully');
+        _logger.debug('Logout successful for user: $email');
       } else {
         _logger
             .warning('Missing tokens for logout, clearing local storage only');
@@ -132,6 +143,7 @@ class AuthService {
       ]);
       _logger.debug('Successfully cleared all tokens');
     } catch (e) {
+      _logger.error('Failed to logout', error: e);
       _exceptionMapper.mapApiExceptionToDomainException(e);
     }
   }

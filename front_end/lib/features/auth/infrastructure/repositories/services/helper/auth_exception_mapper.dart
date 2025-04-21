@@ -1,11 +1,15 @@
 // auth_exception_mapper.dart
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/infrastructure/exceptions/api_exception_mapper.dart';
+import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/exceptions/auth_error_codes.dart';
 import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_exception_mapper.dart';
 
-class AuthExceptionMapper extends ApiExceptionMapper<AuthenticationException> {
-  AuthExceptionMapper({required super.logger});
+class AuthExceptionMapperImpl
+    extends ApiExceptionMapperImpl<AuthenticationException>
+    implements AuthExceptionMapper {
+  AuthExceptionMapperImpl({required AppLogger logger}) : super(logger: logger);
 
   @override
   Never mapApiExceptionToDomainException(dynamic e) {
@@ -44,7 +48,7 @@ class AuthExceptionMapper extends ApiExceptionMapper<AuthenticationException> {
             requestId: e.requestId,
           );
         default:
-          throw GenericDomainException(
+          throw GenericAuthException(
             e.message,
             code: AuthErrorCodes.genericError,
             requestId: e.requestId,
@@ -57,9 +61,9 @@ class AuthExceptionMapper extends ApiExceptionMapper<AuthenticationException> {
   }
 
   @override
-  AuthenticationException mapToFeatureException(String message,
+  AuthenticationException createFeatureException(String message,
       {String? code, String? requestId}) {
-    return GenericDomainException(
+    return GenericAuthException(
       message,
       code: code ?? AuthErrorCodes.genericError,
       requestId: requestId,

@@ -60,10 +60,13 @@ class StoreApiRoutes {
   static const String path = '/stores';
   static String get base => '${ApiRoutes.base}$path';
   static String get storeBrands => '$base/store-brands/';
-  static String get nearbyStores => '$storeBrands/nearby-stores/';
+
+  static String getStoreBrandsNearby(String address) =>
+      '$storeBrands/nearby-stores/$address/';
 
   static String getProductsByStore(String storeSlug) =>
       '$base/$storeSlug/products/';
+
   static String getStoreProductsForCategory(String storeSlug) =>
       '$base/$storeSlug/category/products/';
 }

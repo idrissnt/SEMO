@@ -1,55 +1,57 @@
+import 'package:semo/core/domain/exceptions/api_exceptions.dart';
+import 'package:semo/features/store/domain/exceptions/store_error_codes.dart';
+
 /// Base exception for all store-related errors
-class StoreException implements Exception {
-  final String message;
-  final dynamic originalError;
 
-  StoreException(this.message, [this.originalError]);
-
-  @override
-  String toString() => 'StoreException: $message';
+/// Domain exceptions for store
+class StoreException extends DomainException {
+  StoreException(
+    String message, {
+    String? code,
+    String? requestId,
+  }) : super(message, code: code, requestId: requestId);
 }
 
-/// Exception thrown when store data cannot be found
-class StoreNotFoundException extends StoreException {
-  StoreNotFoundException(String message, [dynamic originalError])
-      : super(message, originalError);
-
-  @override
-  String toString() => 'StoreNotFoundException: $message';
+class InvalidUuidException extends StoreException {
+  InvalidUuidException(
+      {String message = 'Invalid UUID provided',
+      String? code,
+      String? requestId})
+      : super(message,
+            code: code ?? StoreErrorCodes.invalidUuid, requestId: requestId);
 }
 
-/// Exception thrown when store data cannot be retrieved due to network issues
-class StoreNetworkException extends StoreException {
-  StoreNetworkException(String message, [dynamic originalError])
-      : super(message, originalError);
-
-  @override
-  String toString() => 'StoreNetworkException: $message';
+class StoreIdRequiredException extends StoreException {
+  StoreIdRequiredException(
+      {String message = 'Store id is required',
+      String? code,
+      String? requestId})
+      : super(message,
+            code: code ?? StoreErrorCodes.storeIdRequired,
+            requestId: requestId);
 }
 
-/// Exception thrown when store search operations fail
-class StoreSearchException extends StoreException {
-  StoreSearchException(String message, [dynamic originalError])
-      : super(message, originalError);
-
-  @override
-  String toString() => 'StoreSearchException: $message';
+class AddressRequiredException extends StoreException {
+  AddressRequiredException(
+      {String message = 'Address is required', String? code, String? requestId})
+      : super(message,
+            code: code ?? StoreErrorCodes.addressRequired,
+            requestId: requestId);
 }
 
-/// Exception thrown when product data cannot be found
-class ProductNotFoundException extends StoreException {
-  ProductNotFoundException(String message, [dynamic originalError])
-      : super(message, originalError);
-
-  @override
-  String toString() => 'ProductNotFoundException: $message';
+class QuerySearchRequiredException extends StoreException {
+  QuerySearchRequiredException(
+      {String message = 'Required query search is missing',
+      String? code,
+      String? requestId})
+      : super(message,
+            code: code ?? StoreErrorCodes.querySearchRequired,
+            requestId: requestId);
 }
 
-/// Exception thrown when authentication is required but missing
-class StoreAuthenticationException extends StoreException {
-  StoreAuthenticationException(String message, [dynamic originalError])
-      : super(message, originalError);
-
-  @override
-  String toString() => 'StoreAuthenticationException: $message';
+/// Generic store exception for cases that don't fit other categories (500 Internal Server Error)
+class GenericStoreException extends StoreException {
+  GenericStoreException(String message, {String? code, String? requestId})
+      : super(message,
+            code: code ?? StoreErrorCodes.genericError, requestId: requestId);
 }

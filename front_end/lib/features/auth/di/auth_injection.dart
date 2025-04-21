@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/features/auth/domain/exceptions/auth_exception_mapper.dart';
+import 'package:semo/features/auth/infrastructure/repositories/services/helper/auth_exception_mapper.dart';
 
 // Auth feature imports
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
@@ -10,6 +12,11 @@ import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
 final sl = GetIt.instance;
 
 void registerAuthDependencies() {
+  // Register exception mappers
+  sl.registerFactory<AuthExceptionMapper>(
+    () => AuthExceptionMapperImpl(logger: sl()),
+  );
+
   // Register repositories
   // Use Lazy Singleton pattern for repositories to ensure they're only created when needed
   if (!sl.isRegistered<UserAuthRepository>()) {
@@ -18,6 +25,7 @@ void registerAuthDependencies() {
         apiClient: sl(),
         tokenService: sl(),
         logger: sl(),
+        exceptionMapper: sl(),
       ),
     );
   }
