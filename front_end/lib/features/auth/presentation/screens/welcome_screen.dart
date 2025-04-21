@@ -52,23 +52,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   const SizedBox(height: 10),
                   // Horizontally scrollable widget section
                   SizedBox(
-                    height: 400,
-                    width: double.infinity,
+                    height: 500,
+                    width: context.responsiveItemSize(300),
                     child: PageView(
                       controller: _pageController,
                       children: [
                         _buildCard(
                           context,
                           'Vos courses livrées\nen 1 heure',
-                          // 'Lancez le chrono...',
-                          'Choisissez, commandez, c’est parti!',
-                          const Color.fromARGB(255, 234, 230, 230),
                         ),
                         _buildCard(
                           context,
                           'Vos Courses',
-                          '5',
-                          Colors.white,
                         )
                       ],
                     ),
@@ -96,42 +91,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () => context.go(AppRoutes.register),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Colors.white,
-                      foregroundColor: context.primaryColor,
-                    ),
-                    child: Text(
-                      'Créer un compte',
-                      style: context.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w900,
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  OutlinedButton(
-                    onPressed: () => context.go(AppRoutes.login),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: const Color.fromARGB(255, 24, 24, 24),
-                      foregroundColor: Colors.white,
-                    ),
-                    child: Text(
-                      'Se connecter',
-                      style: context.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // App name text field at the bottom
                 ],
               ),
             ),
@@ -141,69 +100,93 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  Widget _buildCard(
-      BuildContext context, String title, String subtitle, Color color) {
+  Widget _buildCard(BuildContext context, String title) {
     return Card(
+      color: Colors.white,
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        // height: 200,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            // begin: Alignment.topLeft,
-            // end: Alignment.bottomRight,
-            colors: [
-              color,
-              color.withOpacity(0.7),
-            ],
-          ),
-        ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(33)),
+      child: SizedBox(
+        width: context.responsiveItemSize(300),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.only(
+              top: 40.0, bottom: 40.0, left: 15.0, right: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 title,
                 style: context.headline1,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () => context.go(AppRoutes.register),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: const Color.fromARGB(255, 14, 77, 129),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: SizedBox(
+                      width: context.responsiveItemSize(250),
+                      child: Text(
+                        'Créer un compte',
+                        textAlign: TextAlign.center,
+                        style: context.bodyLarge.copyWith(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  OutlinedButton(
+                    onPressed: () => context.go(AppRoutes.login),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: const Color.fromARGB(255, 234, 232, 232),
+                      disabledForegroundColor: Colors.white,
+                    ),
+                    child: SizedBox(
+                      width: context.responsiveItemSize(250),
+                      child: Text(
+                        'Se connecter',
+                        textAlign: TextAlign.center,
+                        style: context.bodyLarge.copyWith(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
               BlocBuilder<HomeStoreBloc, HomeStoreState>(
                 builder: (context, state) {
                   if (state is StoreBrandsLoaded &&
                       state.storeBrands.isNotEmpty) {
                     return SizedBox(
-                        height: 200,
+                        height: 80,
                         child: StoreSection(
-                            stores: state.storeBrands,
-                            sectionHeight: context.responsiveItemSize(200)));
+                            stores: state.storeBrands, sectionHeight: 80));
                   }
                   return Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
                       'Loading stores...',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.black),
                     ),
                   );
                 },
               ),
-              const SizedBox(height: 20),
-              Center(
-                child: Text(
-                  subtitle,
-                  style: context.headline2,
-                ),
-              ),
-              const Spacer(),
             ],
           ),
         ),
