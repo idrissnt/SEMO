@@ -67,7 +67,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(InvalidCredentialsFailure(error.message));
         } else if (error is InvalidInputException) {
           emit(InvalidInputFailure(error.message));
-        } else if (error is GenericDomainException) {
+        } else if (error is GenericAuthException) {
           // Use extension methods for cleaner error type checking
           if (error.isNetworkError) {
             emit(NetworkFailure(error.getNetworkErrorMessage('login')));
@@ -129,7 +129,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(UserAlreadyExistsFailure(error.message));
         } else if (error is InvalidInputException) {
           emit(InvalidInputFailure(error.message));
-        } else if (error is GenericDomainException) {
+        } else if (error is GenericAuthException) {
           // Use extension methods for cleaner error type checking
           if (error.isNetworkError) {
             emit(NetworkFailure(error.getNetworkErrorMessage('registration')));
@@ -170,7 +170,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               .warning('Missing refresh token during logout: ${error.message}');
           emit(AuthUnauthenticated());
           return;
-        } else if (error is GenericDomainException) {
+        } else if (error is GenericAuthException) {
           // Use extension methods for cleaner error type checking
           if (error.isNetworkError) {
             emit(NetworkFailure(error.getNetworkErrorMessage('logout')));

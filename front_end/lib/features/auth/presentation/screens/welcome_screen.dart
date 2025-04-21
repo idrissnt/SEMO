@@ -34,7 +34,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Stack(
         children: [
           CustomPaint(
-            painter: IosBackgroundPainter(),
+            painter: AuthBackgroundPainter(),
             size: Size.infinite,
           ),
           SafeArea(
@@ -52,31 +52,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   const SizedBox(height: 10),
                   // Horizontally scrollable widget section
                   SizedBox(
-                    height: 210,
+                    height: 400,
+                    width: double.infinity,
                     child: PageView(
                       controller: _pageController,
                       children: [
                         _buildCard(
                           context,
-                          'Earnings',
-                          '\$834.12',
-                          'Current balance',
-                          Colors.blue,
+                          'Vos courses livrées\nen 1 heure',
+                          // 'Lancez le chrono...',
+                          'Choisissez, commandez, c’est parti!',
+                          const Color.fromARGB(255, 234, 230, 230),
                         ),
                         _buildCard(
                           context,
-                          'Tasks',
+                          'Vos Courses',
                           '5',
-                          'Pending tasks',
-                          Colors.orange,
-                        ),
-                        _buildCard(
-                          context,
-                          'Projects',
-                          '3',
-                          'Active projects',
-                          Colors.green,
-                        ),
+                          Colors.white,
+                        )
                       ],
                     ),
                   ),
@@ -91,7 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       child: SmoothPageIndicator(
                         controller: _pageController,
-                        count: 3,
+                        count: 2,
                         effect: const ExpandingDotsEffect(
                           activeDotColor: Colors.blue,
                           dotColor: Colors.grey,
@@ -103,31 +96,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                     ),
                   ),
-                  // Display store brands from HomeStoreBloc
-                  BlocBuilder<HomeStoreBloc, HomeStoreState>(
-                    builder: (context, state) {
-                      if (state is StoreBrandsLoaded) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            StoreSection(stores: state.storeBrands),
-                            const SizedBox(height: 20),
-                          ],
-                        );
-                      }
-                      return const SizedBox(height: 10);
-                    },
-                  ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: () => context.go(AppRoutes.login),
+                    onPressed: () => context.go(AppRoutes.register),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: Colors.white,
                       foregroundColor: context.primaryColor,
                     ),
                     child: Text(
-                      'Se connecter',
+                      'Créer un compte',
                       style: context.bodyLarge.copyWith(
                         fontWeight: FontWeight.w900,
                         color: Colors.black,
@@ -137,14 +115,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   const SizedBox(height: 16),
                   OutlinedButton(
-                    onPressed: () => context.go(AppRoutes.register),
+                    onPressed: () => context.go(AppRoutes.login),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: const Color.fromARGB(255, 24, 24, 24),
                       foregroundColor: Colors.white,
                     ),
                     child: Text(
-                      'Créer un compte',
+                      'Se connecter',
                       style: context.bodyLarge.copyWith(
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
@@ -163,17 +141,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  Widget _buildCard(BuildContext context, String title, String value,
-      String subtitle, Color color) {
+  Widget _buildCard(
+      BuildContext context, String title, String subtitle, Color color) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
+        // height: 200,
+        width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            // begin: Alignment.topLeft,
+            // end: Alignment.bottomRight,
             colors: [
               color,
               color.withOpacity(0.7),
@@ -181,40 +161,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: context.headline1,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 14,
-                ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
+              BlocBuilder<HomeStoreBloc, HomeStoreState>(
+                builder: (context, state) {
+                  if (state is StoreBrandsLoaded &&
+                      state.storeBrands.isNotEmpty) {
+                    return SizedBox(
+                        height: 200,
+                        child: StoreSection(
+                            stores: state.storeBrands,
+                            sectionHeight: context.responsiveItemSize(200)));
+                  }
+                  return Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
@@ -222,12 +190,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
-                      'View more',
+                      'Loading stores...',
                       style: TextStyle(color: Colors.white),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
+              const SizedBox(height: 20),
+              Center(
+                child: Text(
+                  subtitle,
+                  style: context.headline2,
+                ),
+              ),
+              const Spacer(),
             ],
           ),
         ),
@@ -236,7 +212,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 }
 
-class IosBackgroundPainter extends CustomPainter {
+class AuthBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final width = size.width;
@@ -249,7 +225,7 @@ class IosBackgroundPainter extends CustomPainter {
         end: Alignment.bottomLeft,
         colors: [
           Color.fromARGB(255, 64, 71, 74), //
-          Color(0xFF3A85F4), // Medium blue
+          Color.fromARGB(255, 10, 40, 84), // Medium blue
           Color(0xFF5E5CE6), // Blue-purple
         ],
         stops: [0.0, 0.5, 1.0],
@@ -286,10 +262,10 @@ class IosBackgroundPainter extends CustomPainter {
         end: Alignment.bottomRight,
         colors: [
           Color.fromARGB(
-              255, 193, 200, 204), // Very light blue with slight pink tint
+              255, 38, 39, 40), // Very light blue with slight pink tint
           Color(0xFFEDF0F7), // Light blue-gray
           Color.fromARGB(
-              255, 184, 166, 190), // Light blue-gray with slight pink tint
+              255, 153, 153, 180), // Light blue-gray with slight pink tint
         ],
         stops: [0.2, 0.6, 1.0],
       ).createShader(Rect.fromLTWH(0, height * 0.4, width, height * 0.6));
