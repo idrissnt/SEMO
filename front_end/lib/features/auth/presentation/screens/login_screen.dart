@@ -10,9 +10,9 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
-import 'package:semo/features/auth/presentation/widgets/auth_header.dart';
-import 'package:semo/features/auth/presentation/widgets/auth_state_handler.dart';
-import 'package:semo/features/auth/presentation/widgets/login_form.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/auth_header.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/auth_state_handler.dart';
+import 'package:semo/features/auth/presentation/widgets/login/login_form.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

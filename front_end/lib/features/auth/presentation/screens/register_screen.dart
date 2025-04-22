@@ -7,8 +7,8 @@ import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
-import 'package:semo/features/auth/presentation/widgets/auth_header.dart';
-import 'package:semo/features/auth/presentation/widgets/register_form.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/auth_header.dart';
+import 'package:semo/features/auth/presentation/widgets/register/register_form.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

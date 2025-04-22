@@ -24,9 +24,9 @@ class DjangoWelcomeAssetsRepository(WelcomeAssetsRepository):
             id=model.id,
             title_one=model.title_one,
             title_two=model.title_two,
-            first_logo_url=model.first_logo_url,
-            second_logo_url=model.second_logo_url,
-            third_logo_url=model.third_logo_url
+            first_logo_url=model.first_logo_url.url,
+            second_logo_url=model.second_logo_url.url,
+            third_logo_url=model.third_logo_url.url
         )
     
     def get_task_assets(self) -> TaskAsset:
@@ -45,11 +45,11 @@ class DjangoWelcomeAssetsRepository(WelcomeAssetsRepository):
             id=model.id,
             title_one=model.title_one,
             title_two=model.title_two,
-            first_image_url=model.first_image_url,
-            second_image_url=model.second_image_url,
-            third_image_url=model.third_image_url,
-            fourth_image_url=model.fourth_image_url,
-            fifth_image_url=model.fifth_image_url
+            first_image_url=model.first_image_url.url,
+            second_image_url=model.second_image_url.url,
+            third_image_url=model.third_image_url.url,
+            fourth_image_url=model.fourth_image_url.url,
+            fifth_image_url=model.fifth_image_url.url
         )
     
     def get_company_asset(self) -> CompanyAsset:
@@ -67,5 +67,5 @@ class DjangoWelcomeAssetsRepository(WelcomeAssetsRepository):
         return CompanyAsset(
             id=model.id,
             name=model.name,
-            logo_url=model.logo_url
+            logo_url=model.logo_url.url
         )   

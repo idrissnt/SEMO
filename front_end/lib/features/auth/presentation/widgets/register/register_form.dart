@@ -5,7 +5,7 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
-import 'package:semo/features/auth/presentation/widgets/form_validators.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/form_validators.dart';
 
 /// A form widget for the registration screen
 class RegisterFormWidget extends StatefulWidget {

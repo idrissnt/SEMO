@@ -63,6 +63,7 @@ class WelcomeService {
       );
 
       final taskAssetModel = TaskAssetModel.fromJson(response);
+      _logger.info('Task asset Model: ${taskAssetModel.firstImage}');
       return taskAssetModel.toDomain();
     } catch (e) {
       _logger.error('Failed to fetch task asset: $e');

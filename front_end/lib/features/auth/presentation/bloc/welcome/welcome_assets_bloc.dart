@@ -77,9 +77,12 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
 
     final result = await _welcomeRepository.getTaskAsset();
 
+    _logger.info('Task asset result: $result');
+
     result.fold(
       (taskAsset) {
         _logger.info('Task asset loaded successfully');
+        _logger.info('Task asset: ${taskAsset.firstImage}');
         emit(TaskAssetLoaded(taskAsset));
       },
       (error) {
@@ -131,7 +134,7 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
       // Handle company asset result
       CompanyAsset? companyAsset;
       WelcomeException? firstError;
-      
+
       companyResult.fold(
         (asset) => companyAsset = asset,
         (error) {
