@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
@@ -86,14 +85,6 @@ Widget _buildTaskAssetContent(BuildContext context, TaskAsset taskAsset) {
     textColor: Colors.black,
     padding: const EdgeInsets.all(16.0),
   );
-}
-
-/// A simple class to define the pattern for a grid tile
-class GridTilePattern {
-  final int crossAxis;
-  final int mainAxis;
-
-  const GridTilePattern({required this.crossAxis, required this.mainAxis});
 }
 
 /// Animated gradient text widget
@@ -198,8 +189,8 @@ class ProductShowcaseGrid extends StatelessWidget {
       padding: padding,
       child: Column(
         children: [
-          // Staggered grid of product images
-          _buildStaggeredGrid(imageUrls),
+          // Overlapping cards with profile labels
+          _buildOverlappingCards(imageUrls),
 
           // Caption text at the bottom
           if (titleText != null || subtitleText != null)
@@ -249,77 +240,152 @@ class ProductShowcaseGrid extends StatelessWidget {
     );
   }
 
-  /// Builds the staggered grid layout for product images
-  Widget _buildStaggeredGrid(List<String> images) {
-    const double gridSpacing = 8.0;
+  /// Builds overlapping cards layout with profile labels
+  Widget _buildOverlappingCards(List<String> images) {
+    // Ensure we have at least 2 images
+    final List<String> imagesToUse = images.length >= 2
+        ? images.sublist(0, 2)
+        : [...images, ...List.filled(2 - images.length, '')];
 
-    // logger.info('Building staggered grid with ${images.length} images');
-    // logger.info('Images: $images');
-
-    // Ensure we have at least 5 images for the layout
-    final List<String> imagesToUse = images.length >= 5
-        ? images.sublist(0, 5)
-        : [...images, ...List.filled(5 - images.length, '')];
-
-    // logger.info('Using images: $imagesToUse');
-    // Define a more type-safe approach with a custom class
-    final patterns = [
-      const GridTilePattern(
-          crossAxis: 2, mainAxis: 2), // Large image (top-left)
-      const GridTilePattern(crossAxis: 1, mainAxis: 1), // Top-right image
-      const GridTilePattern(crossAxis: 1, mainAxis: 1), // Middle-right image
-      const GridTilePattern(crossAxis: 1, mainAxis: 1), // Bottom-left image
-      const GridTilePattern(crossAxis: 1, mainAxis: 1), // Bottom-middle image
+    // Sample profile images - replace with actual profile images in production
+    final profileImages = [
+      'https://randomuser.me/api/portraits/men/32.jpg',
+      'https://randomuser.me/api/portraits/women/44.jpg',
     ];
 
-    // Wrap in a SizedBox with fixed height to prevent layout issues
+    // Sample names - replace with actual names in production
+    final names = ['Chris', 'Chloé'];
+
     return SizedBox(
-      height: 300, // Fixed height to prevent infinite height constraint
-      child: StaggeredGrid.count(
-        crossAxisCount: 3,
-        mainAxisSpacing: gridSpacing,
-        crossAxisSpacing: gridSpacing,
-        children: List.generate(5, (index) {
-          final pattern = patterns[index];
-          return StaggeredGridTile.count(
-            crossAxisCellCount: pattern.crossAxis,
-            mainAxisCellCount: pattern.mainAxis,
-            child: _buildGridItem(imagesToUse[index], index),
-          );
-        }),
+      height: 300,
+      child: Stack(
+        children: [
+          // Left card stack
+          Positioned(
+            left: 20,
+            top: 40,
+            child: _buildCardStack(
+              mainImage: imagesToUse[0],
+              profileImage: profileImages[0],
+              name: names[0],
+              angle: -5,
+              mainCardColor: Colors.purple.shade100,
+              stackCardColor: Colors.purple.shade200,
+            ),
+          ),
+
+          // Right card stack (positioned to overlap slightly)
+          Positioned(
+            right: 20,
+            top: 20,
+            child: _buildCardStack(
+              mainImage: imagesToUse[1],
+              profileImage: profileImages[1],
+              name: names[1],
+              angle: 5,
+              mainCardColor: Colors.orange.shade100,
+              stackCardColor: Colors.orange.shade200,
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  /// Builds an individual grid item with optimized image loading
-  Widget _buildGridItem(String imageUrl, int index) {
-    if (imageUrl.isEmpty) {
-      // Placeholder for empty image URLs
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[800],
-          borderRadius: BorderRadius.circular(itemBorderRadius),
-        ),
-      );
-    }
-
-    // Network image with caching and optimizations
-    return Hero(
-      tag: 'product_image_$index', // Enable hero animations if needed
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(itemBorderRadius),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
-          fit: BoxFit.cover,
-          fadeInDuration: const Duration(milliseconds: 200),
-          memCacheHeight: 500, // Optimize memory usage
-          placeholder: (context, url) => Container(color: Colors.grey[800]),
-          errorWidget: (context, url, error) => Container(
-            color: Colors.grey[800],
-            child: const Icon(Icons.error, color: Colors.white),
+  /// Builds a card stack with a main card and background cards
+  Widget _buildCardStack({
+    required String mainImage,
+    required String profileImage,
+    required String name,
+    required double angle,
+    required Color mainCardColor,
+    required Color stackCardColor,
+  }) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        // Background cards for stacked effect
+        Positioned(
+          left: -8,
+          top: -8,
+          child: Transform.rotate(
+            angle: (angle - 5) * 0.0174533, // Convert degrees to radians
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                color: stackCardColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+
+        // Main card
+        Transform.rotate(
+          angle: angle * 0.0174533, // Convert degrees to radians
+          child: Container(
+            width: 160,
+            height: 160,
+            decoration: BoxDecoration(
+              color: mainCardColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 8,
+                  offset: Offset(0, 3),
+                ),
+              ],
+              image: mainImage.isNotEmpty
+                  ? DecorationImage(
+                      image: CachedNetworkImageProvider(mainImage),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+            ),
+
+            // Profile label at the top of the card
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Profile image
+                    CircleAvatar(
+                      radius: 12,
+                      backgroundImage: CachedNetworkImageProvider(profileImage),
+                    ),
+                    const SizedBox(width: 4),
+                    // Name text
+                    Text(
+                      '$name vous aide',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
