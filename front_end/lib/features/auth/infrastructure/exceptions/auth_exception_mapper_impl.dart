@@ -2,9 +2,9 @@
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/infrastructure/exceptions/api_exception_mapper.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_error_codes.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_exception_mapper.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_error_codes.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_exception_mapper.dart';
 
 class AuthExceptionMapperImpl
     extends ApiExceptionMapperImpl<AuthenticationException>

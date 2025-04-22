@@ -1,5 +1,5 @@
 import 'package:semo/core/domain/services/api_client.dart';
-import 'package:semo/core/infrastructure/api_routes/api_routes.dart';
+import 'package:semo/core/infrastructure/api_endpoints/api_enpoints.dart';
 import 'package:semo/core/utils/logger.dart';
 
 import 'package:semo/features/store/domain/entities/product.dart';

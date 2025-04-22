@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     
     # Local apps
+    'core',
     'the_user_app',
     'store',
     'orders',

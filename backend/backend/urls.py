@@ -16,6 +16,7 @@ urlpatterns = [
     
     # API URLs
     path('api/v1/', include([
+        path('core/', include('core.urls', namespace='core')),
         path('users/', include('the_user_app.urls', namespace='the_user_app')),
         path('stores/', include('store.urls', namespace='store')),
         path('orders/', include('orders.urls', namespace='orders')),

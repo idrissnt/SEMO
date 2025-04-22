@@ -1,5 +1,5 @@
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
 import 'package:semo/core/utils/result.dart';
 
 /// AuthRepository defines the contract for authentication operations

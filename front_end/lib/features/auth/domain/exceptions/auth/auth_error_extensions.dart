@@ -1,6 +1,6 @@
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_error_codes.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_error_codes.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
 
 // adding new functionality to the DomainException class without modifying the original class
 /// Extension methods for domain exceptions to determine their type

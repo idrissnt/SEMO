@@ -9,6 +9,7 @@ import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/features/home/presentation/bloc/home_store/home_store_bloc.dart';
 import 'package:semo/features/home/presentation/bloc/home_store/home_store_state.dart';
 import 'package:semo/features/auth/presentation/widgets/welcom_store.dart';
+import 'package:semo/features/store/presentation/widgets/product_showcase_grid.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -62,7 +63,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         _buildCard(
                           context,
-                        )
+                        ),
+                        _buildProductShowcase(context)
                       ],
                     ),
                   ),
@@ -77,7 +79,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       child: SmoothPageIndicator(
                         controller: _pageController,
-                        count: 2,
+                        count: 3,
                         effect: const ExpandingDotsEffect(
                           activeDotColor: Colors.blue,
                           dotColor: Colors.grey,
@@ -203,6 +205,39 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// Builds a product showcase card using the staggered grid layout
+  Widget _buildProductShowcase(BuildContext context) {
+    // Using existing images from the assets directory
+    // Repeating some images to fill the grid
+    final List<String> sampleProductImages = [
+      'assets/images/make_groceries_shopping_.jpg',  // Large image (top-left)
+      'assets/images/secure_payment.jpg',           // Top-right
+      'assets/images/task_posting.jpg',             // Middle-right
+      'assets/images/carrefour.png',                // Bottom-left
+      'assets/images/earn_money.png',               // Bottom-middle
+      'assets/images/pattern.png',                  // Bottom-right
+    ];
+
+    return Card(
+      color: Colors.black,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(33)),
+      child: SizedBox(
+        width: context.responsiveItemSize(300),
+        child: ProductShowcaseGrid(
+          imageUrls: sampleProductImages,
+          isNetworkImage: false, // Using asset images
+          titleText: 'La magie',
+          subtitleText: 'de la nouveauté',
+          additionalText: "ne s'arrête jamais.",
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          padding: const EdgeInsets.all(16.0),
         ),
       ),
     );

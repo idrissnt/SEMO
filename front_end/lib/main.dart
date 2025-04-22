@@ -9,10 +9,10 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/app_bloc_observer.dart';
 
 // BLoC imports
-import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_event.dart';
-import 'package:semo/features/home/presentation/bloc/home_store/home_store_bloc.dart';
-import 'package:semo/features/home/presentation/bloc/home_store/home_store_event.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
+import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,12 +42,12 @@ void main() async {
               return bloc;
             },
           ),
-          BlocProvider<HomeStoreBloc>(
+          BlocProvider<WelcomeAssetsBloc>(
             create: (context) {
-              // Get the HomeStoreBloc from the service locator
-              final bloc = sl<HomeStoreBloc>();
-              // Immediately load store brands
-              bloc.add(const LoadAllStoreBrandsEvent());
+              // Get the WelcomeAssetsBloc from the service locator
+              final bloc = sl<WelcomeAssetsBloc>();
+              // Immediately load all welcome assets at once
+              bloc.add(const LoadAllAssetsEvent());
               return bloc;
             },
           ),

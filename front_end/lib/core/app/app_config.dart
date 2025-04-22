@@ -8,7 +8,8 @@ class AppConfig {
       case Environment.dev:
 
         // Update with the Mac's current IP address on the local network actually used
-        return 'http://192.168.172.184:8000'; // Current Mac IP address
+        // return 'http://192.168.172.184:8000'; // Current Mac IP address
+        return 'http://172.20.10.5:8000'; // Current Mac IP address
       case Environment.staging:
         return 'https://staging-api.semo.com';
       case Environment.prod:

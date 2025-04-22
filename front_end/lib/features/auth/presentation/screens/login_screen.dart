@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/core/utils/logger.dart';
 
-import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
 import 'package:semo/features/auth/presentation/widgets/auth_header.dart';
 import 'package:semo/features/auth/presentation/widgets/auth_state_handler.dart';
@@ -59,10 +59,7 @@ class _LoginScreenState extends State<LoginScreen>
       listener: (context, state) {
         _logger.debug(
           'Login State',
-          {
-            'component': 'LoginScreen',
-            'state': state.toString()
-          },
+          {'component': 'LoginScreen', 'state': state.toString()},
         );
         if (state is AuthAuthenticated) {
           _logger.info('Navigating to main screen');

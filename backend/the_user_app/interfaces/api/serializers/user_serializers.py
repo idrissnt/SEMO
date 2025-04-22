@@ -1,10 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-import logging
-
-from the_user_app.domain.models.entities import User, Address, UserWithAddresses
-
-logger = logging.getLogger(__name__)
 
 class AddressSerializer(serializers.Serializer):
     """Serializer for Address domain model"""

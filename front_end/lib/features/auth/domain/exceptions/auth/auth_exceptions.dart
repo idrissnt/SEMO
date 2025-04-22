@@ -1,5 +1,5 @@
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_error_codes.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_error_codes.dart';
 
 /// Domain exceptions for authentication and authorization
 class AuthenticationException extends DomainException {

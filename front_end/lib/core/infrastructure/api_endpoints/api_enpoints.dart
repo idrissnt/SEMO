@@ -14,10 +14,17 @@ class ApiRoutes {
   static String get mediaBase => AppConfig.mediaBaseUrl;
 }
 
+/// Welcome assets endpoints
+class WelcomeApiRoutes {
+  static String base = '${ApiRoutes.base}/core/welcome-assets';
+  static String companyAsset = '$base/company-asset/';
+  static String storeAssets = '$base/store-assets/';
+  static String taskAssets = '$base/task-assets/';
+}
+
 /// Authentication related routes
 class AuthApiRoutes {
-  static const String path = '/users/auth';
-  static String get base => '${ApiRoutes.base}$path';
+  static String base = '${ApiRoutes.base}/users/auth';
   static String get login => '$base/login/';
   static String get logout => '$base/logout/';
   static String get register => '$base/register/';
@@ -26,16 +33,14 @@ class AuthApiRoutes {
 
 /// Token related routes
 class TokenApiRoutes {
-  static const String path = '/users/token';
-  static String get base => '${ApiRoutes.base}$path';
+  static String get base => '${ApiRoutes.base}/users/token';
   static String get refresh => '$base/refresh/';
   static String get verify => '$base/verify/';
 }
 
 /// User profile related routes
 class ProfileApiRoutes {
-  static const String path = '/users/profiles';
-  static String get base => '${ApiRoutes.base}$path';
+  static String get base => '${ApiRoutes.base}/users/profiles';
   static String get me => '$base/me/';
   static String get updateProfile => '$base/update-profile/';
   static String get deleteAccount => '$base/delete-account/';
@@ -43,8 +48,7 @@ class ProfileApiRoutes {
 
 /// User address related routes
 class UserAddressApiRoutes {
-  static const String path = '/users/addresses';
-  static String get base => '${ApiRoutes.base}$path';
+  static String get base => '${ApiRoutes.base}/users/addresses';
   static String get getUserAddresses => '$base/';
   static String get createAddress => '$base/';
 
@@ -57,8 +61,7 @@ class UserAddressApiRoutes {
 
 /// Store related routes
 class StoreApiRoutes {
-  static const String path = '/stores';
-  static String get base => '${ApiRoutes.base}$path';
+  static String get base => '${ApiRoutes.base}/stores';
   static String get storeBrands => '$base/store-brands/';
 
   static String getStoreBrandsNearby(String address) =>
@@ -73,8 +76,7 @@ class StoreApiRoutes {
 
 /// Search related routes within store
 class StoreSearchApiRoutes {
-  static const String path = '/search';
-  static String get base => '${StoreApiRoutes.base}$path';
+  static String get base => '${StoreApiRoutes.base}/search';
   static String get searchProducts => '$base/products/';
   static String get autocomplete => '$base/autocomplete/';
 }

@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_routes.dart';
@@ -50,7 +50,9 @@ class AppRouter {
       }
 
       // If not authenticated, redirect to login
-      if (!isAuthenticated && !isAuthRoute && state.uri.path != AppRoutes.onboarding) {
+      if (!isAuthenticated &&
+          !isAuthRoute &&
+          state.uri.path != AppRoutes.onboarding) {
         return AppRoutes.login;
       }
 

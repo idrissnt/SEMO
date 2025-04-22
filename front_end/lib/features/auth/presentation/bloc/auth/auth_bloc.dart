@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_error_extensions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_error_extensions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:semo/features/auth/domain/usecases/auth_check_usecase.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_event.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserAuthRepository _authRepository;
@@ -41,46 +41,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (authTokens) async {
         _logger.info('Login successful, fetching user profile');
-        // After successful login, fetch the user profile
-        final userResult = await _userProfileUseCase.getCurrentUser();
-        userResult.fold(
-          (user) {
-            _logger.info('User profile fetched: ${user.email}');
-            emit(AuthAuthenticated(user));
-          },
-          (error) {
-            _logger.error('Failed to get user profile after login',
-                error: error);
-            // Use specific profile fetch error state with retry option
-            emit(const ProfileFetchFailure(
-                'Login successful but failed to get user profile'));
-            // Don't immediately transition to unauthenticated - let UI handle retry
-          },
-        );
+        await _fetchUserProfile(emit, 'login');
       },
       (error) {
-        // Log the error without stack trace
         _logger.error('Bloc Login error', error: error.message);
-
-        // Map domain exceptions to specific UI states
-        if (error is InvalidCredentialsException) {
-          emit(InvalidCredentialsFailure(error.message));
-        } else if (error is InvalidInputException) {
-          emit(InvalidInputFailure(error.message));
-        } else if (error is GenericAuthException) {
-          // Use extension methods for cleaner error type checking
-          if (error.isNetworkError) {
-            emit(NetworkFailure(error.getNetworkErrorMessage('login')));
-          } else if (error.isServerError) {
-            emit(ServerFailure(error.getServerErrorMessage('login')));
-          } else {
-            // Generic fallback
-            emit(AuthFailure(error.message));
-          }
-        } else {
-          // Generic fallback
-          emit(AuthFailure(error.message));
-        }
+        _mapErrorToState(emit, error, 'login');
       },
     );
   }
@@ -104,45 +69,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (authTokens) async {
         _logger.info('Registration successful, fetching user profile');
-        // After successful registration, fetch the user profile
-        final userResult = await _userProfileUseCase.getCurrentUser();
-        userResult.fold(
-          (user) {
-            _logger.info('User profile fetched: ${user.email}');
-            emit(AuthAuthenticated(user));
-          },
-          (error) {
-            _logger.error('Failed to get user profile after registration',
-                error: error);
-            // Use specific profile fetch error state with retry option
-            emit(const ProfileFetchFailure(
-                'Registration successful but failed to get user profile'));
-            // Don't immediately transition to unauthenticated - let UI handle retry
-          },
-        );
+        await _fetchUserProfile(emit, 'registration');
       },
       (error) {
-        _logger.error('Registration error', error: error);
-
-        // Map domain exceptions to specific UI states
-        if (error is UserAlreadyExistsException) {
-          emit(UserAlreadyExistsFailure(error.message));
-        } else if (error is InvalidInputException) {
-          emit(InvalidInputFailure(error.message));
-        } else if (error is GenericAuthException) {
-          // Use extension methods for cleaner error type checking
-          if (error.isNetworkError) {
-            emit(NetworkFailure(error.getNetworkErrorMessage('registration')));
-          } else if (error.isServerError) {
-            emit(ServerFailure(error.getServerErrorMessage('registration')));
-          } else {
-            // Generic fallback
-            emit(AuthFailure(error.message));
-          }
-        } else {
-          // Generic fallback
-          emit(AuthFailure(error.message));
-        }
+        _logger.error('Registration error', error: error.message);
+        _mapErrorToState(emit, error, 'registration');
       },
     );
   }
@@ -163,28 +94,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUnauthenticated());
       },
       (error) {
-        // Map domain exceptions to specific UI states
+        _logger.error('Logout error', error: error.message);
+        
+        // Special case for logout - handle missing token gracefully
         if (error is MissingRefreshTokenException) {
-          // We can handle this gracefully - just log out locally
-          _logger
-              .warning('Missing refresh token during logout: ${error.message}');
+          _logger.warning('Missing refresh token during logout: ${error.message}');
           emit(AuthUnauthenticated());
           return;
-        } else if (error is GenericAuthException) {
-          // Use extension methods for cleaner error type checking
-          if (error.isNetworkError) {
-            emit(NetworkFailure(error.getNetworkErrorMessage('logout')));
-          } else if (error.isServerError) {
-            emit(ServerFailure(error.getServerErrorMessage('logout')));
-          } else {
-            // Generic fallback
-            emit(AuthFailure(error.message));
-          }
-        } else {
-          // Generic fallback
-          emit(AuthFailure(error.message));
         }
-
+        
+        // Map other errors to appropriate states
+        _mapErrorToState(emit, error, 'logout');
+        
         // Even if there was an error, we still want to log out locally
         emit(AuthUnauthenticated());
       },
@@ -252,6 +173,69 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // Use network error with retry option
       emit(const NetworkFailure(
           'Connection error during authentication check. Tap to retry.'));
+    }
+  }
+  
+  /// Maps domain exceptions to specific UI states
+  /// This centralizes error handling logic for all auth operations
+  /// @param emit The state emitter
+  /// @param error The domain exception that was thrown
+  /// @param operation The name of the operation (login, registration, logout)
+  /// Fetches the user profile and emits appropriate states
+  /// This centralizes the user profile fetching logic
+  /// @param emit The state emitter
+  /// @param operation The name of the operation (login, registration)
+  Future<void> _fetchUserProfile(
+    Emitter<AuthState> emit,
+    String operation,
+  ) async {
+    final userResult = await _userProfileUseCase.getCurrentUser();
+    userResult.fold(
+      (user) {
+        _logger.info('User profile fetched: ${user.email}');
+        emit(AuthAuthenticated(user));
+      },
+      (error) {
+        _logger.error('Failed to get user profile after $operation',
+            error: error);
+        // Use specific profile fetch error state with retry option
+        emit(ProfileFetchFailure(
+            '$operation successful but failed to get user profile'));
+        // Don't immediately transition to unauthenticated - let UI handle retry
+      },
+    );
+  }
+
+  /// Maps domain exceptions to specific UI states
+  /// This centralizes error handling logic for all auth operations
+  /// @param emit The state emitter
+  /// @param error The domain exception that was thrown
+  /// @param operation The name of the operation (login, registration, logout)
+  void _mapErrorToState(
+    Emitter<AuthState> emit,
+    AuthenticationException error,
+    String operation,
+  ) {
+    // Map specific auth exceptions to appropriate UI states
+    if (error is InvalidCredentialsException) {
+      emit(InvalidCredentialsFailure(error.message));
+    } else if (error is InvalidInputException) {
+      emit(InvalidInputFailure(error.message));
+    } else if (error is UserAlreadyExistsException) {
+      emit(UserAlreadyExistsFailure(error.message));
+    } else if (error is GenericAuthException) {
+      // Use extension methods for cleaner error type checking
+      if (error.isNetworkError) {
+        emit(NetworkFailure(error.getNetworkErrorMessage(operation)));
+      } else if (error.isServerError) {
+        emit(ServerFailure(error.getServerErrorMessage(operation)));
+      } else {
+        // Generic fallback
+        emit(AuthFailure(error.message));
+      }
+    } else {
+      // Generic fallback for any other auth exceptions
+      emit(AuthFailure(error.message));
     }
   }
 }

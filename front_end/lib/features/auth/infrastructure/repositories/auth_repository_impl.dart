@@ -2,14 +2,14 @@
 
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/result.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_exception_mapper.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_exception_mapper.dart';
 
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/domain/services/token_service.dart';
 
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
-import 'package:semo/features/auth/domain/exceptions/auth_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:semo/features/auth/infrastructure/repositories/services/auth_service.dart';
 

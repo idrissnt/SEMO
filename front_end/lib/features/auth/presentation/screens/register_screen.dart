@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_event.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
 import 'package:semo/features/auth/presentation/widgets/auth_header.dart';
 import 'package:semo/features/auth/presentation/widgets/register_form.dart';

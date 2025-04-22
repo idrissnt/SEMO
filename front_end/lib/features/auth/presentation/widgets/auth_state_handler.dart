@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/presentation/global/app_globals.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_event.dart';
-import 'package:semo/features/auth/presentation/bloc/auth_state.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
 /// A widget that handles different auth states and provides appropriate UI feedback
 /// This demonstrates how to use BlocConsumer to react to different states
