@@ -59,14 +59,14 @@ class StoreAssetLoaded extends WelcomeAssetsState {
   List<Object?> get props => [storeAsset];
 }
 
-/// State when only task asset has been loaded
+/// State when task assets have been loaded
 class TaskAssetLoaded extends WelcomeAssetsState {
-  final TaskAsset taskAsset;
+  final List<TaskAsset> taskAssets;
 
-  const TaskAssetLoaded(this.taskAsset);
+  const TaskAssetLoaded(this.taskAssets);
 
   @override
-  List<Object?> get props => [taskAsset];
+  List<Object?> get props => [taskAssets];
 }
 
 /// State when an error occurs while loading welcome assets
@@ -107,14 +107,14 @@ class WelcomeAssetsValidationFailure extends WelcomeAssetsState {
 class AllAssetsLoaded extends WelcomeAssetsState {
   final CompanyAsset companyAsset;
   final StoreAsset storeAsset;
-  final TaskAsset taskAsset;
+  final List<TaskAsset> taskAssets;
 
   const AllAssetsLoaded({
     required this.companyAsset,
     required this.storeAsset,
-    required this.taskAsset,
+    required this.taskAssets,
   });
 
   @override
-  List<Object?> get props => [companyAsset, storeAsset, taskAsset];
+  List<Object?> get props => [companyAsset, storeAsset, taskAssets];
 }

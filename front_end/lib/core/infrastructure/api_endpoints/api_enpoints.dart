@@ -19,7 +19,7 @@ class WelcomeApiRoutes {
   static String base = '${ApiRoutes.base}/core/welcome-assets';
   static String companyAsset = '$base/company-asset/';
   static String storeAssets = '$base/store-assets/';
-  static String taskAssets = '$base/task-assets/';
+  static String taskAssets = '$base/all-task-assets/';
 }
 
 /// Authentication related routes

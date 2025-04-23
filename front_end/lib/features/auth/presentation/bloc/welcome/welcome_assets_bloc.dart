@@ -67,27 +67,26 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
     );
   }
 
-  /// Handles the LoadTaskAssetEvent to load only task asset
+  /// Handles the LoadTaskAssetEvent to load only task assets
   Future<void> _onLoadTaskAsset(
     LoadTaskAssetEvent event,
     Emitter<WelcomeAssetsState> emit,
   ) async {
-    _logger.info('Loading task asset');
+    _logger.info('Loading task assets');
     emit(const TaskAssetLoading());
 
-    final result = await _welcomeRepository.getTaskAsset();
+    final result = await _welcomeRepository.getAllTaskAsset();
 
-    _logger.info('Task asset result: $result');
+    _logger.info('Task assets result: $result');
 
     result.fold(
-      (taskAsset) {
-        _logger.info('Task asset loaded successfully');
-        _logger.info('Task asset: ${taskAsset.firstImage}');
-        emit(TaskAssetLoaded(taskAsset));
+      (taskAssets) {
+        _logger.info('Task assets loaded successfully: ${taskAssets.length} items');
+        emit(TaskAssetLoaded(taskAssets));
       },
       (error) {
-        _logger.error('Failed to load task asset', error: error);
-        _mapErrorToState(emit, error, 'task asset');
+        _logger.error('Failed to load task assets', error: error);
+        _mapErrorToState(emit, error, 'task assets');
       },
     );
   }
@@ -129,7 +128,7 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
       // Load all assets in parallel for better performance
       final companyResult = await _welcomeRepository.getCompanyAsset();
       final storeResult = await _welcomeRepository.getStoreAsset();
-      final taskResult = await _welcomeRepository.getTaskAsset();
+      final taskResult = await _welcomeRepository.getAllTaskAsset();
 
       // Handle company asset result
       CompanyAsset? companyAsset;
@@ -165,17 +164,17 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
         return;
       }
 
-      // Handle task asset result
-      TaskAsset? taskAsset;
+      // Handle task assets result
+      List<TaskAsset>? taskAssets;
       taskResult.fold(
-        (asset) => taskAsset = asset,
+        (assets) => taskAssets = assets,
         (error) {
           firstError = error;
-          _logger.error('Failed to load task asset', error: error);
+          _logger.error('Failed to load task assets', error: error);
         },
       );
 
-      // If there was an error with task asset, report it
+      // If there was an error with task assets, report it
       if (firstError != null) {
         _mapErrorToState(emit, firstError!, 'all assets');
         return;
@@ -186,7 +185,7 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
       emit(AllAssetsLoaded(
         companyAsset: companyAsset!,
         storeAsset: storeAsset!,
-        taskAsset: taskAsset!,
+        taskAssets: taskAssets!,
       ));
     } catch (e) {
       _logger.error('Unexpected error loading all assets', error: e);

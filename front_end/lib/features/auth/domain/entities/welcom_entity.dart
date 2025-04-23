@@ -10,40 +10,36 @@ class CompanyAsset {
 
 class StoreAsset {
   final String id;
-  final String titleOne;
-  final String titleTwo;
-  final String firstLogoUrl;
-  final String secondLogoUrl;
-  final String thirdLogoUrl;
+  final String cardTitleOne;
+  final String cardTitleTwo;
+  final String storeTitle;
+  final String storeLogoOneUrl;
+  final String storeLogoTwoUrl;
+  final String storeLogoThreeUrl;
 
   const StoreAsset({
     required this.id,
-    required this.titleOne,
-    required this.titleTwo,
-    required this.firstLogoUrl,
-    required this.secondLogoUrl,
-    required this.thirdLogoUrl,
+    required this.cardTitleOne,
+    required this.cardTitleTwo,
+    required this.storeTitle,
+    required this.storeLogoOneUrl,
+    required this.storeLogoTwoUrl,
+    required this.storeLogoThreeUrl,
   });
 }
 
 class TaskAsset {
   final String id;
-  final String titleOne;
-  final String titleTwo;
-  final String firstImage;
-  final String secondImage;
-  final String thirdImage;
-  final String fourthImage;
-  final String fifthImage;
+  final String title;
+  final String taskImage;
+  final String taskerProfileImageUrl;
+  final String taskerProfileTitle;
 
   const TaskAsset({
     required this.id,
-    required this.titleOne,
-    required this.titleTwo,
-    required this.firstImage,
-    required this.secondImage,
-    required this.thirdImage,
-    required this.fourthImage,
-    required this.fifthImage,
+    required this.title,
+    required this.taskImage,
+    required this.taskerProfileImageUrl,
+    required this.taskerProfileTitle,
   });
 }

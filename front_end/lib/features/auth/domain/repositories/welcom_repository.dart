@@ -13,6 +13,6 @@ abstract class WelcomeRepository {
   Future<Result<StoreAsset, WelcomeException>> getStoreAsset();
 
   /// Fetches task asset information
-  /// Returns a Result containing either a TaskAsset object on success or a WelcomeException on failure
-  Future<Result<TaskAsset, WelcomeException>> getTaskAsset();
+  /// Returns a Result containing either a List of TaskAsset objects on success or a WelcomeException on failure
+  Future<Result<List<TaskAsset>, WelcomeException>> getAllTaskAsset();
 }

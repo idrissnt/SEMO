@@ -1,6 +1,6 @@
 from core.domain.services.logging_service_interface import LoggingServiceInterface
 from core.domain.value_objects.result import Result
-
+from typing import List
 from core.domain.models.entities.welcom_asset import StoreAsset, TaskAsset, CompanyAsset
 from core.domain.repositories.welcome_assets_repository import WelcomeAssetsRepository
 
@@ -28,15 +28,15 @@ class WelcomeAssetApplicationService:
             self.logger.error("Error getting store assets", {"exception": str(e)})
             return Result.failure(e)
     
-    def get_task_assets(self) -> Result[TaskAsset, str]:
+    def get_all_task_assets(self) -> Result[List[TaskAsset], str]:
         """Get task asset
             
         Returns:
-            Result containing TaskAsset on success or error message on failure
+            Result containing List of TaskAsset on success or error message on failure
         """
         
         try:
-            welcome_asset = self.welcome_asset_repository.get_task_assets()
+            welcome_asset = self.welcome_asset_repository.get_all_task_assets()
             return Result.success(welcome_asset)
             
         except Exception as e:

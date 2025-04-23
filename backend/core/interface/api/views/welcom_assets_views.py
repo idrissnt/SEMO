@@ -51,13 +51,13 @@ class WelcomeAssetViewSet(viewsets.ViewSet):
             else:
                 raise result.error
     
-    @action(detail=False, methods=['get'], permission_classes=[AllowAny], url_path='task-assets')
-    def get_task_assets(self, request):
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny], url_path='all-task-assets')
+    def get_all_task_assets(self, request):
         
-        result = self.welcome_asset_service.get_task_assets()
+        result = self.welcome_asset_service.get_all_task_assets()
         
         if result.is_success():
-            serialized_data = TaskAssetSerializer(result.value).data
+            serialized_data = TaskAssetSerializer(result.value, many=True).data
             return Response(serialized_data, status=status.HTTP_200_OK)
         else:
             if hasattr(result.error, '__call__'):

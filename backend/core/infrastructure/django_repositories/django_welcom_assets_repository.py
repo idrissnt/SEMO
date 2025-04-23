@@ -22,34 +22,32 @@ class DjangoWelcomeAssetsRepository(WelcomeAssetsRepository):
         """Convert ORM model to domain model"""
         return StoreAsset(
             id=model.id,
-            title_one=model.title_one,
-            title_two=model.title_two,
-            first_logo_url=model.first_logo_url.url,
-            second_logo_url=model.second_logo_url.url,
-            third_logo_url=model.third_logo_url.url
+            card_title_one=model.card_title_one,
+            card_title_two=model.card_title_two,
+            store_title=model.store_title,
+            store_logo_one_url=model.store_logo_one_url.url,
+            store_logo_two_url=model.store_logo_two_url.url,
+            store_logo_three_url=model.store_logo_three_url.url
         )
     
-    def get_task_assets(self) -> TaskAsset:
+    def get_all_task_assets(self) -> List[TaskAsset]:
         """Get task asset
         
         Returns:
-            TaskAsset object
+            List of TaskAsset objects
         """
-        tasks = cache.get_or_set('welcome_tasks', lambda: TaskAssetModel.objects.first(), 60*60)
+        tasks = cache.get_or_set('welcome_tasks', lambda: list(TaskAssetModel.objects.all()), 60*60)
         
-        return self._to_task_domain(tasks)
+        return [self._to_task_domain(task) for task in tasks]
     
     def _to_task_domain(self, model: TaskAssetModel) -> TaskAsset:
         """Convert ORM model to domain model"""
         return TaskAsset(
             id=model.id,
-            title_one=model.title_one,
-            title_two=model.title_two,
-            first_image_url=model.first_image_url.url,
-            second_image_url=model.second_image_url.url,
-            third_image_url=model.third_image_url.url,
-            fourth_image_url=model.fourth_image_url.url,
-            fifth_image_url=model.fifth_image_url.url
+            title=model.title,
+            task_image_url=model.task_image_url.url,
+            tasker_profile_image_url=model.tasker_profile_image_url.url,
+            tasker_profile_title=model.tasker_profile_title
         )
     
     def get_company_asset(self) -> CompanyAsset:

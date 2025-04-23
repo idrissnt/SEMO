@@ -33,30 +33,33 @@ class CompanyAssetModel {
 /// Data transfer object for store asset from API
 class StoreAssetModel {
   final String id;
-  final String titleOne;
-  final String titleTwo;
-  final String firstLogoUrl;
-  final String secondLogoUrl;
-  final String thirdLogoUrl;
+  final String cardTitleOne;
+  final String cardTitleTwo;
+  final String storeTitle;
+  final String storeLogoOneUrl;
+  final String storeLogoTwoUrl;
+  final String storeLogoThreeUrl;
 
   const StoreAssetModel({
     required this.id,
-    required this.titleOne,
-    required this.titleTwo,
-    required this.firstLogoUrl,
-    required this.secondLogoUrl,
-    required this.thirdLogoUrl,
+    required this.cardTitleOne,
+    required this.cardTitleTwo,
+    required this.storeTitle,
+    required this.storeLogoOneUrl,
+    required this.storeLogoTwoUrl,
+    required this.storeLogoThreeUrl,
   });
 
   /// Creates a model from JSON data
   factory StoreAssetModel.fromJson(Map<String, dynamic> json) {
     return StoreAssetModel(
       id: json['id'] ?? '',
-      titleOne: json['title_one'] ?? '',
-      titleTwo: json['title_two'] ?? '',
-      firstLogoUrl: json['first_logo_url'] ?? '',
-      secondLogoUrl: json['second_logo_url'] ?? '',
-      thirdLogoUrl: json['third_logo_url'] ?? '',
+      cardTitleOne: json['card_title_one'] ?? '',
+      cardTitleTwo: json['card_title_two'] ?? '',
+      storeTitle: json['store_title'] ?? '',
+      storeLogoOneUrl: json['store_logo_one_url'] ?? '',
+      storeLogoTwoUrl: json['store_logo_two_url'] ?? '',
+      storeLogoThreeUrl: json['store_logo_three_url'] ?? '',
     );
   }
 
@@ -64,11 +67,12 @@ class StoreAssetModel {
   StoreAsset toDomain() {
     return StoreAsset(
       id: id,
-      titleOne: titleOne,
-      titleTwo: titleTwo,
-      firstLogoUrl: firstLogoUrl,
-      secondLogoUrl: secondLogoUrl,
-      thirdLogoUrl: thirdLogoUrl,
+      cardTitleOne: cardTitleOne,
+      cardTitleTwo: cardTitleTwo,
+      storeTitle: storeTitle,
+      storeLogoOneUrl: storeLogoOneUrl,
+      storeLogoTwoUrl: storeLogoTwoUrl,
+      storeLogoThreeUrl: storeLogoThreeUrl,
     );
   }
 }
@@ -76,36 +80,27 @@ class StoreAssetModel {
 /// Data transfer object for task asset from API
 class TaskAssetModel {
   final String id;
-  final String titleOne;
-  final String titleTwo;
-  final String firstImage;
-  final String secondImage;
-  final String thirdImage;
-  final String fourthImage;
-  final String fifthImage;
+  final String title;
+  final String taskImage;
+  final String taskerProfileImageUrl;
+  final String taskerProfileTitle;
 
   const TaskAssetModel({
     required this.id,
-    required this.titleOne,
-    required this.titleTwo,
-    required this.firstImage,
-    required this.secondImage,
-    required this.thirdImage,
-    required this.fourthImage,
-    required this.fifthImage,
+    required this.title,
+    required this.taskImage,
+    required this.taskerProfileImageUrl,
+    required this.taskerProfileTitle,
   });
 
   /// Creates a model from JSON data
   factory TaskAssetModel.fromJson(Map<String, dynamic> json) {
     return TaskAssetModel(
       id: json['id'] ?? '',
-      titleOne: json['title_one'] ?? '',
-      titleTwo: json['title_two'] ?? '',
-      firstImage: json['first_image_url'] ?? '',
-      secondImage: json['second_image_url'] ?? '',
-      thirdImage: json['third_image_url'] ?? '',
-      fourthImage: json['fourth_image_url'] ?? '',
-      fifthImage: json['fifth_image_url'] ?? '',
+      title: json['title'] ?? '',
+      taskImage: json['task_image_url'] ?? '',
+      taskerProfileImageUrl: json['tasker_profile_image_url'] ?? '',
+      taskerProfileTitle: json['tasker_profile_title'] ?? '',
     );
   }
 
@@ -113,13 +108,10 @@ class TaskAssetModel {
   TaskAsset toDomain() {
     return TaskAsset(
       id: id,
-      titleOne: titleOne,
-      titleTwo: titleTwo,
-      firstImage: firstImage,
-      secondImage: secondImage,
-      thirdImage: thirdImage,
-      fourthImage: fourthImage,
-      fifthImage: fifthImage,
+      title: title,
+      taskImage: taskImage,
+      taskerProfileImageUrl: taskerProfileImageUrl,
+      taskerProfileTitle: taskerProfileTitle,
     );
   }
 }

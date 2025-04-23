@@ -40,7 +40,7 @@ Widget buildStoreCard(BuildContext context) {
                   TextSpan(
                     text: ' 1 heure',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 243, 33, 33),
+                      color: Colors.red,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -52,7 +52,7 @@ Widget buildStoreCard(BuildContext context) {
                 if (state is StoreBrandsLoaded &&
                     state.storeBrands.isNotEmpty) {
                   return SizedBox(
-                      height: 80,
+                      height: 200,
                       child: StoreSection(
                           stores: state.storeBrands, sectionHeight: 80));
                 }
@@ -93,30 +93,38 @@ class StoreSection extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    double imageSize = sectionHeight - sectionHeight * 0.2;
+    // Calculate a safe image size based on the container height
+    double containerHeight = 100;
+    double imageSize = 60;
 
-    return SizedBox(
-      height: sectionHeight,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        padding: EdgeInsets.symmetric(horizontal: context.xs),
-        itemCount: stores.length,
-        itemBuilder: (context, index) {
-          final store = stores[index];
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.m),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  StoreImageButton(store: store, size: imageSize),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Les magasins',
+            style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal)),
+        Container(
+          decoration: BoxDecoration(
+            // color: Colors.blue,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          height: containerHeight,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: context.xs),
+            itemCount: stores.length,
+            itemBuilder: (context, index) {
+              final store = stores[index];
+              return Center(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  child: StoreImageButton(store: store, size: imageSize),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

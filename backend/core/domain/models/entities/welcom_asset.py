@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
+from typing import Optional
 
 @dataclass
 class CompanyAsset:
@@ -12,20 +13,18 @@ class CompanyAsset:
 class StoreAsset:
     """Domain entity representing a store asset"""
     id: UUID
-    title_one: str
-    title_two: str
-    first_logo_url: str
-    second_logo_url: str
-    third_logo_url: str
+    card_title_one: str
+    card_title_two: str
+    store_title: str
+    store_logo_one_url: str
+    store_logo_two_url: str
+    store_logo_three_url: str
 
 @dataclass
 class TaskAsset:
     """Domain entity representing a task asset"""
     id: UUID
-    title_one: str
-    title_two: str
-    first_image_url: str
-    second_image_url: str
-    third_image_url: str
-    fourth_image_url: str
-    fifth_image_url: str
+    title: Optional[str]
+    task_image_url: str
+    tasker_profile_image_url : Optional[str] 
+    tasker_profile_title : Optional[str]

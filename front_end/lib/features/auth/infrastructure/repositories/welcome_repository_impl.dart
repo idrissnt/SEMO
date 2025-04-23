@@ -44,9 +44,9 @@ class WelcomeRepositoryImpl implements WelcomeRepository {
   }
 
   @override
-  Future<Result<TaskAsset, WelcomeException>> getTaskAsset() async {
+  Future<Result<List<TaskAsset>, WelcomeException>> getAllTaskAsset() async {
     try {
-      final taskAsset = await _welcomeService.getTaskAsset();
+      final taskAsset = await _welcomeService.getAllTaskAsset();
       return Result.success(taskAsset);
     } catch (e) {
       return _handleWelcomeError(e, 'Task asset');

@@ -17,12 +17,12 @@ class CompanyAssetAdmin(admin.ModelAdmin):
 
 @admin.register(StoreAsset)
 class StoreAssetAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title_one', 'title_two', 'first_logo_url', 'second_logo_url', 'third_logo_url']
-    search_fields = ['title_one', 'title_two']
+    list_display = ['id', 'card_title_one', 'card_title_two', 'store_title', 'store_logo_one_url', 'store_logo_two_url', 'store_logo_three_url']
+    search_fields = ['card_title_one', 'card_title_two']
 
     fieldsets = [
         ('Store Asset', {
-            'fields': ('title_one', 'title_two', 'first_logo_url', 'second_logo_url', 'third_logo_url')
+            'fields': ('card_title_one', 'card_title_two', 'store_title', 'store_logo_one_url', 'store_logo_two_url', 'store_logo_three_url')
         }),
     ]
 
@@ -31,12 +31,12 @@ class StoreAssetAdmin(admin.ModelAdmin):
 
 @admin.register(TaskAsset)
 class TaskAssetAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title_one', 'title_two', 'first_image_url', 'second_image_url', 'third_image_url', 'fourth_image_url', 'fifth_image_url']
-    search_fields = ['title_one', 'title_two']
+    list_display = ['id', 'title', 'task_image_url', 'tasker_profile_image_url', 'tasker_profile_title']
+    search_fields = ['title']
 
     fieldsets = [
         ('Task Asset', {
-            'fields': ('title_one', 'title_two', 'first_image_url', 'second_image_url', 'third_image_url', 'fourth_image_url', 'fifth_image_url')
+            'fields': ('title', 'task_image_url', 'tasker_profile_image_url', 'tasker_profile_title')
         }),
     ]
 

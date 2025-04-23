@@ -53,20 +53,19 @@ class WelcomeService {
     }
   }
 
-  Future<TaskAsset> getTaskAsset() async {
+  Future<List<TaskAsset>> getAllTaskAsset() async {
     try {
-      _logger.debug('Fetching task asset');
+      _logger.debug('Fetching all task assets');
 
-      final response = await _apiClient.get<Map<String, dynamic>>(
+      final response = await _apiClient.get<List<dynamic>>(
         WelcomeApiRoutes.taskAssets,
         options: null, // No special options needed
       );
 
-      final taskAssetModel = TaskAssetModel.fromJson(response);
-      _logger.info('Task asset Model: ${taskAssetModel.firstImage}');
-      return taskAssetModel.toDomain();
+      final taskAssetModels = response.map((item) => TaskAssetModel.fromJson(item)).toList();
+      return taskAssetModels.map((model) => model.toDomain()).toList();
     } catch (e) {
-      _logger.error('Failed to fetch task asset: $e');
+      _logger.error('Failed to fetch task assets: $e');
       _exceptionMapper.mapApiExceptionToDomainException(e);
     }
   }
