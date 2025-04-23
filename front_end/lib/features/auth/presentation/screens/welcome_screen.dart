@@ -65,9 +65,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   // Pagination indicators
                   Center(
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.only(
+                          top: 8, bottom: 8, left: 12, right: 12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: SmoothPageIndicator(
@@ -76,8 +77,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         effect: const ExpandingDotsEffect(
                           activeDotColor: Colors.blue,
                           dotColor: Colors.grey,
-                          dotHeight: 8,
-                          dotWidth: 8,
+                          dotHeight: 12,
+                          dotWidth: 12,
                           expansionFactor: 2,
                           spacing: 4,
                         ),

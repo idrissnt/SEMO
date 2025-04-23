@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:semo/core/presentation/navigation/router_services/route_constants.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/features/auth/presentation/widgets/welcom/store_showcase.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -20,14 +22,11 @@ Widget buildTaskCard(BuildContext context) {
       width: context.responsiveItemSize(300),
       child: BlocBuilder<WelcomeAssetsBloc, WelcomeAssetsState>(
         builder: (context, state) {
-          logger.info('The sate kjubf State: $state');
           if (state is TaskAssetLoaded) {
             // Use the TaskAsset images from the loaded state
-            logger.info('Task asset loaded successfully');
             return _buildTaskAssetContent(context, state.taskAsset);
           } else if (state is TaskAssetLoading || state is AllAssetsLoading) {
             // Show a loading indicator while assets are being loaded
-            logger.info('Task asset loading...');
             return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +79,6 @@ Widget _buildTaskAssetContent(BuildContext context, TaskAsset taskAsset) {
   return ProductShowcaseGrid(
     imageUrls: taskImages,
     titleText: taskAsset.titleOne,
-    subtitleText: taskAsset.titleTwo,
     backgroundColor: Colors.white,
     textColor: Colors.black,
     padding: const EdgeInsets.all(16.0),
@@ -164,7 +162,6 @@ class ProductShowcaseGrid extends StatelessWidget {
   final List<String> imageUrls;
 
   final String? titleText;
-  final String? subtitleText;
   final Color backgroundColor;
   final Color textColor;
   final EdgeInsets padding;
@@ -175,7 +172,6 @@ class ProductShowcaseGrid extends StatelessWidget {
     Key? key,
     required this.imageUrls,
     this.titleText,
-    this.subtitleText,
     this.backgroundColor = Colors.black,
     this.textColor = Colors.white,
     this.padding = const EdgeInsets.all(16.0),
@@ -189,15 +185,18 @@ class ProductShowcaseGrid extends StatelessWidget {
       padding: padding,
       child: Column(
         children: [
-          // Overlapping cards with profile labels
-          _buildOverlappingCards(imageUrls),
-
           // Caption text at the bottom
-          if (titleText != null || subtitleText != null)
+          if (titleText != null)
             Padding(
               padding: const EdgeInsets.only(top: 24.0, bottom: 16.0),
               child: _buildCaptionText(context),
             ),
+          // Overlapping cards with profile labels
+          _buildOverlappingCards(imageUrls),
+
+          // Login and Register buttons
+          buildButtons(context, AppRoutes.register, AppRoutes.login,
+              'Créer un compte', 'Se connecter'),
         ],
       ),
     );
@@ -213,15 +212,6 @@ class ProductShowcaseGrid extends StatelessWidget {
             titleText!,
             fontSize: 24,
             fontWeight: FontWeight.bold,
-          ),
-        if (subtitleText != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: _buildGradientText(
-              subtitleText!,
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
           ),
       ],
     );
@@ -242,10 +232,10 @@ class ProductShowcaseGrid extends StatelessWidget {
 
   /// Builds overlapping cards layout with profile labels
   Widget _buildOverlappingCards(List<String> images) {
-    // Ensure we have at least 2 images
-    final List<String> imagesToUse = images.length >= 2
-        ? images.sublist(0, 2)
-        : [...images, ...List.filled(2 - images.length, '')];
+    // Ensure we have at least 5 images
+    final List<String> imagesToUse = images.length >= 5
+        ? images.sublist(0, 5)
+        : [...images, ...List.filled(5 - images.length, '')];
 
     // Sample profile images - replace with actual profile images in production
     final profileImages = [
@@ -253,21 +243,22 @@ class ProductShowcaseGrid extends StatelessWidget {
       'https://randomuser.me/api/portraits/women/44.jpg',
     ];
 
-    // Sample names - replace with actual names in production
-    final names = ['Chris', 'Chloé'];
+    // Sample textimages - replace with actual textimages in production
+    final textimages = ['Mr. Propre', 'Cheffe cuisinière'];
 
     return SizedBox(
-      height: 300,
+      height: 230,
       child: Stack(
         children: [
           // Left card stack
           Positioned(
-            left: 20,
+            left: 5,
             top: 40,
             child: _buildCardStack(
-              mainImage: imagesToUse[0],
+              mainImage: imagesToUse[4],
+              backgroundImage: imagesToUse[0],
               profileImage: profileImages[0],
-              name: names[0],
+              textimage: textimages[0],
               angle: -5,
               mainCardColor: Colors.purple.shade100,
               stackCardColor: Colors.purple.shade200,
@@ -276,12 +267,13 @@ class ProductShowcaseGrid extends StatelessWidget {
 
           // Right card stack (positioned to overlap slightly)
           Positioned(
-            right: 20,
+            right: 0,
             top: 20,
             child: _buildCardStack(
-              mainImage: imagesToUse[1],
+              mainImage: imagesToUse[3],
+              backgroundImage: imagesToUse[2],
               profileImage: profileImages[1],
-              name: names[1],
+              textimage: textimages[1],
               angle: 5,
               mainCardColor: Colors.orange.shade100,
               stackCardColor: Colors.orange.shade200,
@@ -295,8 +287,9 @@ class ProductShowcaseGrid extends StatelessWidget {
   /// Builds a card stack with a main card and background cards
   Widget _buildCardStack({
     required String mainImage,
+    required String backgroundImage,
     required String profileImage,
-    required String name,
+    required String textimage,
     required double angle,
     required Color mainCardColor,
     required Color stackCardColor,
@@ -323,6 +316,12 @@ class ProductShowcaseGrid extends StatelessWidget {
                     offset: Offset(0, 2),
                   ),
                 ],
+                image: backgroundImage.isNotEmpty
+                    ? DecorationImage(
+                        image: CachedNetworkImageProvider(backgroundImage),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
               ),
             ),
           ),
@@ -356,10 +355,10 @@ class ProductShowcaseGrid extends StatelessWidget {
             child: Align(
               alignment: Alignment.topLeft,
               child: Container(
-                margin: const EdgeInsets.all(8),
+                margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.blue.shade500,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -371,10 +370,11 @@ class ProductShowcaseGrid extends StatelessWidget {
                       backgroundImage: CachedNetworkImageProvider(profileImage),
                     ),
                     const SizedBox(width: 4),
-                    // Name text
+                    // TextImage text
                     Text(
-                      '$name vous aide',
+                      textimage,
                       style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),

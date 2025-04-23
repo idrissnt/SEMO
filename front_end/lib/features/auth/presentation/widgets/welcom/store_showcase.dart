@@ -47,51 +47,6 @@ Widget buildStoreCard(BuildContext context) {
                 ],
               ),
             ),
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () => context.go(AppRoutes.register),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: const Color.fromARGB(255, 14, 77, 129),
-                    foregroundColor: Colors.white,
-                  ),
-                  child: SizedBox(
-                    width: context.responsiveItemSize(250),
-                    child: Text(
-                      'Créer un compte',
-                      textAlign: TextAlign.center,
-                      style: context.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                OutlinedButton(
-                  onPressed: () => context.go(AppRoutes.login),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: const Color.fromARGB(255, 234, 232, 232),
-                    disabledForegroundColor: Colors.white,
-                  ),
-                  child: SizedBox(
-                    width: context.responsiveItemSize(250),
-                    child: Text(
-                      'Se connecter',
-                      textAlign: TextAlign.center,
-                      style: context.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w900,
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
             BlocBuilder<HomeStoreBloc, HomeStoreState>(
               builder: (context, state) {
                 if (state is StoreBrandsLoaded &&
@@ -115,6 +70,8 @@ Widget buildStoreCard(BuildContext context) {
                 );
               },
             ),
+            buildButtons(context, AppRoutes.register, AppRoutes.login,
+                'Créer un compte', 'Se connecter'),
           ],
         ),
       ),
@@ -149,7 +106,7 @@ class StoreSection extends StatelessWidget {
           final store = stores[index];
           return Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.xs),
+              padding: EdgeInsets.symmetric(horizontal: context.m),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -224,4 +181,55 @@ class StoreImageButton extends StatelessWidget {
       color: context.textSecondaryColor,
     );
   }
+}
+
+Widget buildButtons(BuildContext context, String registerRoute,
+    String loginRoute, String registerText, String loginText) {
+  return Column(
+    children: [
+      ElevatedButton(
+        onPressed: () => context.go(registerRoute),
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+          minimumSize: const Size(0, 50),
+          backgroundColor: Colors.blue.shade800,
+          foregroundColor: Colors.white,
+        ),
+        child: SizedBox(
+          width: context.responsiveItemSize(250),
+          child: Text(
+            registerText,
+            textAlign: TextAlign.center,
+            style: context.bodyLarge.copyWith(
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(height: 8),
+      OutlinedButton(
+        onPressed: () => context.go(loginRoute),
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+          minimumSize: const Size(0, 50),
+          backgroundColor: const Color.fromARGB(255, 234, 232, 232),
+          disabledForegroundColor: Colors.white,
+        ),
+        child: SizedBox(
+          width: context.responsiveItemSize(250),
+          child: Text(
+            loginText,
+            textAlign: TextAlign.center,
+            style: context.bodyLarge.copyWith(
+              fontWeight: FontWeight.w900,
+              color: Colors.black,
+              fontSize: 20,
+            ),
+          ),
+        ),
+      )
+    ],
+  );
 }
