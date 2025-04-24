@@ -28,7 +28,7 @@ class WelcomeAssetsModule {
     );
 
     // BLoCs
-    getIt.registerFactory(
+    getIt.registerLazySingleton(
       () => WelcomeAssetsBloc(
         welcomeRepository: getIt<WelcomeRepository>(),
       ),

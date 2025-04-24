@@ -21,7 +21,7 @@ Widget buildTaskCard(BuildContext context) {
       child: BlocBuilder<WelcomeAssetsBloc, WelcomeAssetsState>(
         builder: (context, state) {
           // Handle different state types directly
-          if (state is TaskAssetLoaded && state.taskAssets.isNotEmpty) {
+          if (state is AllAssetsLoaded && state.taskAssets.isNotEmpty) {
             // Successfully loaded with task assets
 
             // data preparation
@@ -35,14 +35,14 @@ Widget buildTaskCard(BuildContext context) {
               textColor: Colors.black,
               padding: const EdgeInsets.all(16.0),
             );
-          } else if (state is TaskAssetLoaded) {
+          } else if (state is AllAssetsLoaded && state.taskAssets.isEmpty) {
             // Loaded but empty
             logger.info('Task assets loaded but empty');
             return const Center(
               child: Text('task assets coming soon...',
                   style: TextStyle(color: Colors.black)),
             );
-          } else if (state is TaskAssetLoading || state is AllAssetsLoading) {
+          } else if (state is AllAssetsLoading) {
             // Loading state
             logger.info('Task assets loading...');
             return const Center(
@@ -77,11 +77,11 @@ Widget buildTaskCard(BuildContext context) {
   );
 }
 
-/// Schedules a retry for loading task assets
+/// Schedules a retry for loading all assets
 void _scheduleRetryLoad(BuildContext context) {
   Future.delayed(const Duration(seconds: 3), () {
     if (context.mounted) {
-      context.read<WelcomeAssetsBloc>().add(const LoadTaskAssetEvent());
+      context.read<WelcomeAssetsBloc>().add(const LoadAllAssetsEvent());
     }
   });
 }

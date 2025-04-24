@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:semo/features/auth/presentation/widgets/welcom/components/task_card_stack.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/styles/card_theme.dart';
+import 'package:semo/features/auth/presentation/widgets/welcom/styles/task_card_theme.dart';
 
 /// A component that handles the layout of task cards
 class CardLayout extends StatelessWidget {

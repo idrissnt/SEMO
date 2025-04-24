@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/features/auth/presentation/widgets/welcom/components/auth_buttons.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/components/card_layout.dart';
+import 'package:semo/features/auth/presentation/widgets/welcom/components/task_card_layout.dart';
 
 /// This widget creates a visually appealing showcase of products using a staggered grid layout,
 /// similar to a masonry grid, with a text caption at the bottom.

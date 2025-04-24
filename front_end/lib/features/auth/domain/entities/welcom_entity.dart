@@ -1,10 +1,12 @@
 class CompanyAsset {
   final String id;
   final String logoUrl;
+  final String companyName;
 
   const CompanyAsset({
     required this.id,
     required this.logoUrl,
+    required this.companyName,
   });
 }
 

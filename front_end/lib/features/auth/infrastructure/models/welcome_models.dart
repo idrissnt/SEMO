@@ -26,6 +26,7 @@ class CompanyAssetModel {
     return CompanyAsset(
       id: id,
       logoUrl: logoUrl,
+      companyName: name,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/styles/card_theme.dart';
+import 'package:semo/features/auth/presentation/widgets/welcom/styles/task_card_theme.dart';
 
 /// A component that builds a stack of cards with a main card and background card
 class StackOfCards extends StatelessWidget {
