@@ -100,6 +100,13 @@ class AppTextStyles {
       );
 
   // Button Styles - Context-aware versions
+
+  static TextStyle buttonVeryLarge(BuildContext context) => GoogleFonts.poppins(
+        fontSize: _getResponsiveFontSize(context, 20),
+        fontWeight: FontWeight.w900,
+        color: Colors.white,
+        height: 1.4,
+      );
   static TextStyle buttonLarge(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 16),
         fontWeight: FontWeight.w600,

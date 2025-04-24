@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:semo/features/auth/presentation/widgets/welcom/styles/card_theme.dart';
 
 /// A component that builds a stack of cards with a main card and background card
-class TaskCardStack extends StatelessWidget {
+class StackOfCards extends StatelessWidget {
   final String mainImage;
   final String backgroundImage;
   final String profileImage;
@@ -12,7 +12,7 @@ class TaskCardStack extends StatelessWidget {
   final Color mainCardColor;
   final Color stackCardColor;
 
-  const TaskCardStack({
+  const StackOfCards({
     Key? key,
     required this.mainImage,
     required this.backgroundImage,
@@ -65,7 +65,7 @@ class TaskCardStack extends StatelessWidget {
   /// Builds the profile label that appears on cards
   Widget? _buildProfileLabel(String profileImage, String labelText) {
     if (profileImage.isEmpty) return null;
-    
+
     return Align(
       alignment: Alignment.topLeft,
       child: Container(
@@ -98,7 +98,7 @@ class TaskCardStack extends StatelessWidget {
       ),
     );
   }
-  
+
   /// Helper method to build card containers with consistent styling
   Widget _buildCardContainer({
     required double width,

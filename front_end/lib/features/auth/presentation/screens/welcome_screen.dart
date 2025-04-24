@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/store_showcase.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/product_showcase_grid.dart';
+import 'package:semo/features/auth/presentation/widgets/welcom/showcases/store_showcase.dart';
+import 'package:semo/features/auth/presentation/widgets/welcom/task_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
 
@@ -24,8 +24,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _appNameController.dispose();
     super.dispose();
   }
-
-  // The task card building logic has been moved to product_showcase_grid.dart as a top-level function
 
   @override
   Widget build(BuildContext context) {

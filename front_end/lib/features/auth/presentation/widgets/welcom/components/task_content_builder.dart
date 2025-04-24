@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/product_showcase_grid.dart';
 import 'package:semo/features/auth/presentation/widgets/welcom/styles/card_theme.dart';
 import 'package:semo/features/auth/presentation/widgets/welcom/utils/task_asset_organizer.dart';
 
@@ -12,15 +11,17 @@ final AppLogger logger = AppLogger();
 /// Builds content when task assets are loaded
 class TaskContentBuilder {
   /// Builds the task asset content for the product showcase grid
-  static Widget build(BuildContext context, List<TaskAsset> taskAssets) {
+  static Map<String, dynamic> build(
+      BuildContext context, List<TaskAsset> taskAssets) {
     // Log summary of task assets for debugging
     logger.info('Processing ${taskAssets.length} task assets');
-    
+
     // Only log detailed asset info in debug mode
     if (kDebugMode) {
       for (int i = 0; i < taskAssets.length; i++) {
         final asset = taskAssets[i];
-        logger.info('Asset $i - title: ${asset.title}, hasImage: ${asset.taskImage.isNotEmpty}');
+        logger.info(
+            'Asset $i - title: ${asset.title}, hasImage: ${asset.taskImage.isNotEmpty}');
       }
     }
 
@@ -36,7 +37,7 @@ class TaskContentBuilder {
 
     // Prepare the main card assets
     final List<Map<String, String>> mainCards = [];
-    
+
     // Process available main card assets (up to 2)
     for (var asset in mainCardAssets.take(2)) {
       mainCards.add({
@@ -45,7 +46,7 @@ class TaskContentBuilder {
         'profileTitle': asset.taskerProfileTitle,
       });
     }
-    
+
     // Log summary of main cards
     logger.info('Main cards count: ${mainCards.length}');
 
@@ -69,14 +70,11 @@ class TaskContentBuilder {
     logger.info('Background images: $backgroundImages');
 
     // Use the existing ProductShowcaseGrid but with our organized data
-    return ProductShowcaseGrid(
-      imageUrls: const [], // Not used directly anymore
-      titleText: titleAsset?.title ?? 'Task Showcase',
-      backgroundColor: Colors.white,
-      textColor: Colors.black,
-      padding: const EdgeInsets.all(16.0),
-      mainCards: mainCards,
-      backgroundImages: backgroundImages,
-    );
+
+    return {
+      'titleText': titleAsset?.title ?? 'Task Showcase',
+      'mainCards': mainCards,
+      'backgroundImages': backgroundImages,
+    };
   }
 }

@@ -18,6 +18,7 @@ extension ThemeExtension on BuildContext {
   TextStyle get bodyMedium => AppTextStyles.bodyMedium(this);
   TextStyle get bodySmall => AppTextStyles.bodySmall(this);
   TextStyle get caption => AppTextStyles.caption(this);
+  TextStyle get buttonVeryLarge => AppTextStyles.buttonVeryLarge(this);
   TextStyle get buttonLarge => AppTextStyles.buttonLarge(this);
   TextStyle get buttonMedium => AppTextStyles.buttonMedium(this);
   TextStyle get buttonSmall => AppTextStyles.buttonSmall(this);
