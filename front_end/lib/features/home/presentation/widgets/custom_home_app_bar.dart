@@ -23,13 +23,13 @@ class CustomHomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     // Reduced app bar height to minimize white space
     final appBarHeight = isCollapsed
-        ? context.responsiveItemSize(kToolbarHeight)
-        : context.responsiveItemSize(kToolbarHeight * 1.9);
+        ? context.getResponsiveHeightValue(kToolbarHeight)
+        : context.getResponsiveHeightValue(kToolbarHeight * 1.9);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return Material(
-          elevation: isCollapsed ? context.cardElevation : 0,
+          elevation: isCollapsed ? context.cardElevationWidth : 0,
           color: context.backgroundColor,
           child: SafeArea(
             bottom: false,
@@ -41,9 +41,9 @@ class CustomHomeAppBar extends StatelessWidget {
                   // Top row with location and icons - only visible when not collapsed
                   if (!isCollapsed)
                     Positioned(
-                      top: context.xxs,
-                      left: context.m,
-                      right: context.m,
+                      top: context.xxsWidth,
+                      left: context.mWidth,
+                      right: context.mWidth,
                       child: _buildTopRow(context),
                     ),
 
@@ -53,11 +53,12 @@ class CustomHomeAppBar extends StatelessWidget {
                     curve: Curves.easeInOut,
                     // Adjusted search bar position for reduced app bar height
                     top: isCollapsed
-                        ? context.s
-                        : context.responsiveItemSize(kToolbarHeight * 0.95),
-                    left: context.m,
-                    right: context.m,
-                    height: context.buttonHeightMedium,
+                        ? context.sWidth
+                        : context
+                            .getResponsiveWidthValue(kToolbarHeight * 0.95),
+                    left: context.mWidth,
+                    right: context.mWidth,
+                    height: context.buttonHeightMediumWidth,
                     child: _buildSearchBarRow(context),
                   ),
                 ],
@@ -81,21 +82,24 @@ class CustomHomeAppBar extends StatelessWidget {
 
   Widget _buildLocationWidget(BuildContext context) {
     return BlocBuilder<HomeUserAddressBloc, HomeUserAddressState>(
-      buildWhen: (previous, current) => 
-          current is HomeUserAddressLoaded || 
-          current is HomeAddressCreated || 
+      buildWhen: (previous, current) =>
+          current is HomeUserAddressLoaded ||
+          current is HomeAddressCreated ||
           current is HomeAddressUpdated,
       builder: (context, state) {
         // Extract address from state
         String addressText = 'Select Address';
         if (state is HomeUserAddressLoaded) {
-          addressText = '${state.address.streetNumber} ${state.address.streetName}';
+          addressText =
+              '${state.address.streetNumber} ${state.address.streetName}';
         } else if (state is HomeAddressCreated) {
-          addressText = '${state.address.streetNumber} ${state.address.streetName}';
+          addressText =
+              '${state.address.streetNumber} ${state.address.streetName}';
         } else if (state is HomeAddressUpdated) {
-          addressText = '${state.address.streetNumber} ${state.address.streetName}';
+          addressText =
+              '${state.address.streetNumber} ${state.address.streetName}';
         }
-        
+
         return GestureDetector(
           onTap: () {
             // Navigate to address selection/update screen
@@ -106,9 +110,9 @@ class CustomHomeAppBar extends StatelessWidget {
             children: [
               context.iconMedium(
                   icon: Icons.location_on, color: context.textPrimaryColor),
-              SizedBox(width: context.xxs),
+              SizedBox(width: context.xxsWidth),
               SizedBox(
-                width: context.responsiveItemSize(100),
+                width: context.getResponsiveWidthValue(100),
                 child: Text(
                   addressText,
                   style: context.appBarTitle,
@@ -117,7 +121,8 @@ class CustomHomeAppBar extends StatelessWidget {
                 ),
               ),
               context.iconMedium(
-                  icon: Icons.keyboard_arrow_down, color: context.textPrimaryColor),
+                  icon: Icons.keyboard_arrow_down,
+                  color: context.textPrimaryColor),
             ],
           ),
         );
@@ -134,19 +139,19 @@ class CustomHomeAppBar extends StatelessWidget {
               icon: Icons.shopping_cart_outlined,
               color: context.textPrimaryColor),
           onPressed: () {},
-          padding: EdgeInsets.all(context.xs),
+          padding: EdgeInsets.all(context.xsWidth),
         ),
         IconButton(
           icon: context.iconMedium(
               icon: Icons.notifications_none, color: context.textPrimaryColor),
           onPressed: () {},
-          padding: EdgeInsets.all(context.xs),
+          padding: EdgeInsets.all(context.xsWidth),
         ),
         IconButton(
           icon: context.iconMedium(
               icon: Icons.person_outline, color: context.textPrimaryColor),
           onPressed: () {},
-          padding: EdgeInsets.all(context.xs),
+          padding: EdgeInsets.all(context.xsWidth),
         ),
       ],
     );
@@ -165,7 +170,7 @@ class CustomHomeAppBar extends StatelessWidget {
             icon: context.iconMedium(
                 icon: Icons.person, color: context.textPrimaryColor),
             onPressed: () {},
-            padding: EdgeInsets.all(context.xs),
+            padding: EdgeInsets.all(context.xsWidth),
           ),
       ],
     );
@@ -173,37 +178,40 @@ class CustomHomeAppBar extends StatelessWidget {
 
   Widget _buildSearchBar(BuildContext context) {
     return BlocBuilder<HomeStoreBloc, HomeStoreState>(
-      buildWhen: (previous, current) => 
+      buildWhen: (previous, current) =>
           current is HomeStoreAutocompleteSuggestionsLoaded,
       builder: (context, state) {
         return Material(
           color: context.surfaceColor,
-          borderRadius: BorderRadius.circular(context.borderRadiusXLarge),
+          borderRadius: BorderRadius.circular(context.borderRadiusXLargeWidth),
           child: SizedBox(
-            height: context.buttonHeightMedium,
+            height: context.buttonHeightMediumWidth,
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: context.m),
+                  padding: EdgeInsets.only(left: context.mWidth),
                   child: context.iconMedium(
-                      icon: Icons.search, color: context.textSurfaceColor),
+                      icon: Icons.search, color: context.textSecondaryColor),
                 ),
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Search products...',
                       hintStyle: context.appBarTitle.copyWith(
-                        color: context.textSurfaceColor,
+                        color: context.textSecondaryColor,
                       ),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(
-                          vertical: context.s, horizontal: context.xs),
+                          vertical: context.sWidth,
+                          horizontal: context.xsWidth),
                       isDense: true,
                       // Show autocomplete suggestions if available
-                      suffixIcon: state is HomeStoreAutocompleteSuggestionsLoaded && 
+                      suffixIcon:
+                          state is HomeStoreAutocompleteSuggestionsLoaded &&
                                   state.suggestions.isNotEmpty
-                          ? Icon(Icons.arrow_drop_down, color: context.textSurfaceColor)
-                          : null,
+                              ? Icon(Icons.arrow_drop_down,
+                                  color: context.textSecondaryColor)
+                              : null,
                     ),
                     style: context.bodyMedium.copyWith(
                       color: context.textPrimaryColor,
@@ -212,16 +220,16 @@ class CustomHomeAppBar extends StatelessWidget {
                       if (query.length >= 2) {
                         // Trigger autocomplete suggestions
                         context.read<HomeStoreBloc>().add(
-                          HomeStoreSearchQueryChangedEvent(query: query),
-                        );
+                              HomeStoreSearchQueryChangedEvent(query: query),
+                            );
                       }
                     },
                     onSubmitted: (query) {
                       if (query.isNotEmpty) {
                         // Trigger search with submitted query
                         context.read<HomeStoreBloc>().add(
-                          HomeStoreSearchSubmittedEvent(query: query),
-                        );
+                              HomeStoreSearchSubmittedEvent(query: query),
+                            );
                         // You could navigate to search results page here
                       }
                     },

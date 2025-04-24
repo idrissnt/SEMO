@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/styles/task_card_theme.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/utils/task_asset_organizer.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/styles/task_card_theme.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/utils/task_asset_organizer.dart';
 
 /// Logger instance for the task content builder
 final AppLogger logger = AppLogger();

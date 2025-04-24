@@ -3,21 +3,18 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Primary Colors
   static const Color semoWelcome = Color.fromARGB(255, 227, 225, 225);
-  static const Color primary = Colors.blueAccent;
+  static Color primary = Colors.blue.shade800;
   static const Color primaryVariant = Color(0xFF3700B3);
-  static const Color secondary = Colors.black;
-  static const Color secondaryVariant = Colors.black87;
+  static const Color secondary = Colors.white;
+  static const Color secondaryVariant = Color(0xFFF4F4F4);
 
   // Background and Surface
   static const Color background = Color(0xFFF5F5F5);
-  static const Color surface = Color.fromARGB(255, 227, 225, 225);
+  static const Color surface = Color.fromARGB(255, 241, 240, 240);
 
   // Text Colors
-  static const Color onPrimary = Color.fromARGB(255, 8, 8, 8);
-  static const Color onSecondary = Colors.black;
-  static const Color onBackground = Colors.black87;
-  static const Color onSurface = Colors.black38;
-  static const Color lineColor = Color.fromARGB(255, 230, 228, 228);
+  static const Color textPrimaryColor = Color.fromARGB(255, 8, 8, 8);
+  static const Color textSecondaryColor = Colors.white;
 
   // Status Colors
   static const Color success = Color(0xFF4CAF50);

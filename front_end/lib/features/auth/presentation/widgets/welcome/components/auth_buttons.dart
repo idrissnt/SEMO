@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/navigation/router_services/route_constants.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/utils/button_builder.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/utils/button_builder.dart';
 
 /// A reusable component that displays the authentication buttons
 /// (Create Account and Login) in a consistent manner across the app
 class AuthButtons extends StatelessWidget {
-  /// The spacing between the buttons
-  final double spacing;
-
   /// Optional custom styling for the register button
   final Map<String, dynamic>? registerButtonStyle;
 
@@ -18,25 +15,24 @@ class AuthButtons extends StatelessWidget {
   /// Creates an AuthButtons widget with optional custom styling
   const AuthButtons({
     Key? key,
-    this.spacing = 8.0,
     this.registerButtonStyle,
     this.loginButtonStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final double spacing = context.responsiveItemSize(this.spacing);
-    final double minWidth = context.responsiveItemSize(250.0);
-    final double minHeight = context.responsiveItemSize(50.0);
-    final double verticalPadding = context.responsiveItemSize(4.0);
-    final double horizontalPadding = context.responsiveItemSize(8.0);
+    final double spacingBetweenButtons = context.smallHeight;
+    final double minWidth = context.getResponsiveWidthValue(250.0);
+    final double minHeight = context.getResponsiveHeightValue(50.0);
+    final double verticalPadding = context.xsWidth;
+    final double horizontalPadding = context.smallHeight;
 
     // Default styles for the register button
     final Map<String, dynamic> defaultRegisterStyle = {
       'text': 'Créer un compte',
-      'textColor': Colors.white,
-      'backgroundColor': Colors.blue.shade800,
-      'foregroundColor': Colors.white,
+      'textColor': context.textSecondaryColor,
+      'backgroundColor': context.primaryColor,
+      'foregroundColor': context.textSecondaryColor,
       'verticalPadding': verticalPadding,
       'horizontalPadding': horizontalPadding,
       'minWidth': minWidth,
@@ -46,9 +42,9 @@ class AuthButtons extends StatelessWidget {
     // Default styles for the login button
     final Map<String, dynamic> defaultLoginStyle = {
       'text': 'Se connecter',
-      'textColor': Colors.black,
-      'backgroundColor': const Color.fromARGB(255, 241, 240, 240),
-      'foregroundColor': Colors.black,
+      'textColor': context.textPrimaryColor,
+      'backgroundColor': context.surfaceColor,
+      'foregroundColor': context.textPrimaryColor,
       'verticalPadding': verticalPadding,
       'horizontalPadding': horizontalPadding,
       'minWidth': minWidth,
@@ -73,7 +69,7 @@ class AuthButtons extends StatelessWidget {
           minWidth: registerStyle['minWidth'] as double,
           minHeight: registerStyle['minHeight'] as double,
         ).buildButtons(),
-        SizedBox(height: spacing),
+        SizedBox(height: spacingBetweenButtons),
         ButtonBuilder(
           context: context,
           route: AppRoutes.login,

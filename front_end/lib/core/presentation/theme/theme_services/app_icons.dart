@@ -9,7 +9,7 @@ class AppIcons {
           {required IconData icon, Color? color}) =>
       Icon(
         icon,
-        size: AppDimensionsWidth.iconSizeMedium(context),
+        size: AppDimensionsWidth.iconSizeMediumWidth(context),
         color: color,
       );
 
@@ -17,7 +17,7 @@ class AppIcons {
           {required IconData icon, Color? color}) =>
       Icon(
         icon,
-        size: AppDimensionsWidth.iconSizeSmall(context),
+        size: AppDimensionsWidth.iconSizeSmallWidth(context),
         color: color,
       );
 
@@ -25,7 +25,7 @@ class AppIcons {
           {required IconData icon, Color? color}) =>
       Icon(
         icon,
-        size: AppDimensionsWidth.iconSizeLarge(context),
+        size: AppDimensionsWidth.iconSizeLargeWidth(context),
         color: color,
       );
 
@@ -33,7 +33,7 @@ class AppIcons {
           {required IconData icon, Color? color}) =>
       Icon(
         icon,
-        size: AppDimensionsWidth.iconSizeXLarge(context),
+        size: AppDimensionsWidth.iconSizeXLargeWidth(context),
         color: color,
       );
 }

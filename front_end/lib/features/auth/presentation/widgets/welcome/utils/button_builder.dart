@@ -41,7 +41,7 @@ class ButtonBuilder {
         foregroundColor: foregroundColor,
       ),
       child: SizedBox(
-        width: context.responsiveItemSize(minWidth),
+        width: context.getResponsiveWidthValue(minWidth),
         child: Text(
           text,
           textAlign: TextAlign.center,

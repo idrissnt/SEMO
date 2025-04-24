@@ -30,28 +30,28 @@ class AppTextStyles {
   static TextStyle headline1(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 32),
         fontWeight: FontWeight.bold,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.2,
       );
 
   static TextStyle headline2(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 24),
         fontWeight: FontWeight.w600,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.3,
       );
 
   static TextStyle headline3(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 20),
         fontWeight: FontWeight.w600,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.4,
       );
 
   static TextStyle headline4(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 18),
         fontWeight: FontWeight.w600,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.4,
       );
 
@@ -59,7 +59,7 @@ class AppTextStyles {
   static TextStyle sectionTitle(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 18),
         fontWeight: FontWeight.bold,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.4,
       );
 
@@ -67,61 +67,69 @@ class AppTextStyles {
   static TextStyle bodyLarge(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 16),
         fontWeight: FontWeight.normal,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.5,
       );
 
   static TextStyle appBarTitle(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 16),
         fontWeight: FontWeight.bold,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.4,
       );
 
   static TextStyle bodyMedium(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 14),
         fontWeight: FontWeight.normal,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.5,
       );
 
   static TextStyle bodySmall(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 12),
         fontWeight: FontWeight.normal,
-        color: AppColors.onSecondary,
+        color: AppColors.textSecondaryColor,
         height: 1.5,
       );
 
   static TextStyle caption(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 12),
         fontWeight: FontWeight.normal,
-        color: AppColors.onSurface,
+        color: AppColors.textSecondaryColor,
         height: 1.4,
       );
 
   // Button Styles - Context-aware versions
 
   static TextStyle buttonVeryLarge(BuildContext context) => GoogleFonts.poppins(
-        fontSize: _getResponsiveFontSize(context, 20),
+        fontSize: _getResponsiveFontSize(context, 24),
         fontWeight: FontWeight.w900,
         color: Colors.white,
         height: 1.4,
       );
   static TextStyle buttonLarge(BuildContext context) => GoogleFonts.poppins(
-        fontSize: _getResponsiveFontSize(context, 16),
+        fontSize: _getResponsiveFontSize(context, 20),
         fontWeight: FontWeight.w600,
         color: Colors.white,
         height: 1.4,
       );
 
   static TextStyle buttonMedium(BuildContext context) => GoogleFonts.poppins(
-        fontSize: _getResponsiveFontSize(context, 14),
+        fontSize: _getResponsiveFontSize(context, 16),
         fontWeight: FontWeight.w600,
         color: Colors.white,
         height: 1.4,
       );
 
   static TextStyle buttonSmall(BuildContext context) => GoogleFonts.poppins(
+        fontSize: _getResponsiveFontSize(context, 14),
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        height: 1.4,
+      );
+
+  static TextStyle buttonExtraSmall(BuildContext context) =>
+      GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 12),
         fontWeight: FontWeight.w600,
         color: Colors.white,
@@ -183,7 +191,7 @@ class AppTextStyles {
   static TextStyle listItemTitle(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 14),
         fontWeight: FontWeight.w600,
-        color: AppColors.onPrimary,
+        color: AppColors.textPrimaryColor,
         height: 1.4,
       );
 
@@ -191,7 +199,7 @@ class AppTextStyles {
       GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 12),
         fontWeight: FontWeight.normal,
-        color: AppColors.onSecondary,
+        color: AppColors.textSecondaryColor,
         height: 1.4,
       );
 }

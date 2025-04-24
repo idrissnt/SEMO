@@ -28,15 +28,16 @@ class StoreSection extends StatelessWidget {
     }
 
     // Calculate responsive dimensions
-    final double storeWidth = context.responsiveItemSize(isLarge ? 100 : 95);
+    final double storeWidth =
+        context.responsiveItemSizeWidth(isLarge ? 100 : 95);
     final double sectionHeight =
-        context.responsiveItemSize(isLarge ? 140 : 130);
+        context.getResponsiveHeightValue(isLarge ? 140 : 130);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: context.l),
+          padding: EdgeInsets.only(left: context.lWidth),
           child: Text(
             title,
             style: context.sectionTitle,
@@ -46,13 +47,13 @@ class StoreSection extends StatelessWidget {
           height: sectionHeight,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: context.xs),
+            padding: EdgeInsets.symmetric(horizontal: context.xsWidth),
             itemCount: stores.length,
             itemBuilder: (context, index) {
               final store = stores[index];
               return Container(
                 width: storeWidth,
-                margin: EdgeInsets.symmetric(horizontal: context.xs),
+                margin: EdgeInsets.symmetric(horizontal: context.xsWidth),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -64,7 +65,7 @@ class StoreSection extends StatelessWidget {
                         context.go('/store/${store.id}');
                       },
                     ),
-                    SizedBox(height: context.m),
+                    SizedBox(height: context.mWidth),
                     Text(
                       store.name,
                       style: context.bodyMedium,
@@ -78,7 +79,7 @@ class StoreSection extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: context.l),
+        SizedBox(height: context.lWidth),
       ],
     );
   }
@@ -132,7 +133,7 @@ class _StoreImageButtonState extends State<StoreImageButton>
   Widget build(BuildContext context) {
     // Calculate responsive size based on device width
     final baseSize = widget.isLarge ? 100.0 : 80.0;
-    final size = context.responsiveItemSize(baseSize);
+    final size = context.responsiveItemSizeWidth(baseSize);
 
     return AnimatedBuilder(
       animation: _scaleAnimation,
@@ -161,7 +162,7 @@ class _StoreImageButtonState extends State<StoreImageButton>
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(context.xs),
+          padding: EdgeInsets.all(context.xsWidth),
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,

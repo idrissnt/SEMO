@@ -36,6 +36,24 @@ class AppDimensionsHeight {
   static double largeHeight(BuildContext context) {
     return getResponsiveHeightValue(context, 16);
   }
+
+  static double xLargeHeight(BuildContext context) {
+    return getResponsiveHeightValue(context, 20);
+  }
+
+  static double xxLargeHeight(BuildContext context) {
+    return getResponsiveHeightValue(context, 24);
+  }
+
+  /// Button heights - all are responsive by default
+  static double buttonHeightSmall(BuildContext context) =>
+      getResponsiveHeightValue(context, 32.0);
+
+  static double buttonHeightMedium(BuildContext context) =>
+      getResponsiveHeightValue(context, 44.0);
+
+  static double buttonHeightLarge(BuildContext context) =>
+      getResponsiveHeightValue(context, 56.0);
 }
 
 class AppDimensionsWidth {
@@ -63,118 +81,114 @@ class AppDimensionsWidth {
   }
 
   // Get responsive spacing value
-  static double _getResponsiveValue(BuildContext context, double baseValue) {
+  static double getResponsiveWidthValue(
+      BuildContext context, double baseValue) {
     return baseValue * _getWidthScaleFactor(context);
   }
 
   /// Spacing values - all are responsive by default
   /// Extra extra small spacing (2dp on phone)
-  static double xxs(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing * 0.25);
+  static double xxsWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing * 0.25);
 
   /// Extra small spacing (4dp on phone)
-  static double xs(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing * 0.5);
+  static double xsWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing * 0.5);
 
   /// Small spacing (8dp on phone)
-  static double s(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing);
+  static double sWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing);
 
   /// Medium spacing (12dp on phone)
-  static double m(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing * 1.5);
+  static double mWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing * 1.5);
 
   /// Large spacing (16dp on phone)
-  static double l(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing * 2);
+  static double lWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing * 2);
 
   /// Extra large spacing (24dp on phone)
-  static double xl(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing * 3);
+  static double xlWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing * 3);
 
   /// Extra extra large spacing (32dp on phone)
-  static double xxl(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing * 4);
+  static double xxlWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing * 4);
 
   /// Extra extra extra large spacing (48dp on phone)
-  static double xxxl(BuildContext context) =>
-      _getResponsiveValue(context, _baseSpacing * 6);
+  static double xxxlWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, _baseSpacing * 6);
 
   /// Border radius values - all are responsive by default
-  static double borderRadiusSmall(BuildContext context) =>
-      _getResponsiveValue(context, 4.0);
+  static double borderRadiusSmallWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 4.0);
 
-  static double borderRadiusMedium(BuildContext context) =>
-      _getResponsiveValue(context, 8.0);
+  static double borderRadiusMediumWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 8.0);
 
-  static double borderRadiusLarge(BuildContext context) =>
-      _getResponsiveValue(context, 16.0);
+  static double borderRadiusLargeWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 16.0);
 
-  static double borderRadiusXLarge(BuildContext context) =>
-      _getResponsiveValue(context, 24.0);
+  static double borderRadiusXLargeWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 24.0);
 
-  static double borderRadiusCircular(BuildContext context) =>
-      _getResponsiveValue(context, 100.0);
+  static double borderRadiusXXLargeWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 33.0);
+
+  static double borderRadiusCircularWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 100.0);
 
   /// Icon sizes - all are responsive by default
-  static double iconSizeSmall(BuildContext context) =>
-      _getResponsiveValue(context, 16.0);
+  static double iconSizeSmallWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 16.0);
 
-  static double iconSizeMedium(BuildContext context) =>
-      _getResponsiveValue(context, 24.0);
+  static double iconSizeMediumWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 24.0);
 
-  static double iconSizeLarge(BuildContext context) =>
-      _getResponsiveValue(context, 32.0);
+  static double iconSizeLargeWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 32.0);
 
-  static double iconSizeXLarge(BuildContext context) =>
-      _getResponsiveValue(context, 48.0);
-
-  /// Button heights - all are responsive by default
-  static double buttonHeightSmall(BuildContext context) =>
-      _getResponsiveValue(context, 32.0);
-
-  static double buttonHeightMedium(BuildContext context) =>
-      _getResponsiveValue(context, 44.0);
-
-  static double buttonHeightLarge(BuildContext context) =>
-      _getResponsiveValue(context, 56.0);
+  static double iconSizeXLargeWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 48.0);
 
   /// Card elevations - all are responsive by default
-  static double cardElevation(BuildContext context) =>
-      _getResponsiveValue(context, 2.0);
+  static double cardElevationWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 2.0);
 
-  static double cardElevationLarge(BuildContext context) =>
-      _getResponsiveValue(context, 4.0);
+  static double cardElevationLargeWidth(BuildContext context) =>
+      getResponsiveWidthValue(context, 4.0);
 
   /// Common padding values
-  static EdgeInsets screenPadding(BuildContext context) {
-    return EdgeInsets.symmetric(horizontal: l(context));
+  static EdgeInsets screenPaddingWidth(BuildContext context) {
+    return EdgeInsets.symmetric(horizontal: lWidth(context));
   }
 
-  static EdgeInsets contentPadding(BuildContext context) {
-    return EdgeInsets.all(m(context));
+  static EdgeInsets contentPaddingWidth(BuildContext context) {
+    return EdgeInsets.all(mWidth(context));
   }
 
-  static EdgeInsets listItemPadding(BuildContext context) {
-    return EdgeInsets.symmetric(horizontal: l(context), vertical: m(context));
+  static EdgeInsets listItemPaddingWidth(BuildContext context) {
+    return EdgeInsets.symmetric(
+        horizontal: lWidth(context), vertical: mWidth(context));
   }
 
-  static EdgeInsets cardPadding(BuildContext context) {
-    return EdgeInsets.all(l(context));
+  static EdgeInsets cardPaddingWidth(BuildContext context) {
+    return EdgeInsets.all(lWidth(context));
   }
 
-  static EdgeInsets buttonPadding(BuildContext context) {
-    return EdgeInsets.symmetric(horizontal: l(context), vertical: s(context));
+  static EdgeInsets buttonPaddingWidth(BuildContext context) {
+    return EdgeInsets.symmetric(
+        horizontal: lWidth(context), vertical: sWidth(context));
   }
 
   /// Returns a responsive item size for grids and lists based on screen size
-  static double getResponsiveItemSize(BuildContext context,
+  static double getResponsiveItemSizeWidth(BuildContext context,
       {double defaultSize = 100.0}) {
     return defaultSize * _getWidthScaleFactor(context);
   }
 
   /// Returns the number of grid columns based on screen width
-  static int getResponsiveGridCount(BuildContext context) {
+  static int getResponsiveGridCountWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
     if (width < _phoneWidth) return 2; // Phone
@@ -184,15 +198,15 @@ class AppDimensionsWidth {
   }
 
   // Legacy methods for backwards compatibility
-  static EdgeInsets getResponsivePadding(BuildContext context) {
-    return screenPadding(context);
+  static EdgeInsets getResponsivePaddingWidth(BuildContext context) {
+    return screenPaddingWidth(context);
   }
 
-  static double getResponsiveHorizontalSpacing(BuildContext context) {
-    return l(context);
+  static double getResponsiveHorizontalSpacingWidth(BuildContext context) {
+    return lWidth(context);
   }
 
-  static double getResponsiveVerticalSpacing(BuildContext context) {
-    return l(context);
+  static double getResponsiveVerticalSpacingWidth(BuildContext context) {
+    return lWidth(context);
   }
 }

@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/auth/presentation/widgets/welcom/components/auth_buttons.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/components/auth_buttons.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/components/store/store_image_builder.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -24,11 +25,13 @@ class StoreShowcase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 15.0),
+      padding: EdgeInsets.symmetric(
+          vertical: context.xxLargeHeight, horizontal: context.sWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Card Store Title Section
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
@@ -37,7 +40,7 @@ class StoreShowcase extends StatelessWidget {
                 TextSpan(
                   text: cardTitleOne,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: context.textPrimaryColor,
                   ),
                 ),
                 TextSpan(
@@ -50,14 +53,15 @@ class StoreShowcase extends StatelessWidget {
               ],
             ),
           ),
+          // Store Section
           SizedBox(
-            height: 200,
+            height: context.getResponsiveHeightValue(150),
             child: StoreSection(
                 allStoresLogo: allStoresLogo,
                 storeTitle: storeTitle,
-                sectionHeight: 80),
+                sectionHeight: context.getResponsiveHeightValue(150)),
           ),
-          // Authentication buttons
+          // Authentication buttons Section
           const AuthButtons(),
         ],
       ),
@@ -79,101 +83,43 @@ class StoreSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate a safe image size based on the container height
-    double containerHeight = 100;
-    double imageSize = 60;
+    double containerHeight = context.getResponsiveHeightValue(80);
+    double imageSize = context.getResponsiveHeightValue(45);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(storeTitle,
-            style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal)),
+        // Store Title
+        Text(storeTitle, style: context.appBarTitle),
+
+        // Store Container
         Container(
           decoration: BoxDecoration(
-            // color: Colors.blue,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius:
+                BorderRadius.circular(context.borderRadiusMediumWidth),
           ),
           height: containerHeight,
+
+          // Store List
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: context.xs),
+            padding: EdgeInsets.symmetric(horizontal: context.xsWidth),
             itemCount: allStoresLogo.length,
             itemBuilder: (context, index) {
               final storeLogo = allStoresLogo[index];
+
+              // Store Image
               return Center(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  child:
-                      StoreImageButton(storeLogo: storeLogo, size: imageSize),
+                  margin: EdgeInsets.symmetric(horizontal: context.sWidth),
+                  child: StoreImage(storeLogo: storeLogo, size: imageSize),
                 ),
               );
             },
           ),
         ),
       ],
-    );
-  }
-}
-
-class StoreImageButton extends StatelessWidget {
-  final String storeLogo;
-  final double size;
-  static final AppLogger _logger = AppLogger();
-
-  const StoreImageButton({
-    Key? key,
-    required this.storeLogo,
-    required this.size,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: storeLogo.isNotEmpty
-          ? _buildStoreImage(context, size)
-          : _buildFallbackIcon(context, size),
-    );
-  }
-
-  Widget _buildStoreImage(BuildContext context, double size) {
-    //
-    logger.info('Store image: $storeLogo');
-
-    return Image.network(
-      storeLogo,
-      fit: BoxFit.cover,
-      width: size,
-      height: size,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return _buildLoadingIndicator(loadingProgress);
-      },
-      errorBuilder: (context, error, stackTrace) {
-        _logger.error('Error loading store image: $error');
-        return _buildFallbackIcon(context, size);
-      },
-    );
-  }
-
-  Widget _buildLoadingIndicator(ImageChunkEvent loadingProgress) {
-    return Center(
-      child: CircularProgressIndicator(
-        value: loadingProgress.expectedTotalBytes != null
-            ? loadingProgress.cumulativeBytesLoaded /
-                loadingProgress.expectedTotalBytes!
-            : null,
-      ),
-    );
-  }
-
-  Widget _buildFallbackIcon(BuildContext context, double size) {
-    return Icon(
-      Icons.store,
-      size: size,
-      color: context.textSecondaryColor,
     );
   }
 }

@@ -22,6 +22,7 @@ extension ThemeExtension on BuildContext {
   TextStyle get buttonLarge => AppTextStyles.buttonLarge(this);
   TextStyle get buttonMedium => AppTextStyles.buttonMedium(this);
   TextStyle get buttonSmall => AppTextStyles.buttonSmall(this);
+  TextStyle get buttonExtraSmall => AppTextStyles.buttonExtraSmall(this);
   TextStyle get errorText => AppTextStyles.errorText(this);
   TextStyle get successText => AppTextStyles.successText(this);
   TextStyle get cardTitle => AppTextStyles.cardTitle(this);
@@ -38,21 +39,20 @@ extension ThemeExtension on BuildContext {
   Color get errorColor => AppColors.error;
   Color get successColor => AppColors.success;
   Color get warningColor => AppColors.warning;
-  Color get textPrimaryColor => AppColors.onPrimary;
-  Color get textSecondaryColor => AppColors.onSecondary;
-  Color get textDisabledColor => AppColors.onBackground;
-  Color get textSurfaceColor => AppColors.onSurface;
-  Color get lineColor => AppColors.lineColor;
+  Color get textPrimaryColor => AppColors.textPrimaryColor;
+  Color get textSecondaryColor => AppColors.textSecondaryColor;
 
   /// Access to responsive spacing dimensions
-  double get xxs => AppDimensionsWidth.xxs(this);
-  double get xs => AppDimensionsWidth.xs(this);
-  double get s => AppDimensionsWidth.s(this);
-  double get m => AppDimensionsWidth.m(this);
-  double get l => AppDimensionsWidth.l(this);
-  double get xl => AppDimensionsWidth.xl(this);
-  double get xxl => AppDimensionsWidth.xxl(this);
-  double get xxxl => AppDimensionsWidth.xxxl(this);
+  double get xxsWidth => AppDimensionsWidth.xxsWidth(this);
+  double get xsWidth => AppDimensionsWidth.xsWidth(this);
+  double get sWidth => AppDimensionsWidth.sWidth(this);
+  double get mWidth => AppDimensionsWidth.mWidth(this);
+  double get lWidth => AppDimensionsWidth.lWidth(this);
+  double get xlWidth => AppDimensionsWidth.xlWidth(this);
+  double get xxlWidth => AppDimensionsWidth.xxlWidth(this);
+  double get xxxlWidth => AppDimensionsWidth.xxxlWidth(this);
+  double getResponsiveWidthValue(double baseValue) =>
+      AppDimensionsWidth.getResponsiveWidthValue(this, baseValue);
 
   /// Access to responsive height dimensions
   double get smallHeight => AppDimensionsHeight.smallHeight(this);
@@ -60,46 +60,65 @@ extension ThemeExtension on BuildContext {
   double get largeHeight => AppDimensionsHeight.largeHeight(this);
   double getResponsiveHeightValue(double baseValue) =>
       AppDimensionsHeight.getResponsiveHeightValue(this, baseValue);
-
-  /// Access to responsive border radius
-  double get borderRadiusSmall => AppDimensionsWidth.borderRadiusSmall(this);
-  double get borderRadiusMedium => AppDimensionsWidth.borderRadiusMedium(this);
-  double get borderRadiusLarge => AppDimensionsWidth.borderRadiusLarge(this);
-  double get borderRadiusXLarge => AppDimensionsWidth.borderRadiusXLarge(this);
-  double get borderRadiusCircular =>
-      AppDimensionsWidth.borderRadiusCircular(this);
-
-  /// Access to responsive icon sizes
-  double get iconSizeSmall => AppDimensionsWidth.iconSizeSmall(this);
-  double get iconSizeMedium => AppDimensionsWidth.iconSizeMedium(this);
-  double get iconSizeLarge => AppDimensionsWidth.iconSizeLarge(this);
-  double get iconSizeXLarge => AppDimensionsWidth.iconSizeXLarge(this);
+  double get xLargeHeight => AppDimensionsHeight.xLargeHeight(this);
+  double get xxLargeHeight => AppDimensionsHeight.xxLargeHeight(this);
 
   /// Access to responsive button heights
-  double get buttonHeightSmall => AppDimensionsWidth.buttonHeightSmall(this);
-  double get buttonHeightMedium => AppDimensionsWidth.buttonHeightMedium(this);
-  double get buttonHeightLarge => AppDimensionsWidth.buttonHeightLarge(this);
+  double get buttonHeightSmallWidth =>
+      AppDimensionsHeight.buttonHeightSmall(this);
+  double get buttonHeightMediumWidth =>
+      AppDimensionsHeight.buttonHeightMedium(this);
+  double get buttonHeightLargeWidth =>
+      AppDimensionsHeight.buttonHeightLarge(this);
+
+  /// Access to responsive border radius
+  double get borderRadiusSmallWidth =>
+      AppDimensionsWidth.borderRadiusSmallWidth(this);
+  double get borderRadiusMediumWidth =>
+      AppDimensionsWidth.borderRadiusMediumWidth(this);
+  double get borderRadiusLargeWidth =>
+      AppDimensionsWidth.borderRadiusLargeWidth(this);
+  double get borderRadiusXLargeWidth =>
+      AppDimensionsWidth.borderRadiusXLargeWidth(this);
+  double get borderRadiusXXLargeWidth =>
+      AppDimensionsWidth.borderRadiusXXLargeWidth(this);
+  double get borderRadiusCircularWidth =>
+      AppDimensionsWidth.borderRadiusCircularWidth(this);
+
+  /// Access to responsive icon sizes
+  double get iconSizeSmallWidth => AppDimensionsWidth.iconSizeSmallWidth(this);
+  double get iconSizeMediumWidth =>
+      AppDimensionsWidth.iconSizeMediumWidth(this);
+  double get iconSizeLargeWidth => AppDimensionsWidth.iconSizeLargeWidth(this);
+  double get iconSizeXLargeWidth =>
+      AppDimensionsWidth.iconSizeXLargeWidth(this);
 
   /// Access to responsive card elevations
-  double get cardElevation => AppDimensionsWidth.cardElevation(this);
-  double get cardElevationLarge => AppDimensionsWidth.cardElevationLarge(this);
+  double get cardElevationWidth => AppDimensionsWidth.cardElevationWidth(this);
+  double get cardElevationLargeWidth =>
+      AppDimensionsWidth.cardElevationLargeWidth(this);
 
   /// Access to responsive padding presets
-  EdgeInsets get screenPadding => AppDimensionsWidth.screenPadding(this);
-  EdgeInsets get contentPadding => AppDimensionsWidth.contentPadding(this);
-  EdgeInsets get listItemPadding => AppDimensionsWidth.listItemPadding(this);
-  EdgeInsets get cardPadding => AppDimensionsWidth.cardPadding(this);
-  EdgeInsets get buttonPadding => AppDimensionsWidth.buttonPadding(this);
+  EdgeInsets get screenPaddingWidth =>
+      AppDimensionsWidth.screenPaddingWidth(this);
+  EdgeInsets get contentPaddingWidth =>
+      AppDimensionsWidth.contentPaddingWidth(this);
+  EdgeInsets get listItemPaddingWidth =>
+      AppDimensionsWidth.listItemPaddingWidth(this);
+  EdgeInsets get cardPaddingWidth => AppDimensionsWidth.cardPaddingWidth(this);
+  EdgeInsets get buttonPaddingWidth =>
+      AppDimensionsWidth.buttonPaddingWidth(this);
 
   /// Access to responsive grid and layout helpers
-  int get gridCount => AppDimensionsWidth.getResponsiveGridCount(this);
+  int get gridCount => AppDimensionsWidth.getResponsiveGridCountWidth(this);
 
   /// Get responsive item size with default size
-  double responsiveItemSize(double defaultSize) =>
-      AppDimensionsWidth.getResponsiveItemSize(this, defaultSize: defaultSize);
+  double responsiveItemSizeWidth(double defaultSize) =>
+      AppDimensionsWidth.getResponsiveItemSizeWidth(this,
+          defaultSize: defaultSize);
 
   /// For backwards compatibility
-  double get horizontalSpacing => AppDimensionsWidth.l(this);
+  double get horizontalSpacingWidth => AppDimensionsWidth.lWidth(this);
 
   /// Access to app icons
   Icon iconSmall({required IconData icon, Color? color}) =>

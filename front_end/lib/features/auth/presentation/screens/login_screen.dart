@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen>
               SafeArea(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: EdgeInsets.all(context.xl),
+                    padding: EdgeInsets.all(context.xlWidth),
                     child: FadeTransition(
                       opacity: _fadeAnimation,
                       child: Column(

@@ -14,14 +14,14 @@ class SectionSeparator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? context.xxs,
+      height: height ?? context.smallHeight,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: color ?? context.lineColor,
+        color: color ?? context.textSecondaryColor,
         border: Border.symmetric(
           horizontal: BorderSide(
-            color: context.lineColor,
-            width: context.xxs,
+            color: context.textSecondaryColor,
+            width: context.xxsWidth,
           ),
         ),
       ),

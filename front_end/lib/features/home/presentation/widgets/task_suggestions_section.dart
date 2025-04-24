@@ -24,16 +24,16 @@ class TaskSuggestionsSection extends StatelessWidget {
     }
 
     // Calculate responsive dimensions
-    final double sectionHeight = context.responsiveItemSize(160);
-    final double buttonSize = context.responsiveItemSize(40);
-    final double iconSize = context.responsiveItemSize(20);
+    final double sectionHeight = context.responsiveItemSizeWidth(160);
+    final double buttonSize = context.responsiveItemSizeWidth(40);
+    final double iconSize = context.responsiveItemSizeWidth(20);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(
-              left: context.l, right: context.l, top: context.s),
+              left: context.lWidth, right: context.lWidth, top: context.sWidth),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -78,7 +78,7 @@ class TaskSuggestionsSection extends StatelessWidget {
           height: sectionHeight,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: context.m),
+            padding: EdgeInsets.symmetric(horizontal: context.mWidth),
             itemCount: taskSuggestions.length,
             itemBuilder: (context, index) {
               final task = taskSuggestions[index];
@@ -92,7 +92,7 @@ class TaskSuggestionsSection extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: context.l),
+        SizedBox(height: context.lWidth),
       ],
     );
   }
@@ -111,22 +111,24 @@ class TaskSuggestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Calculate responsive dimensions
-    final double cardWidth = context.responsiveItemSize(150);
-    final double iconSize = context.responsiveItemSize(20);
-    final double smallIconSize = context.responsiveItemSize(14);
+    final double cardWidth = context.responsiveItemSizeWidth(150);
+    final double iconSize = context.responsiveItemSizeWidth(20);
+    final double smallIconSize = context.responsiveItemSizeWidth(14);
 
     return Container(
       width: cardWidth,
-      margin: EdgeInsets.symmetric(horizontal: context.xs, vertical: context.s),
+      margin: EdgeInsets.symmetric(
+          horizontal: context.xsWidth, vertical: context.sWidth),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(context.borderRadiusMedium),
+          borderRadius: BorderRadius.circular(context.borderRadiusMediumWidth),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(context.borderRadiusMedium),
+              borderRadius:
+                  BorderRadius.circular(context.borderRadiusMediumWidth),
               boxShadow: [
                 BoxShadow(
                   color: context.secondaryColor,
@@ -135,18 +137,18 @@ class TaskSuggestionCard extends StatelessWidget {
                 ),
               ],
             ),
-            padding: EdgeInsets.all(context.m),
+            padding: EdgeInsets.all(context.mWidth),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(context.s),
+                      padding: EdgeInsets.all(context.sWidth),
                       decoration: BoxDecoration(
                         color: task.iconBackgroundColor,
-                        borderRadius:
-                            BorderRadius.circular(context.borderRadiusSmall),
+                        borderRadius: BorderRadius.circular(
+                            context.borderRadiusSmallWidth),
                       ),
                       child: Icon(
                         task.icon,
@@ -157,11 +159,12 @@ class TaskSuggestionCard extends StatelessWidget {
                     const Spacer(),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: context.s, vertical: context.xxs),
+                          horizontal: context.sWidth,
+                          vertical: context.xxsWidth),
                       decoration: BoxDecoration(
                         color: context.primaryColor,
-                        borderRadius:
-                            BorderRadius.circular(context.borderRadiusMedium),
+                        borderRadius: BorderRadius.circular(
+                            context.borderRadiusMediumWidth),
                       ),
                       child: Text(
                         task.reward,
@@ -170,14 +173,14 @@ class TaskSuggestionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: context.m),
+                SizedBox(height: context.mWidth),
                 Text(
                   task.title,
                   style: context.listItemTitle,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: context.xxs),
+                SizedBox(height: context.xxsWidth),
                 Text(
                   task.description,
                   style: context.listItemSubtitle,
@@ -192,7 +195,7 @@ class TaskSuggestionCard extends StatelessWidget {
                       size: smallIconSize,
                       color: Colors.grey,
                     ),
-                    SizedBox(width: context.xxs),
+                    SizedBox(width: context.xxsWidth),
                     Text(
                       task.timeEstimate,
                       style: context.caption,
