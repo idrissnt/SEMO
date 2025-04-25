@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
+import '../app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A comprehensive text styles class that provides consistent typography across the app

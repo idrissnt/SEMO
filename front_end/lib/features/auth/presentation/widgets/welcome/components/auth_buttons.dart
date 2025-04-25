@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/navigation/router_services/route_constants.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/utils/button_builder.dart';
 
 /// A reusable component that displays the authentication buttons
@@ -21,18 +23,18 @@ class AuthButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double spacingBetweenButtons = context.smallHeight;
-    final double minWidth = context.getResponsiveWidthValue(250.0);
-    final double minHeight = context.getResponsiveHeightValue(50.0);
-    final double verticalPadding = context.xsWidth;
-    final double horizontalPadding = context.smallHeight;
+    final double spacingBetweenButtons = AppDimensionsHeight.small;
+    final double minWidth = WelcomeDimensions.minWidthButton;
+    final double minHeight = WelcomeDimensions.minHeightButton;
+    final double verticalPadding = AppDimensionsWidth.xSmall;
+    final double horizontalPadding = AppDimensionsHeight.small;
 
     // Default styles for the register button
     final Map<String, dynamic> defaultRegisterStyle = {
       'text': 'Créer un compte',
-      'textColor': context.textSecondaryColor,
-      'backgroundColor': context.primaryColor,
-      'foregroundColor': context.textSecondaryColor,
+      'textColor': AppColors.textSecondaryColor,
+      'backgroundColor': AppColors.primary,
+      'foregroundColor': AppColors.textSecondaryColor,
       'verticalPadding': verticalPadding,
       'horizontalPadding': horizontalPadding,
       'minWidth': minWidth,
@@ -42,9 +44,9 @@ class AuthButtons extends StatelessWidget {
     // Default styles for the login button
     final Map<String, dynamic> defaultLoginStyle = {
       'text': 'Se connecter',
-      'textColor': context.textPrimaryColor,
-      'backgroundColor': context.surfaceColor,
-      'foregroundColor': context.textPrimaryColor,
+      'textColor': AppColors.textPrimaryColor,
+      'backgroundColor': AppColors.secondaryVariant,
+      'foregroundColor': AppColors.textPrimaryColor,
       'verticalPadding': verticalPadding,
       'horizontalPadding': horizontalPadding,
       'minWidth': minWidth,

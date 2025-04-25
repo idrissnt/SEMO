@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_dimensions.dart';
+import 'package:semo/core/presentation/theme/theme_services/previous/app_dimensions.dart';
 
 /// A centralized class for managing icons and their responsive sizes throughout the app.
 /// This ensures consistent icon usage and sizing across different screen sizes.

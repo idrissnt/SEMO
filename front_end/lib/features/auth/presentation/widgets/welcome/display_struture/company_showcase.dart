@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
 
 class CompanyShowcase extends StatelessWidget {
   const CompanyShowcase({
@@ -13,13 +15,13 @@ class CompanyShowcase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double logoSize = context.getResponsiveWidthValue(50);
+    final double logoSize = WelcomeDimensions.companyLogoSize;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // Company logo
         ClipRRect(
-          borderRadius: BorderRadius.circular(context.borderRadiusMediumWidth),
+          borderRadius: BorderRadius.circular(AppBorderRadius.small),
           child: Image.network(
             companyLogo,
             width: logoSize,
@@ -35,11 +37,13 @@ class CompanyShowcase extends StatelessWidget {
           ),
         ),
         // Company name
-        SizedBox(width: context.mWidth),
+        SizedBox(width: AppDimensionsWidth.xSmall),
         Text(
           companyName,
-          style: context.semoWelcome.copyWith(
-            color: context.secondaryColor,
+          style: TextStyle(
+            fontSize: WelcomeDimensions.companyNameSize,
+            color: AppColors.textSecondaryColor,
+            fontWeight: FontWeight.w800,
           ),
           textAlign: TextAlign.center,
         ),
@@ -51,7 +55,7 @@ class CompanyShowcase extends StatelessWidget {
     return Icon(
       Icons.store,
       size: size,
-      color: context.textSecondaryColor,
+      color: AppColors.secondaryVariant,
     );
   }
 

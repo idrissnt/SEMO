@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/core/utils/logger.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -77,8 +78,8 @@ class _LoginScreenState extends State<LoginScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      context.primaryColor,
-                      context.secondaryColor,
+                      AppColors.primary,
+                      AppColors.secondary,
                     ],
                   ),
                 ),
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen>
               SafeArea(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: EdgeInsets.all(context.xlWidth),
+                    padding: EdgeInsets.all(AppDimensionsWidth.xl),
                     child: FadeTransition(
                       opacity: _fadeAnimation,
                       child: Column(
@@ -112,8 +113,9 @@ class _LoginScreenState extends State<LoginScreen>
                             children: [
                               Text(
                                 'Don\'t have an account? ',
-                                style: context.bodyMedium.copyWith(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  fontSize: AppDimensionsWidth.medium,
+                                  color: Colors.white70,
                                 ),
                               ),
                               GestureDetector(
@@ -122,7 +124,8 @@ class _LoginScreenState extends State<LoginScreen>
                                 },
                                 child: Text(
                                   'Register',
-                                  style: context.bodyMedium.copyWith(
+                                  style: TextStyle(
+                                    fontSize: AppDimensionsWidth.medium,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline,

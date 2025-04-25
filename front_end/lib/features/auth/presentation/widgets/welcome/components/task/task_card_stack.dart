@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+
 import 'package:semo/features/auth/presentation/widgets/welcome/styles/task_card_theme.dart';
 
 /// A component that builds a stack of cards with a main card and background card
@@ -26,26 +29,29 @@ class StackOfCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardLeftPosition = context.getResponsiveWidthValue(-7);
-    final cardTopPosition = context.getResponsiveHeightValue(-7);
-    final angleBackgroundInclination =
-        context.getResponsiveWidthValue(angle - 5);
+    final backgroundCardLeftPosition =
+        DefaultTaskCardAssets.backgroundCardLeftPosition;
+    final backgroundCardTopPosition =
+        DefaultTaskCardAssets.backgroundCardTopPosition;
+    final backgroundCardAngleInclination =
+        DefaultTaskCardAssets.backgroundCardAngleInclination;
+    final angleBackgroundInclination = angle - backgroundCardAngleInclination;
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
         // Background card (positioned slightly behind)
         Positioned(
-          left: cardLeftPosition,
-          top: cardTopPosition,
+          left: backgroundCardLeftPosition,
+          top: backgroundCardTopPosition,
           child: Transform.rotate(
-            angle: angleBackgroundInclination * DefaultAssets.degToRad,
+            angle: angleBackgroundInclination * DefaultTaskCardAssets.degToRad,
             child: _buildCardContainer(
-              width: DefaultAssets.cardWidth(context),
-              height: DefaultAssets.cardHeight(context),
+              width: DefaultTaskCardAssets.cardWidth,
+              height: DefaultTaskCardAssets.cardHeight,
               color: stackCardColor,
-              borderRadius: DefaultAssets.cardRadius(context),
-              boxShadow: DefaultAssets.getBoxShadow(isMainCard: false),
+              borderRadius: DefaultTaskCardAssets.cardRadius,
+              boxShadow: DefaultTaskCardAssets.getBoxShadow(isMainCard: false),
               imageUrl: backgroundImage,
             ),
           ),
@@ -53,13 +59,13 @@ class StackOfCards extends StatelessWidget {
 
         // Main card
         Transform.rotate(
-          angle: angle * DefaultAssets.degToRad,
+          angle: angle * DefaultTaskCardAssets.degToRad,
           child: _buildCardContainer(
-            width: DefaultAssets.cardWidth(context),
-            height: DefaultAssets.cardHeight(context),
+            width: DefaultTaskCardAssets.cardWidth,
+            height: DefaultTaskCardAssets.cardHeight,
             color: mainCardColor,
-            borderRadius: DefaultAssets.cardRadius(context),
-            boxShadow: DefaultAssets.getBoxShadow(),
+            borderRadius: DefaultTaskCardAssets.cardRadius,
+            boxShadow: DefaultTaskCardAssets.getBoxShadow(),
             imageUrl: mainImage,
             child: _buildProfileLabel(context, profileImage, profileTitle),
           ),
@@ -73,18 +79,20 @@ class StackOfCards extends StatelessWidget {
       BuildContext context, String profileImage, String labelText) {
     if (profileImage.isEmpty) return null;
 
-    final profileImageSize = context.iconSizeSmallWidth;
+    final profileImageSize = AppIconSize.small;
 
     return Align(
       alignment: Alignment.topLeft,
       child: Container(
         margin: EdgeInsets.symmetric(
-            horizontal: context.xsWidth, vertical: context.extraSmallHeight),
+            horizontal: AppDimensionsWidth.xxSmall,
+            vertical: AppDimensionsHeight.xxSmall),
         padding: EdgeInsets.symmetric(
-            horizontal: context.sWidth, vertical: context.extraSmallHeight),
+            horizontal: AppDimensionsWidth.xSmall,
+            vertical: AppDimensionsHeight.xxSmall),
         decoration: BoxDecoration(
-          color: context.primaryVariantColor,
-          borderRadius: BorderRadius.circular(context.borderRadiusLargeWidth),
+          color: AppColors.primaryVariant,
+          borderRadius: BorderRadius.circular(AppBorderRadius.large),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -95,17 +103,18 @@ class StackOfCards extends StatelessWidget {
               backgroundImage: profileImage.isNotEmpty
                   ? CachedNetworkImageProvider(profileImage)
                   : null,
-              backgroundColor: context.backgroundColor,
+              backgroundColor: AppColors.background,
               child: profileImage.isEmpty
                   ? Icon(Icons.person, size: profileImageSize)
                   : null,
             ),
-            SizedBox(width: context.xsWidth),
+            SizedBox(width: AppDimensionsWidth.xxSmall),
             // Profile title
             Text(
               labelText,
-              style: context.bodyMedium.copyWith(
-                color: context.textSecondaryColor,
+              style: TextStyle(
+                fontSize: AppFontSize.small,
+                color: AppColors.textSecondaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),

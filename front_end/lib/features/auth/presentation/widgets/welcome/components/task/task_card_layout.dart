@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+
 import 'package:semo/features/auth/presentation/widgets/welcome/components/task/task_card_stack.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/styles/task_card_theme.dart';
 
@@ -17,7 +17,7 @@ class CardLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: context.getResponsiveHeightValue(220),
+      height: DefaultTaskCardAssets.taskCardSectionHeight,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -33,11 +33,11 @@ class CardLayout extends StatelessWidget {
   /// Builds a positioned card with the appropriate theme and data
   Widget _buildPositionedCard(BuildContext context, int position) {
     final cardData = _getCardData(position);
-    final theme = DefaultAssets.cardThemes[position];
-    final leftPosition = context.getResponsiveWidthValue(18);
-    final rightPosition = context.getResponsiveWidthValue(5);
-    final topPosition = context.getResponsiveHeightValue(25);
-    final angleInclination = context.getResponsiveWidthValue(theme.angle);
+    final theme = DefaultTaskCardAssets.cardThemes[position];
+    final leftPosition = DefaultTaskCardAssets.leftPosition;
+    final rightPosition = DefaultTaskCardAssets.rightPosition;
+    final topPosition = DefaultTaskCardAssets.topPosition;
+    final angleInclination = theme.angle;
 
     return Positioned(
       // Position based on card theme
@@ -69,8 +69,8 @@ class CardLayout extends StatelessWidget {
         'mainImage': mainCards![position]['mainImage'] ?? '',
         'backgroundImage': backgroundImages![position],
         'profileImage': mainCards![position]['profileImage'] ?? '',
-        'profileTitle':
-            mainCards![position]['profileTitle'] ?? DefaultAssets.defaultTitle,
+        'profileTitle': mainCards![position]['profileTitle'] ??
+            DefaultTaskCardAssets.defaultTitle,
       };
     } else {
       // Use fallback data
@@ -84,7 +84,7 @@ class CardLayout extends StatelessWidget {
       'mainImage': '',
       'backgroundImage': '',
       'profileImage': '',
-      'profileTitle': '${DefaultAssets.defaultTitle} ${position + 1}',
+      'profileTitle': '${DefaultTaskCardAssets.defaultTitle} ${position + 1}',
     };
   }
 }

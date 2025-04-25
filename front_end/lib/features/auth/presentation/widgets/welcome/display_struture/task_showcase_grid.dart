@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+
 import 'package:semo/features/auth/presentation/widgets/welcome/components/auth_buttons.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/components/task/task_card_layout.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
 
 /// This widget creates a visually appealing showcase of products using a staggered grid layout,
 /// similar to a masonry grid, with a text caption at the bottom.
@@ -22,13 +26,14 @@ class TaskCardShowcaseGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          vertical: context.xxLargeHeight, horizontal: context.lWidth),
+          vertical: AppDimensionsHeight.xl,
+          horizontal: AppDimensionsWidth.medium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Title text
-          _buildCaptionText(context),
+          cardTitleText(titleText, AppColors.textPrimaryColor),
 
           // Task cards display
           CardLayout(
@@ -40,15 +45,6 @@ class TaskCardShowcaseGrid extends StatelessWidget {
           const AuthButtons(),
         ],
       ),
-    );
-  }
-
-  /// Builds the caption text section with gradient text
-  Widget _buildCaptionText(BuildContext context) {
-    return Text(
-      textAlign: TextAlign.center,
-      titleText,
-      style: context.headline1,
     );
   }
 }

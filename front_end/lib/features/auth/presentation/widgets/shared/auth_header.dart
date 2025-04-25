@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 
 /// A header widget for authentication screens
 class AuthHeader extends StatelessWidget {
@@ -17,11 +17,16 @@ class AuthHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: context.headline1),
+        Text(title,
+            style: TextStyle(
+              fontSize: AppDimensionsWidth.medium,
+              color: Colors.black87,
+            )),
         const SizedBox(height: 8),
         Text(
           subtitle,
-          style: context.bodyLarge.copyWith(
+          style: TextStyle(
+            fontSize: AppDimensionsWidth.medium,
             color: Colors.grey[600],
           ),
         ),

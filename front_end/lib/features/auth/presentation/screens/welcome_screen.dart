@@ -1,13 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/state_handler/company_asset.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/state_handler/pagination_indicator.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/state_handler/store_card.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/state_handler/task_card.dart';
+import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -40,17 +41,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.lWidth),
+              padding:
+                  EdgeInsets.symmetric(horizontal: AppDimensionsWidth.medium),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Company asset
                   buildCompanyAsset(context),
-                  SizedBox(height: context.smallHeight),
+                  SizedBox(height: AppDimensionsHeight.small),
 
                   // Horizontally scrollable widget section
                   SizedBox(
-                    height: context.getResponsiveHeightValue(450),
+                    height: WelcomeDimensions.bigCardHeight,
                     child: PageView(
                       controller: _pageController,
                       children: [
@@ -59,7 +61,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: context.smallHeight),
+                  SizedBox(height: AppDimensionsHeight.xSmall),
 
                   // Pagination indicators
                   buildPaginationIndicators(

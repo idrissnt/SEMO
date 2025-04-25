@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
@@ -72,16 +73,23 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 enabled: state is! AuthLoading,
-                style: context.bodyLarge.copyWith(color: Colors.black87),
+                style: TextStyle(
+                  fontSize: AppDimensionsWidth.medium,
+                  color: Colors.black87,
+                ),
                 decoration: InputDecoration(
                   labelText: 'Email',
                   hintText: 'Enter your email',
                   prefixIcon:
-                      Icon(Icons.email_outlined, color: context.primaryColor),
-                  labelStyle:
-                      context.bodyMedium.copyWith(color: Colors.grey[700]),
-                  hintStyle:
-                      context.bodyMedium.copyWith(color: Colors.grey[400]),
+                      Icon(Icons.email_outlined, color: AppColors.primary),
+                  labelStyle: TextStyle(
+                    fontSize: AppDimensionsWidth.medium,
+                    color: Colors.grey[700],
+                  ),
+                  hintStyle: TextStyle(
+                    fontSize: AppDimensionsWidth.medium,
+                    color: Colors.grey[400],
+                  ),
                 ),
                 validator: FormValidators.validateEmail,
               ),
@@ -90,25 +98,32 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 controller: _passwordController,
                 obscureText: _obscurePassword,
                 enabled: state is! AuthLoading,
-                style: context.bodyLarge.copyWith(color: Colors.black87),
+                style: TextStyle(
+                  fontSize: AppDimensionsWidth.medium,
+                  color: Colors.black87,
+                ),
                 decoration: InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
                   prefixIcon:
-                      Icon(Icons.lock_outline, color: context.primaryColor),
+                      Icon(Icons.lock_outline, color: AppColors.primary),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword
                           ? Icons.visibility_off
                           : Icons.visibility,
-                      color: context.primaryColor,
+                      color: AppColors.primary,
                     ),
                     onPressed: _togglePasswordVisibility,
                   ),
-                  labelStyle:
-                      context.bodyMedium.copyWith(color: Colors.grey[700]),
-                  hintStyle:
-                      context.bodyMedium.copyWith(color: Colors.grey[400]),
+                  labelStyle: TextStyle(
+                    fontSize: AppDimensionsWidth.medium,
+                    color: Colors.grey[700],
+                  ),
+                  hintStyle: TextStyle(
+                    fontSize: AppDimensionsWidth.medium,
+                    color: Colors.grey[400],
+                  ),
                 ),
                 validator: FormValidators.validatePassword,
               ),
@@ -121,7 +136,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   },
                   child: Text(
                     'Forgot Password?',
-                    style: TextStyle(color: context.primaryColor),
+                    style: TextStyle(color: AppColors.primary),
                   ),
                 ),
               ),
@@ -144,7 +159,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           )
                         : Text(
                             'Login',
-                            style: context.bodyLarge.copyWith(
+                            style: TextStyle(
+                              fontSize: AppDimensionsWidth.medium,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),

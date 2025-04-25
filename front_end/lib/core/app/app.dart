@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
+      fontSizeResolver: FontSizeResolvers.radius,
       builder: (context, child) {
         return MaterialApp.router(
           title: 'SEMO',

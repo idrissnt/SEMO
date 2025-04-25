@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
+
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
+
 import 'package:semo/features/auth/presentation/widgets/welcome/styles/task_card_theme.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/utils/task_asset_organizer.dart';
 
@@ -60,16 +62,16 @@ class TaskContentBuilder {
     // Fill in missing cards with defaults if needed
     while (mainCards.length < 2) {
       // Create default card data with empty image URLs
-      Map<String, String> defaultCard = DefaultAssets.createCardData();
+      Map<String, String> defaultCard = DefaultTaskCardAssets.createCardData();
 
       // Add position-specific title if needed
       defaultCard['profileTitle'] =
-          '${DefaultAssets.defaultTitle} ${mainCards.length + 1}';
+          '${DefaultTaskCardAssets.defaultTitle} ${mainCards.length + 1}';
       mainCards.add(defaultCard);
     }
 
     while (backgroundImages.length < 2) {
-      backgroundImages.add(DefaultAssets.createBackgroundImage());
+      backgroundImages.add(DefaultTaskCardAssets.createBackgroundImage());
     }
 
     logger.info('Main cards: $mainCards');

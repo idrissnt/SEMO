@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
@@ -73,8 +74,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    context.primaryColor,
-                    context.secondaryColor,
+                    AppColors.primary,
+                    AppColors.secondary,
                   ],
                 ),
               ),
@@ -108,7 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                           children: [
                             Text(
                               "Already have an account? ",
-                              style: context.bodyMedium.copyWith(
+                              style: TextStyle(
+                                fontSize: AppDimensionsWidth.medium,
                                 color: Colors.white70,
                               ),
                             ),
@@ -116,8 +118,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                               onPressed: () => context.go('/login'),
                               child: Text(
                                 'Login',
-                                style: context.bodyMedium.copyWith(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  fontSize: AppDimensionsWidth.medium,
+                                  color: const Color.fromARGB(255, 39, 35, 35),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -162,7 +165,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                           Expanded(
                             child: Text(
                               state.error,
-                              style: context.bodyMedium.copyWith(
+                              style: TextStyle(
+                                fontSize: AppDimensionsWidth.medium,
                                 color: Colors.red.shade700,
                                 height: 1.2,
                               ),

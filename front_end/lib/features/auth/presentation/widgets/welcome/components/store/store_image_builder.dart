@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
 
 class StoreImage extends StatelessWidget {
@@ -60,7 +60,7 @@ class StoreImage extends StatelessWidget {
     return Icon(
       Icons.store,
       size: size,
-      color: context.textSecondaryColor,
+      color: AppColors.textSecondaryColor,
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'theme_services/app_colors.dart';
-import 'theme_services/previous/app_dimensions.dart';
-import 'theme_services/previous/app_text_styles.dart';
-import 'theme_services/after/app_icons.dart';
+import '../app_colors.dart';
+import 'app_dimensions.dart';
+import 'app_text_styles.dart';
+import '../after/app_icons.dart';
 
 /// Extension on BuildContext to easily access theme properties
 extension ThemeExtension on BuildContext {
@@ -36,7 +36,6 @@ extension ThemeExtension on BuildContext {
   Color get primaryVariantColor => AppColors.primaryVariant;
   Color get secondaryColor => AppColors.secondary;
   Color get secondaryVariantColor => AppColors.secondaryVariant;
-  Color get thirdColor => AppColors.thirdColor;
   Color get backgroundColor => AppColors.background;
   Color get surfaceColor => AppColors.surface;
   Color get errorColor => AppColors.error;

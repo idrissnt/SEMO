@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 
 /// A builder class for creating consistent buttons throughout the app
 class ButtonBuilder {
@@ -41,12 +41,14 @@ class ButtonBuilder {
         foregroundColor: foregroundColor,
       ),
       child: SizedBox(
-        width: context.getResponsiveWidthValue(minWidth),
+        width: minWidth,
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: context.buttonVeryLarge.copyWith(
+          style: TextStyle(
             color: textColor,
+            fontSize: AppFontSize.large,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ),

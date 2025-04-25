@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:semo/core/presentation/theme/responsive_theme.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
@@ -12,10 +13,10 @@ final AppLogger logger = AppLogger();
 
 Widget buildStoreCard(BuildContext context) {
   return Card(
-    color: context.secondaryColor,
+    color: AppColors.secondary,
     elevation: 4,
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(context.borderRadiusXXLargeWidth)),
+        borderRadius: BorderRadius.circular(AppBorderRadius.xxl)),
     child: SizedBox(
       child: BlocBuilder<WelcomeAssetsBloc, WelcomeAssetsState>(
         builder: (context, state) {
@@ -35,10 +36,10 @@ Widget buildStoreCard(BuildContext context) {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(color: context.primaryColor),
-                  SizedBox(height: context.largeHeight),
-                  Text('Loading assets...',
-                      style: TextStyle(color: context.textPrimaryColor)),
+                  CircularProgressIndicator(color: AppColors.primary),
+                  SizedBox(height: AppDimensionsHeight.large),
+                  const Text('Loading assets...',
+                      style: TextStyle(color: AppColors.textPrimaryColor)),
                 ],
               ),
             );

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'app_colors.dart';
+import '../app_colors.dart';
 
 class AppDecorations {
   // Card Decorations
@@ -24,15 +24,14 @@ class AppDecorations {
       end: Alignment.bottomCenter,
       colors: [
         Colors.transparent,
-        // ignore: deprecated_member_use
-        Colors.black.withOpacity(0.7),
+        Colors.black,
       ],
     ),
   );
 
   // Chip Decoration
   static BoxDecoration chipDecoration = BoxDecoration(
-    color: AppColors.secondary.withOpacity(0.1),
+    color: AppColors.secondary,
     borderRadius: BorderRadius.circular(20),
   );
 
