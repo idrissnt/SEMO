@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:semo/core/presentation/theme/responsive_theme.dart';
 
 Widget buildPaginationIndicators(
-    BuildContext context, PageController pageController) {
+    BuildContext context, PageController pageController, int nbOfPages) {
   return Center(
     child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: EdgeInsets.symmetric(
+          vertical: context.sWidth, horizontal: context.mediumHeight),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: context.surfaceColor,
+        borderRadius: BorderRadius.circular(context.borderRadiusLargeWidth),
       ),
       child: SmoothPageIndicator(
         controller: pageController,
-        count: 2,
-        effect: const ExpandingDotsEffect(
-          activeDotColor: Colors.blue,
-          dotColor: Colors.grey,
-          dotHeight: 12,
-          dotWidth: 12,
+        count: nbOfPages,
+        effect: ExpandingDotsEffect(
+          activeDotColor: context.primaryColor,
+          dotColor: context.secondaryVariantColor,
+          dotHeight: context.mediumHeight,
+          dotWidth: context.mWidth,
           expansionFactor: 2,
-          spacing: 4,
+          spacing: context.xsWidth,
         ),
       ),
     ),

@@ -32,26 +32,13 @@ class StoreShowcase extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Card Store Title Section
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              style: context.headline1,
-              children: [
-                TextSpan(
-                  text: cardTitleOne,
-                  style: TextStyle(
-                    color: context.textPrimaryColor,
-                  ),
-                ),
-                TextSpan(
-                  text: ' $cardTitleTwo',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              cardTitleText(
+                  cardTitleOne, context.headline1, context.textPrimaryColor),
+              cardTitleText(cardTitleTwo, context.headline1, Colors.red),
+            ],
           ),
           // Store Section
           SizedBox(
@@ -68,6 +55,11 @@ class StoreShowcase extends StatelessWidget {
     );
   }
 }
+
+Text cardTitleText(String storeTitle, TextStyle style, Color color) => Text(
+      storeTitle,
+      style: style.copyWith(color: color, fontWeight: FontWeight.bold),
+    );
 
 class StoreSection extends StatelessWidget {
   final List<String> allStoresLogo;

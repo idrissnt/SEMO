@@ -21,11 +21,8 @@ class TaskCardShowcaseGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-          top: context.xxLargeHeight,
-          bottom: context.xxLargeHeight,
-          left: context.xlWidth,
-          right: context.lWidth),
+      padding: EdgeInsets.symmetric(
+          vertical: context.xxLargeHeight, horizontal: context.lWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

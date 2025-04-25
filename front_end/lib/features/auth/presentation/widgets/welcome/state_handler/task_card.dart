@@ -13,7 +13,7 @@ final AppLogger logger = AppLogger();
 /// Builds a task showcase card using the staggered grid layout
 Widget buildTaskCard(BuildContext context) {
   return Card(
-    color: Colors.white,
+    color: context.secondaryColor,
     elevation: 4,
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(context.borderRadiusXXLargeWidth)),
@@ -35,21 +35,21 @@ Widget buildTaskCard(BuildContext context) {
           } else if (state is AllAssetsLoaded && state.taskAssets.isEmpty) {
             // Loaded but empty
             logger.info('Task assets loaded but empty');
-            return const Center(
+            return Center(
               child: Text('task assets coming soon...',
-                  style: TextStyle(color: Colors.black)),
+                  style: TextStyle(color: context.textPrimaryColor)),
             );
           } else if (state is AllAssetsLoading) {
             // Loading state
             logger.info('Task assets loading...');
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(color: Colors.blue),
-                  SizedBox(height: 16),
+                  CircularProgressIndicator(color: context.primaryColor),
+                  SizedBox(height: context.largeHeight),
                   Text('Loading assets...',
-                      style: TextStyle(color: Colors.black)),
+                      style: TextStyle(color: context.textPrimaryColor)),
                 ],
               ),
             );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:semo/core/presentation/theme/responsive_theme.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/components/task/task_card_stack.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/styles/task_card_theme.dart';
 
@@ -15,35 +16,40 @@ class CardLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      height: 240,
+    return SizedBox(
+      height: context.getResponsiveHeightValue(220),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          _buildPositionedCard(0),
-          _buildPositionedCard(1),
+          // 0 = left
+          _buildPositionedCard(context, 0),
+          // 1 = right
+          _buildPositionedCard(context, 1),
         ],
       ),
     );
   }
 
   /// Builds a positioned card with the appropriate theme and data
-  Widget _buildPositionedCard(int position) {
+  Widget _buildPositionedCard(BuildContext context, int position) {
     final cardData = _getCardData(position);
     final theme = DefaultAssets.cardThemes[position];
+    final leftPosition = context.getResponsiveWidthValue(18);
+    final rightPosition = context.getResponsiveWidthValue(5);
+    final topPosition = context.getResponsiveHeightValue(25);
+    final angleInclination = context.getResponsiveWidthValue(theme.angle);
 
     return Positioned(
       // Position based on card theme
-      left: theme.position == CardPosition.left ? 0 : null,
-      right: theme.position == CardPosition.right ? 0 : null,
-      top: 20,
+      left: theme.position == CardPosition.left ? leftPosition : null,
+      right: theme.position == CardPosition.right ? rightPosition : null,
+      top: topPosition,
       child: StackOfCards(
         mainImage: cardData['mainImage'] as String,
         backgroundImage: cardData['backgroundImage'] as String,
         profileImage: cardData['profileImage'] as String,
         profileTitle: cardData['profileTitle'] as String,
-        angle: theme.angle,
+        angle: angleInclination,
         mainCardColor: theme.mainColor,
         stackCardColor: theme.stackColor,
       ),
@@ -60,11 +66,9 @@ class CardLayout extends StatelessWidget {
 
     if (hasOrganizedData) {
       return {
-        'mainImage':
-            mainCards![position]['mainImage'] ?? DefaultAssets.defaultImagePath,
+        'mainImage': mainCards![position]['mainImage'] ?? '',
         'backgroundImage': backgroundImages![position],
-        'profileImage': mainCards![position]['profileImage'] ??
-            DefaultAssets.defaultImagePath,
+        'profileImage': mainCards![position]['profileImage'] ?? '',
         'profileTitle':
             mainCards![position]['profileTitle'] ?? DefaultAssets.defaultTitle,
       };
@@ -77,9 +81,9 @@ class CardLayout extends StatelessWidget {
   /// Creates fallback card data when organized data is not available
   Map<String, String> _createFallbackCardData(int position) {
     return {
-      'mainImage': DefaultAssets.defaultImagePath,
-      'backgroundImage': DefaultAssets.defaultImagePath,
-      'profileImage': DefaultAssets.defaultImagePath,
+      'mainImage': '',
+      'backgroundImage': '',
+      'profileImage': '',
       'profileTitle': '${DefaultAssets.defaultTitle} ${position + 1}',
     };
   }

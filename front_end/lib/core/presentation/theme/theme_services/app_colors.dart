@@ -4,9 +4,9 @@ class AppColors {
   // Primary Colors
   static const Color semoWelcome = Color.fromARGB(255, 227, 225, 225);
   static Color primary = Colors.blue.shade800;
-  static const Color primaryVariant = Color(0xFF3700B3);
+  static Color primaryVariant = Colors.blue.shade500;
   static const Color secondary = Colors.white;
-  static const Color secondaryVariant = Color(0xFFF4F4F4);
+  static const Color secondaryVariant = Colors.grey;
 
   // Background and Surface
   static const Color background = Color(0xFFF5F5F5);

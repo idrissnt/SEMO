@@ -25,6 +25,10 @@ class AppDimensionsHeight {
     return baseValue * getHeightScaleFactor(context);
   }
 
+  static double extraSmallHeight(BuildContext context) {
+    return getResponsiveHeightValue(context, 4);
+  }
+
   static double smallHeight(BuildContext context) {
     return getResponsiveHeightValue(context, 8);
   }
@@ -140,16 +144,16 @@ class AppDimensionsWidth {
 
   /// Icon sizes - all are responsive by default
   static double iconSizeSmallWidth(BuildContext context) =>
-      getResponsiveWidthValue(context, 16.0);
+      getResponsiveWidthValue(context, 12.0);
 
   static double iconSizeMediumWidth(BuildContext context) =>
-      getResponsiveWidthValue(context, 24.0);
+      getResponsiveWidthValue(context, 16.0);
 
   static double iconSizeLargeWidth(BuildContext context) =>
-      getResponsiveWidthValue(context, 32.0);
+      getResponsiveWidthValue(context, 24.0);
 
   static double iconSizeXLargeWidth(BuildContext context) =>
-      getResponsiveWidthValue(context, 48.0);
+      getResponsiveWidthValue(context, 32.0);
 
   /// Card elevations - all are responsive by default
   static double cardElevationWidth(BuildContext context) =>

@@ -27,6 +27,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.dispose();
   }
 
+  int nbOfPages = 2;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +62,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   SizedBox(height: context.smallHeight),
 
                   // Pagination indicators
-                  buildPaginationIndicators(context, _pageController),
+                  buildPaginationIndicators(
+                      context, _pageController, nbOfPages),
                 ],
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A comprehensive text styles class that provides consistent typography across the app
 /// All text styles should be accessed through this class to maintain consistency
@@ -18,6 +19,8 @@ class AppTextStyles {
     if (width > 1200) return baseSize * 1.2;
     return baseSize;
   }
+
+  double getResponsiveWidthValue(double baseValue) => baseValue.w;
 
   static TextStyle semoWelcome(BuildContext context) => GoogleFonts.poppins(
         fontSize: _getResponsiveFontSize(context, 50),

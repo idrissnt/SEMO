@@ -38,7 +38,9 @@ class CompanyShowcase extends StatelessWidget {
         SizedBox(width: context.mWidth),
         Text(
           companyName,
-          style: context.semoWelcome,
+          style: context.semoWelcome.copyWith(
+            color: context.secondaryColor,
+          ),
           textAlign: TextAlign.center,
         ),
       ],

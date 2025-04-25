@@ -12,7 +12,7 @@ final AppLogger logger = AppLogger();
 
 Widget buildStoreCard(BuildContext context) {
   return Card(
-    color: Colors.white,
+    color: context.secondaryColor,
     elevation: 4,
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(context.borderRadiusXXLargeWidth)),

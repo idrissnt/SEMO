@@ -59,7 +59,13 @@ class TaskContentBuilder {
 
     // Fill in missing cards with defaults if needed
     while (mainCards.length < 2) {
-      mainCards.add(DefaultAssets.createCardData(mainCards.length));
+      // Create default card data with empty image URLs
+      Map<String, String> defaultCard = DefaultAssets.createCardData();
+
+      // Add position-specific title if needed
+      defaultCard['profileTitle'] =
+          '${DefaultAssets.defaultTitle} ${mainCards.length + 1}';
+      mainCards.add(defaultCard);
     }
 
     while (backgroundImages.length < 2) {

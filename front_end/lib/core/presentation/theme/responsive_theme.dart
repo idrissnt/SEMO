@@ -33,7 +33,9 @@ extension ThemeExtension on BuildContext {
 
   /// Access to app colors
   Color get primaryColor => AppColors.primary;
+  Color get primaryVariantColor => AppColors.primaryVariant;
   Color get secondaryColor => AppColors.secondary;
+  Color get secondaryVariantColor => AppColors.secondaryVariant;
   Color get backgroundColor => AppColors.background;
   Color get surfaceColor => AppColors.surface;
   Color get errorColor => AppColors.error;
@@ -55,6 +57,7 @@ extension ThemeExtension on BuildContext {
       AppDimensionsWidth.getResponsiveWidthValue(this, baseValue);
 
   /// Access to responsive height dimensions
+  double get extraSmallHeight => AppDimensionsHeight.extraSmallHeight(this);
   double get smallHeight => AppDimensionsHeight.smallHeight(this);
   double get mediumHeight => AppDimensionsHeight.mediumHeight(this);
   double get largeHeight => AppDimensionsHeight.largeHeight(this);
