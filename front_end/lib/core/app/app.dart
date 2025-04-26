@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:semo/core/presentation/navigation/app_router.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/global/app_globals.dart';
+import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 
 /// Root widget of the application
 /// Configures the app theme and routing
@@ -34,12 +35,11 @@ class MyApp extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            // Add platform-specific gesture settings
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              },
+            inputDecorationTheme: InputDecorationTheme(
+              labelStyle: TextStyle(
+                fontSize: AppFontSize.medium,
+                color: AppColors.textPrimaryColor,
+              ),
             ),
           ),
           // this is set as the routing configuration

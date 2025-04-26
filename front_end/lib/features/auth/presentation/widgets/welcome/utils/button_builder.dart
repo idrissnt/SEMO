@@ -34,6 +34,9 @@ class ButtonBuilder {
     return ElevatedButton(
       onPressed: () => context.push(route),
       style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
+        ),
         padding: EdgeInsets.symmetric(
             vertical: verticalPadding, horizontal: horizontalPadding),
         minimumSize: Size(minWidth, minHeight),

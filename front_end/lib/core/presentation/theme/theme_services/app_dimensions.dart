@@ -15,6 +15,7 @@ class AppDimensionsWidth {
   static double get xl => 24.w;
   static double get xxl => 28.w;
   static double get xxxl => 32.w;
+  static double get xxxxl => 36.w;
 }
 
 /// Access to responsive Height dimensions using ScreenUtil
@@ -28,6 +29,8 @@ class AppDimensionsHeight {
   static double get xl => 24.h;
   static double get xxl => 28.h;
   static double get xxxl => 32.h;
+  static double get xxxxl => 36.h;
+  static double get xxxxxl => 40.h;
 }
 
 /// Access to responsive Border radius using ScreenUtil
