@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../features/home/presentation/screens/home_screen.dart';
-import '../../../../features/mission/mission_screen.dart';
-import '../../../../features/earn/earn_screen.dart';
-import '../../../../features/message/message_screen.dart';
-import '../../../../features/semo_ai/semo_ai_screen.dart';
+import '../../../../../features/home/presentation/screens/home_screen.dart';
+import '../../../../../features/mission/mission_screen.dart';
+import '../../../../../features/earn/earn_screen.dart';
+import '../../../../../features/message/message_screen.dart';
+import '../../../../../features/semo_ai/semo_ai_screen.dart';
 import 'route_constants.dart';
 
 ShellRoute getMainShellRoute() {

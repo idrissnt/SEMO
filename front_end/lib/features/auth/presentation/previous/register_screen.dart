@@ -11,14 +11,14 @@ import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/auth_header.dart';
 import 'package:semo/features/auth/presentation/widgets/register/register_form.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class RegisterScreenPrevious extends StatefulWidget {
+  const RegisterScreenPrevious({Key? key}) : super(key: key);
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<RegisterScreenPrevious> createState() => _RegisterScreenPreviousState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen>
+class _RegisterScreenPreviousState extends State<RegisterScreenPrevious>
     with SingleTickerProviderStateMixin {
   final AppLogger _logger = AppLogger();
   late AnimationController _animationController;

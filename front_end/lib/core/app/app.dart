@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:semo/core/presentation/navigation/router_services/app_router.dart';
+import 'package:semo/core/presentation/navigation/app_router.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/global/app_globals.dart';
 

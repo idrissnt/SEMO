@@ -1,5 +1,5 @@
 // This file is now a facade that re-exports the router components from their new location.
 // This maintains backward compatibility while refactoring the codebase.
 
-export 'router_services/app_router.dart';
+export '../app_router.dart';
 export 'router_services/route_extensions.dart';

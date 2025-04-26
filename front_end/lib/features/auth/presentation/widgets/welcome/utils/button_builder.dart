@@ -32,7 +32,7 @@ class ButtonBuilder {
   /// Builds and returns an ElevatedButton with the specified styling
   Widget buildButtons() {
     return ElevatedButton(
-      onPressed: () => context.go(route),
+      onPressed: () => context.push(route),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.symmetric(
             vertical: verticalPadding, horizontal: horizontalPadding),
