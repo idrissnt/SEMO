@@ -1,118 +1,27 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:semo/core/utils/result.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/core/domain/exceptions/api_error_extensions.dart';
+
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exceptions_wlecom.dart';
 import 'package:semo/features/auth/domain/repositories/welcom_repository.dart';
+
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
+import 'package:semo/features/auth/presentation/services/error_message_service.dart';
 
 /// BLoC for managing welcome assets state
 class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
   final WelcomeRepository _welcomeRepository;
-  final AppLogger _logger;
+  final AppLogger _logger = AppLogger();
+  final ErrorMessageService _errorMessageService = ErrorMessageService();
 
-  WelcomeAssetsBloc({
-    required WelcomeRepository welcomeRepository,
-    AppLogger? logger,
-  })  : _welcomeRepository = welcomeRepository,
-        _logger = logger ?? AppLogger(),
+  WelcomeAssetsBloc({required WelcomeRepository welcomeRepository})
+      : _welcomeRepository = welcomeRepository,
         super(const WelcomeAssetsInitial()) {
-    on<LoadCompanyAssetEvent>(_onLoadCompanyAsset);
-    on<LoadStoreAssetEvent>(_onLoadStoreAsset);
-    on<LoadTaskAssetEvent>(_onLoadTaskAsset);
     on<LoadAllAssetsEvent>(_onLoadAllAssets);
-  }
-
-  /// Handles the LoadCompanyAssetEvent to load only company asset
-  Future<void> _onLoadCompanyAsset(
-    LoadCompanyAssetEvent event,
-    Emitter<WelcomeAssetsState> emit,
-  ) async {
-    _logger.info('Loading company asset');
-    emit(const CompanyAssetLoading());
-
-    final result = await _welcomeRepository.getCompanyAsset();
-
-    result.fold(
-      (companyAsset) {
-        _logger.info('Company asset loaded successfully');
-        emit(CompanyAssetLoaded(companyAsset));
-      },
-      (error) {
-        _logger.error('Failed to load company asset', error: error);
-        _mapErrorToState(emit, error, 'company asset');
-      },
-    );
-  }
-
-  /// Handles the LoadStoreAssetEvent to load only store asset
-  Future<void> _onLoadStoreAsset(
-    LoadStoreAssetEvent event,
-    Emitter<WelcomeAssetsState> emit,
-  ) async {
-    _logger.info('Loading store asset');
-    emit(const StoreAssetLoading());
-
-    final result = await _welcomeRepository.getStoreAsset();
-
-    result.fold(
-      (storeAsset) {
-        _logger.info('Store asset loaded successfully');
-        emit(StoreAssetLoaded(storeAsset));
-      },
-      (error) {
-        _logger.error('Failed to load store asset', error: error);
-        _mapErrorToState(emit, error, 'store asset');
-      },
-    );
-  }
-
-  /// Handles the LoadTaskAssetEvent to load only task assets
-  Future<void> _onLoadTaskAsset(
-    LoadTaskAssetEvent event,
-    Emitter<WelcomeAssetsState> emit,
-  ) async {
-    _logger.info('Loading task assets');
-    emit(const TaskAssetLoading());
-
-    final result = await _welcomeRepository.getAllTaskAsset();
-
-    _logger.info('Task assets result: $result');
-
-    result.fold(
-      (taskAssets) {
-        _logger.info('Task assets loaded successfully: ${taskAssets.length} items');
-        emit(TaskAssetLoaded(taskAssets));
-      },
-      (error) {
-        _logger.error('Failed to load task assets', error: error);
-        _mapErrorToState(emit, error, 'task assets');
-      },
-    );
-  }
-
-  /// Maps domain exceptions to specific UI states
-  /// This centralizes error handling logic for all asset types
-  void _mapErrorToState(
-    Emitter<WelcomeAssetsState> emit,
-    WelcomeException error,
-    String assetType,
-  ) {
-    if (error is WelcomeAssetsNotFoundException) {
-      emit(WelcomeAssetsNotFoundFailure(
-        'The requested $assetType could not be found',
-      ));
-    } else if (error is WelcomeAssetsValidationException) {
-      emit(WelcomeAssetsValidationFailure(
-        'Invalid $assetType data: ${error.message}',
-      ));
-    } else {
-      // For all other errors, use a generic error state
-      emit(WelcomeAssetsError(
-        error: error,
-        message: 'Failed to load $assetType: ${error.message}',
-      ));
-    }
   }
 
   /// Handles the LoadAllAssetsEvent to load all assets at once
@@ -130,53 +39,48 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
       final storeResult = await _welcomeRepository.getStoreAsset();
       final taskResult = await _welcomeRepository.getAllTaskAsset();
 
-      // Handle company asset result
-      CompanyAsset? companyAsset;
+      // Track the first error encountered
       WelcomeException? firstError;
 
-      companyResult.fold(
-        (asset) => companyAsset = asset,
-        (error) {
-          firstError = error;
-          _logger.error('Failed to load company asset', error: error);
-        },
+      // Handle company asset result
+      final companyAsset = _handleResult<CompanyAsset>(
+        companyResult,
+        () => firstError,
+        (error) => firstError = error,
+        'company asset',
       );
 
       // If there was an error with company asset, report it
       if (firstError != null) {
-        _mapErrorToState(emit, firstError!, 'all assets');
+        _mapErrorToState(emit, firstError, 'all assets');
         return;
       }
 
       // Handle store asset result
-      StoreAsset? storeAsset;
-      storeResult.fold(
-        (asset) => storeAsset = asset,
-        (error) {
-          firstError = error;
-          _logger.error('Failed to load store asset', error: error);
-        },
+      final storeAsset = _handleResult<StoreAsset>(
+        storeResult,
+        () => firstError,
+        (error) => firstError = error,
+        'store asset',
       );
 
       // If there was an error with store asset, report it
       if (firstError != null) {
-        _mapErrorToState(emit, firstError!, 'all assets');
+        _mapErrorToState(emit, firstError, 'all assets');
         return;
       }
 
       // Handle task assets result
-      List<TaskAsset>? taskAssets;
-      taskResult.fold(
-        (assets) => taskAssets = assets,
-        (error) {
-          firstError = error;
-          _logger.error('Failed to load task assets', error: error);
-        },
+      final taskAssets = _handleResult<List<TaskAsset>>(
+        taskResult,
+        () => firstError,
+        (error) => firstError = error,
+        'task assets',
       );
 
       // If there was an error with task assets, report it
       if (firstError != null) {
-        _mapErrorToState(emit, firstError!, 'all assets');
+        _mapErrorToState(emit, firstError, 'all assets');
         return;
       }
 
@@ -189,10 +93,75 @@ class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {
       ));
     } catch (e) {
       _logger.error('Unexpected error loading all assets', error: e);
-      emit(WelcomeAssetsError(
-        error: e,
-        message: 'An unexpected error occurred while loading assets',
+      emit(WelcomeAssetsFetchFailure(
+        _errorMessageService.getUserFriendlyWelcomeMessage(e, 'all assets'),
+        canRetry: true,
       ));
+    }
+  }
+
+  /// Generic helper method to handle repository results
+  /// Returns the success value or null if there was an error
+  /// If there was an error, it will be stored in the provided error reference
+  T? _handleResult<T>(
+    Result<T, WelcomeException> result,
+    WelcomeException? Function() getError,
+    void Function(WelcomeException) setError,
+    String assetType,
+  ) {
+    T? value;
+    result.fold(
+      (success) => value = success,
+      (error) {
+        setError(error);
+        _logger.error('Failed to load $assetType', error: error);
+      },
+    );
+    return value;
+  }
+
+  /// Maps domain exceptions to specific UI states
+  /// This centralizes error handling logic for all asset types
+  void _mapErrorToState(
+    Emitter<WelcomeAssetsState> emit,
+    WelcomeException? error,
+    String assetType,
+  ) {
+    if (error == null) {
+      emit(WelcomeAssetsGenericFailure(
+        _errorMessageService.getUserFriendlyWelcomeMessage(null, assetType),
+        canRetry: true,
+      ));
+      return;
+    }
+    _logger.error('Error loading $assetType', error: error);
+    _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
+    _logger.debug(
+        _errorMessageService.getUserFriendlyWelcomeMessage(error, assetType));
+
+    if (error.isNetworkError) {
+      emit(WelcomeAssetsNetworkFailure(
+          _errorMessageService.getUserFriendlyWelcomeMessage(error, assetType),
+          canRetry: true));
+    } else if (error.isServerError) {
+      emit(WelcomeAssetsServerFailure(
+          _errorMessageService.getUserFriendlyWelcomeMessage(error, assetType),
+          canRetry: true));
+    } else if (error is WelcomeAssetsNotFoundException) {
+      emit(WelcomeAssetsNotFoundFailure(
+        _errorMessageService.getUserFriendlyWelcomeMessage(error, assetType),
+        canRetry: true,
+      ));
+    } else if (error is WelcomeAssetsFetchException) {
+      emit(WelcomeAssetsFetchFailure(
+        _errorMessageService.getUserFriendlyWelcomeMessage(error, assetType),
+        canRetry: true,
+      ));
+    } else {
+      // Generic fallback
+      emit(WelcomeAssetsGenericFailure(
+          _errorMessageService.getUserFriendlyWelcomeMessage(error, assetType),
+          canRetry: true));
     }
   }
 }

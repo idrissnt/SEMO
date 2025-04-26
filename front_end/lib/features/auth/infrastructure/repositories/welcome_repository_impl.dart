@@ -1,10 +1,14 @@
+import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/domain/services/api_client.dart';
+
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/result.dart';
+
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exception_mapper.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exception_mapper_welcom.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exceptions_wlecom.dart';
 import 'package:semo/features/auth/domain/repositories/welcom_repository.dart';
+
 import 'package:semo/features/auth/infrastructure/repositories/services/welcome_service.dart';
 
 /// Implementation of the WelcomeRepository interface that delegates to specialized services
@@ -65,11 +69,19 @@ class WelcomeRepositoryImpl implements WelcomeRepository {
     if (e is WelcomeException) {
       // Welcome exceptions can be directly returned
       return Result.failure(e);
+    } else if (e is ApiException) {
+      // API exceptions can be directly returned as they extend DomainException
+      // We need to wrap them in a WelcomeException to match the return type
+      return Result.failure(WelcomeException(
+        'Failed to fetch $assetType: ${e.message}',
+        code: e.code,
+        requestId: e.requestId,
+      ));
     }
 
     // For all other exceptions, create a generic welcome exception
     return Result.failure(
-      WelcomeAssetsFetchException('Failed to fetch $assetType: $e'),
+      GenericWelcomeException('Failed to fetch $assetType: $e'),
     );
   }
 }

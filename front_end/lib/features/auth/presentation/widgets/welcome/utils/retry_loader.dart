@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 

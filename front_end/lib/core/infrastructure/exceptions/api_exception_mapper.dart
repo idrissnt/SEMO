@@ -1,4 +1,5 @@
 // lib/core/infrastructure/exception/api_exception_mapper.dart
+import 'package:semo/core/domain/exceptions/api_error_code.dart';
 import 'package:semo/core/domain/exceptions/api_exception_mapper.dart';
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/utils/logger.dart';

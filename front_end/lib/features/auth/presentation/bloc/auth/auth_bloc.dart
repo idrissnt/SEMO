@@ -1,9 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/core/domain/exceptions/api_error_extensions.dart';
+
 import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
-import 'package:semo/features/auth/domain/exceptions/auth/auth_error_extensions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:semo/features/auth/domain/usecases/auth_check_usecase.dart';
+
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
@@ -95,17 +98,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (error) {
         _logger.error('Logout error', error: error.message);
-        
+
         // Special case for logout - handle missing token gracefully
         if (error is MissingRefreshTokenException) {
-          _logger.warning('Missing refresh token during logout: ${error.message}');
+          _logger
+              .warning('Missing refresh token during logout: ${error.message}');
           emit(AuthUnauthenticated());
           return;
         }
-        
+
         // Map other errors to appropriate states
         _mapErrorToState(emit, error, 'logout');
-        
+
         // Even if there was an error, we still want to log out locally
         emit(AuthUnauthenticated());
       },
@@ -175,7 +179,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           'Connection error during authentication check. Tap to retry.'));
     }
   }
-  
+
   /// Maps domain exceptions to specific UI states
   /// This centralizes error handling logic for all auth operations
   /// @param emit The state emitter

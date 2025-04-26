@@ -2,7 +2,7 @@ import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/infrastructure/api_endpoints/api_enpoints.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exception_mapper.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exception_mapper_welcom.dart';
 import 'package:semo/features/auth/infrastructure/models/welcome_models.dart';
 
 /// Service for handling welcome assets operations
@@ -62,7 +62,8 @@ class WelcomeService {
         options: null, // No special options needed
       );
 
-      final taskAssetModels = response.map((item) => TaskAssetModel.fromJson(item)).toList();
+      final taskAssetModels =
+          response.map((item) => TaskAssetModel.fromJson(item)).toList();
       return taskAssetModels.map((model) => model.toDomain()).toList();
     } catch (e) {
       _logger.error('Failed to fetch task assets: $e');

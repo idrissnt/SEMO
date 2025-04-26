@@ -16,91 +16,17 @@ class WelcomeAssetsInitial extends WelcomeAssetsState {
 
 /// Base state when assets are being loaded
 class WelcomeAssetsLoading extends WelcomeAssetsState {
-  const WelcomeAssetsLoading();
-}
+  final String? assetType;
 
-/// State when company asset is being loaded
-class CompanyAssetLoading extends WelcomeAssetsLoading {
-  const CompanyAssetLoading();
-}
+  const WelcomeAssetsLoading({this.assetType});
 
-/// State when store asset is being loaded
-class StoreAssetLoading extends WelcomeAssetsLoading {
-  const StoreAssetLoading();
-}
-
-/// State when task asset is being loaded
-class TaskAssetLoading extends WelcomeAssetsLoading {
-  const TaskAssetLoading();
+  @override
+  List<Object?> get props => [assetType];
 }
 
 /// State when all assets are being loaded
 class AllAssetsLoading extends WelcomeAssetsLoading {
-  const AllAssetsLoading();
-}
-
-/// State when only company asset has been loaded
-class CompanyAssetLoaded extends WelcomeAssetsState {
-  final CompanyAsset companyAsset;
-
-  const CompanyAssetLoaded(this.companyAsset);
-
-  @override
-  List<Object?> get props => [companyAsset];
-}
-
-/// State when only store asset has been loaded
-class StoreAssetLoaded extends WelcomeAssetsState {
-  final StoreAsset storeAsset;
-
-  const StoreAssetLoaded(this.storeAsset);
-
-  @override
-  List<Object?> get props => [storeAsset];
-}
-
-/// State when task assets have been loaded
-class TaskAssetLoaded extends WelcomeAssetsState {
-  final List<TaskAsset> taskAssets;
-
-  const TaskAssetLoaded(this.taskAssets);
-
-  @override
-  List<Object?> get props => [taskAssets];
-}
-
-/// State when an error occurs while loading welcome assets
-class WelcomeAssetsError extends WelcomeAssetsState {
-  final Object error;
-  final String message;
-
-  const WelcomeAssetsError({
-    required this.error,
-    required this.message,
-  });
-
-  @override
-  List<Object?> get props => [error, message];
-}
-
-/// State when welcome assets are not found
-class WelcomeAssetsNotFoundFailure extends WelcomeAssetsState {
-  final String message;
-
-  const WelcomeAssetsNotFoundFailure(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-/// State when welcome assets validation fails
-class WelcomeAssetsValidationFailure extends WelcomeAssetsState {
-  final String message;
-
-  const WelcomeAssetsValidationFailure(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  const AllAssetsLoading() : super(assetType: 'all');
 }
 
 /// State when all assets have been loaded successfully
@@ -117,4 +43,58 @@ class AllAssetsLoaded extends WelcomeAssetsState {
 
   @override
   List<Object?> get props => [companyAsset, storeAsset, taskAssets];
+}
+
+/// Base class for all welcome assets failure states
+abstract class WelcomeAssetsFailureState extends WelcomeAssetsState {
+  final String message;
+  final bool canRetry;
+
+  const WelcomeAssetsFailureState(
+    this.message, {
+    this.canRetry = true,
+  });
+
+  @override
+  List<Object?> get props => [message, canRetry];
+}
+
+/// Generic welcome assets fetch failure
+class WelcomeAssetsFetchFailure extends WelcomeAssetsFailureState {
+  const WelcomeAssetsFetchFailure(
+    String message, {
+    bool canRetry = true,
+  }) : super(message, canRetry: canRetry);
+}
+
+/// Welcome assets not found failure
+class WelcomeAssetsNotFoundFailure extends WelcomeAssetsFailureState {
+  const WelcomeAssetsNotFoundFailure(
+    String message, {
+    bool canRetry = true,
+  }) : super(message, canRetry: canRetry);
+}
+
+/// Network failure (no internet connection)
+class WelcomeAssetsNetworkFailure extends WelcomeAssetsFailureState {
+  const WelcomeAssetsNetworkFailure(
+    String message, {
+    bool canRetry = true,
+  }) : super(message, canRetry: canRetry);
+}
+
+/// Server failure (backend issue)
+class WelcomeAssetsServerFailure extends WelcomeAssetsFailureState {
+  const WelcomeAssetsServerFailure(
+    String message, {
+    bool canRetry = false,
+  }) : super(message, canRetry: canRetry);
+}
+
+/// Generic welcome assets error
+class WelcomeAssetsGenericFailure extends WelcomeAssetsFailureState {
+  const WelcomeAssetsGenericFailure(
+    String message, {
+    bool canRetry = false,
+  }) : super(message, canRetry: canRetry);
 }

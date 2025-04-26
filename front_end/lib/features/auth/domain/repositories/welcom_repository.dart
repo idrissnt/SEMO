@@ -1,6 +1,6 @@
 import 'package:semo/core/utils/result.dart';
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exceptions.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exceptions_wlecom.dart';
 
 /// WelcomeRepository defines the contract for welcome assets operations
 abstract class WelcomeRepository {

@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+
 import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
+
+import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
+
+Widget buildCompanyAsset(BuildContext context, CompanyAsset companyAsset) {
+  return CompanyShowcase(
+    companyLogo: companyAsset.logoUrl,
+    companyName: companyAsset.companyName,
+  );
+}
 
 class CompanyShowcase extends StatelessWidget {
   const CompanyShowcase({

@@ -24,13 +24,3 @@ class WelcomeDimensions {
   static double get minWidthButton => 250.w;
   static double get textFontSize => 10.sp;
 }
-
-Text cardTitleText(String title, Color color) => Text(
-      title,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 28.sp,
-        color: color,
-        fontWeight: FontWeight.w900,
-      ),
-    );

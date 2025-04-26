@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:semo/core/utils/logger.dart';
+
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
-
-import 'package:semo/core/utils/logger.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';

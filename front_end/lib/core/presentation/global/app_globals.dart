@@ -4,6 +4,6 @@ import 'package:flutter/material.dart';
 class AppGlobals {
   /// Global key for the ScaffoldMessenger
   /// This allows showing SnackBars from anywhere in the app
-  static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = 
+  static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 }

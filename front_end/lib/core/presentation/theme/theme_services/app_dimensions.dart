@@ -66,4 +66,5 @@ class AppIconSize {
   static double get xl => 24.r;
   static double get xxl => 28.r;
   static double get xxxl => 32.r;
+  static double get xxxxl => 40.r;
 }

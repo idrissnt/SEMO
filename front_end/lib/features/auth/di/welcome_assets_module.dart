@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exception_mapper.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exception_mapper_welcom.dart';
 import 'package:semo/features/auth/domain/repositories/welcom_repository.dart';
 import 'package:semo/features/auth/infrastructure/exceptions/welcome_exception_mapper_impl.dart';
 import 'package:semo/features/auth/infrastructure/repositories/welcome_repository_impl.dart';

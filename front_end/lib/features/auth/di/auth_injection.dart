@@ -13,13 +13,14 @@ import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 final sl = GetIt.instance;
 
 void registerAuthDependencies() {
+  //
+  // Register welcome assets dependencies
+  WelcomeAssetsModule.register(sl);
+
   // Register exception mappers
   sl.registerFactory<AuthExceptionMapper>(
     () => AuthExceptionMapperImpl(logger: sl()),
   );
-
-  // Register welcome assets dependencies
-  WelcomeAssetsModule.register(sl);
 
   // Register repositories
   // Use Lazy Singleton pattern for repositories to ensure they're only created when needed

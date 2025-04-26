@@ -2,9 +2,9 @@
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 import 'package:semo/core/infrastructure/exceptions/api_exception_mapper.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_error_codes.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exceptions.dart';
-import 'package:semo/features/auth/domain/exceptions/welcom/welcome_exception_mapper.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/error_codes_welcom.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exceptions_wlecom.dart';
+import 'package:semo/features/auth/domain/exceptions/welcom/exception_mapper_welcom.dart';
 
 class WelcomeExceptionMapperImpl
     extends ApiExceptionMapperImpl<WelcomeException>
@@ -28,9 +28,9 @@ class WelcomeExceptionMapperImpl
         requestId: e.requestId,
       );
     } else if (e is BadRequestException) {
-      throw WelcomeAssetsValidationException(
+      throw GenericWelcomeException(
         e.message,
-        code: WelcomeErrorCodes.invalidAsset,
+        code: WelcomeErrorCodes.genericError,
         requestId: e.requestId,
       );
     }

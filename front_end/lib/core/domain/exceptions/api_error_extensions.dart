@@ -1,6 +1,5 @@
+import 'package:semo/core/domain/exceptions/api_error_code.dart';
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
-import 'package:semo/features/auth/domain/exceptions/auth/auth_error_codes.dart';
-import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
 
 // adding new functionality to the DomainException class without modifying the original class
 /// Extension methods for domain exceptions to determine their type
@@ -12,12 +11,6 @@ extension DomainExceptionTypeExtension on DomainException {
   /// Returns true if this exception represents a network error
   bool get isNetworkError =>
       code == ErrorCodes.networkError || code == ErrorCodes.timeout;
-
-  /// Returns true if this exception represents an authentication error
-  bool get isAuthError =>
-      this is AuthenticationException ||
-      code == AuthErrorCodes.invalidCredentials ||
-      code == AuthErrorCodes.missingToken;
 }
 
 /// Extension methods for creating user-friendly error messages
