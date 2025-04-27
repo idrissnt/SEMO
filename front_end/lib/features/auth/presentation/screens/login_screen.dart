@@ -77,6 +77,27 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.background,
+          ),
+          icon: const FaIcon(FontAwesomeIcons.arrowLeft,
+              size: 20, color: AppColors.iconColorFirstColor),
+          onPressed: () => context.pop(),
+        ),
+        title: Text(
+          'Connexion',
+          style: TextStyle(
+            fontSize: AppFontSize.xxl,
+            color: AppColors.textPrimaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Stack(
         children: [
           // Background
@@ -108,18 +129,18 @@ class _LoginScreenState extends State<LoginScreen>
               ),
             ),
           ),
-          Positioned(
-            top: AppDimensionsHeight.xxxxxl,
-            left: AppDimensionsWidth.medium,
-            child: IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: AppColors.background,
-              ),
-              icon: const Icon(Icons.arrow_back,
-                  color: AppColors.iconColorFirstColor),
-              onPressed: () => context.pop(),
-            ),
-          ),
+          // Positioned(
+          //   top: AppDimensionsHeight.xxxxxl,
+          //   left: AppDimensionsWidth.medium,
+          //   child: IconButton(
+          //     style: IconButton.styleFrom(
+          //       backgroundColor: AppColors.background,
+          //     ),
+          //     icon: const Icon(Icons.arrow_back,
+          //         color: AppColors.iconColorFirstColor),
+          //     onPressed: () => context.pop(),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -129,135 +150,147 @@ class _LoginScreenState extends State<LoginScreen>
     return FadeTransition(
       opacity: _fadeAnimation,
       child: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: 600.h,
-            padding: EdgeInsets.symmetric(
-              horizontal: AppDimensionsWidth.medium,
+        child: Container(
+          height: 600.h,
+          padding: EdgeInsets.symmetric(
+            horizontal: AppDimensionsWidth.medium,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(AppBorderRadius.xl),
+              bottomRight: Radius.circular(AppBorderRadius.xl),
+              // topLeft: Radius.circular(AppBorderRadius.xl),
+              // topRight: Radius.circular(AppBorderRadius.xl),
             ),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(AppBorderRadius.xl),
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 16),
-                  Text(
-                    'Connexion',
-                    style: TextStyle(
-                      fontSize: AppFontSize.xxl,
-                      color: AppColors.textPrimaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 16),
+                // Text(
+                //   'Connexion',
+                //   style: TextStyle(
+                //     fontSize: AppFontSize.xxl,
+                //     color: AppColors.textPrimaryColor,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
+                const SizedBox(height: 32),
 
-                  // Email field
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: FaIcon(FontAwesomeIcons.envelope, size: 20),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(AppBorderRadius.large),
-                      ),
+                // Email field
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    labelText: 'Email',
+                    prefixIcon: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                      child: FaIcon(FontAwesomeIcons.envelope, size: 22),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Veuillez entrer votre email';
-                      }
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                          .hasMatch(value)) {
-                        return 'Veuillez entrer un email valide';
-                      }
-                      return null;
-                    },
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppBorderRadius.large),
+                    ),
                   ),
-                  const SizedBox(height: 16),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer votre email';
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'Veuillez entrer un email valide';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
 
-                  // Password field
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(AppBorderRadius.large),
-                      ),
-                      labelText: 'Mot de passe',
-                      prefixIcon: const FaIcon(FontAwesomeIcons.lock, size: 20),
-                      suffixIcon: IconButton(
-                        icon: FaIcon(
+                // Password field
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppBorderRadius.large),
+                    ),
+                    labelText: 'Mot de passe',
+                    prefixIcon: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                      child: FaIcon(FontAwesomeIcons.lock, size: 22),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: FaIcon(
                           _obscurePassword
                               ? FontAwesomeIcons.eye
                               : FontAwesomeIcons.eyeSlash,
-                          size: 20,
+                          size: 22,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
                       ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Veuillez entrer votre mot de passe';
-                      }
-                      if (value.length < 6) {
-                        return 'Le mot de passe doit contenir au moins 6 caractères';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Forgot password link
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
                       onPressed: () {
-                        // Navigate to forgot password screen
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
                       },
-                      child: const Text('Mot de passe oublié ?'),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer votre mot de passe';
+                    }
+                    if (value.length < 6) {
+                      return 'Le mot de passe doit contenir au moins 6 caractères';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 8),
 
-                  // Login button
-                  ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(300, 50),
-                      backgroundColor: AppColors.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(AppBorderRadius.xxl),
-                      ),
-                    ),
-                    child: Text(
-                      'Se connecter',
-                      style: TextStyle(
-                        fontSize: AppFontSize.large,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
+                // Forgot password link
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      // Navigate to forgot password screen
+                    },
+                    child: const Text('Mot de passe oublié ?'),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Login button
+                ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(300, 50),
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                ],
-              ),
+                  child: Text(
+                    'Se connecter',
+                    style: TextStyle(
+                      fontSize: AppFontSize.large,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
         ),

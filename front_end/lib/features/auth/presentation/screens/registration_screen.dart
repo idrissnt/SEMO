@@ -119,12 +119,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // App logo or title
-              // Icon(
-              //   Icons.store,
-              //   size: 80,
-              //   color: AppColors.primary,
-              // ),
               const SizedBox(height: 16),
               Text(
                 'Créer un compte',
