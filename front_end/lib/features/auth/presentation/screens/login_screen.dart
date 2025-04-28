@@ -15,7 +15,8 @@ import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
-import 'package:semo/features/auth/presentation/widgets/shared/state_handler/state_handler.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/loading_button.dart';
+import 'package:semo/features/auth/presentation/widgets/state_handler/auth/state_handler.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -34,32 +35,17 @@ class _LoginScreenState extends State<LoginScreen>
   bool _obscurePassword = true;
   final String loadingMessage = 'Connexion en cours...';
 
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-
   @override
   void initState() {
     super.initState();
     logger.debug('LoginScreen: Initializing animation controllers',
         {'component': 'LoginScreen'});
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-    _animationController.forward();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -77,27 +63,6 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          style: IconButton.styleFrom(
-            backgroundColor: AppColors.background,
-          ),
-          icon: const FaIcon(FontAwesomeIcons.arrowLeft,
-              size: 20, color: AppColors.iconColorFirstColor),
-          onPressed: () => context.pop(),
-        ),
-        title: Text(
-          'Connexion',
-          style: TextStyle(
-            fontSize: AppFontSize.xxl,
-            color: AppColors.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
       body: Stack(
         children: [
           // Background
@@ -112,43 +77,41 @@ class _LoginScreenState extends State<LoginScreen>
                   EdgeInsets.symmetric(horizontal: AppDimensionsWidth.medium),
               child: BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) {
-                  return StateHandler.handleAuthState(
+                  return AuthStateHandler.handleAuthState(
                     context: context,
                     state: state,
                     loadingMessage: loadingMessage,
-                    useShimmerLoading: false,
                     onSuccess: (_) {
                       // This will be handled by the app's navigation logic
                       // when AuthAuthenticated state is emitted
                       return const SizedBox.shrink();
                     },
-                    onInitial: () => _buildLoginForm(context),
-                    onUnauthenticated: () => _buildLoginForm(context),
+                    onInitial: () => _buildLoginForm(context, state),
+                    onUnauthenticated: () => _buildLoginForm(context, state),
                   );
                 },
               ),
             ),
           ),
-          // Positioned(
-          //   top: AppDimensionsHeight.xxxxxl,
-          //   left: AppDimensionsWidth.medium,
-          //   child: IconButton(
-          //     style: IconButton.styleFrom(
-          //       backgroundColor: AppColors.background,
-          //     ),
-          //     icon: const Icon(Icons.arrow_back,
-          //         color: AppColors.iconColorFirstColor),
-          //     onPressed: () => context.pop(),
-          //   ),
-          // ),
+          Positioned(
+            top: AppDimensionsHeight.xxxxxl,
+            left: AppDimensionsWidth.medium,
+            child: IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: AppColors.background,
+              ),
+              icon: const Icon(Icons.arrow_back,
+                  color: AppColors.iconColorFirstColor),
+              onPressed: () => context.pop(),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildLoginForm(BuildContext context) {
-    return FadeTransition(
-      opacity: _fadeAnimation,
+  Widget _buildLoginForm(BuildContext context, AuthState state) {
+    return SingleChildScrollView(
       child: SafeArea(
         child: Container(
           height: 600.h,
@@ -157,11 +120,8 @@ class _LoginScreenState extends State<LoginScreen>
           ),
           decoration: BoxDecoration(
             color: AppColors.background,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(AppBorderRadius.xl),
-              bottomRight: Radius.circular(AppBorderRadius.xl),
-              // topLeft: Radius.circular(AppBorderRadius.xl),
-              // topRight: Radius.circular(AppBorderRadius.xl),
+            borderRadius: BorderRadius.all(
+              Radius.circular(AppBorderRadius.xl),
             ),
           ),
           child: Form(
@@ -171,15 +131,15 @@ class _LoginScreenState extends State<LoginScreen>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                // Text(
-                //   'Connexion',
-                //   style: TextStyle(
-                //     fontSize: AppFontSize.xxl,
-                //     color: AppColors.textPrimaryColor,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                //   textAlign: TextAlign.center,
-                // ),
+                Text(
+                  'Connexion',
+                  style: TextStyle(
+                    fontSize: AppFontSize.xxl,
+                    color: AppColors.textPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 32),
 
                 // Email field
@@ -188,24 +148,23 @@ class _LoginScreenState extends State<LoginScreen>
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
-                    labelText: 'Email',
+                    labelText: 'E-mail',
                     prefixIcon: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                      padding: EdgeInsets.all(15),
                       child: FaIcon(FontAwesomeIcons.envelope, size: 22),
                     ),
                     border: OutlineInputBorder(
                       borderRadius:
-                          BorderRadius.circular(AppBorderRadius.large),
+                          BorderRadius.circular(AppBorderRadius.medium),
                     ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer votre email';
+                      return 'Veuillez entrer votre e-mail';
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
-                      return 'Veuillez entrer un email valide';
+                      return 'Veuillez entrer un e-mail valide';
                     }
                     return null;
                   },
@@ -220,12 +179,11 @@ class _LoginScreenState extends State<LoginScreen>
                     contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius:
-                          BorderRadius.circular(AppBorderRadius.large),
+                          BorderRadius.circular(AppBorderRadius.medium),
                     ),
                     labelText: 'Mot de passe',
                     prefixIcon: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                      padding: EdgeInsets.all(15),
                       child: FaIcon(FontAwesomeIcons.lock, size: 22),
                     ),
                     suffixIcon: IconButton(
@@ -249,9 +207,6 @@ class _LoginScreenState extends State<LoginScreen>
                     if (value == null || value.isEmpty) {
                       return 'Veuillez entrer votre mot de passe';
                     }
-                    if (value.length < 6) {
-                      return 'Le mot de passe doit contenir au moins 6 caractères';
-                    }
                     return null;
                   },
                 ),
@@ -269,13 +224,23 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
                 const SizedBox(height: 24),
 
-                // Login button
-                ElevatedButton(
+                // Login button with loading state
+                LoadingButton(
                   onPressed: _login,
+                  // Determine if we're in loading state
+                  isLoading: AuthStateHandler.isLoading(state),
+                  // Custom splash color for better visual feedback
+                  splashColor: AppColors.primary,
+                  highlightColor: AppColors.primary,
+                  boxShadowColor: AppColors.primary,
+                  // Slightly faster animation for a snappier feel
+                  animationDuration: const Duration(milliseconds: 300),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 50),
+                    minimumSize: Size(300, 50.h),
                     backgroundColor: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(
+                        vertical: AppDimensionsWidth.xSmall,
+                        horizontal: AppDimensionsHeight.small),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
                     ),

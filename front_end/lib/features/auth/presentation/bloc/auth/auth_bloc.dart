@@ -27,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterRequested>(_onAuthRegisterRequested);
     on<AuthLogoutRequested>(_onAuthLogoutRequested);
     on<AuthCheckRequested>(_onAuthCheckRequested);
+    on<AuthResetState>(_onAuthResetState);
   }
 
   Future<void> _onAuthLoginRequested(
@@ -64,7 +65,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       email: event.email,
       password: event.password,
       firstName: event.firstName,
-      lastName: event.lastName,
       phoneNumber: event.phoneNumber,
       profilePhotoUrl: event.profilePhotoUrl,
     );
@@ -114,6 +114,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUnauthenticated());
       },
     );
+  }
+
+  /// Handles the reset state event
+  /// Resets the auth state to initial when navigating between auth screens
+  void _onAuthResetState(
+    AuthResetState event,
+    Emitter<AuthState> emit,
+  ) {
+    _logger.info('Resetting auth state to initial');
+    emit(AuthInitial());
   }
 
   Future<void> _onAuthCheckRequested(

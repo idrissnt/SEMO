@@ -22,7 +22,6 @@ class AuthLoginRequested extends AuthEvent {
 
 class AuthRegisterRequested extends AuthEvent {
   final String firstName;
-  final String lastName;
   final String email;
   final String password;
   final String? phoneNumber;
@@ -30,7 +29,6 @@ class AuthRegisterRequested extends AuthEvent {
 
   const AuthRegisterRequested({
     required this.firstName,
-    required this.lastName,
     required this.email,
     required this.password,
     this.phoneNumber,
@@ -39,7 +37,7 @@ class AuthRegisterRequested extends AuthEvent {
 
   @override
   List<Object?> get props =>
-      [firstName, lastName, email, password, phoneNumber, profilePhotoUrl];
+      [firstName, email, password, phoneNumber, profilePhotoUrl];
 }
 
 class AuthLogoutRequested extends AuthEvent {
@@ -54,3 +52,7 @@ class AuthLogoutRequested extends AuthEvent {
 }
 
 class AuthCheckRequested extends AuthEvent {}
+
+/// Event to reset the auth state to initial
+/// Used when navigating between auth screens to clear any error states
+class AuthResetState extends AuthEvent {}

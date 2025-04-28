@@ -10,6 +10,20 @@
             "request": "launch",
             "cwd": "front_end",
             "program": "lib/data/models/user_auth/user_model.dart"
+        },
+        {
+            "name": "Flutter (lib/features/auth/auth_routes.dart)",
+            "type": "dart",
+            "request": "launch",
+            "cwd": "front_end",
+            "program": "lib/features/auth/auth_routes.dart"
+        },
+        {
+            "name": "Flutter (lib/features/auth/presentation/widgets/welcome/utils/animated_button_builder.dart)",
+            "type": "dart",
+            "request": "launch",
+            "cwd": "front_end",
+            "program": "lib/features/auth/presentation/widgets/welcome/utils/animated_button_builder.dart"
         }
     ]
 }

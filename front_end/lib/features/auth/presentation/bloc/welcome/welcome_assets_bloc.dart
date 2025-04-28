@@ -10,7 +10,7 @@ import 'package:semo/features/auth/domain/repositories/welcom_repository.dart';
 
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
-import 'package:semo/features/auth/presentation/services/error_message_service.dart';
+import 'package:semo/features/auth/presentation/services/welcom/error_message_service.dart';
 
 /// BLoC for managing welcome assets state
 class WelcomeAssetsBloc extends Bloc<WelcomeAssetsEvent, WelcomeAssetsState> {

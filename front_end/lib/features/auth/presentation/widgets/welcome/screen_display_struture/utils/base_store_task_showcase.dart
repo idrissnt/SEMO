@@ -16,9 +16,6 @@ class BaseShowcase extends StatelessWidget {
   /// Custom padding for the entire card
   final EdgeInsets? padding;
 
-  /// Whether to include auth buttons at the bottom
-  final bool showAuthButtons;
-
   /// Background color of the card
   final Color backgroundColor;
 
@@ -27,7 +24,6 @@ class BaseShowcase extends StatelessWidget {
     required this.titleSection,
     required this.contentSection,
     this.padding,
-    this.showAuthButtons = true,
     this.backgroundColor = AppColors.secondary,
   }) : super(key: key);
 
@@ -56,8 +52,8 @@ class BaseShowcase extends StatelessWidget {
               // Content section
               contentSection,
 
-              // Auth buttons section (optional)
-              if (showAuthButtons) const AuthButtons(),
+              // Auth buttons section
+              const AuthButtons(),
             ],
           ),
         ),

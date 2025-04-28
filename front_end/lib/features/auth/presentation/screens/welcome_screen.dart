@@ -11,7 +11,7 @@ import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_even
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
 
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
-import 'package:semo/features/auth/presentation/widgets/shared/state_handler/state_handler.dart';
+import 'package:semo/features/auth/presentation/widgets/state_handler/welcom/state_handler.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/screen_display_struture/company_showcase.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/screen_display_struture/pagination_indicator.dart';
 import 'package:semo/features/auth/presentation/widgets/welcome/screen_display_struture/store_showcase.dart';
@@ -63,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       horizontal: AppDimensionsWidth.medium),
                   child: BlocBuilder<WelcomeAssetsBloc, WelcomeAssetsState>(
                     builder: (context, state) {
-                      return StateHandler.handleWelcomeAssetsState<
+                      return WelcomeStateHandler.handleWelcomeAssetsState<
                           AllAssetsLoaded>(
                         context: context,
                         state: state,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Primary Colors
   static const Color semoWelcome = Color.fromARGB(255, 227, 225, 225);
-  static Color primary = Colors.blue.shade800;
+  static Color primary = Colors.blue.shade700;
   static Color primaryVariant = Colors.blue.shade500;
   static const Color secondary = Colors.white;
   static const Color secondaryVariant = Color.fromARGB(255, 227, 227, 227);
