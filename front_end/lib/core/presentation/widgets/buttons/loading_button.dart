@@ -1,18 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:semo/features/auth/presentation/widgets/shared/animated_button.dart';
+import 'package:semo/core/presentation/widgets/buttons/animated_button.dart';
 
 /// A button that shows a loading indicator when in loading state
-/// Extends the functionality of AnimatedButton to handle loading states
+///
+/// This button extends the functionality of AnimatedButton by adding
+/// a loading state that displays a CircularProgressIndicator
 class LoadingButton extends StatelessWidget {
+  /// The callback to execute when the button is pressed
   final VoidCallback onPressed;
+
+  /// The child widget to display when not in loading state
   final Widget child;
+
+  /// The style of the button
   final ButtonStyle style;
+
+  /// Whether the button is in loading state
   final bool isLoading;
+
+  /// The color of the splash effect when the button is pressed
   final Color splashColor;
+
+  /// The color of the highlight effect
   final Color highlightColor;
+
+  /// The color of the shadow effect
   final Color boxShadowColor;
+
+  /// Whether to enable haptic feedback when the button is pressed
   final bool enableHapticFeedback;
+
+  /// The duration of the animation
   final Duration animationDuration;
 
   const LoadingButton({
@@ -45,14 +64,16 @@ class LoadingButton extends StatelessWidget {
     );
   }
 
-  /// Builds the loading indicator without text
+  /// Builds the loading indicator
   Widget _buildLoadingContent() {
     return SizedBox(
-      width: 24.r,
-      height: 24.r,
+      height: 24.h,
+      width: 24.w,
       child: CircularProgressIndicator(
-        strokeWidth: 2.5.r,
-        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+        strokeWidth: 2.5,
+        valueColor: AlwaysStoppedAnimation<Color>(
+          style.foregroundColor?.resolve({}) ?? Colors.white,
+        ),
       ),
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
-import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/company_and_store_theme.dart';
 
 /// A reusable widget for displaying loading states
 /// Provides consistent loading UI across the application

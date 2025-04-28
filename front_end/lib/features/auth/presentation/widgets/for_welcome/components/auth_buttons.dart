@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/navigation/previous/router_services/route_constants.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 
-import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
-import 'package:semo/features/auth/presentation/widgets/welcome/utils/animated_button_builder.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/company_and_store_theme.dart';
 
 /// A reusable component that displays the authentication buttons
 /// (Create Account and Login) in a consistent manner across the app
@@ -61,13 +61,12 @@ class AuthButtons extends StatelessWidget {
 
     return Column(
       children: [
-        AnimatedButtonBuilder(
+        ButtonFactory.createNavigationButton(
           context: context,
           route: AppRoutes.register,
           text: registerStyle['text'] as String,
           textColor: registerStyle['textColor'] as Color,
           backgroundColor: registerStyle['backgroundColor'] as Color,
-          foregroundColor: registerStyle['foregroundColor'] as Color,
           splashColor: registerStyle['backgroundColor'] as Color,
           highlightColor: registerStyle['backgroundColor'] as Color,
           boxShadowColor: registerStyle['backgroundColor'] as Color,
@@ -77,15 +76,14 @@ class AuthButtons extends StatelessWidget {
           minHeight: registerStyle['minHeight'] as double,
           enableHapticFeedback: true,
           animationDuration: const Duration(milliseconds: 300),
-        ).buildButton(),
+        ),
         SizedBox(height: spacingBetweenButtons),
-        AnimatedButtonBuilder(
+        ButtonFactory.createNavigationButton(
           context: context,
           route: AppRoutes.login,
           text: loginStyle['text'] as String,
           textColor: loginStyle['textColor'] as Color,
           backgroundColor: loginStyle['backgroundColor'] as Color,
-          foregroundColor: loginStyle['foregroundColor'] as Color,
           splashColor: loginStyle['backgroundColor'] as Color,
           highlightColor: loginStyle['backgroundColor'] as Color,
           boxShadowColor: loginStyle['backgroundColor'] as Color,
@@ -95,7 +93,7 @@ class AuthButtons extends StatelessWidget {
           minHeight: loginStyle['minHeight'] as double,
           enableHapticFeedback: true,
           animationDuration: const Duration(milliseconds: 300),
-        ).buildButton(),
+        ),
       ],
     );
   }

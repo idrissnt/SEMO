@@ -3,19 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
-
-import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
-import 'package:semo/features/auth/presentation/widgets/shared/loading_button.dart';
+import 'package:semo/features/auth/presentation/utils/auth_validators.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/auth_screen_template.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/form/auth_form_container.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/form/auth_text_field.dart';
+import 'package:semo/features/auth/presentation/widgets/shared/form/auth_password_field.dart';
 import 'package:semo/features/auth/presentation/widgets/state_handler/auth/state_handler.dart';
 
 final AppLogger logger = AppLogger();
@@ -27,25 +29,26 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
   final String loadingMessage = 'Connexion en cours...';
 
   @override
   void initState() {
     super.initState();
-    logger.debug('LoginScreen: Initializing animation controllers',
-        {'component': 'LoginScreen'});
+    logger.debug('LoginScreen: Initializing', {'component': 'LoginScreen'});
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -62,202 +65,102 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Background
-          CustomPaint(
-            painter: AuthBackgroundPainter(),
-            size: Size.infinite,
-          ),
-          // Content
-          SafeArea(
-            child: Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: AppDimensionsWidth.medium),
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  return AuthStateHandler.handleAuthState(
-                    context: context,
-                    state: state,
-                    loadingMessage: loadingMessage,
-                    onSuccess: (_) {
-                      // This will be handled by the app's navigation logic
-                      // when AuthAuthenticated state is emitted
-                      return const SizedBox.shrink();
-                    },
-                    onInitial: () => _buildLoginForm(context, state),
-                    onUnauthenticated: () => _buildLoginForm(context, state),
-                  );
-                },
-              ),
-            ),
-          ),
-          Positioned(
-            top: AppDimensionsHeight.xxxxxl,
-            left: AppDimensionsWidth.medium,
-            child: IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: AppColors.background,
-              ),
-              icon: const Icon(Icons.arrow_back,
-                  color: AppColors.iconColorFirstColor),
-              onPressed: () => context.pop(),
-            ),
-          ),
-        ],
-      ),
+    return AuthScreenTemplate(
+      title: 'Connexion',
+      loadingMessage: loadingMessage,
+      formBuilder: _buildLoginForm,
     );
   }
 
   Widget _buildLoginForm(BuildContext context, AuthState state) {
-    return SingleChildScrollView(
-      child: SafeArea(
-        child: Container(
-          height: 600.h,
-          padding: EdgeInsets.symmetric(
-            horizontal: AppDimensionsWidth.medium,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: BorderRadius.all(
-              Radius.circular(AppBorderRadius.xl),
+    return AuthFormContainer(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 30.h),
+
+            // App logo or title
+            Center(
+              child: Text(
+                'Connexion',
+                style: TextStyle(
+                  fontSize: AppFontSize.xxxl,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimaryColor,
+                ),
+              ),
             ),
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 16),
-                Text(
-                  'Connexion',
-                  style: TextStyle(
-                    fontSize: AppFontSize.xxl,
-                    color: AppColors.textPrimaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
+            SizedBox(height: 30.h),
 
-                // Email field
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(10),
-                    labelText: 'E-mail',
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: FaIcon(FontAwesomeIcons.envelope, size: 22),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(AppBorderRadius.medium),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer votre e-mail';
-                    }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                        .hasMatch(value)) {
-                      return 'Veuillez entrer un e-mail valide';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Password field
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(10),
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(AppBorderRadius.medium),
-                    ),
-                    labelText: 'Mot de passe',
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: FaIcon(FontAwesomeIcons.lock, size: 22),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: FaIcon(
-                          _obscurePassword
-                              ? FontAwesomeIcons.eye
-                              : FontAwesomeIcons.eyeSlash,
-                          size: 22,
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer votre mot de passe';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 8),
-
-                // Forgot password link
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // Navigate to forgot password screen
-                    },
-                    child: const Text('Mot de passe oublié ?'),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Login button with loading state
-                LoadingButton(
-                  onPressed: _login,
-                  // Determine if we're in loading state
-                  isLoading: AuthStateHandler.isLoading(state),
-                  // Custom splash color for better visual feedback
-                  splashColor: AppColors.primary,
-                  highlightColor: AppColors.primary,
-                  boxShadowColor: AppColors.primary,
-                  // Slightly faster animation for a snappier feel
-                  animationDuration: const Duration(milliseconds: 300),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(300, 50.h),
-                    backgroundColor: AppColors.primary,
-                    padding: EdgeInsets.symmetric(
-                        vertical: AppDimensionsWidth.xSmall,
-                        horizontal: AppDimensionsHeight.small),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
-                    ),
-                  ),
-                  child: Text(
-                    'Se connecter',
-                    style: TextStyle(
-                      fontSize: AppFontSize.large,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-              ],
+            // Email field
+            AuthTextField(
+              controller: _emailController,
+              labelText: 'E-mail',
+              prefixIcon: FontAwesomeIcons.envelope,
+              keyboardType: TextInputType.emailAddress,
+              focusNode: _emailFocusNode,
+              nextFocusNode: _passwordFocusNode,
+              validator: AuthValidators.validateEmail,
             ),
-          ),
+            const SizedBox(height: 16),
+
+            // Password field
+            AuthPasswordField(
+              controller: _passwordController,
+              labelText: 'Mot de passe',
+              focusNode: _passwordFocusNode,
+              onSubmitted: _login,
+              validator: (value) =>
+                  AuthValidators.validateRequired(value, 'mot de passe'),
+            ),
+            const SizedBox(height: 8),
+
+            // Forgot password link
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
+                  // Navigate to forgot password screen
+                },
+                child: const Text('Mot de passe oublié ?'),
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Login button with loading state
+            ButtonFactory.createLoadingButton(
+              context: context,
+              onPressed: _login,
+              text: 'Se connecter',
+              // Determine if we're in loading state
+              isLoading: AuthStateHandler.isLoading(state),
+              // Colors
+              backgroundColor: AppColors.primary,
+              textColor: Colors.white,
+              splashColor: AppColors.primary,
+              highlightColor: AppColors.primary,
+              boxShadowColor: AppColors.primary,
+              // Dimensions
+              minWidth: 300.w,
+              minHeight: 50.h,
+              verticalPadding: AppDimensionsWidth.xSmall,
+              horizontalPadding: AppDimensionsHeight.small,
+              borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
+              // Animation
+              animationDuration: const Duration(milliseconds: 300),
+              enableHapticFeedback: true,
+              // Text style
+              textStyle: TextStyle(
+                fontSize: AppFontSize.large,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
         ),
       ),
     );

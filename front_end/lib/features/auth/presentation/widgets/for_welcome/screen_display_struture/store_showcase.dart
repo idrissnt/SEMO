@@ -4,12 +4,12 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 
-import 'package:semo/features/auth/presentation/widgets/welcome/components/store/store_image_builder.dart';
-import 'package:semo/features/auth/presentation/widgets/welcome/components/shared/showcase_title.dart';
-import 'package:semo/features/auth/presentation/widgets/welcome/components/store/store_content_builder.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/components/store/store_image_builder.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/components/shared/showcase_title.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/components/store/store_content_builder.dart';
 
-import 'package:semo/features/auth/presentation/widgets/welcome/screen_display_struture/utils/base_store_task_showcase.dart';
-import 'package:semo/features/auth/presentation/widgets/welcome/styles/company_and_store_theme.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/utils/base_store_task_showcase.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/company_and_store_theme.dart';
 
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
 

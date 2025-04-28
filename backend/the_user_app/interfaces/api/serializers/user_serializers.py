@@ -17,7 +17,8 @@ class UserSerializer(serializers.Serializer):
     password = serializers.CharField(
         write_only=True, 
         required=True,
-        validators=[validate_password]
+        # validators=[validate_password] #to complicated (8 characters, Not be too common,
+                                        # Not be entirely numeric, Not be too similar to the username/email)
     )
     profile_photo_url = serializers.URLField(required=False, allow_null=True)
     first_name = serializers.CharField(max_length=255)
@@ -54,4 +55,4 @@ class AuthTokensSerializer(serializers.Serializer):
 class PasswordChangeSerializer(serializers.Serializer):
     """Serializer for password change request data"""
     old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True, validators=[validate_password])
+    # new_password = serializers.CharField(required=True, validators=[validate_password])

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
 
-import 'package:semo/features/auth/presentation/widgets/welcome/components/auth_buttons.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/components/auth_buttons.dart';
 
 /// A base component for showcase cards that provides a consistent layout structure
 class BaseShowcase extends StatelessWidget {

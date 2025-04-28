@@ -15,7 +15,19 @@ from core.domain.exceptions import CoreDomainException
 class InvalidInputException(CoreDomainException):
     """Exception raised when invalid input is provided"""
     def __init__(self, message="Invalid input provided"):
+        self.errors = None
+        
+        # If message is a dictionary (like serializer.errors), store it separately
+        if isinstance(message, dict):
+            self.errors = message
+            message = "Invalid input provided"
+            
         super().__init__(message, "invalid_input")
+        
+    def __str__(self):
+        if self.errors:
+            return "Invalid input provided"
+        return super().__str__()
 
 # login related exceptions
 class InvalidCredentialsException(CoreDomainException):

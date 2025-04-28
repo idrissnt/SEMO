@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:semo/core/presentation/widgets/popup_notification.dart';
+
 import 'package:semo/features/auth/domain/entities/auth_entity.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';

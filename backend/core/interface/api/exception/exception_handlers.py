@@ -104,6 +104,10 @@ def domain_exception_handler(exc, context):
         'request_id': request_id
     }
     
+    # Handle InvalidInputException with serializer errors
+    if hasattr(exc, 'errors') and exc.errors is not None:
+        data['details'] = exc.errors
+    
     # Log the exception with the appropriate level
     log_message = f"{exc.__class__.__name__}: {str(exc)}"
     if log_level == 'debug':

@@ -1,16 +1,37 @@
-// In a new file like widgets/common/animated_button.dart
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
+/// A button with animation effects for improved user feedback
+///
+/// This button provides:
+/// - Scale animation when pressed
+/// - Optional haptic feedback
+/// - Custom splash effects
+/// - Shadow animation
 class AnimatedButton extends StatefulWidget {
+  /// The callback to execute when the button is pressed
   final VoidCallback onPressed;
+
+  /// The child widget to display inside the button
   final Widget child;
+
+  /// The style of the button
   final ButtonStyle style;
+
+  /// The color of the splash effect when the button is pressed
   final Color splashColor;
-  final Color? highlightColor; // for ripple effect
-  final Color boxShadowColor; // for shadow effect
+
+  /// The color of the highlight effect (for ripple effect)
+  final Color highlightColor;
+
+  /// The color of the shadow effect
+  final Color boxShadowColor;
+
+  /// The duration of the animation
   final Duration animationDuration;
+
+  /// Whether to enable haptic feedback when the button is pressed
   final bool enableHapticFeedback;
 
   const AnimatedButton({
@@ -19,7 +40,7 @@ class AnimatedButton extends StatefulWidget {
     required this.child,
     required this.style,
     required this.splashColor,
-    this.highlightColor,
+    required this.highlightColor,
     required this.boxShadowColor,
     this.animationDuration = const Duration(milliseconds: 350),
     this.enableHapticFeedback = true,
