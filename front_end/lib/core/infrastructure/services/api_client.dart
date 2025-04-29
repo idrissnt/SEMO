@@ -210,6 +210,13 @@ class ApiClientImpl implements ApiClient {
               code: errorCode,
               requestId: requestId,
             );
+          case 409:
+            throw ConflictException(
+              message: errorMessage,
+              details: details,
+              code: errorCode,
+              requestId: requestId,
+            );
           default:
             throw ApiException(
                 'Request failed with status: $statusCode, message: $errorMessage',

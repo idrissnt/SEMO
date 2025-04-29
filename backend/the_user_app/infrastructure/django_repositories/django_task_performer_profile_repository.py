@@ -1,13 +1,12 @@
 from typing import List, Optional
 import uuid
 from django.db import transaction
-from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 from django.db.models import Q
 
-from ...domain.models.entities import TaskPerformerProfile
-from ...domain.repositories.repository_interfaces import TaskPerformerProfileRepository
-from ..django_models.orm_models import TaskPerformerProfileModel, CustomUserModel
+from the_user_app.domain.models.entities import TaskPerformerProfile
+from the_user_app.domain.repositories.task_performer_repository_interfaces import TaskPerformerProfileRepository
+from the_user_app.infrastructure.django_models.orm_models import TaskPerformerProfileModel, CustomUserModel
 
 
 class DjangoTaskPerformerProfileRepository(TaskPerformerProfileRepository):

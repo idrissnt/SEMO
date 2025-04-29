@@ -9,11 +9,13 @@ import 'package:semo/features/auth/domain/usecases/auth_check_usecase.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
+import 'package:semo/features/auth/presentation/services/auth/auth_error_message_service.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserAuthRepository _authRepository;
   final UserProfileUseCase _userProfileUseCase;
   final AppLogger _logger;
+  final AuthErrorMessageService _errorMessageService;
 
   AuthBloc({
     required UserAuthRepository authRepository,
@@ -22,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   })  : _authRepository = authRepository,
         _userProfileUseCase = userProfileUseCase,
         _logger = logger,
+        _errorMessageService = AuthErrorMessageService(),
         super(AuthInitial()) {
     on<AuthLoginRequested>(_onAuthLoginRequested);
     on<AuthRegisterRequested>(_onAuthRegisterRequested);
@@ -49,6 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (error) {
         _logger.error('Bloc Login error', error: error.message);
+        _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
         _mapErrorToState(emit, error, 'login');
       },
     );
@@ -76,6 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (error) {
         _logger.error('Registration error', error: error.message);
+        _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
         _mapErrorToState(emit, error, 'registration');
       },
     );
@@ -98,6 +103,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (error) {
         _logger.error('Logout error', error: error.message);
+        _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
 
         // Special case for logout - handle missing token gracefully
         if (error is MissingRefreshTokenException) {
@@ -212,9 +218,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (error) {
         _logger.error('Failed to get user profile after $operation',
             error: error);
+        _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
         // Use specific profile fetch error state with retry option
         emit(ProfileFetchFailure(
-            '$operation successful but failed to get user profile'));
+            _errorMessageService.getUserFriendlyAuthMessage(error, 'profile')));
         // Don't immediately transition to unauthenticated - let UI handle retry
       },
     );
@@ -230,26 +237,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthenticationException error,
     String operation,
   ) {
-    // Map specific auth exceptions to appropriate UI states
+    // Get user-friendly message from the error message service
+    final userFriendlyMessage =
+        _errorMessageService.getUserFriendlyAuthMessage(error, operation);
+
+    // Log the technical details for debugging
+    _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
+    _logger.debug(userFriendlyMessage);
+
+    // Map specific auth exceptions to appropriate UI states with user-friendly messages
     if (error is InvalidCredentialsException) {
-      emit(InvalidCredentialsFailure(error.message));
+      emit(InvalidCredentialsFailure(userFriendlyMessage));
     } else if (error is InvalidInputException) {
-      emit(InvalidInputFailure(error.message));
+      emit(InvalidInputFailure(userFriendlyMessage));
     } else if (error is UserAlreadyExistsException) {
-      emit(UserAlreadyExistsFailure(error.message));
+      emit(UserAlreadyExistsFailure(userFriendlyMessage));
     } else if (error is GenericAuthException) {
       // Use extension methods for cleaner error type checking
       if (error.isNetworkError) {
-        emit(NetworkFailure(error.getNetworkErrorMessage(operation)));
+        emit(NetworkFailure(userFriendlyMessage));
       } else if (error.isServerError) {
-        emit(ServerFailure(error.getServerErrorMessage(operation)));
+        emit(ServerFailure(userFriendlyMessage));
       } else {
         // Generic fallback
-        emit(AuthFailure(error.message));
+        emit(AuthFailure(userFriendlyMessage));
       }
     } else {
       // Generic fallback for any other auth exceptions
-      emit(AuthFailure(error.message));
+      emit(AuthFailure(userFriendlyMessage));
     }
   }
 }

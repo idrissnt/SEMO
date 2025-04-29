@@ -12,6 +12,9 @@ from the_user_app.domain.user_exceptions import (
     PasswordChangeException,
     MissingRefreshTokenException,
     InvalidInputException,
+    UserNotFoundException,
+    InvalidVerificationCodeException,
+    VerificationFailedException,
 )
 
 def get_fully_qualified_name(cls):
@@ -29,6 +32,14 @@ USER_EXCEPTION_MAPPING = {
         (status.HTTP_400_BAD_REQUEST, 'missing_token', 'warning'),
     get_fully_qualified_name(InvalidInputException): 
         (status.HTTP_400_BAD_REQUEST, 'invalid_input', 'warning'),
+
+    # Verification related exceptions
+    get_fully_qualified_name(UserNotFoundException): 
+        (status.HTTP_404_NOT_FOUND, 'user_not_found', 'warning'),
+    get_fully_qualified_name(InvalidVerificationCodeException): 
+        (status.HTTP_400_BAD_REQUEST, 'invalid_verification_code', 'warning'),
+    get_fully_qualified_name(VerificationFailedException): 
+        (status.HTTP_400_BAD_REQUEST, 'verification_failed', 'warning'),
 }
 
 # Note: The base domain exception (CoreDomainException) is defined in the core app

@@ -2,8 +2,10 @@ from typing import List, Optional, Tuple, Dict, Any
 import uuid
 import logging
 
-from the_user_app.domain.models.entities import Address, User
-from the_user_app.domain.repositories.repository_interfaces import AddressRepository, UserRepository
+from the_user_app.domain.models.entities import Address
+from the_user_app.domain.repositories.address_repository_interfaces import AddressRepository
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
+
 
 logger = logging.getLogger(__name__)
 

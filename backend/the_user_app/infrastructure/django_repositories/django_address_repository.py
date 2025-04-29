@@ -2,7 +2,7 @@ from typing import List, Optional
 import uuid
 
 from the_user_app.domain.models.entities import Address
-from the_user_app.domain.repositories.repository_interfaces import AddressRepository
+from the_user_app.domain.repositories.address_repository_interfaces import AddressRepository
 from the_user_app.infrastructure.django_models.orm_models import AddressModel, CustomUserModel
 
 class DjangoAddressRepository(AddressRepository):

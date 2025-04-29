@@ -23,38 +23,64 @@ EXCEPTION_MAPPING.update(CORE_EXCEPTION_MAPPING)
 def load_app_exception_mappings():
     """
     Load exception mappings from all Django apps that have defined them.
-    Each app should have a module at interfaces/api/exception_mapping.py
-    with dictionaries named *_EXCEPTION_MAPPING.
+    
+    This function looks for exception mappings in three ways, in order of preference:
+    1. From the get_exception_mappings() method on the app's AppConfig
+    2. From the app's exception_mappings module (flexible path)
+    3. From the legacy path: app.interfaces.api.exception.exception_mapping
     """
-    for app in settings.INSTALLED_APPS:
+    for app_label in settings.INSTALLED_APPS:
         # Skip third-party apps
-        if app.startswith('django.') or app.startswith('rest_framework'):
+        if app_label.startswith('django.') or app_label.startswith('rest_framework'):
             continue
             
-        # Try to import the exception mapping module
+        # Try to get the app config
         try:
-            # Convert django app name to python module path
-            if app.endswith('.apps.Config'):
-                app = app.rsplit('.', 2)[0]
-                
-            mapping_module = f"{app}.interfaces.api.exception.exception_mapping"
-            module = importlib.import_module(mapping_module)
+            from django.apps import apps
+            app_config = apps.get_app_config(app_label.split('.')[-1])
             
-            # Find all exception mapping dictionaries in the module
-            for attr_name in dir(module):
-                if attr_name.endswith('_EXCEPTION_MAPPING'):
-                    mapping_dict = getattr(module, attr_name)
-                    if isinstance(mapping_dict, dict):
-                        EXCEPTION_MAPPING.update(mapping_dict)
-                        logger.debug(f"Loaded exception mapping from {mapping_module}.{attr_name}")
-        except (ImportError, AttributeError) as e:
-            # It's okay if an app doesn't have exception mappings
-            logger.debug(f"No exception mappings found for {app}", {"error": str(e), "app": app})
-            continue
+            # Method 1: Check if the app config has a get_exception_mappings method
+            if hasattr(app_config, 'get_exception_mappings') and callable(app_config.get_exception_mappings):
+                mappings = app_config.get_exception_mappings()
+                if isinstance(mappings, dict):
+                    EXCEPTION_MAPPING.update(mappings)
+                    logger.debug(f"Loaded exception mappings from {app_label} AppConfig")
+                    continue
+            
+            # Method 2: Try to import from a flexible path
+            app_module = app_config.module.__name__
+            possible_paths = [
+                f"{app_module}.exception_mappings",
+                f"{app_module}.exceptions.mappings",
+                f"{app_module}.api.exceptions",
+                f"{app_module}.interfaces.api.exception_mapping",
+                # Legacy path as fallback
+                f"{app_module}.interfaces.api.exception.exception_mapping"
+            ]
+            
+            for path in possible_paths:
+                try:
+                    module = importlib.import_module(path)
+                    found_mappings = False
+                    
+                    # Find all exception mapping dictionaries in the module
+                    for attr_name in dir(module):
+                        if attr_name.endswith('_EXCEPTION_MAPPING') or attr_name == 'EXCEPTION_MAPPING':
+                            mapping_dict = getattr(module, attr_name)
+                            if isinstance(mapping_dict, dict):
+                                EXCEPTION_MAPPING.update(mapping_dict)
+                                logger.debug(f"Loaded exception mapping from {path}.{attr_name}")
+                                found_mappings = True
+                    
+                    if found_mappings:
+                        break  # Stop trying other paths if we found mappings
+                        
+                except (ImportError, AttributeError):
+                    continue  # Try the next path
+                    
         except Exception as e:
-            # Log other errors but don't fail
-            logger.warning(f"Error loading exception mappings from {app}", {"error": str(e), "app": app})
-            continue
+            # Log errors but don't fail
+            logger.debug(f"No exception mappings found for {app_label}", {"error": str(e), "app": app_label})
 
 # Load mappings when the module is imported
 try:

@@ -14,7 +14,8 @@ from the_user_app.domain.user_exceptions import (
 )
 
 from the_user_app.domain.models.entities import User
-from the_user_app.domain.repositories.repository_interfaces import UserRepository, AuthRepository
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
+from the_user_app.domain.repositories.auth_repository_interfaces import AuthRepository
 from the_user_app.domain.services.auth_service import AuthDomainService
 from the_user_app.domain.models.events.user_events import UserRegisteredEvent
 from core.domain_events.event_bus import event_bus

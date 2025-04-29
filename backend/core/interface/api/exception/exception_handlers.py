@@ -95,7 +95,11 @@ def domain_exception_handler(exc, context):
     
     # Handle domain and other exceptions using the configuration-based approach
     # Get the mapping for this exception
+    logger.debug(f"Exception type: {exc.__class__.__name__}, Module: {exc.__class__.__module__}")
+    logger.debug(f"Exception code: {getattr(exc, 'code', 'no_code')}")
+    
     status_code, error_code, log_level = get_exception_mapping(exc)
+    logger.debug(f"Mapped to status_code: {status_code}, error_code: {error_code}, log_level: {log_level}")
     
     # Prepare the error response data
     data = {

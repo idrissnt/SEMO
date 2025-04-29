@@ -12,7 +12,8 @@ from the_user_app.domain.user_exceptions import InvalidInputException
 from the_user_app.interfaces.api.serializers import (
     UserSerializer,
     LoginRequestSerializer,
-    AuthTokensSerializer
+    AuthTokensSerializer,
+    PasswordChangeSerializer
 )
 from the_user_app.infrastructure.factory import UserFactory
 
@@ -66,7 +67,7 @@ class AuthViewSet(viewsets.ViewSet):
         # Extract request ID or generate a new one
         request_id = request.META.get('HTTP_X_REQUEST_ID', str(uuid.uuid4()))
         
-        # Validate input data
+        # Validate input data format (not business rules)
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
             raise InvalidInputException(serializer.errors)
@@ -75,6 +76,7 @@ class AuthViewSet(viewsets.ViewSet):
         auth_service = UserFactory.create_auth_service()
         
         # Register user and get Result object
+        # The domain layer will handle business rules like checking for existing users
         result = auth_service.register_user(serializer.validated_data)
         
         # Check if registration was successful
@@ -140,6 +142,8 @@ class AuthViewSet(viewsets.ViewSet):
             else:
                 # Otherwise, raise it directly
                 raise result.error
+    
+
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def logout(self, request):

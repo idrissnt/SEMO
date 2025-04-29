@@ -52,3 +52,19 @@ class MissingRefreshTokenException(CoreDomainException):
     """Exception raised when a refresh token is required but not provided"""
     def __init__(self, message="Refresh token is required"):
         super().__init__(message, "missing_token")
+
+# verification related exceptions
+class UserNotFoundException(CoreDomainException):
+    """Exception raised when a user is not found"""
+    def __init__(self, message="User not found"):
+        super().__init__(message, "user_not_found")
+
+class InvalidVerificationCodeException(CoreDomainException):
+    """Exception raised when a verification code is invalid or expired"""
+    def __init__(self, message="Invalid or expired verification code"):
+        super().__init__(message, "invalid_verification_code")
+
+class VerificationFailedException(CoreDomainException):
+    """Exception raised when verification fails for any reason"""
+    def __init__(self, message="Verification failed"):
+        super().__init__(message, "verification_failed")

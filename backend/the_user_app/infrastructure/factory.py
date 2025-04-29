@@ -1,21 +1,41 @@
 from the_user_app.domain.repositories.repository_interfaces import UserRepository, AddressRepository, AuthRepository, TaskPerformerProfileRepository
+from the_user_app.domain.repositories.verification_code_repository import VerificationCodeRepository
+from the_user_app.domain.services.template_services import TemplateService
+from the_user_app.domain.services.verification_service import VerificationService
+
 from the_user_app.infrastructure.django_repositories.django_user_repository import DjangoUserRepository
 from the_user_app.infrastructure.django_repositories.django_address_repository import DjangoAddressRepository
 from the_user_app.infrastructure.django_repositories.django_auth_repository import DjangoAuthRepository
 from the_user_app.infrastructure.django_repositories.django_task_performer_profile_repository import DjangoTaskPerformerProfileRepository
+from the_user_app.infrastructure.django_repositories.django_verification_code_repository import DjangoVerificationCodeRepository
+from the_user_app.infrastructure.services.verification_service_impl import VerificationServiceImpl
+from the_user_app.infrastructure.services.template_service_impl import DjangoTemplateService
 
 from core.infrastructure.factories.logging_factory import CoreLoggingFactory
+from core.infrastructure.services.email_service_impl import DummyEmailService, SendGridEmailService
+from core.infrastructure.services.sms_service_impl import DummySmsService, TwilioSmsService
 
 from the_user_app.application.services.auth_service import AuthApplicationService
 from the_user_app.application.services.user_service import UserApplicationService
 from the_user_app.application.services.address_service import AddressApplicationService
 from the_user_app.application.services.task_performer_service import TaskPerformerApplicationService
+from the_user_app.application.services.verification_service_application import VerificationApplicationService
+
+
+
+from django.conf import settings
 
 class UserFactory:
     """Factory for creating user-related services and repositories"""
     
-    # Singleton instance of the logging service
+    # Singleton instances
     _logging_service = None
+    _verification_service = None
+    _email_service = None
+    _sms_service = None
+    _template_service = None
+    _verification_code_repository = None
+    _verification_application_service = None
     
     @staticmethod
     def create_user_repository() -> UserRepository:
@@ -96,3 +116,121 @@ class UserFactory:
         task_performer_profile_repository = UserFactory.create_task_performer_profile_repository()
         user_repository = UserFactory.create_user_repository()
         return TaskPerformerApplicationService(task_performer_profile_repository, user_repository)
+        
+    @staticmethod
+    def create_email_service():
+        """Create an EmailService implementation
+        
+        Returns:
+            EmailService implementation
+        """
+        if UserFactory._email_service is None:
+            logger = CoreLoggingFactory.create_logger("email")
+            
+            # Use SendGrid in production, dummy in development
+            if hasattr(settings, 'SENDGRID_API_KEY') and settings.SENDGRID_API_KEY:
+                UserFactory._email_service = SendGridEmailService(
+                    api_key=settings.SENDGRID_API_KEY,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    logger=logger
+                )
+            else:
+                UserFactory._email_service = DummyEmailService(logger)
+                
+        return UserFactory._email_service
+    
+    @staticmethod
+    def create_sms_service():
+        """Create an SmsService implementation
+        
+        Returns:
+            SmsService implementation
+        """
+        if UserFactory._sms_service is None:
+            logger = CoreLoggingFactory.create_logger("sms")
+            
+            # Use Twilio in production, dummy in development
+            if hasattr(settings, 'TWILIO_ACCOUNT_SID') and settings.TWILIO_ACCOUNT_SID:
+                UserFactory._sms_service = TwilioSmsService(
+                    account_sid=settings.TWILIO_ACCOUNT_SID,
+                    auth_token=settings.TWILIO_AUTH_TOKEN,
+                    from_number=settings.TWILIO_FROM_NUMBER,
+                    logger=logger
+                )
+            else:
+                UserFactory._sms_service = DummySmsService(logger)
+                
+        return UserFactory._sms_service
+    
+    @staticmethod
+    def create_verification_code_repository() -> VerificationCodeRepository:
+        """Create a VerificationCodeRepository implementation
+        
+        Returns:
+            VerificationCodeRepository implementation
+        """
+        if UserFactory._verification_code_repository is None:
+            UserFactory._verification_code_repository = DjangoVerificationCodeRepository()
+                
+        return UserFactory._verification_code_repository
+    
+    @staticmethod
+    def create_template_service() -> TemplateService:
+        """Create a TemplateService implementation
+        
+        Returns:
+            TemplateService implementation
+        """
+        if UserFactory._template_service is None:
+            logger = CoreLoggingFactory.create_logger("template")
+            UserFactory._template_service = DjangoTemplateService(logger)
+                
+        return UserFactory._template_service
+    
+    @staticmethod
+    def create_verification_service() -> VerificationService:
+        """Create a VerificationService implementation
+        
+        Returns:
+            VerificationService implementation
+        """
+        if UserFactory._verification_service is None:
+            email_service = UserFactory.create_email_service()
+            sms_service = UserFactory.create_sms_service()
+            verification_code_repository = UserFactory.create_verification_code_repository()
+            template_service = UserFactory.create_template_service()
+            logger = CoreLoggingFactory.create_logger("verification")
+            
+            # Get code expiry time from settings or use default
+            code_expiry_minutes = getattr(settings, 'VERIFICATION_CODE_EXPIRY_MINUTES', 15)
+            
+            UserFactory._verification_service = VerificationServiceImpl(
+                email_service=email_service,
+                sms_service=sms_service,
+                verification_code_repository=verification_code_repository,
+                template_service=template_service,
+                logger=logger,
+                code_expiry_minutes=code_expiry_minutes
+            )
+            
+        return UserFactory._verification_service
+        
+    @staticmethod
+    def create_verification_application_service() -> VerificationApplicationService:
+        """Create a VerificationApplicationService
+        
+        Returns:
+            VerificationApplicationService instance
+        """
+        if UserFactory._verification_application_service is None:
+            user_repository = UserFactory.create_user_repository()
+            verification_service = UserFactory.create_verification_service()
+            logger = CoreLoggingFactory.create_logger("verification_application")
+            
+            UserFactory._verification_application_service = VerificationApplicationService(
+                user_repository=user_repository,
+                verification_service=verification_service,
+                logger=logger
+            )
+            
+        return UserFactory._verification_application_service

@@ -17,6 +17,8 @@ class User:
     last_logout: Optional[datetime] = None
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: Optional[datetime] = None
+    email_verified: bool = False
+    phone_verified: bool = False
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     
     def __str__(self) -> str:

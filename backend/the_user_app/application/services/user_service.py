@@ -3,7 +3,7 @@ import uuid
 import logging
 
 from the_user_app.domain.models.entities import User
-from the_user_app.domain.repositories.repository_interfaces import UserRepository
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
 
 logger = logging.getLogger(__name__)
 

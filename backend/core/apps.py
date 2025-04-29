@@ -8,3 +8,7 @@ class CoreConfig(AppConfig):
     def ready(self):
         # Import signals to register them
         import core.infrastructure.django_models.signals
+
+    def get_exception_mappings(self):
+        from core.interface.api.exception.exception_mapping import CORE_EXCEPTION_MAPPING
+        return CORE_EXCEPTION_MAPPING

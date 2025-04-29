@@ -2,10 +2,8 @@ from typing import Optional
 import uuid
 from datetime import datetime
 
-from django.contrib.auth import get_user_model
-
 from the_user_app.domain.models.entities import User
-from the_user_app.domain.repositories.repository_interfaces import UserRepository
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
 from the_user_app.infrastructure.django_models.orm_models import CustomUserModel
 
 class DjangoUserRepository(UserRepository):
@@ -37,6 +35,21 @@ class DjangoUserRepository(UserRepository):
         """
         try:
             user_model = CustomUserModel.objects.get(email=email)
+            return self._to_domain(user_model)
+        except CustomUserModel.DoesNotExist:
+            return None
+            
+    def get_by_phone_number(self, phone_number: str) -> Optional[User]:
+        """Get user by phone number
+        
+        Args:
+            phone_number: Phone number of the user
+            
+        Returns:
+            User object if found, None otherwise
+        """
+        try:
+            user_model = CustomUserModel.objects.get(phone_number=phone_number)
             return self._to_domain(user_model)
         except CustomUserModel.DoesNotExist:
             return None
@@ -140,6 +153,32 @@ class DjangoUserRepository(UserRepository):
             return True
         except CustomUserModel.DoesNotExist:
             return False
+            
+    def mark_email_verified(self, user_id: uuid.UUID) -> bool:
+        """Mark user's email as verified
+        
+        Args:
+            user_id: UUID of the user
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        # Use direct update for better performance
+        updated = CustomUserModel.objects.filter(id=user_id).update(email_verified=True)
+        return updated > 0
+            
+    def mark_phone_verified(self, user_id: uuid.UUID) -> bool:
+        """Mark user's phone as verified
+        
+        Args:
+            user_id: UUID of the user
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        # Use direct update for better performance
+        updated = CustomUserModel.objects.filter(id=user_id).update(phone_verified=True)
+        return updated > 0
     
     def _to_domain(self, model: CustomUserModel) -> User:
         """Convert ORM model to domain model"""
@@ -152,5 +191,7 @@ class DjangoUserRepository(UserRepository):
             profile_photo_url=model.profile_photo_url,
             last_login=model.last_login,
             created_at=model.created_at,
-            updated_at=model.updated_at
+            updated_at=model.updated_at,
+            email_verified=model.email_verified,
+            phone_verified=model.phone_verified
         )

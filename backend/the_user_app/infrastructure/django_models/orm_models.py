@@ -43,6 +43,8 @@ class CustomUserModel(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(null=True, blank=True)
     last_logout = models.DateTimeField(null=True, blank=True)
+    email_verified = models.BooleanField(default=False, null=True, blank=True)
+    phone_verified = models.BooleanField(default=False, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name']
@@ -51,6 +53,12 @@ class CustomUserModel(AbstractUser):
 
     class Meta:
         db_table = 'custom_user'
+        indexes = [
+            models.Index(fields=['email']),
+            models.Index(fields=['phone_number']),
+            models.Index(fields=['email_verified']),
+            models.Index(fields=['phone_verified']),
+        ]
 
     def __str__(self):
         return self.email

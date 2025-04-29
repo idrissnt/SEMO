@@ -10,7 +10,8 @@ from the_user_app.interfaces.api.views import (
     AuthViewSet,
     UserProfileViewSet,
     AddressViewSet,
-    TaskPerformerProfileViewSet
+    TaskPerformerProfileViewSet,
+    verification_views
 )
 
 app_name = 'the_user_app'
@@ -21,6 +22,7 @@ router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'profiles', UserProfileViewSet, basename='profiles')
 router.register(r'addresses', AddressViewSet, basename='addresses')
 router.register(r'task-performers', TaskPerformerProfileViewSet, basename='task-performers')
+router.register(r'verification', verification_views.VerificationViewSet, basename='verification')
 
 # The API URLs are now determined automatically by the router
 urlpatterns = [

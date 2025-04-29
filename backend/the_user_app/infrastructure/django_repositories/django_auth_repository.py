@@ -4,8 +4,8 @@ from datetime import datetime
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from the_user_app.domain.models.entities import User, LogoutEvent, BlacklistedToken
-from the_user_app.domain.repositories.repository_interfaces import AuthRepository
+from the_user_app.domain.models.entities import LogoutEvent, BlacklistedToken
+from the_user_app.domain.repositories.auth_repository_interfaces import AuthRepository
 from the_user_app.domain.value_objects.value_objects import AuthTokens
 from the_user_app.infrastructure.django_models.orm_models import CustomUserModel, LogoutEventModel, BlacklistedTokenModel
 

@@ -1,9 +1,9 @@
 from typing import List, Optional, Dict, Any
 import uuid
 
-from ...domain.models.entities import TaskPerformerProfile, User
-from ...domain.repositories.repository_interfaces import TaskPerformerProfileRepository, UserRepository
-
+from the_user_app.domain.models.entities import TaskPerformerProfile
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
+from the_user_app.domain.repositories.task_performer_repository_interfaces import TaskPerformerProfileRepository
 
 class TaskPerformerApplicationService:
     """Application service for task performer-related operations"""
