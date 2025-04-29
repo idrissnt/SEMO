@@ -1,4 +1,7 @@
-from the_user_app.domain.repositories.repository_interfaces import UserRepository, AddressRepository, AuthRepository, TaskPerformerProfileRepository
+from the_user_app.domain.repositories.address_repository_interfaces import AddressRepository
+from the_user_app.domain.repositories.auth_repository_interfaces import AuthRepository
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
+from the_user_app.domain.repositories.task_performer_repository_interfaces import TaskPerformerProfileRepository
 from the_user_app.domain.repositories.verification_code_repository import VerificationCodeRepository
 from the_user_app.domain.services.template_services import TemplateService
 from the_user_app.domain.services.verification_service import VerificationService
@@ -13,7 +16,7 @@ from the_user_app.infrastructure.services.template_service_impl import DjangoTem
 
 from core.infrastructure.factories.logging_factory import CoreLoggingFactory
 from core.infrastructure.services.email_service_impl import DummyEmailService, SendGridEmailService
-from core.infrastructure.services.sms_service_impl import DummySmsService, TwilioSmsService
+from core.infrastructure.services.ovh_sms_service_impl import OVHSmsService, DummySmsService
 
 from the_user_app.application.services.auth_service import AuthApplicationService
 from the_user_app.application.services.user_service import UserApplicationService
@@ -149,14 +152,17 @@ class UserFactory:
         if UserFactory._sms_service is None:
             logger = CoreLoggingFactory.create_logger("sms")
             
-            # Use Twilio in production, dummy in development
-            if hasattr(settings, 'TWILIO_ACCOUNT_SID') and settings.TWILIO_ACCOUNT_SID:
-                UserFactory._sms_service = TwilioSmsService(
-                    account_sid=settings.TWILIO_ACCOUNT_SID,
-                    auth_token=settings.TWILIO_AUTH_TOKEN,
-                    from_number=settings.TWILIO_FROM_NUMBER,
+            # Prioritize OVH if configured
+            if hasattr(settings, 'OVH_APPLICATION_KEY') and settings.OVH_APPLICATION_KEY:
+                UserFactory._sms_service = OVHSmsService(
+                    application_key=settings.OVH_APPLICATION_KEY,
+                    application_secret=settings.OVH_APPLICATION_SECRET,
+                    consumer_key=settings.OVH_CONSUMER_KEY,
+                    service_name=settings.OVH_SMS_SERVICE_NAME,
+                    sender=settings.OVH_SMS_SENDER,
                     logger=logger
                 )
+            # Use dummy service if neither is configured
             else:
                 UserFactory._sms_service = DummySmsService(logger)
                 

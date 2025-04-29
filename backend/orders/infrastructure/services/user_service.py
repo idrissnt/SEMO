@@ -2,7 +2,7 @@ from typing import Optional
 from uuid import UUID
 
 from orders.domain.services.user_service_interface import UserServiceInterface, UserInfo
-from the_user_app.domain.repositories.repository_interfaces import UserRepository
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
 
 
 class UserService(UserServiceInterface):

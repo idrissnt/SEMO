@@ -1,7 +1,7 @@
 from typing import Optional
 import uuid
 from core.domain.services.logging_service_interface import LoggingServiceInterface
-from the_user_app.domain.repositories.repository_interfaces import UserRepository
+from the_user_app.domain.repositories.user_repository_interfaces import UserRepository
 from the_user_app.domain.services.verification_service import VerificationService
 from the_user_app.domain.user_exceptions import (
     UserNotFoundException,

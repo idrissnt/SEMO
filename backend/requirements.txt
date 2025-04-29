@@ -67,3 +67,7 @@ django-storages==1.14.6
 
 # Logging
 python-json-logger==3.3.0
+
+# Email and SMS services
+sendgrid==6.11.0
+ovh==1.1.0  # For OVHcloud SMS integration

@@ -158,3 +158,32 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
     print("WARNING: AWS credentials not found. S3 file storage will not work.")
     # In this case, you might want to set up local file storage as fallback
+
+
+
+# SendGrid Configuration (for email delivery)
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', 'noreply@yourdomain.com')
+
+# Configure email backend based on SendGrid availability
+if SENDGRID_API_KEY:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'apikey'  # This is exactly the string 'apikey'
+    EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+else:
+    # Fallback to console backend if SendGrid is not configured
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    print("WARNING: SendGrid not configured. Emails will be printed to console.")
+
+# OVH SMS Configuration (preferred for France) for send messages via sms
+OVH_APPLICATION_KEY = config('OVH_APPLICATION_KEY')
+OVH_APPLICATION_SECRET = config('OVH_APPLICATION_SECRET')
+OVH_CONSUMER_KEY = config('OVH_CONSUMER_KEY')
+OVH_SMS_SERVICE_NAME = config('OVH_SMS_SERVICE_NAME')
+OVH_SMS_SENDER = config('OVH_SMS_SENDER')
+
+# Verification Settings
+VERIFICATION_CODE_EXPIRY_MINUTES = int(config('VERIFICATION_CODE_EXPIRY_MINUTES', 15))

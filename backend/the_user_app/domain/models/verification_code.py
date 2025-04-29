@@ -50,10 +50,10 @@ class VerificationCode:
         self.is_used = True
         self.used_at = current_time
 
-    def min_length_password_reset(self) -> int:
+    def min_length_password_reset() -> int:
         """Get minimum length for password reset code"""
         return 6
 
-    def min_length_code_validation(self) -> int:
+    def min_length_code_validation() -> int:
         """Get minimum length of code validation"""
         return 6

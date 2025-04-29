@@ -11,8 +11,6 @@ from the_user_app.domain.constants.template_paths import (
 from the_user_app.domain.constants.verification_services import (
     EMAIL_VERIFICATION_SUBJECT,
     PASSWORD_RESET_SUBJECT,
-    SMS_VERIFICATION_SUBJECT,
-    SMS_PASSWORD_RESET_SUBJECT
 )
 
 from core.domain.services.email_service import EmailService

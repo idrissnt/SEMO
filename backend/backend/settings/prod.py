@@ -82,6 +82,33 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET_PROD')
 # Google Maps API
 GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY_PROD')
 
+# SendGrid Configuration (for email delivery)
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@yourdomain.com')
+
+# Configure email backend based on SendGrid availability
+if SENDGRID_API_KEY:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'apikey'  # This is exactly the string 'apikey'
+    EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+else:
+    # Fallback to console backend if SendGrid is not configured
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    print("WARNING: SendGrid not configured. Emails will be printed to console.")
+
+# OVH SMS Configuration (preferred for France) for send messages via sms
+OVH_APPLICATION_KEY = os.environ.get('OVH_APPLICATION_KEY')
+OVH_APPLICATION_SECRET = os.environ.get('OVH_APPLICATION_SECRET')
+OVH_CONSUMER_KEY = os.environ.get('OVH_CONSUMER_KEY')
+OVH_SMS_SERVICE_NAME = os.environ.get('OVH_SMS_SERVICE_NAME')
+OVH_SMS_SENDER = os.environ.get('OVH_SMS_SENDER')
+
+# Verification Settings
+VERIFICATION_CODE_EXPIRY_MINUTES = int(os.environ.get('VERIFICATION_CODE_EXPIRY_MINUTES', 15))
+
 # Redis URL for production
 # In production, this should point to a production Redis instance
 # with proper authentication and security
