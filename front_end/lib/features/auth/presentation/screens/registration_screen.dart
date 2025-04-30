@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
@@ -19,6 +18,7 @@ import 'package:semo/features/auth/presentation/widgets/shared/form/auth_form_co
 import 'package:semo/features/auth/presentation/widgets/shared/form/auth_text_field.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/form/auth_password_field.dart';
 import 'package:semo/features/auth/presentation/widgets/state_handler/auth/state_handler.dart';
+import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -41,7 +41,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
 
-  final String loadingMessage = 'Création de votre compte...';
+  final String loadingMessage = AuthConstants.registrationLoadingMessage;
 
   @override
   void dispose() {
@@ -71,7 +71,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthScreenTemplate(
-      title: 'Inscription',
+      title: AuthConstants.registrationTitle,
       loadingMessage: loadingMessage,
       formBuilder: _buildRegistrationForm,
     );
@@ -85,12 +85,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 30.h),
+            SizedBox(height: AppDimensionsHeight.xxxl),
 
             // App logo or title
             Center(
               child: Text(
-                'Créer un compte',
+                AuthConstants.registrationHeading,
                 style: TextStyle(
                   fontSize: AppFontSize.xxxl,
                   fontWeight: FontWeight.bold,
@@ -98,73 +98,73 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 30.h),
+            SizedBox(height: AppDimensionsHeight.xxxl),
 
             // First name field
             AuthTextField(
               controller: _firstNameController,
-              labelText: 'Prénom',
+              labelText: AuthConstants.firstNameLabel,
               prefixIcon: FontAwesomeIcons.user,
               focusNode: _firstNameFocusNode,
               nextFocusNode: _emailFocusNode,
-              validator: (value) =>
-                  AuthValidators.validateRequired(value, 'prénom'),
+              validator: AuthValidators.validateFirstName,
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: AppDimensionsHeight.medium),
 
             // Email field
             AuthTextField(
               controller: _emailController,
-              labelText: 'E-mail',
+              labelText: AuthConstants.emailLabel,
               prefixIcon: FontAwesomeIcons.envelope,
               keyboardType: TextInputType.emailAddress,
               focusNode: _emailFocusNode,
               nextFocusNode: _passwordFocusNode,
               validator: AuthValidators.validateEmail,
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: AppDimensionsHeight.medium),
 
             // Password field
             AuthPasswordField(
               controller: _passwordController,
-              labelText: 'Mot de passe',
+              labelText: AuthConstants.passwordLabel,
               focusNode: _passwordFocusNode,
               nextFocusNode: _confirmPasswordFocusNode,
-              validator: AuthValidators.validatePassword,
-              helperText: 'Minimum 6 caractères',
+              validator: AuthValidators.validateRegistrationPassword,
+              helperText: AuthConstants.passwordHelperText,
             ),
-            SizedBox(height: 30.h),
+            SizedBox(height: AppDimensionsHeight.xxxl),
 
             // Register button with loading state
             ButtonFactory.createLoadingButton(
               context: context,
               onPressed: _register,
-              text: 'Créer un compte',
+              text: AuthConstants.registrationButtonText,
               // Determine if we're in loading state
               isLoading: AuthStateHandler.isLoading(state),
               // Colors
               backgroundColor: AppColors.primary,
-              textColor: Colors.white,
+              textColor: AppColors.secondary,
               splashColor: AppColors.primary,
               highlightColor: AppColors.primary,
               boxShadowColor: AppColors.primary,
               // Dimensions
-              minWidth: 300.w,
-              minHeight: 50.h,
+              minWidth: AuthConstants.buttonMinWidth,
+              minHeight: AuthConstants.buttonMinHeight,
               verticalPadding: AppDimensionsWidth.xSmall,
               horizontalPadding: AppDimensionsHeight.small,
               borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
               // Animation
-              animationDuration: const Duration(milliseconds: 300),
+              animationDuration: const Duration(
+                  milliseconds: AuthConstants.animationDurationMs),
               enableHapticFeedback: true,
               // Text style
               textStyle: TextStyle(
                 fontSize: AppFontSize.large,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.secondary,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: AppDimensionsHeight.xl),
           ],
         ),
       ),

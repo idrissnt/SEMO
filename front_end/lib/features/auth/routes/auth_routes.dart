@@ -5,13 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports
-import 'package:semo/core/presentation/navigation/previous/router_services/route_constants.dart';
-import 'package:semo/core/presentation/navigation/routing_transitions.dart';
+import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
+import 'package:semo/core/presentation/navigation/app_routes/routing_transitions.dart';
+import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/auth/presentation/screens/login_screen.dart';
 import 'package:semo/features/auth/presentation/screens/registration_screen.dart';
 import 'package:semo/features/auth/presentation/screens/welcome_screen.dart';
+
+final AppLogger logger = AppLogger();
 
 /// Class that handles all authentication-related routing
 class AuthRouter {
@@ -61,14 +64,10 @@ class AuthRouter {
   /// Auth routes redirect function that handles authentication logic
   static Future<String?> authRedirect(
       BuildContext context, GoRouterState state) async {
-    // Get AuthBloc state first before any async operations
+    //
+    // Get current auth state
     final authState = context.read<AuthBloc>().state;
-
-    // Check if authenticated based on AuthBloc state only
-    // AuthBloc already handles token validation internally
     final isAuthenticated = authState is AuthAuthenticated;
-
-    // Handle authentication flow
     final isAuthRoute = AuthRouter.isAuthRoute(state.uri.path);
 
     // If authenticated, prevent access to auth routes

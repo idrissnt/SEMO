@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'route_constants.dart';
+import '../../routes_constants/route_constants.dart';
 import 'route_params.dart';
 
 /// Extension methods to simplify navigation with type safety

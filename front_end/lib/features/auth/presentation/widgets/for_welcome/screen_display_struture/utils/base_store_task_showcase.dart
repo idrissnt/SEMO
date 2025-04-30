@@ -29,33 +29,31 @@ class BaseShowcase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Card(
-        color: backgroundColor,
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
-        ),
-        child: Padding(
-          padding: padding ??
-              EdgeInsets.symmetric(
-                vertical: AppDimensionsHeight.xl,
-                horizontal: AppDimensionsWidth.medium,
-              ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Title section
-              titleSection,
+    return Card(
+      color: backgroundColor,
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
+      ),
+      child: Padding(
+        padding: padding ??
+            EdgeInsets.symmetric(
+              vertical: AppDimensionsHeight.xl,
+              horizontal: AppDimensionsWidth.medium,
+            ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Title section
+            titleSection,
 
-              // Content section
-              contentSection,
+            // Content section
+            contentSection,
 
-              // Auth buttons section
-              const AuthButtons(),
-            ],
-          ),
+            // Auth buttons section
+            const AuthButtons(),
+          ],
         ),
       ),
     );

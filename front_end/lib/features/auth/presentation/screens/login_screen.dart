@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
@@ -19,6 +18,7 @@ import 'package:semo/features/auth/presentation/widgets/shared/form/auth_form_co
 import 'package:semo/features/auth/presentation/widgets/shared/form/auth_text_field.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/form/auth_password_field.dart';
 import 'package:semo/features/auth/presentation/widgets/state_handler/auth/state_handler.dart';
+import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
-  final String loadingMessage = 'Connexion en cours...';
+  final String loadingMessage = AuthConstants.loginLoadingMessage;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthScreenTemplate(
-      title: 'Connexion',
+      title: AuthConstants.loginTitle,
       loadingMessage: loadingMessage,
       formBuilder: _buildLoginForm,
     );
@@ -80,12 +80,12 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 30.h),
+            SizedBox(height: AppDimensionsHeight.xxxl),
 
             // App logo or title
             Center(
               child: Text(
-                'Connexion',
+                AuthConstants.loginTitle,
                 style: TextStyle(
                   fontSize: AppFontSize.xxxl,
                   fontWeight: FontWeight.bold,
@@ -93,30 +93,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 30.h),
+            SizedBox(height: AppDimensionsHeight.xxxl),
 
             // Email field
             AuthTextField(
               controller: _emailController,
-              labelText: 'E-mail',
+              labelText: AuthConstants.emailLabel,
               prefixIcon: FontAwesomeIcons.envelope,
               keyboardType: TextInputType.emailAddress,
               focusNode: _emailFocusNode,
               nextFocusNode: _passwordFocusNode,
               validator: AuthValidators.validateEmail,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: AppDimensionsHeight.medium),
 
             // Password field
             AuthPasswordField(
               controller: _passwordController,
-              labelText: 'Mot de passe',
+              labelText: AuthConstants.passwordLabel,
               focusNode: _passwordFocusNode,
               onSubmitted: _login,
-              validator: (value) =>
-                  AuthValidators.validateRequired(value, 'mot de passe'),
+              validator: (value) => AuthValidators.validateLoginPassword(value),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: AppDimensionsHeight.xSmall),
 
             // Forgot password link
             Align(
@@ -125,41 +124,42 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   // Navigate to forgot password screen
                 },
-                child: const Text('Mot de passe oublié ?'),
+                child: const Text(AuthConstants.forgotPasswordText),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: AppDimensionsHeight.xl),
 
             // Login button with loading state
             ButtonFactory.createLoadingButton(
               context: context,
               onPressed: _login,
-              text: 'Se connecter',
+              text: AuthConstants.loginButtonText,
               // Determine if we're in loading state
               isLoading: AuthStateHandler.isLoading(state),
               // Colors
               backgroundColor: AppColors.primary,
-              textColor: Colors.white,
+              textColor: AppColors.secondary,
               splashColor: AppColors.primary,
               highlightColor: AppColors.primary,
               boxShadowColor: AppColors.primary,
               // Dimensions
-              minWidth: 300.w,
-              minHeight: 50.h,
+              minWidth: AuthConstants.buttonMinWidth,
+              minHeight: AuthConstants.buttonMinHeight,
               verticalPadding: AppDimensionsWidth.xSmall,
               horizontalPadding: AppDimensionsHeight.small,
               borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
               // Animation
-              animationDuration: const Duration(milliseconds: 300),
+              animationDuration: const Duration(
+                  milliseconds: AuthConstants.animationDurationMs),
               enableHapticFeedback: true,
               // Text style
               textStyle: TextStyle(
                 fontSize: AppFontSize.large,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.secondary,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: AppDimensionsHeight.xl),
           ],
         ),
       ),

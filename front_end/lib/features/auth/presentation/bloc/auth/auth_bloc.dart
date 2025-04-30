@@ -209,22 +209,41 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
     String operation,
   ) async {
-    final userResult = await _userProfileUseCase.getCurrentUser();
-    userResult.fold(
-      (user) {
-        _logger.info('User profile fetched: ${user.email}');
-        emit(AuthAuthenticated(user));
-      },
-      (error) {
-        _logger.error('Failed to get user profile after $operation',
-            error: error);
-        _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
-        // Use specific profile fetch error state with retry option
-        emit(ProfileFetchFailure(
-            _errorMessageService.getUserFriendlyAuthMessage(error, 'profile')));
-        // Don't immediately transition to unauthenticated - let UI handle retry
-      },
-    );
+    try {
+      if (emit.isDone) {
+        _logger.warning('Emitter is already done in _fetchUserProfile');
+        return;
+      }
+      
+      final userResult = await _userProfileUseCase.getCurrentUser();
+      
+      // Check again if emitter is done before emitting
+      if (emit.isDone) {
+        _logger.warning('Emitter became done during _fetchUserProfile');
+        return;
+      }
+      
+      userResult.fold(
+        (user) {
+          _logger.info('User profile fetched: ${user.email}');
+          emit(AuthAuthenticated(user));
+        },
+        (error) {
+          _logger.error('Failed to get user profile after $operation',
+              error: error);
+          _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
+          // Use specific profile fetch error state with retry option
+          emit(ProfileFetchFailure(
+              _errorMessageService.getUserFriendlyAuthMessage(error, 'profile')));
+          // Don't immediately transition to unauthenticated - let UI handle retry
+        },
+      );
+    } catch (e) {
+      _logger.error('Exception in _fetchUserProfile', error: e);
+      if (!emit.isDone) {
+        emit(const AuthFailure('An unexpected error occurred fetching your profile'));
+      }
+    }
   }
 
   /// Maps domain exceptions to specific UI states

@@ -17,6 +17,7 @@ import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_displ
 import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/store_showcase.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/task_showcase_grid.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/company_and_store_theme.dart';
+import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -43,8 +44,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.dispose();
   }
 
-  int nbOfPages = 2;
-  final String loadingMessage = 'Chargement des données...';
+  int nbOfPages = AuthConstants.welcomePageCount;
+  final String loadingMessage = AuthConstants.welcomeLoadingMessage;
 
   @override
   Widget build(BuildContext context) {

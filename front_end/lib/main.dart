@@ -17,7 +17,7 @@ import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_even
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Force keyboard to close on app start and hot reload
   SystemChannels.textInput.invokeMethod('TextInput.hide');
 

@@ -13,7 +13,6 @@ from the_user_app.interfaces.api.serializers import (
     UserSerializer,
     LoginRequestSerializer,
     AuthTokensSerializer,
-    PasswordChangeSerializer
 )
 from the_user_app.infrastructure.factory import UserFactory
 

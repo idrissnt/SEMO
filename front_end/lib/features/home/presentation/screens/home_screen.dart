@@ -7,6 +7,7 @@ import '../../../../core/utils/logger.dart';
 import '../bloc/home_store/home_store_bloc.dart';
 import '../bloc/home_store/home_store_event.dart';
 import '../bloc/home_store/home_store_state.dart';
+
 import '../bloc/user_address/user_address_bloc.dart';
 import '../bloc/user_address/user_address_event.dart';
 import '../bloc/user_address/user_address_state.dart';
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Load all store brands
       context.read<HomeStoreBloc>().add(const LoadAllStoreBrandsEvent());
-      
+
       // Load user address
       context.read<HomeUserAddressBloc>().add(const HomeGetUserAddressEvent());
     } catch (e) {
@@ -85,11 +86,11 @@ class _HomeTabState extends State<_HomeTab> {
   Future<void> _refreshData() {
     final homeStoreBloc = context.read<HomeStoreBloc>();
     homeStoreBloc.add(const LoadAllStoreBrandsEvent());
-    
+
     // Refresh user address
     final userAddressBloc = context.read<HomeUserAddressBloc>();
     userAddressBloc.add(const HomeGetUserAddressEvent());
-    
+
     // Return a completed future to satisfy RefreshIndicator
     return Future.delayed(const Duration(seconds: 2));
   }
