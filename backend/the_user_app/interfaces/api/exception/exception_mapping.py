@@ -14,7 +14,10 @@ from the_user_app.domain.user_exceptions import (
     InvalidInputException,
     UserNotFoundException,
     InvalidVerificationCodeException,
-    VerificationFailedException,
+    EmailVerificationRequestFailedException,
+    PhoneVerificationRequestFailedException,
+    PasswordResetRequestFailedException,
+    PasswordResetFailedException
 )
 
 def get_fully_qualified_name(cls):
@@ -38,8 +41,14 @@ USER_EXCEPTION_MAPPING = {
         (status.HTTP_404_NOT_FOUND, 'user_not_found', 'warning'),
     get_fully_qualified_name(InvalidVerificationCodeException): 
         (status.HTTP_400_BAD_REQUEST, 'invalid_verification_code', 'warning'),
-    get_fully_qualified_name(VerificationFailedException): 
-        (status.HTTP_400_BAD_REQUEST, 'verification_failed', 'warning'),
+    get_fully_qualified_name(EmailVerificationRequestFailedException): 
+        (status.HTTP_500_INTERNAL_SERVER_ERROR, 'email_verification_request_failed', 'error'),
+    get_fully_qualified_name(PhoneVerificationRequestFailedException): 
+        (status.HTTP_500_INTERNAL_SERVER_ERROR, 'phone_verification_request_failed', 'error'),
+    get_fully_qualified_name(PasswordResetRequestFailedException): 
+        (status.HTTP_500_INTERNAL_SERVER_ERROR, 'password_reset_request_failed', 'error'),
+    get_fully_qualified_name(PasswordResetFailedException): 
+        (status.HTTP_500_INTERNAL_SERVER_ERROR, 'password_reset_failed', 'error')
 }
 
 # Note: The base domain exception (CoreDomainException) is defined in the core app

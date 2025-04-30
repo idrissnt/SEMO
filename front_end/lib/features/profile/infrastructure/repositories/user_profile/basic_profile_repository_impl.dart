@@ -2,9 +2,9 @@ import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/utils/result.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
-import 'package:semo/features/profile/domain/repositories/profile_repository.dart';
-import 'package:semo/features/profile/domain/exceptions/profile_exceptions.dart';
-import 'package:semo/features/profile/infrastructure/repositories/services/base_profile_service.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/basic_profile_repository.dart';
+import 'package:semo/features/profile/domain/exceptions/profile/profile_exceptions.dart';
+import 'package:semo/features/profile/infrastructure/repositories/user_profile/services/base_profile_service.dart';
 
 /// Implementation of the BasicProfileRepository interface that delegates to specialized services
 class BasicProfileRepositoryImpl implements BasicProfileRepository {
@@ -14,8 +14,8 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
   BasicProfileRepositoryImpl({
     required ApiClient apiClient,
     required AppLogger logger,
-  }) : _logger = logger,
-       _profileService = BaseProfileService(
+  })  : _logger = logger,
+        _profileService = BaseProfileService(
           apiClient: apiClient,
           logger: logger,
         );
@@ -26,7 +26,8 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
       final user = await _profileService.getCurrentUser();
       return Result.success(user);
     } catch (e, stackTrace) {
-      _logger.error('Error getting current user', error: e, stackTrace: stackTrace);
+      _logger.error('Error getting current user',
+          error: e, stackTrace: stackTrace);
       return Result.failure(BasicProfileException(e.toString()));
     }
   }
@@ -47,7 +48,8 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
       );
       return Result.success(user);
     } catch (e, stackTrace) {
-      _logger.error('Error updating user profile', error: e, stackTrace: stackTrace);
+      _logger.error('Error updating user profile',
+          error: e, stackTrace: stackTrace);
       return Result.failure(BasicProfileException(e.toString()));
     }
   }

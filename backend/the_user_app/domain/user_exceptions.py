@@ -53,18 +53,42 @@ class MissingRefreshTokenException(CoreDomainException):
     def __init__(self, message="Refresh token is required"):
         super().__init__(message, "missing_token")
 
-# verification related exceptions
+#### verification related exceptions
+
+# user not found
 class UserNotFoundException(CoreDomainException):
     """Exception raised when a user is not found"""
     def __init__(self, message="User not found"):
         super().__init__(message, "user_not_found")
 
+# invalid verification code
 class InvalidVerificationCodeException(CoreDomainException):
     """Exception raised when a verification code is invalid or expired"""
     def __init__(self, message="Invalid or expired verification code"):
         super().__init__(message, "invalid_verification_code")
 
-class VerificationFailedException(CoreDomainException):
-    """Exception raised when verification fails for any reason"""
-    def __init__(self, message="Verification failed"):
-        super().__init__(message, "verification_failed")
+# email verification request failed
+class EmailVerificationRequestFailedException(CoreDomainException):
+    """Exception raised when email verification request fails for any reason"""
+    def __init__(self, message="Email verification request failed"):
+        super().__init__(message, "email_verification_request_failed")
+
+# phone verification request failed
+class PhoneVerificationRequestFailedException(CoreDomainException):
+    """Exception raised when phone verification request fails for any reason"""
+    def __init__(self, message="Phone verification request failed"):
+        super().__init__(message, "phone_verification_request_failed")
+
+# password reset request failed
+class PasswordResetRequestFailedException(CoreDomainException):
+    """Exception raised when password reset request fails for any reason"""
+    def __init__(self, message="Password reset request failed"):
+        super().__init__(message, "password_reset_request_failed")
+
+# password reset failed
+class PasswordResetFailedException(CoreDomainException):
+    """Exception raised when password reset fails for any reason"""
+    def __init__(self, message="Password reset failed"):
+        super().__init__(message, "password_reset_failed")
+
+

@@ -7,8 +7,8 @@ from typing import Optional
 
 class VerificationCodeType(Enum):
     """Enumeration of verification code types"""
-    EMAIL_VERIFICATION = "email_verification"
-    PHONE_VERIFICATION = "phone_verification"
+    EMAIL_VERIFICATION = "email"
+    PHONE_VERIFICATION = "phone"
     PASSWORD_RESET = "password_reset"
     
     @classmethod

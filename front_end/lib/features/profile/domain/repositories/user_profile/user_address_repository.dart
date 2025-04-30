@@ -1,5 +1,5 @@
 import 'package:semo/core/utils/result.dart';
-import 'package:semo/features/profile/domain/exceptions/profile_exceptions.dart';
+import 'package:semo/features/profile/domain/exceptions/profile/profile_exceptions.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
 
 abstract class UserAddressRepository {

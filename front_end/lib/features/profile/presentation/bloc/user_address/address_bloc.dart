@@ -1,16 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/profile/domain/usecases/address_usecases.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/user_address_repository.dart';
 import 'package:semo/features/profile/presentation/bloc/user_address/address_event.dart';
 import 'package:semo/features/profile/presentation/bloc/user_address/address_state.dart';
 
 class UserAddressBloc extends Bloc<UserAddressEvent, UserAddressState> {
-  final UserAddressUseCases _userAddressUseCases;
+  final UserAddressRepository _userAddressRepository;
   final AppLogger _logger = AppLogger();
 
   UserAddressBloc({
-    required UserAddressUseCases userAddressUseCases,
-  })  : _userAddressUseCases = userAddressUseCases,
+    required UserAddressRepository userAddressRepository,
+  })  : _userAddressRepository = userAddressRepository,
         super(const UserAddressInitial()) {
     on<GetUserAddressEvent>(_onGetUserAddress);
     on<GetUserAddressByIdEvent>(_onGetUserAddressById);
@@ -25,7 +25,7 @@ class UserAddressBloc extends Bloc<UserAddressEvent, UserAddressState> {
     _logger.debug('Getting user address');
     emit(const UserAddressLoading());
 
-    final result = await _userAddressUseCases.getUserAddress();
+    final result = await _userAddressRepository.getUserAddress();
 
     emit(result.fold(
       (address) {
@@ -46,7 +46,7 @@ class UserAddressBloc extends Bloc<UserAddressEvent, UserAddressState> {
     _logger.debug('Getting user address by ID: ${event.addressId}');
     emit(const UserAddressLoading());
 
-    final result = await _userAddressUseCases.getAddressById(event.addressId);
+    final result = await _userAddressRepository.getAddressById(event.addressId);
 
     emit(result.fold(
       (address) {
@@ -67,7 +67,7 @@ class UserAddressBloc extends Bloc<UserAddressEvent, UserAddressState> {
     _logger.debug('Creating new user address');
     emit(const UserAddressLoading());
 
-    final result = await _userAddressUseCases.createAddress(event.address);
+    final result = await _userAddressRepository.createAddress(event.address);
 
     emit(result.fold(
       (address) {
@@ -88,7 +88,7 @@ class UserAddressBloc extends Bloc<UserAddressEvent, UserAddressState> {
     _logger.debug('Updating user address');
     emit(const UserAddressLoading());
 
-    final result = await _userAddressUseCases.updateAddress(event.address);
+    final result = await _userAddressRepository.updateAddress(event.address);
 
     emit(result.fold(
       (address) {

@@ -1,29 +1,43 @@
 import 'package:get_it/get_it.dart';
-import 'package:semo/features/profile/domain/repositories/services/user_address_repository.dart';
-import 'package:semo/features/profile/domain/repositories/services/basic_profile_repository.dart';
-import 'package:semo/features/profile/domain/usecases/address_usecases.dart';
-import 'package:semo/features/profile/domain/usecases/basic_profile_usecases.dart';
-import 'package:semo/features/profile/presentation/bloc/user_address/address_bloc.dart';
+import 'package:semo/features/profile/di/user_verif_injection.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/basic_profile_repository.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/user_address_repository.dart';
+import 'package:semo/features/profile/infrastructure/repositories/user_profile/basic_profile_repository_impl.dart';
+import 'package:semo/features/profile/infrastructure/repositories/user_profile/user_address_repository_impl.dart';
 import 'package:semo/features/profile/presentation/bloc/basic_profile/basic_profile_bloc.dart';
+import 'package:semo/features/profile/presentation/bloc/user_address/address_bloc.dart';
+
+/// Dependency injection module for profile feature
 
 final sl = GetIt.instance;
 
 void registerProfileDependencies() {
-  // Register use cases
-  sl.registerFactory(() => UserAddressUseCases(
+  // Register user verification dependencies
+  UserVerifModule.register(sl);
+
+  // Register user address repositories
+  sl.registerLazySingleton<UserAddressRepository>(
+    () => UserAddressRepositoryImpl(
+      apiClient: sl(),
+      logger: sl(),
+    ),
+  );
+
+  // Register basic profile repositories
+  sl.registerLazySingleton<BasicProfileRepository>(
+    () => BasicProfileRepositoryImpl(
+      apiClient: sl(),
+      logger: sl(),
+    ),
+  );
+
+  // Register user address BLoCs
+  sl.registerFactory(() => UserAddressBloc(
         userAddressRepository: sl<UserAddressRepository>(),
       ));
-      
-  sl.registerFactory(() => BasicProfileUseCases(
-        profileRepository: sl<BasicProfileRepository>(),
-      ));
 
-  // Register BLoCs
-  sl.registerFactory(() => UserAddressBloc(
-        userAddressUseCases: sl<UserAddressUseCases>(),
-      ));
-      
+  // Register basic profile BLoCs
   sl.registerFactory(() => BasicProfileBloc(
-        profileUseCases: sl<BasicProfileUseCases>(),
+        basicProfileRepository: sl<BasicProfileRepository>(),
       ));
 }

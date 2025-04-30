@@ -33,7 +33,7 @@ class VerificationViewSet(viewsets.ViewSet):
         },
         description='Request an email verification code'
     )
-    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny], url_path='request-email-verification')
     def request_email_verification(self, request):
         # Extract request ID or generate a new one
         request_id = request.META.get('HTTP_X_REQUEST_ID', str(uuid.uuid4()))
@@ -70,7 +70,7 @@ class VerificationViewSet(viewsets.ViewSet):
         },
         description='Request a phone verification code'
     )
-    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny], url_path='request-phone-verification')
     def request_phone_verification(self, request):
         # Extract request ID or generate a new one
         request_id = request.META.get('HTTP_X_REQUEST_ID', str(uuid.uuid4()))
@@ -107,7 +107,7 @@ class VerificationViewSet(viewsets.ViewSet):
         },
         description='Verify a code'
     )
-    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny], url_path='verify-code')
     def verify_code(self, request):
         # Extract request ID or generate a new one
         request_id = request.META.get('HTTP_X_REQUEST_ID', str(uuid.uuid4()))
@@ -145,7 +145,7 @@ class VerificationViewSet(viewsets.ViewSet):
         },
         description='Request a password reset code'
     )
-    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny], url_path='request-password-reset')
     def request_password_reset(self, request):
         # Extract request ID or generate a new one
         request_id = request.META.get('HTTP_X_REQUEST_ID', str(uuid.uuid4()))
@@ -184,7 +184,7 @@ class VerificationViewSet(viewsets.ViewSet):
         },
         description='Reset password with a verification code'
     )
-    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny], url_path='reset-password')
     def reset_password(self, request):
         # Extract request ID or generate a new one
         request_id = request.META.get('HTTP_X_REQUEST_ID', str(uuid.uuid4()))

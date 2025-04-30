@@ -1,6 +1,7 @@
 import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/infrastructure/api_endpoints/api_enpoints.dart';
 import 'package:semo/core/utils/logger.dart';
+
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
 import 'package:semo/features/auth/domain/exceptions/welcom/exception_mapper_welcom.dart';
 import 'package:semo/features/auth/infrastructure/models/welcome_models.dart';

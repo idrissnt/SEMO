@@ -1,7 +1,7 @@
 import 'package:semo/core/utils/result.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
-import 'package:semo/features/profile/domain/exceptions/profile_exceptions.dart';
-import 'package:semo/features/profile/domain/repositories/services/user_address_repository.dart';
+import 'package:semo/features/profile/domain/exceptions/profile/profile_exceptions.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/user_address_repository.dart';
 
 /// Use cases for user address operations in the Home feature
 class HomeUserAddressUseCases {

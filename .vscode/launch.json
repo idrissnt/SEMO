@@ -24,6 +24,13 @@
             "request": "launch",
             "cwd": "front_end",
             "program": "lib/features/auth/presentation/widgets/welcome/utils/animated_button_builder.dart"
+        },
+        {
+            "name": "Flutter (lib/features/profile/di/profile_injection.dart)",
+            "type": "dart",
+            "request": "launch",
+            "cwd": "front_end",
+            "program": "lib/features/profile/di/profile_injection.dart"
         }
     ]
 }

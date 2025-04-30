@@ -5,7 +5,7 @@ import 'package:semo/core/domain/exceptions/api_error_extensions.dart';
 
 import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
-import 'package:semo/features/auth/domain/usecases/auth_check_usecase.dart';
+import 'package:semo/features/auth/domain/services/auth_check_usecase.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';

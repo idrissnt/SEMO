@@ -6,7 +6,10 @@ from the_user_app.domain.services.verification_service import VerificationServic
 from the_user_app.domain.user_exceptions import (
     UserNotFoundException,
     InvalidVerificationCodeException,
-    VerificationFailedException
+    EmailVerificationRequestFailedException,
+    PhoneVerificationRequestFailedException,
+    PasswordResetRequestFailedException,
+    PasswordResetFailedException
 )
 from core.domain.value_objects.result import Result
 
@@ -50,7 +53,7 @@ class VerificationApplicationService:
                 return Result.success(True)
             else:
                 self.logger.error("Failed to send email verification code", {"email": email, "user_id": str(user.id)})
-                return Result.failure(VerificationFailedException("Failed to send verification code"))
+                return Result.failure(EmailVerificationRequestFailedException("Failed to send verification code"))
                 
         except Exception as e:
             self.logger.error("Error in email verification request", {"email": email, "error": str(e)})
@@ -83,7 +86,7 @@ class VerificationApplicationService:
                 return Result.success(True)
             else:
                 self.logger.error("Failed to send phone verification code", {"phone_number": phone_number, "user_id": str(user.id)})
-                return Result.failure(VerificationFailedException("Failed to send verification code"))
+                return Result.failure(PhoneVerificationRequestFailedException("Failed to send verification code"))
                 
         except Exception as e:
             self.logger.error("Error in phone verification request", {"phone_number": phone_number, "error": str(e)})
@@ -174,7 +177,7 @@ class VerificationApplicationService:
                 return Result.success(True)
             else:
                 self.logger.error("Failed to send password reset code", {"user_id": str(user.id), "email": email, "phone_number": phone_number})
-                return Result.failure(VerificationFailedException("Failed to send password reset code"))
+                return Result.failure(PasswordResetRequestFailedException("Failed to send password reset code"))
                 
         except Exception as e:
             self.logger.error("Error in password reset request", {"email": email, "phone_number": phone_number, "error": str(e)})
@@ -215,7 +218,7 @@ class VerificationApplicationService:
                 return Result.success(True)
             else:
                 self.logger.error("Failed to reset password", {"user_id": str(user_id)})
-                return Result.failure(VerificationFailedException("Failed to reset password"))
+                return Result.failure(PasswordResetFailedException("Failed to reset password"))
                 
         except Exception as e:
             self.logger.error("Error in password reset", {"user_id": str(user_id), "error": str(e)})

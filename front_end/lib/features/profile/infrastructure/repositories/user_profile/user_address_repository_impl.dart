@@ -1,10 +1,10 @@
 import 'package:semo/core/domain/services/api_client.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/result.dart';
-import 'package:semo/features/profile/infrastructure/repositories/services/address_service.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/user_address_repository.dart';
+import 'package:semo/features/profile/infrastructure/repositories/user_profile/services/address_service.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
-import 'package:semo/features/profile/domain/exceptions/profile_exceptions.dart';
-import 'package:semo/features/profile/domain/repositories/profile_repository.dart';
+import 'package:semo/features/profile/domain/exceptions/profile/profile_exceptions.dart';
 
 /// Implementation of the UserAddressRepository interface that delegates to AddressService
 class UserAddressRepositoryImpl implements UserAddressRepository {
@@ -14,8 +14,8 @@ class UserAddressRepositoryImpl implements UserAddressRepository {
   UserAddressRepositoryImpl({
     required ApiClient apiClient,
     required AppLogger logger,
-  }) : _logger = logger,
-       _addressService = AddressService(
+  })  : _logger = logger,
+        _addressService = AddressService(
           apiClient: apiClient,
           logger: logger,
         );

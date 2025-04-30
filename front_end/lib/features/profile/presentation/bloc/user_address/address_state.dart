@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:semo/features/profile/domain/entities/profile_entity.dart';
-import 'package:semo/features/profile/domain/exceptions/profile_exceptions.dart';
+import 'package:semo/features/profile/domain/exceptions/profile/profile_exceptions.dart';
 
 abstract class UserAddressState extends Equatable {
   const UserAddressState();

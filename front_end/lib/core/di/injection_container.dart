@@ -15,10 +15,10 @@ import 'package:semo/features/home/di/home_screen_injection.dart';
 import 'package:semo/features/profile/di/profile_injection.dart';
 
 // Repositories
-import 'package:semo/features/profile/domain/repositories/services/basic_profile_repository.dart';
-import 'package:semo/features/profile/domain/repositories/services/user_address_repository.dart';
-import 'package:semo/features/profile/infrastructure/repositories/basic_profile_repository_impl.dart';
-import 'package:semo/features/profile/infrastructure/repositories/user_address_repository_impl.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/basic_profile_repository.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/user_address_repository.dart';
+import 'package:semo/features/profile/infrastructure/repositories/user_profile/basic_profile_repository_impl.dart';
+import 'package:semo/features/profile/infrastructure/repositories/user_profile/user_address_repository_impl.dart';
 
 final sl = GetIt.instance; // Service Locator accessible anywhere in the app
 

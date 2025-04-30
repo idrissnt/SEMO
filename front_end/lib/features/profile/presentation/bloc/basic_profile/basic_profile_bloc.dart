@@ -1,17 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/profile/domain/usecases/basic_profile_usecases.dart';
+import 'package:semo/features/profile/domain/repositories/user_profile/basic_profile_repository.dart';
 import 'package:semo/features/profile/presentation/bloc/basic_profile/basic_profile_event.dart';
 import 'package:semo/features/profile/presentation/bloc/basic_profile/basic_profile_state.dart';
 
 /// BLoC for managing basic profile operations
 class BasicProfileBloc extends Bloc<BasicProfileEvent, BasicProfileState> {
-  final BasicProfileUseCases _profileUseCases;
+  final BasicProfileRepository _basicProfileRepository;
   final AppLogger _logger = AppLogger();
 
   BasicProfileBloc({
-    required BasicProfileUseCases profileUseCases,
-  })  : _profileUseCases = profileUseCases,
+    required BasicProfileRepository basicProfileRepository,
+  })  : _basicProfileRepository = basicProfileRepository,
         super(const BasicProfileInitial()) {
     on<GetCurrentUserEvent>(_onGetCurrentUser);
     on<UpdateUserProfileEvent>(_onUpdateUserProfile);
@@ -25,7 +25,7 @@ class BasicProfileBloc extends Bloc<BasicProfileEvent, BasicProfileState> {
     _logger.debug('Getting current user profile');
     emit(const BasicProfileLoading());
 
-    final result = await _profileUseCases.getCurrentUser();
+    final result = await _basicProfileRepository.getCurrentUser();
 
     emit(result.fold(
       (user) {
@@ -46,7 +46,7 @@ class BasicProfileBloc extends Bloc<BasicProfileEvent, BasicProfileState> {
     _logger.debug('Updating user profile');
     emit(const BasicProfileLoading());
 
-    final result = await _profileUseCases.updateUserProfile(
+    final result = await _basicProfileRepository.updateUserProfile(
       firstName: event.firstName,
       lastName: event.lastName,
       // email: event.email,
@@ -73,7 +73,7 @@ class BasicProfileBloc extends Bloc<BasicProfileEvent, BasicProfileState> {
     _logger.debug('Deleting user account');
     emit(const BasicProfileLoading());
 
-    final result = await _profileUseCases.deleteAccount();
+    final result = await _basicProfileRepository.deleteAccount();
 
     emit(result.fold(
       (success) {
