@@ -1,20 +1,27 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/features/auth/routes/initial_route.dart';
+import 'package:semo/core/presentation/navigation/bottom_navigation/main_shell_route.dart';
+import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/register_all_tabs.dart';
+import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/register_shell_providers.dart';
+import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
 import 'package:semo/features/auth/routes/auth_routes.dart';
+import 'package:semo/features/auth/routes/initial_route.dart';
 
-import '../../../../features/home/routes/home_route.dart';
 import 'navigation_logger.dart';
-import '../routes_constants/route_constants.dart';
-// import 'store_shell_route.dart';
-export '../previous/router_services/route_extensions.dart';
 
 /// Central router configuration for the application
 class AppRouter {
+  /// Initialize the router
+  static void initialize() {
+    // Register all tabs from all features
+    registerAllTabs();
+
+    // Register all shell providers from features
+    registerAllShellProviders();
+  }
+
   /// The main router for the app with navigation logging enabled
   static final GoRouter router = GoRouter(
     initialLocation: AppRoutes.splash,
@@ -28,7 +35,8 @@ class AppRouter {
     routes: [
       ...getInitialRoutes(),
       ...AuthRouter.getAuthRoutes(),
-      getHomeRoute(),
+      // Use the main shell route from core instead of home-specific route
+      getMainShellRoute(),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(

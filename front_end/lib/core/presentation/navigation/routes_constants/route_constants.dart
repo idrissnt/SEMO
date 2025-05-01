@@ -15,7 +15,4 @@ class AppRoutes {
   static const String earn = '/earn';
   static const String message = '/message';
   static const String semoAi = '/semo-ai';
-
-  // Utility routes
-  static const String main = '/main';
 }

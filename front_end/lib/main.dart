@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Core imports
 import 'package:semo/core/app/app.dart';
 import 'package:semo/core/di/injection_container.dart'; //sl = service locator
+import 'package:semo/core/presentation/navigation/app_routes/app_router.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/app_bloc_observer.dart';
 
@@ -29,8 +30,11 @@ void main() async {
 
     // Register the BlocObserver to monitor all bloc events and state changes
     Bloc.observer = AppBlocObserver(logger);
+    
+    // Initialize router and register all tabs
+    AppRouter.initialize();
 
-    logger.debug('Dependencies initialized successfully');
+    logger.debug('Dependencies and navigation initialized successfully');
 
     // Initialize app
     runApp(
