@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
 /// A reusable password field component for authentication forms
 ///

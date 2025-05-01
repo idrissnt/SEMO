@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
 /// A container for authentication forms with consistent styling
 class AuthFormContainer extends StatelessWidget {

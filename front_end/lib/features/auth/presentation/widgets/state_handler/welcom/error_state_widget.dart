@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
 /// A reusable widget for displaying error states
 /// Provides consistent error UI across the application

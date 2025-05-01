@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
 import 'package:semo/features/auth/presentation/widgets/for_welcome/components/store/store_image_builder.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/components/shared/showcase_title.dart';

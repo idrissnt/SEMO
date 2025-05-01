@@ -5,7 +5,7 @@ import 'package:semo/core/presentation/navigation/bottom_navigation/main_shell_r
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/register_all_tabs.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/register_shell_providers.dart';
 import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/auth/routes/auth_routes.dart';
 import 'package:semo/features/auth/routes/initial_route.dart';
 

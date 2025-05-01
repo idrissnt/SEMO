@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
 /// A popup notification that slides in from the top of the screen
 /// and automatically dismisses after a specified duration

@@ -8,11 +8,22 @@ class AppColors {
   static const Color secondary = Colors.white;
   static const Color secondaryVariant = Color.fromARGB(255, 227, 227, 227);
   static const Color thirdColor = Color.fromARGB(255, 116, 116, 116);
-  static const Color iconColorFirstColor = Colors.black;
+  static const Color transparent = Colors.transparent;
 
   // Background and Surface
-  static const Color background = Colors.white;
+  static const Color background =
+      Colors.white; // Using Color(0xFFFFFFFF) would also work
   static const Color surface = Color.fromARGB(255, 241, 240, 240);
+
+  // Search Bar Colors
+  static Color searchBarColor =
+      Colors.grey[200] ?? const Color(0xFFEEEEEE); // Provide a fallback color
+  static const Color searchBarHintColor = Color.fromARGB(255, 112, 112, 112);
+
+  // Icon Colors
+  static const Color iconColorFirstColor =
+      Colors.black; // Using Color(0xFF000000) would also work
+  static const Color iconColorSecondColor = Colors.grey;
 
   // Shadow Colors
   static const Color appBarShadowColor = Color.fromARGB(13, 13, 13, 13);

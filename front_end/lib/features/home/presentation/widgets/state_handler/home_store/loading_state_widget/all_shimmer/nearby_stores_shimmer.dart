@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
 /// A shimmer loading widget specifically for nearby stores
 /// Displays a vertical list of store card placeholders with location indicators

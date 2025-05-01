@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 

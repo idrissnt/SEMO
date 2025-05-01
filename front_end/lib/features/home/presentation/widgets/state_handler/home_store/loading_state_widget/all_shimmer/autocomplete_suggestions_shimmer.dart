@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
 /// A shimmer loading widget specifically for autocomplete suggestions
 /// Displays a dropdown-like list of suggestion placeholders

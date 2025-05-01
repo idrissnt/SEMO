@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_colors.dart';
-import 'package:semo/core/presentation/theme/theme_services/app_dimensions.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/widgets/buttons/animated_button.dart';
 import 'package:semo/core/presentation/widgets/buttons/loading_button.dart';
 
