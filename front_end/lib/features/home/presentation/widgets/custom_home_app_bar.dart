@@ -179,8 +179,12 @@ class CustomHomeAppBar extends StatelessWidget {
   Widget _buildSearchBar(BuildContext context) {
     return BlocBuilder<HomeStoreBloc, HomeStoreState>(
       buildWhen: (previous, current) =>
-          current is HomeStoreAutocompleteSuggestionsLoaded,
+          current.autocompleteSuggestionsState != previous.autocompleteSuggestionsState,
       builder: (context, state) {
+        final suggestionsState = state.autocompleteSuggestionsState;
+        final hasSuggestions = suggestionsState is AutocompleteSuggestionsLoaded && 
+                              suggestionsState.suggestions.isNotEmpty;
+        
         return Material(
           color: context.surfaceColor,
           borderRadius: BorderRadius.circular(context.borderRadiusXLargeWidth),
@@ -206,12 +210,10 @@ class CustomHomeAppBar extends StatelessWidget {
                           horizontal: context.xsWidth),
                       isDense: true,
                       // Show autocomplete suggestions if available
-                      suffixIcon:
-                          state is HomeStoreAutocompleteSuggestionsLoaded &&
-                                  state.suggestions.isNotEmpty
-                              ? Icon(Icons.arrow_drop_down,
-                                  color: context.textSecondaryColor)
-                              : null,
+                      suffixIcon: hasSuggestions
+                          ? Icon(Icons.arrow_drop_down,
+                              color: context.textSecondaryColor)
+                          : null,
                     ),
                     style: context.bodyMedium.copyWith(
                       color: context.textPrimaryColor,

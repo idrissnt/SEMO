@@ -11,8 +11,11 @@ class AppColors {
   static const Color iconColorFirstColor = Colors.black;
 
   // Background and Surface
-  static const Color background = Color(0xFFF5F5F5);
+  static const Color background = Colors.white;
   static const Color surface = Color.fromARGB(255, 241, 240, 240);
+
+  // Shadow Colors
+  static const Color appBarShadowColor = Color.fromARGB(13, 13, 13, 13);
 
   // Text Colors
   static const Color textPrimaryColor = Color.fromARGB(255, 8, 8, 8);

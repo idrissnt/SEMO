@@ -11,7 +11,7 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
   HomeStoreBloc({
     required HomeStoreUseCases homeStoreUseCases,
   })  : _homeStoreUseCases = homeStoreUseCases,
-        super(const HomeStoreInitial()) {
+        super(const HomeStoreState()) {
     on<LoadAllStoreBrandsEvent>(_onLoadAllStoreBrands);
     on<LoadNearbyStoresEvent>(_onLoadNearbyStores);
     on<LoadProductsByCategoryEvent>(_onLoadProductsByCategory);
@@ -24,18 +24,20 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     Emitter<HomeStoreState> emit,
   ) async {
     _logger.debug('Loading all store brands');
-    emit(const HomeStoreLoading());
+    emit(state.copyWith(storeBrandsState: const StoreBrandsLoading()));
 
     final result = await _homeStoreUseCases.getAllStoreBrands();
     
     result.fold(
       (storeBrands) {
-        emit(StoreBrandsLoaded(storeBrands));
+        emit(state.copyWith(storeBrandsState: StoreBrandsLoaded(storeBrands)));
         _logger.debug('Successfully loaded ${storeBrands.length} store brands');
       },
       (error) {
         _logger.error('Error loading store brands', error: error);
-        emit(HomeStoreError('Failed to load store brands: ${error.message}'));
+        emit(state.copyWith(
+          storeBrandsState: StoreBrandsError('Failed to load store brands: ${error.message}')
+        ));
       },
     );
   }
@@ -45,20 +47,22 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     Emitter<HomeStoreState> emit,
   ) async {
     _logger.debug('Loading nearby stores for address: ${event.address}');
-    emit(const HomeStoreLoading());
+    emit(state.copyWith(nearbyStoresState: const NearbyStoresLoading()));
 
     final result = await _homeStoreUseCases.findNearbyStores(
       address: event.address,
     );
-    
+
     result.fold(
       (nearbyStores) {
-        emit(NearbyStoresLoaded(nearbyStores));
+        emit(state.copyWith(nearbyStoresState: NearbyStoresLoaded(nearbyStores)));
         _logger.debug('Successfully loaded ${nearbyStores.length} nearby stores');
       },
       (error) {
         _logger.error('Error loading nearby stores', error: error);
-        emit(HomeStoreError('Failed to load nearby stores: ${error.message}'));
+        emit(state.copyWith(
+          nearbyStoresState: NearbyStoresError('Failed to load nearby stores: ${error.message}')
+        ));
       },
     );
   }
@@ -68,7 +72,7 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     Emitter<HomeStoreState> emit,
   ) async {
     _logger.debug('Loading products by category for store: ${event.storeId}');
-    emit(const HomeStoreLoading());
+    emit(state.copyWith(productsByCategoryState: const ProductsByCategoryLoading()));
 
     final result = await _homeStoreUseCases.getProductsByCategory(
       storeSlug: event.storeSlug,
@@ -77,16 +81,21 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     
     result.fold(
       (products) {
-        emit(ProductsByCategoryLoaded(
-          products: products,
-          storeId: event.storeId,
+        emit(state.copyWith(
+          productsByCategoryState: ProductsByCategoryLoaded(
+            products: products,
+            storeId: event.storeId,
+          )
         ));
         _logger.debug('Successfully loaded ${products.length} products');
       },
       (error) {
         _logger.error('Error loading products by category', error: error);
-        emit(HomeStoreError(
-            'Failed to load products by category: ${error.message}'));
+        emit(state.copyWith(
+          productsByCategoryState: ProductsByCategoryError(
+            'Failed to load products by category: ${error.message}'
+          )
+        ));
       },
     );
   }
@@ -98,20 +107,25 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     if (event.query.length < 2) return;
 
     _logger.debug('Getting autocomplete suggestions for query: ${event.query}');
-    emit(const HomeStoreLoading());
+    emit(state.copyWith(autocompleteSuggestionsState: const AutocompleteSuggestionsLoading()));
 
     final result = await _homeStoreUseCases.getAutocompleteSuggestions(event.query);
     
     result.fold(
       (suggestions) {
-        emit(HomeStoreAutocompleteSuggestionsLoaded(suggestions));
+        emit(state.copyWith(
+          autocompleteSuggestionsState: AutocompleteSuggestionsLoaded(suggestions)
+        ));
         _logger.debug(
             'Successfully loaded ${suggestions.length} autocomplete suggestions');
       },
       (error) {
         _logger.error('Error getting autocomplete suggestions', error: error);
-        emit(HomeStoreError(
-            'Failed to get autocomplete suggestions: ${error.message}'));
+        emit(state.copyWith(
+          autocompleteSuggestionsState: AutocompleteSuggestionsError(
+            'Failed to get autocomplete suggestions: ${error.message}'
+          )
+        ));
       },
     );
   }
@@ -121,7 +135,7 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     Emitter<HomeStoreState> emit,
   ) async {
     _logger.debug('Searching products globally for query: ${event.query}');
-    emit(const HomeStoreLoading());
+    emit(state.copyWith(searchResultsState: const SearchResultsLoading()));
 
     final result = await _homeStoreUseCases.searchProducts(
       query: event.query,
@@ -131,12 +145,14 @@ class HomeStoreBloc extends Bloc<HomeStoreEvent, HomeStoreState> {
     
     result.fold(
       (searchResult) {
-        emit(HomeStoreSearchResultsLoaded(searchResult));
+        emit(state.copyWith(searchResultsState: SearchResultsLoaded(searchResult)));
         _logger.debug('Successfully loaded search results');
       },
       (error) {
         _logger.error('Error searching products', error: error);
-        emit(HomeStoreError('Failed to search products: ${error.message}'));
+        emit(state.copyWith(
+          searchResultsState: SearchResultsError('Failed to search products: ${error.message}')
+        ));
       },
     );
   }
