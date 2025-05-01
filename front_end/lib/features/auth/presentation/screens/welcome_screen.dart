@@ -9,13 +9,13 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/pagination_indicator.dart';
 
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
 import 'package:semo/features/auth/presentation/widgets/state_handler/welcom/state_handler.dart';
-import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/company_showcase.dart';
-import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/pagination_indicator.dart';
-import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/store_showcase.dart';
-import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/task_showcase_grid.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/company_showcase.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/store_showcase.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/task_showcase_grid.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/company_and_store_theme.dart';
 import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
 

@@ -7,7 +7,7 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/components/task/task_card_layout.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/components/shared/showcase_title.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/components/task/task_content_builder.dart';
-import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/utils/base_store_task_showcase.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/utils/base_store_task_showcase.dart';
 
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
 

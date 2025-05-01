@@ -8,7 +8,7 @@ import 'package:semo/features/auth/presentation/widgets/for_welcome/components/s
 import 'package:semo/features/auth/presentation/widgets/for_welcome/components/shared/showcase_title.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/components/store/store_content_builder.dart';
 
-import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_display_struture/utils/base_store_task_showcase.dart';
+import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/utils/base_store_task_showcase.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/company_and_store_theme.dart';
 
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';

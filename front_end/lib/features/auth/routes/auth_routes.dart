@@ -64,11 +64,22 @@ class AuthRouter {
   /// Auth routes redirect function that handles authentication logic
   static Future<String?> authRedirect(
       BuildContext context, GoRouterState state) async {
-    //
     // Get current auth state
     final authState = context.read<AuthBloc>().state;
     final isAuthenticated = authState is AuthAuthenticated;
     final isAuthRoute = AuthRouter.isAuthRoute(state.uri.path);
+
+    // Check if the user is a guest user
+    bool isGuestUser = false;
+    if (authState is AuthAuthenticated) {
+      isGuestUser = authState.user.isGuest;
+    }
+
+    if (isGuestUser) {
+      logger.info('Guest user accessing: ${state.uri.path}');
+      // Allow guest users to access non-auth routes
+      return null; // No redirect needed for guest users
+    }
 
     // If authenticated, prevent access to auth routes
     if (isAuthenticated && isAuthRoute) {

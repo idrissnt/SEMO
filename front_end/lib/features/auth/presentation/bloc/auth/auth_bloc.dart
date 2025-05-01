@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/domain/exceptions/api_error_extensions.dart';
+import 'package:semo/core/domain/entities/user_entity.dart';
 
 import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
@@ -31,6 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogoutRequested>(_onAuthLogoutRequested);
     on<AuthCheckRequested>(_onAuthCheckRequested);
     on<AuthResetState>(_onAuthResetState);
+    on<EnterGuestMode>(_onEnterGuestMode);
   }
 
   Future<void> _onAuthLoginRequested(
@@ -244,6 +246,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthFailure('An unexpected error occurred fetching your profile'));
       }
     }
+  }
+
+  /// Handles the EnterGuestMode event
+  /// Creates a guest user and emits AuthAuthenticated state with it
+  /// This allows access to the app without authentication
+  Future<void> _onEnterGuestMode(
+    EnterGuestMode event,
+    Emitter<AuthState> emit,
+  ) async {
+    _logger.info('Entering guest mode');
+    emit(AuthLoading());
+    
+    // Create a guest user using the factory constructor
+    final guestUser = User.guest();
+    
+    // Emit authenticated state with the guest user
+    _logger.info('Guest user created: ${guestUser.email}');
+    emit(AuthAuthenticated(guestUser));
   }
 
   /// Maps domain exceptions to specific UI states

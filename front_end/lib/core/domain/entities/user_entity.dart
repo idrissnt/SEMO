@@ -6,6 +6,7 @@ class User {
   final String? phoneNumber;
   final String? profilePhotoUrl;
   final DateTime? createdAt;
+  final bool isGuest;
 
   User({
     required this.id,
@@ -15,7 +16,20 @@ class User {
     this.phoneNumber,
     this.profilePhotoUrl,
     this.createdAt,
+    this.isGuest = false,
   });
 
+  /// Factory constructor to create a guest user
+  /// This allows parts of the app to be accessed without authentication
+  factory User.guest() => User(
+        id: 'guest',
+        email: 'guest@semo.win',
+        firstName: 'Guest',
+        isGuest: true,
+      );
+
   String get fullName => '$firstName ${lastName ?? ''}';
+  
+  /// Whether this user requires authentication for protected features
+  bool get requiresAuthentication => !isGuest;
 }

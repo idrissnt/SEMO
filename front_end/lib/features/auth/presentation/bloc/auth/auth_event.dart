@@ -56,3 +56,7 @@ class AuthCheckRequested extends AuthEvent {}
 /// Event to reset the auth state to initial
 /// Used when navigating between auth screens to clear any error states
 class AuthResetState extends AuthEvent {}
+
+/// Event to enter guest mode, allowing access to the app without authentication
+/// This is used for the "Passer" button to skip the login process
+class EnterGuestMode extends AuthEvent {}
