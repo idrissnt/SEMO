@@ -8,6 +8,7 @@ import 'package:semo/core/presentation/navigation/routes_constants/route_constan
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/auth/routes/auth_routes.dart';
 import 'package:semo/features/auth/routes/initial_route.dart';
+import 'package:semo/features/profile/routes/profile_routes.dart';
 
 import 'navigation_logger.dart';
 
@@ -37,6 +38,8 @@ class AppRouter {
       ...AuthRouter.getAuthRoutes(),
       // Use the main shell route from core instead of home-specific route
       getMainShellRoute(),
+      // Add profile routes
+      ...ProfileRouter.getProfileRoutes(),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(

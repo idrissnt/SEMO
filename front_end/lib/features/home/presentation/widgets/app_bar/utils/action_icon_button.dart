@@ -18,6 +18,9 @@ class ActionIconButton extends StatelessWidget {
   /// Optional size for the icon
   final double? size;
 
+  /// Optional tooltip text for accessibility
+  final String? tooltip;
+
   /// Constructor for ActionIconButton
   const ActionIconButton({
     Key? key,
@@ -25,6 +28,7 @@ class ActionIconButton extends StatelessWidget {
     required this.onPressed,
     this.color,
     this.size,
+    this.tooltip,
   }) : super(key: key);
 
   @override
@@ -34,6 +38,7 @@ class ActionIconButton extends StatelessWidget {
           color: color ?? AppColors.iconColorFirstColor,
           size: size ?? AppIconSize.xl),
       onPressed: onPressed,
+      tooltip: tooltip,
       // padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       iconSize: size ?? AppIconSize.xl,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/features/home/presentation/widgets/app_bar/utils/action_icon_button.dart';
 
@@ -40,8 +42,10 @@ class ActionIcons extends StatelessWidget {
         // Profile icon
         ActionIconButton(
           icon: Icons.person_outline,
+          tooltip: 'Profile Settings',
           onPressed: () {
-            // Handle profile tap
+            // Navigate to profile settings screen
+            context.push(AppRoutes.profile);
           },
           size: AppIconSize.xl,
         ),
@@ -67,9 +71,11 @@ class CartProfileIcon extends StatelessWidget {
         const SizedBox(width: 0),
         ActionIconButton(
           icon: Icons.person_outline,
+          tooltip: 'Profile Settings',
           color: Colors.grey[800],
           onPressed: () {
-            // Handle profile tap
+            // Navigate to profile settings screen
+            context.push(AppRoutes.profile);
           },
           size: AppIconSize.xl,
         )
