@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:semo/features/auth/routes/auth_routes_const.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
+import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// Tab for account-related settings
 class AccountTab extends StatelessWidget {
@@ -22,25 +24,25 @@ class AccountTab extends StatelessWidget {
                 icon: Icons.person_outline,
                 title: 'Personal Information',
                 subtitle: 'Name, email, phone number',
-                route: '/profile/personal-info',
+                routeName: ProfileRouteNames.personalInfo,
               ),
               SettingsTile(
                 icon: Icons.lock_outline,
                 title: 'Security',
                 subtitle: 'Password, verification, login activity',
-                route: '/profile/security',
+                routeName: ProfileRouteNames.security,
               ),
               SettingsTile(
                 icon: Icons.payment_outlined,
                 title: 'Payment Methods',
                 subtitle: 'Credit cards, bank accounts',
-                route: '/profile/payment-methods',
+                routeName: ProfileRouteNames.paymentMethods,
               ),
               SettingsTile(
                 icon: Icons.location_on_outlined,
                 title: 'Addresses',
                 subtitle: 'Saved addresses for delivery and tasks',
-                route: '/profile/addresses',
+                routeName: ProfileRouteNames.addresses,
               ),
             ],
           ),
@@ -74,10 +76,8 @@ class AccountTab extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Perform logout
-                    Navigator.pop(context);
                     // Navigate to login screen
-                    context.go('/login');
+                    context.go(AuthRoutesConstants.login);
                   },
                   child: const Text('Logout'),
                 ),
@@ -104,3 +104,5 @@ class AccountTab extends StatelessWidget {
     );
   }
 }
+
+class AuthRoutes {}

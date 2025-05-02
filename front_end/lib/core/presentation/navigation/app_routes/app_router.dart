@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/main_shell_route.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/register_all_tabs.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/register_shell_providers.dart';
-import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/auth/routes/auth_routes.dart';
+import 'package:semo/features/auth/routes/auth_routes_const.dart';
 import 'package:semo/features/auth/routes/initial_route.dart';
 import 'package:semo/features/profile/routes/profile_routes.dart';
 
@@ -14,6 +14,10 @@ import 'navigation_logger.dart';
 
 /// Central router configuration for the application
 class AppRouter {
+  /// Navigator key for profile routes
+  static final GlobalKey<NavigatorState> profileNavigatorKey =
+      GlobalKey<NavigatorState>();
+
   /// Initialize the router
   static void initialize() {
     // Register all tabs from all features
@@ -25,10 +29,11 @@ class AppRouter {
 
   /// The main router for the app with navigation logging enabled
   static final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.splash,
+    initialLocation: AuthRoutesConstants.splash,
+    navigatorKey: profileNavigatorKey,
     redirect: (context, state) {
       // Don't redirect from splash screen - let it handle navigation
-      if (state.uri.path == AppRoutes.splash) return null;
+      if (state.uri.path == AuthRoutesConstants.splash) return null;
 
       // Use existing auth redirect for other routes
       return AuthRouter.authRedirect(context, state);
@@ -38,7 +43,7 @@ class AppRouter {
       ...AuthRouter.getAuthRoutes(),
       // Use the main shell route from core instead of home-specific route
       getMainShellRoute(),
-      // Add profile routes
+      // Add profile routes directly at the top level
       ...ProfileRouter.getProfileRoutes(),
     ],
     errorBuilder: (context, state) => Scaffold(
@@ -51,7 +56,7 @@ class AppRouter {
             Text('Route not found: ${state.error}'),
             SizedBox(height: 16.h),
             ElevatedButton(
-              onPressed: () => router.go(AppRoutes.welcome),
+              onPressed: () => router.go(AuthRoutesConstants.welcome),
               child: Text('Go to Welcome Screen',
                   style: TextStyle(
                     color: AppColors.secondary,

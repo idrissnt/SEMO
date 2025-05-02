@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
+import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// Tab for app settings and support
 class SettingsTab extends StatelessWidget {
@@ -22,25 +23,25 @@ class SettingsTab extends StatelessWidget {
                 icon: Icons.notifications_outlined,
                 title: 'Notifications',
                 subtitle: 'Push, email, in-app notifications',
-                route: '/profile/notifications',
+                routeName: ProfileRouteNames.notifications,
               ),
               SettingsTile(
                 icon: Icons.language_outlined,
                 title: 'Language',
                 subtitle: 'Change app language',
-                route: '/profile/language',
+                routeName: ProfileRouteNames.language,
               ),
               SettingsTile(
                 icon: Icons.dark_mode_outlined,
                 title: 'Appearance',
                 subtitle: 'Dark mode, theme settings',
-                route: '/profile/appearance',
+                routeName: ProfileRouteNames.appearance,
               ),
               SettingsTile(
                 icon: Icons.privacy_tip_outlined,
                 title: 'Privacy',
                 subtitle: 'Control your data and privacy settings',
-                route: '/profile/privacy',
+                routeName: ProfileRouteNames.privacy,
               ),
             ],
           ),
@@ -55,25 +56,25 @@ class SettingsTab extends StatelessWidget {
                 icon: Icons.help_outline,
                 title: 'Help Center',
                 subtitle: 'FAQs, contact support',
-                route: '/profile/help',
+                routeName: ProfileRouteNames.help,
               ),
               SettingsTile(
                 icon: Icons.info_outline,
                 title: 'About',
                 subtitle: 'App version, terms, privacy policy',
-                route: '/profile/about',
+                routeName: ProfileRouteNames.about,
               ),
               SettingsTile(
                 icon: Icons.star_outline,
                 title: 'Rate the App',
                 subtitle: 'Tell us what you think',
-                route: '/profile/rate',
+                routeName: ProfileRouteNames.rate,
               ),
               SettingsTile(
                 icon: Icons.share_outlined,
                 title: 'Share with Friends',
                 subtitle: 'Invite others to join',
-                route: '/profile/share',
+                routeName: ProfileRouteNames.share,
               ),
             ],
           ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 
 import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/company_and_store_theme.dart';
+import 'package:semo/features/auth/routes/auth_routes_const.dart';
 
 /// A reusable component that displays the authentication buttons
 /// (Create Account and Login) in a consistent manner across the app
@@ -63,7 +63,7 @@ class AuthButtons extends StatelessWidget {
       children: [
         ButtonFactory.createNavigationButton(
           context: context,
-          route: AppRoutes.register,
+          route: AuthRoutesConstants.register,
           text: registerStyle['text'] as String,
           textColor: registerStyle['textColor'] as Color,
           backgroundColor: registerStyle['backgroundColor'] as Color,
@@ -80,7 +80,7 @@ class AuthButtons extends StatelessWidget {
         SizedBox(height: spacingBetweenButtons),
         ButtonFactory.createNavigationButton(
           context: context,
-          route: AppRoutes.login,
+          route: AuthRoutesConstants.login,
           text: loginStyle['text'] as String,
           textColor: loginStyle['textColor'] as Color,
           backgroundColor: loginStyle['backgroundColor'] as Color,

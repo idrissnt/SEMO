@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:semo/core/presentation/navigation/app_routes/app_router.dart';
 import 'package:semo/core/presentation/navigation/app_routes/routing_transitions.dart';
-import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/features/profile/presentation/screens/personal_info_screen.dart';
 import 'package:semo/features/profile/presentation/screens/profile_settings_screen.dart';
+import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// Class that handles all profile-related routing
 class ProfileRouter {
@@ -12,19 +13,23 @@ class ProfileRouter {
     return [
       // Main profile settings screen
       GoRoute(
-        path: AppRoutes.profile,
-        name: 'profile',
+        path: ProfileRoutesConstants.rootProfile,
+        name: ProfileRouteNames.profile,
+        parentNavigatorKey: AppRouter.profileNavigatorKey,
         pageBuilder: (context, state) => buildPageWithTransition(
           context: context,
           state: state,
           child: const ProfileSettingsScreen(),
-          name: 'ProfileSettingsScreen',
+          name: 'P',
         ),
         routes: [
+          /// //===========================================================================
+          /// Account Tab Routes
+          /// //===========================================================================
           // Personal information screen
           GoRoute(
-            path: 'personal-info',
-            name: 'personal-info',
+            path: ProfileRoutesConstants.accountPersonalInfo,
+            name: ProfileRouteNames.personalInfo,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -34,8 +39,8 @@ class ProfileRouter {
           ),
           // Security screen - to be implemented
           GoRoute(
-            path: 'security',
-            name: 'security',
+            path: ProfileRoutesConstants.accountSecurity,
+            name: ProfileRouteNames.security,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -47,8 +52,8 @@ class ProfileRouter {
           ),
           // Payment methods screen - to be implemented
           GoRoute(
-            path: 'payment-methods',
-            name: 'payment-methods',
+            path: ProfileRoutesConstants.accountPaymentMethods,
+            name: ProfileRouteNames.paymentMethods,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -60,8 +65,8 @@ class ProfileRouter {
           ),
           // Addresses screen - to be implemented
           GoRoute(
-            path: 'addresses',
-            name: 'addresses',
+            path: ProfileRoutesConstants.accountAddresses,
+            name: ProfileRouteNames.addresses,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -71,10 +76,14 @@ class ProfileRouter {
               name: 'AddressesScreen',
             ),
           ),
+
+          /// //===========================================================================
+          /// Tasks Tab Routes
+          /// //===========================================================================
           // Tasks section routes
           GoRoute(
-            path: 'published-tasks',
-            name: 'published-tasks',
+            path: ProfileRoutesConstants.publishedTasks,
+            name: ProfileRouteNames.publishedTasks,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -85,8 +94,8 @@ class ProfileRouter {
             ),
           ),
           GoRoute(
-            path: 'performed-tasks',
-            name: 'performed-tasks',
+            path: ProfileRoutesConstants.performedTasks,
+            name: ProfileRouteNames.performedTasks,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -96,10 +105,14 @@ class ProfileRouter {
               name: 'PerformedTasksScreen',
             ),
           ),
+
+          /// //===========================================================================
+          /// Grocery Tab Routes
+          /// //===========================================================================
           // Grocery section routes
           GoRoute(
-            path: 'grocery-orders',
-            name: 'grocery-orders',
+            path: ProfileRoutesConstants.groceryOrders,
+            name: ProfileRouteNames.groceryOrders,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -110,8 +123,8 @@ class ProfileRouter {
             ),
           ),
           GoRoute(
-            path: 'grocery-deliveries',
-            name: 'grocery-deliveries',
+            path: ProfileRoutesConstants.groceryDeliveries,
+            name: ProfileRouteNames.groceryDeliveries,
             pageBuilder: (context, state) => buildPageWithTransition(
               context: context,
               state: state,
@@ -121,6 +134,10 @@ class ProfileRouter {
               name: 'GroceryDeliveriesScreen',
             ),
           ),
+
+          /// //===========================================================================
+          /// Settings Tab Routes
+          /// //===========================================================================
         ],
       ),
     ];

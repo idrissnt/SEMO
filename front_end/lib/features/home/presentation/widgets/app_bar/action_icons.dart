@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
+import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/home/presentation/widgets/app_bar/utils/action_icon_button.dart';
+import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// //===========================================================================
 /// Widget that displays the action icons (cart, notifications, profile) in the app bar
 /// //===========================================================================
+
+final AppLogger logger = AppLogger();
 
 class ActionIcons extends StatelessWidget {
   const ActionIcons({Key? key}) : super(key: key);
@@ -42,10 +45,8 @@ class ActionIcons extends StatelessWidget {
         // Profile icon
         ActionIconButton(
           icon: Icons.person_outline,
-          tooltip: 'Profile Settings',
           onPressed: () {
-            // Navigate to profile settings screen
-            context.push(AppRoutes.profile);
+            context.pushNamed(ProfileRouteNames.profile);
           },
           size: AppIconSize.xl,
         ),
@@ -71,11 +72,9 @@ class CartProfileIcon extends StatelessWidget {
         const SizedBox(width: 0),
         ActionIconButton(
           icon: Icons.person_outline,
-          tooltip: 'Profile Settings',
           color: Colors.grey[800],
           onPressed: () {
-            // Navigate to profile settings screen
-            context.push(AppRoutes.profile);
+            context.pushNamed(ProfileRouteNames.profile);
           },
           size: AppIconSize.xl,
         )

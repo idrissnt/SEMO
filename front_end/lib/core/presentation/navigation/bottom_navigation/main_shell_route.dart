@@ -17,6 +17,15 @@ ShellRoute getMainShellRoute() {
       // Get all BlocProviders from the registry
       final providers = ShellProviderRegistry.getAllBlocProviders();
 
+      // Check if the current route is one of our tab routes
+      final location = state.uri.path;
+      final isTabRoute = tabs.any((tab) => location.startsWith(tab.route));
+
+      // If this is not a tab route, show the child (external route)
+      if (!isTabRoute && child != const SizedBox()) {
+        return child;
+      }
+
       return MultiBlocProvider(
         // Use providers from all features instead of hardcoding them here
         providers: providers,

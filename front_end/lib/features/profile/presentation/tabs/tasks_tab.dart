@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
+import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// Tab for task-related settings and history
 class TasksTab extends StatelessWidget {
@@ -27,19 +28,19 @@ class TasksTab extends StatelessWidget {
                 icon: Icons.post_add_outlined,
                 title: 'Active Tasks',
                 subtitle: 'Tasks currently open for applications',
-                route: '/profile/published-tasks?status=active',
+                routeName: ProfileRouteNames.publishedTasks,
               ),
               SettingsTile(
                 icon: Icons.assignment_turned_in_outlined,
                 title: 'Completed Tasks',
                 subtitle: 'Tasks that have been completed',
-                route: '/profile/published-tasks?status=completed',
+                routeName: ProfileRouteNames.publishedTasks,
               ),
               SettingsTile(
                 icon: Icons.history_outlined,
                 title: 'Task History',
                 subtitle: 'All tasks you\'ve published',
-                route: '/profile/published-tasks?status=all',
+                routeName: ProfileRouteNames.publishedTasks,
               ),
             ],
           ),
@@ -54,19 +55,19 @@ class TasksTab extends StatelessWidget {
                 icon: Icons.engineering_outlined,
                 title: 'Current Tasks',
                 subtitle: 'Tasks you\'re currently working on',
-                route: '/profile/performed-tasks?status=current',
+                routeName: ProfileRouteNames.performedTasks,
               ),
               SettingsTile(
                 icon: Icons.check_circle_outline,
                 title: 'Completed Tasks',
                 subtitle: 'Tasks you\'ve finished',
-                route: '/profile/performed-tasks?status=completed',
+                routeName: ProfileRouteNames.performedTasks,
               ),
               SettingsTile(
                 icon: Icons.history_outlined,
                 title: 'Task History',
                 subtitle: 'All tasks you\'ve performed',
-                route: '/profile/performed-tasks?status=all',
+                routeName: ProfileRouteNames.performedTasks,
               ),
             ],
           ),
@@ -81,19 +82,19 @@ class TasksTab extends StatelessWidget {
                 icon: Icons.star_outline,
                 title: 'Skills & Categories',
                 subtitle: 'Set your skills and preferred task types',
-                route: '/profile/task-preferences/skills',
+                routeName: ProfileRouteNames.taskPreferencesSkills,
               ),
               SettingsTile(
                 icon: Icons.notifications_outlined,
                 title: 'Task Notifications',
                 subtitle: 'Configure task alerts and updates',
-                route: '/profile/task-preferences/notifications',
+                routeName: ProfileRouteNames.taskPreferencesNotifications,
               ),
               SettingsTile(
                 icon: Icons.visibility_outlined,
                 title: 'Visibility Settings',
                 subtitle: 'Control who can see your task activity',
-                route: '/profile/task-preferences/visibility',
+                routeName: ProfileRouteNames.taskPreferencesVisibility,
               ),
             ],
           ),
@@ -149,9 +150,8 @@ class TasksTab extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color:
-                const Color(0x1A008000), // AppColors.primary with 10% opacity
+          decoration: const BoxDecoration(
+            color: Color(0x1A008000), // AppColors.primary with 10% opacity
             shape: BoxShape.circle,
           ),
           child: Icon(

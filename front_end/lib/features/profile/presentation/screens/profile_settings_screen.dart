@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+// Core imports
 import 'package:semo/core/presentation/theme/app_colors.dart';
+
+// Feature imports
 import 'package:semo/features/profile/presentation/tabs/account_tab.dart';
 import 'package:semo/features/profile/presentation/tabs/tasks_tab.dart';
 import 'package:semo/features/profile/presentation/tabs/grocery_tab.dart';
 import 'package:semo/features/profile/presentation/tabs/settings_tab.dart';
 
+/// A screen that displays user profile settings with multiple tabs for different sections.
+///
+/// This screen provides navigation to various profile-related settings through a tab interface.
 class ProfileSettingsScreen extends StatefulWidget {
+  /// Creates a profile settings screen.
   const ProfileSettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -14,19 +23,21 @@ class ProfileSettingsScreen extends StatefulWidget {
 
 class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
     with SingleTickerProviderStateMixin {
+  /// Controller for managing tab navigation
   late TabController _tabController;
 
-  final List<Tab> _tabs = const [
-    Tab(text: 'Account', icon: Icon(Icons.person_outline)),
-    Tab(text: 'Tasks', icon: Icon(Icons.assignment_outlined)),
-    Tab(text: 'Grocery', icon: Icon(Icons.shopping_bag_outlined)),
-    Tab(text: 'Settings', icon: Icon(Icons.settings_outlined)),
+  /// Tab configuration data
+  static const List<_TabItem> _tabItems = [
+    _TabItem(title: 'Account', icon: Icons.person_outline),
+    _TabItem(title: 'Tasks', icon: Icons.assignment_outlined),
+    _TabItem(title: 'Grocery', icon: Icons.shopping_basket_outlined),
+    _TabItem(title: 'Settings', icon: Icons.settings_outlined),
   ];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
+    _tabController = TabController(length: _tabItems.length, vsync: this);
   }
 
   @override
@@ -39,172 +50,168 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverAppBar(
-            title: const Text('Profile'),
-            backgroundColor: Colors.white,
-            foregroundColor: AppColors.textPrimaryColor,
-            elevation: 0,
-            floating: true,
-            pinned: true,
-            snap: false,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(150),
-              child: Column(
-                children: [
-                  // Profile Header
-                  _buildProfileHeader(context),
-                  // Tab Bar
-                  TabBar(
-                    controller: _tabController,
-                    tabs: _tabs,
-                    labelColor: AppColors.primary,
-                    unselectedLabelColor: Colors.grey,
-                    indicatorColor: AppColors.primary,
-                    indicatorWeight: 3,
-                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    unselectedLabelStyle:
-                        const TextStyle(fontWeight: FontWeight.normal),
-                  ),
-                ],
-              ),
-            ),
-          ),
+      appBar: _buildAppBar(context),
+      body: Column(
+        children: [
+          _buildHeaderSection(),
+          _buildTabContent(),
         ],
-        body: TabBarView(
-          controller: _tabController,
-          children: const [
-            // Account Tab
-            AccountTab(),
-            // Tasks Tab
-            TasksTab(),
-            // Grocery Tab
-            GroceryTab(),
-            // Settings Tab
-            SettingsTab(),
-          ],
-        ),
       ),
     );
   }
 
-  Widget _buildProfileHeader(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
+  /// Builds the app bar with back button and title
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      foregroundColor: AppColors.textPrimaryColor,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      titleSpacing: 0,
+      title: Row(
         children: [
-          // Profile Picture
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.grey,
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                    ),
-                  ],
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/default_profile.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                  size: 18,
-                ),
-              ),
-            ],
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                context.pop();
+              } else {
+                // Navigate to the home screen if we can't pop
+                context.go('/');
+              }
+            },
           ),
-          const SizedBox(height: 16),
-          // User Name
           const Text(
-            'John Doe',
+            'User Name',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimaryColor,
+              color: Colors.black,
             ),
-          ),
-          const SizedBox(height: 4),
-          // User Email
-          Text(
-            'john.doe@example.com',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 16),
-          // User Stats
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildStatItem('4.8', 'Rating'),
-              _buildDivider(),
-              _buildStatItem('24', 'Tasks'),
-              _buildDivider(),
-              _buildStatItem('18', 'Deliveries'),
-            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStatItem(String value, String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+  /// Builds the header section containing profile image and tabs
+  Widget _buildHeaderSection() {
+    return Material(
+      color: Colors.white,
+      elevation: 4,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
-          ),
+          _buildProfileHeader(context),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
-          ),
+          _buildTabBar(),
         ],
       ),
     );
   }
 
-  Widget _buildDivider() {
+  /// Builds the tab bar with custom styling
+  Widget _buildTabBar() {
     return Container(
-      height: 30,
-      width: 1,
-      color: Colors.grey[300],
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+      child: TabBar(
+        controller: _tabController,
+        isScrollable: false,
+        tabs: _buildCustomTabs(),
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.black87,
+        indicator: BoxDecoration(
+          color: AppColors.primary,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+        indicatorPadding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: EdgeInsets.zero,
+      ),
     );
   }
 
-  // Logout button moved to AccountTab
+  /// Builds the tab content area
+  Widget _buildTabContent() {
+    return Expanded(
+      child: TabBarView(
+        controller: _tabController,
+        children: const [
+          AccountTab(),
+          TasksTab(),
+          GroceryTab(),
+          SettingsTab(),
+        ],
+      ),
+    );
+  }
+
+  /// Builds custom tabs with consistent styling
+  List<Widget> _buildCustomTabs() {
+    return _tabItems.map((item) => _buildTabItem(item)).toList();
+  }
+
+  /// Builds a single tab item with consistent styling
+  Widget _buildTabItem(_TabItem item) {
+    return SizedBox(
+      height: 50,
+      child: Tab(
+        text: item.title,
+        icon: Icon(item.icon, size: 24),
+        iconMargin: const EdgeInsets.only(bottom: 2),
+      ),
+    );
+  }
+
+  /// Builds the profile header with avatar and edit button
+  Widget _buildProfileHeader(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        // Profile image
+        CircleAvatar(
+          radius: 36,
+          backgroundColor: Colors.grey[200],
+          backgroundImage:
+              const AssetImage('assets/images/default_profile.png'),
+          onBackgroundImageError: (exception, stackTrace) {},
+          child: const Icon(
+            Icons.person,
+            size: 36,
+            color: Colors.grey,
+          ),
+        ),
+        // Edit button
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(3.0),
+            child: Icon(
+              Icons.edit,
+              size: 12,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Data class to hold tab item configuration
+class _TabItem {
+  final String title;
+  final IconData icon;
+
+  const _TabItem({required this.title, required this.icon});
 }

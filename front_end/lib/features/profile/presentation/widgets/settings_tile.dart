@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// A reusable settings tile widget for profile settings
@@ -6,7 +7,7 @@ class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final String route;
+  final String routeName;
   final Widget? trailing;
   final VoidCallback? onTap;
 
@@ -15,7 +16,7 @@ class SettingsTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.route,
+    required this.routeName,
     this.trailing,
     this.onTap,
   }) : super(key: key);
@@ -23,7 +24,7 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap ?? () => Navigator.of(context).pushNamed(route),
+      onTap: onTap ?? () => context.goNamed(routeName),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(

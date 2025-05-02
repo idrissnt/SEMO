@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 class PersonalInfoScreen extends StatefulWidget {
   const PersonalInfoScreen({Key? key}) : super(key: key);
@@ -36,7 +38,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         foregroundColor: AppColors.textPrimaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pushNamed(ProfileRouteNames.profile),
         ),
       ),
       body: SafeArea(

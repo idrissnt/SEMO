@@ -15,6 +15,7 @@ import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
 import 'package:semo/features/auth/presentation/utils/init_elements.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
 import 'package:semo/features/auth/presentation/widgets/state_handler/welcom/state_handler.dart';
+import 'package:semo/features/auth/routes/auth_routes_const.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -84,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToWelcome() {
     if (mounted && !_hasNavigated) {
       _hasNavigated = true;
-      context.go(AppRoutes.welcome);
+      context.go(AuthRoutesConstants.welcome);
     }
   }
 
