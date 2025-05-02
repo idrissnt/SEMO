@@ -7,7 +7,7 @@ class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final String routeName;
+  final String? routeName;
   final Widget? trailing;
   final VoidCallback? onTap;
 
@@ -16,15 +16,16 @@ class SettingsTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.routeName,
+    this.routeName,
     this.trailing,
     this.onTap,
-  }) : super(key: key);
+  }) : assert(routeName != null || onTap != null, 'Either routeName or onTap must be provided'),
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap ?? () => context.goNamed(routeName),
+      onTap: onTap ?? (routeName != null ? () => context.goNamed(routeName!) : null),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(

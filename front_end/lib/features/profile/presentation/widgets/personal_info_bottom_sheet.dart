@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
-class PersonalInfoScreen extends StatefulWidget {
-  const PersonalInfoScreen({Key? key}) : super(key: key);
+/// A bottom sheet that displays and allows editing of personal information
+/// This is designed to be shown as a modal bottom sheet instead of a full screen
+class PersonalInfoBottomSheet extends StatefulWidget {
+  final ScrollController? scrollController;
+  
+  const PersonalInfoBottomSheet({Key? key, this.scrollController}) : super(key: key);
 
   @override
-  State<PersonalInfoScreen> createState() => _PersonalInfoScreenState();
+  State<PersonalInfoBottomSheet> createState() =>
+      _PersonalInfoBottomSheetState();
 }
 
-class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
+class _PersonalInfoBottomSheetState extends State<PersonalInfoBottomSheet> {
   // Form controllers
   final _nameController = TextEditingController(text: 'John Doe');
   final _emailController = TextEditingController(text: 'john.doe@example.com');
@@ -29,41 +32,81 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Personal Information'),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: AppColors.textPrimaryColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pushNamed(ProfileRouteNames.profile),
-        ),
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile Picture Section
-              _buildProfilePictureSection(),
+      child: Column(
+        children: [
+          // Drag handle
+          _buildDragHandle(),
 
-              const SizedBox(height: 24),
-
-              // Form Fields
-              _buildFormSection(),
-
-              const SizedBox(height: 32),
-
-              // Save Button
-              _buildSaveButton(),
-
-              const SizedBox(height: 40),
-            ],
+          // Title
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                const Text(
+                  'Personal Information',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimaryColor,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+
+          // Content
+          Expanded(
+            child: Scrollbar(
+              thickness: 6,
+              radius: const Radius.circular(10),
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                controller: widget.scrollController,
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Profile Picture Section
+                    _buildProfilePictureSection(),
+
+                    const SizedBox(height: 24),
+
+                    // Form Fields
+                    _buildFormSection(),
+
+                    const SizedBox(height: 32),
+
+                    // Save Button
+                    _buildSaveButton(),
+
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDragHandle() {
+    return Container(
+      width: 40,
+      height: 5,
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(2.5),
       ),
     );
   }
@@ -76,8 +119,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             alignment: Alignment.bottomRight,
             children: [
               Container(
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 3),
@@ -109,7 +152,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   child: const Icon(
                     Icons.camera_alt,
                     color: Colors.white,
-                    size: 20,
+                    size: 16,
                   ),
                 ),
               ),
@@ -138,47 +181,41 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Full Name
+        const Text(
+          'Basic Information',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimaryColor,
+          ),
+        ),
+        const SizedBox(height: 16),
         _buildFormField(
           label: 'Full Name',
           controller: _nameController,
           icon: Icons.person_outline,
-          keyboardType: TextInputType.name,
         ),
-
         const SizedBox(height: 16),
-
-        // Email
         _buildFormField(
           label: 'Email',
           controller: _emailController,
           icon: Icons.email_outlined,
           keyboardType: TextInputType.emailAddress,
-          readOnly:
-              true, // Email is often used as an identifier and not changed
-          helperText: 'Contact support to change your email address',
         ),
-
         const SizedBox(height: 16),
-
-        // Phone Number
         _buildFormField(
           label: 'Phone Number',
           controller: _phoneController,
           icon: Icons.phone_outlined,
           keyboardType: TextInputType.phone,
         ),
-
         const SizedBox(height: 16),
-
-        // Bio
         _buildFormField(
           label: 'Bio',
           controller: _bioController,
-          icon: Icons.info_outline,
-          keyboardType: TextInputType.multiline,
+          icon: Icons.description_outlined,
           maxLines: 3,
-          helperText: 'Tell others about yourself (max 150 characters)',
+          helperText: 'Tell us about yourself in a few sentences',
         ),
       ],
     );
@@ -198,52 +235,38 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: AppColors.textPrimaryColor,
+            color: Colors.grey[700],
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.grey,
-                spreadRadius: 1,
-                blurRadius: 4,
-                offset: Offset(0, 1),
-              ),
-            ],
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          readOnly: readOnly,
+          maxLines: maxLines,
+          style: const TextStyle(
+            fontSize: 16,
+            color: AppColors.textPrimaryColor,
           ),
-          child: TextFormField(
-            controller: controller,
-            keyboardType: keyboardType,
-            readOnly: readOnly,
-            maxLines: maxLines,
-            style: const TextStyle(
-              fontSize: 16,
-              color: AppColors.textPrimaryColor,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: AppColors.primary),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
             ),
-            decoration: InputDecoration(
-              prefixIcon: Icon(icon, color: AppColors.primary),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
-              ),
-              filled: true,
-              fillColor: readOnly ? Colors.grey[50] : Colors.white,
-              helperText: helperText,
-              helperStyle: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+            filled: true,
+            fillColor: readOnly ? Colors.grey[50] : Colors.white,
+            helperText: helperText,
+            helperStyle: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
             ),
           ),
         ),
@@ -262,7 +285,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -304,7 +327,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               title: const Text('Take a photo'),
               onTap: () {
                 // Handle camera option
-                context.pop();
+                Navigator.pop(context);
                 // Implement camera functionality
               },
             ),
@@ -313,7 +336,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               title: const Text('Choose from gallery'),
               onTap: () {
                 // Handle gallery option
-                context.pop();
+                Navigator.pop(context);
                 // Implement gallery functionality
               },
             ),
@@ -323,7 +346,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 title: const Text('Remove current photo'),
                 onTap: () {
                   // Handle remove option
-                  context.pop();
+                  Navigator.pop(context);
                   // Implement remove functionality
                 },
               ),
@@ -362,7 +385,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         ),
       );
 
-      // Navigate back
+      // Close the bottom sheet
       Navigator.pop(context);
     });
   }

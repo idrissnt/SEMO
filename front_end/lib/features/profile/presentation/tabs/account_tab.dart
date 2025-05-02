@@ -4,6 +4,7 @@ import 'package:semo/features/auth/routes/auth_routes_const.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
+import 'package:semo/features/profile/presentation/widgets/personal_info_bottom_sheet.dart';
 
 /// Tab for account-related settings
 class AccountTab extends StatelessWidget {
@@ -17,28 +18,28 @@ class AccountTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Account Settings
-          const SettingsSection(
+          SettingsSection(
             title: 'Account',
             children: [
               SettingsTile(
                 icon: Icons.person_outline,
                 title: 'Personal Information',
                 subtitle: 'Name, email, phone number',
-                routeName: ProfileRouteNames.personalInfo,
+                onTap: () => _showPersonalInfoBottomSheet(context),
               ),
-              SettingsTile(
+              const SettingsTile(
                 icon: Icons.lock_outline,
                 title: 'Security',
                 subtitle: 'Password, verification, login activity',
                 routeName: ProfileRouteNames.security,
               ),
-              SettingsTile(
+              const SettingsTile(
                 icon: Icons.payment_outlined,
                 title: 'Payment Methods',
                 subtitle: 'Credit cards, bank accounts',
                 routeName: ProfileRouteNames.paymentMethods,
               ),
-              SettingsTile(
+              const SettingsTile(
                 icon: Icons.location_on_outlined,
                 title: 'Addresses',
                 subtitle: 'Saved addresses for delivery and tasks',
@@ -54,6 +55,25 @@ class AccountTab extends StatelessWidget {
 
           const SizedBox(height: 40),
         ],
+      ),
+    );
+  }
+
+  // Helper method to show the personal info bottom sheet
+  void _showPersonalInfoBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      enableDrag: true,  // Enable dragging to dismiss
+      isDismissible: true,  // Allow dismissing by tapping outside
+      useSafeArea: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.95, // Start at 95% of screen height
+        minChildSize: 0.5,      // Allow dragging down to 50%
+        maxChildSize: 0.95,     // Maximum 95% of screen height
+        expand: false,
+        builder: (context, scrollController) => PersonalInfoBottomSheet(scrollController: scrollController),
       ),
     );
   }

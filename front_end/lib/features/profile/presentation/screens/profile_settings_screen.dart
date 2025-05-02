@@ -72,14 +72,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
         children: [
           IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                context.pop();
-              } else {
-                // Navigate to the home screen if we can't pop
-                context.go('/');
-              }
-            },
+            onPressed: () => context.pop(),
           ),
           const Text(
             'User Name',
