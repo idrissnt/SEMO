@@ -4,45 +4,42 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// A reusable settings tile widget for profile settings
 class SettingsTile extends StatelessWidget {
-  final IconData icon;
+  final Widget? icon;
   final String title;
   final String subtitle;
   final String? routeName;
-  final Widget? trailing;
   final VoidCallback? onTap;
 
   const SettingsTile({
     Key? key,
-    required this.icon,
+    this.icon,
     required this.title,
     required this.subtitle,
     this.routeName,
-    this.trailing,
     this.onTap,
-  }) : assert(routeName != null || onTap != null, 'Either routeName or onTap must be provided'),
-      super(key: key);
+  })  : assert(routeName != null || onTap != null,
+            'Either routeName or onTap must be provided'),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap ?? (routeName != null ? () => context.goNamed(routeName!) : null),
+      onTap: onTap ??
+          (routeName != null ? () => context.goNamed(routeName!) : null),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
             // Leading icon
             Container(
+              padding: const EdgeInsets.all(6),
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.primary,
+                color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                color: AppColors.primary,
-                size: 22,
-              ),
+              child: icon,
             ),
             const SizedBox(width: 16),
             // Title and subtitle
@@ -69,12 +66,11 @@ class SettingsTile extends StatelessWidget {
                 ],
               ),
             ),
-            // Trailing icon or widget
-            trailing ??
-                const Icon(
-                  Icons.chevron_right,
-                  color: Colors.grey,
-                ),
+
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+            ),
           ],
         ),
       ),

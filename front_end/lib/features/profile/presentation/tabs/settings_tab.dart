@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_icons.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
@@ -16,29 +17,29 @@ class SettingsTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // App Settings
-          const SettingsSection(
+          SettingsSection(
             title: 'App Settings',
             children: [
               SettingsTile(
-                icon: Icons.notifications_outlined,
+                icon: AppIcons.notifications(size: 24, color: Colors.orange),
                 title: 'Notifications',
                 subtitle: 'Push, email, in-app notifications',
                 routeName: ProfileRouteNames.notifications,
               ),
               SettingsTile(
-                icon: Icons.language_outlined,
+                icon: AppIcons.language(size: 24, color: Colors.blue),
                 title: 'Language',
                 subtitle: 'Change app language',
                 routeName: ProfileRouteNames.language,
               ),
               SettingsTile(
-                icon: Icons.dark_mode_outlined,
+                icon: AppIcons.darkMode(size: 24, color: Colors.grey[800]),
                 title: 'Appearance',
                 subtitle: 'Dark mode, theme settings',
                 routeName: ProfileRouteNames.appearance,
               ),
               SettingsTile(
-                icon: Icons.privacy_tip_outlined,
+                icon: AppIcons.privacy(size: 24, color: Colors.purple),
                 title: 'Privacy',
                 subtitle: 'Control your data and privacy settings',
                 routeName: ProfileRouteNames.privacy,
@@ -49,29 +50,29 @@ class SettingsTab extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Support & About
-          const SettingsSection(
+          SettingsSection(
             title: 'Support & About',
             children: [
               SettingsTile(
-                icon: Icons.help_outline,
+                icon: AppIcons.help(size: 24, color: Colors.blue),
                 title: 'Help Center',
                 subtitle: 'FAQs, contact support',
                 routeName: ProfileRouteNames.help,
               ),
               SettingsTile(
-                icon: Icons.info_outline,
+                icon: AppIcons.info(size: 24, color: Colors.green),
                 title: 'About',
                 subtitle: 'App version, terms, privacy policy',
                 routeName: ProfileRouteNames.about,
               ),
               SettingsTile(
-                icon: Icons.star_outline,
+                icon: AppIcons.star(size: 24, color: Colors.amber),
                 title: 'Rate the App',
                 subtitle: 'Tell us what you think',
                 routeName: ProfileRouteNames.rate,
               ),
               SettingsTile(
-                icon: Icons.share_outlined,
+                icon: AppIcons.share(size: 24, color: Colors.orange),
                 title: 'Share with Friends',
                 subtitle: 'Invite others to join',
                 routeName: ProfileRouteNames.share,

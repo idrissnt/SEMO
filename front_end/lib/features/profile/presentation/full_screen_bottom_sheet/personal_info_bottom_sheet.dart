@@ -5,8 +5,9 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 /// This is designed to be shown as a modal bottom sheet instead of a full screen
 class PersonalInfoBottomSheet extends StatefulWidget {
   final ScrollController? scrollController;
-  
-  const PersonalInfoBottomSheet({Key? key, this.scrollController}) : super(key: key);
+
+  const PersonalInfoBottomSheet({Key? key, this.scrollController})
+      : super(key: key);
 
   @override
   State<PersonalInfoBottomSheet> createState() =>
@@ -75,11 +76,6 @@ class _PersonalInfoBottomSheetState extends State<PersonalInfoBottomSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Profile Picture Section
-                    _buildProfilePictureSection(),
-
-                    const SizedBox(height: 24),
-
                     // Form Fields
                     _buildFormSection(),
 
@@ -107,72 +103,6 @@ class _PersonalInfoBottomSheetState extends State<PersonalInfoBottomSheet> {
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(2.5),
-      ),
-    );
-  }
-
-  Widget _buildProfilePictureSection() {
-    return Center(
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.grey,
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                    ),
-                  ],
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/default_profile.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  // Handle profile picture change
-                  _showImageSourceDialog();
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  child: const Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () {
-              // Handle profile picture change
-              _showImageSourceDialog();
-            },
-            child: Text(
-              'Change Profile Picture',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -300,66 +230,6 @@ class _PersonalInfoBottomSheetState extends State<PersonalInfoBottomSheet> {
         ),
       ),
     );
-  }
-
-  void _showImageSourceDialog() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Change Profile Picture',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimaryColor,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ListTile(
-              leading: Icon(Icons.photo_camera, color: AppColors.primary),
-              title: const Text('Take a photo'),
-              onTap: () {
-                // Handle camera option
-                Navigator.pop(context);
-                // Implement camera functionality
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.photo_library, color: AppColors.primary),
-              title: const Text('Choose from gallery'),
-              onTap: () {
-                // Handle gallery option
-                Navigator.pop(context);
-                // Implement gallery functionality
-              },
-            ),
-            if (_hasExistingProfilePicture())
-              ListTile(
-                leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: const Text('Remove current photo'),
-                onTap: () {
-                  // Handle remove option
-                  Navigator.pop(context);
-                  // Implement remove functionality
-                },
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  bool _hasExistingProfilePicture() {
-    // Check if user has a profile picture
-    // This would typically check your user model
-    return true; // Placeholder
   }
 
   void _saveUserInformation() {

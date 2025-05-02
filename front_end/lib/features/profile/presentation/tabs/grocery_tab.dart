@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_icons.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
@@ -21,23 +22,23 @@ class GroceryTab extends StatelessWidget {
           const SizedBox(height: 24),
 
           // My Orders
-          const SettingsSection(
+          SettingsSection(
             title: 'My Orders',
             children: [
               SettingsTile(
-                icon: Icons.shopping_bag_outlined,
+                icon: AppIcons.shoppingBag(size: 24, color: Colors.orange),
                 title: 'Active Orders',
                 subtitle: 'Orders currently in progress',
                 routeName: ProfileRouteNames.groceryOrders,
               ),
               SettingsTile(
-                icon: Icons.check_circle_outline,
+                icon: AppIcons.checkCircle(size: 24, color: Colors.green),
                 title: 'Completed Orders',
                 subtitle: 'Orders that have been delivered',
                 routeName: ProfileRouteNames.groceryOrders,
               ),
               SettingsTile(
-                icon: Icons.history_outlined,
+                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
                 title: 'Order History',
                 subtitle: 'All your past grocery orders',
                 routeName: ProfileRouteNames.groceryOrders,
@@ -48,23 +49,23 @@ class GroceryTab extends StatelessWidget {
           const SizedBox(height: 16),
 
           // My Deliveries
-          const SettingsSection(
+          SettingsSection(
             title: 'My Deliveries',
             children: [
               SettingsTile(
-                icon: Icons.delivery_dining_outlined,
+                icon: AppIcons.delivery(size: 24, color: Colors.purple),
                 title: 'Current Deliveries',
                 subtitle: 'Deliveries you\'re currently handling',
                 routeName: ProfileRouteNames.groceryDeliveries,
               ),
               SettingsTile(
-                icon: Icons.check_circle_outline,
+                icon: AppIcons.checkCircle(size: 24, color: Colors.green),
                 title: 'Completed Deliveries',
                 subtitle: 'Deliveries you\'ve finished',
                 routeName: ProfileRouteNames.groceryDeliveries,
               ),
               SettingsTile(
-                icon: Icons.history_outlined,
+                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
                 title: 'Delivery History',
                 subtitle: 'All deliveries you\'ve made',
                 routeName: ProfileRouteNames.groceryDeliveries,
@@ -75,23 +76,23 @@ class GroceryTab extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Favorites & Preferences
-          const SettingsSection(
+          SettingsSection(
             title: 'Favorites & Preferences',
             children: [
               SettingsTile(
-                icon: Icons.favorite_outline,
+                icon: AppIcons.favorite(size: 24, color: Colors.red),
                 title: 'Favorite Stores',
                 subtitle: 'Stores you frequently order from',
                 routeName: ProfileRouteNames.favoriteStores,
               ),
               SettingsTile(
-                icon: Icons.shopping_cart_outlined,
+                icon: AppIcons.shoppingCart(size: 24, color: Colors.orange),
                 title: 'Favorite Products',
                 subtitle: 'Products you frequently order',
                 routeName: ProfileRouteNames.favoriteProducts,
               ),
               SettingsTile(
-                icon: Icons.directions_car_outlined,
+                icon: AppIcons.car(size: 24, color: Colors.blue),
                 title: 'Delivery Preferences',
                 subtitle: 'Vehicle details, availability, areas',
                 routeName: ProfileRouteNames.deliveryPreferences,
@@ -135,10 +136,12 @@ class GroceryTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem('24', 'Orders', Icons.shopping_bag_outlined),
-              _buildStatItem(
-                  '18', 'Deliveries', Icons.delivery_dining_outlined),
-              _buildStatItem('4.9', 'Rating', Icons.star_outline),
+              _buildStatItem('24', 'Orders',
+                  AppIcons.shoppingBag(size: 24, color: Colors.white)),
+              _buildStatItem('18', 'Deliveries',
+                  AppIcons.delivery(size: 24, color: Colors.white)),
+              _buildStatItem('4.9', 'Rating',
+                  AppIcons.star(size: 24, color: Colors.white)),
             ],
           ),
         ],
@@ -146,7 +149,7 @@ class GroceryTab extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String value, String label, IconData icon) {
+  Widget _buildStatItem(String value, String label, Widget icon) {
     return Column(
       children: [
         Container(
@@ -155,18 +158,14 @@ class GroceryTab extends StatelessWidget {
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: AppColors.primary,
-            size: 24,
-          ),
+          child: icon,
         ),
         const SizedBox(height: 8),
         Text(
           value,
           style: TextStyle(
             fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w800,
             color: AppColors.primary,
           ),
         ),

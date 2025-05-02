@@ -47,9 +47,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile Picture Section
-              _buildProfilePictureSection(),
-
               const SizedBox(height: 24),
 
               // Form Fields
@@ -64,72 +61,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildProfilePictureSection() {
-    return Center(
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.grey,
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                    ),
-                  ],
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/default_profile.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  // Handle profile picture change
-                  _showImageSourceDialog();
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  child: const Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () {
-              // Handle profile picture change
-              _showImageSourceDialog();
-            },
-            child: Text(
-              'Change Profile Picture',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -277,66 +208,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         ),
       ),
     );
-  }
-
-  void _showImageSourceDialog() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Change Profile Picture',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimaryColor,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ListTile(
-              leading: Icon(Icons.photo_camera, color: AppColors.primary),
-              title: const Text('Take a photo'),
-              onTap: () {
-                // Handle camera option
-                context.pop();
-                // Implement camera functionality
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.photo_library, color: AppColors.primary),
-              title: const Text('Choose from gallery'),
-              onTap: () {
-                // Handle gallery option
-                context.pop();
-                // Implement gallery functionality
-              },
-            ),
-            if (_hasExistingProfilePicture())
-              ListTile(
-                leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: const Text('Remove current photo'),
-                onTap: () {
-                  // Handle remove option
-                  context.pop();
-                  // Implement remove functionality
-                },
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  bool _hasExistingProfilePicture() {
-    // Check if user has a profile picture
-    // This would typically check your user model
-    return true; // Placeholder
   }
 
   void _saveUserInformation() {

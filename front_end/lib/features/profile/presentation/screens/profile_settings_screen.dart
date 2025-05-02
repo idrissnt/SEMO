@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 // Core imports
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_icons.dart';
 
 // Feature imports
 import 'package:semo/features/profile/presentation/tabs/account_tab.dart';
@@ -27,11 +28,23 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
   late TabController _tabController;
 
   /// Tab configuration data
-  static const List<_TabItem> _tabItems = [
-    _TabItem(title: 'Account', icon: Icons.person_outline),
-    _TabItem(title: 'Tasks', icon: Icons.assignment_outlined),
-    _TabItem(title: 'Grocery', icon: Icons.shopping_basket_outlined),
-    _TabItem(title: 'Settings', icon: Icons.settings_outlined),
+  static final List<_TabItem> _tabItems = [
+    _TabItem(
+      title: 'Account',
+      iconWidget: AppIcons.personOutline(size: 24, color: Colors.purple),
+    ),
+    _TabItem(
+      title: 'Tasks',
+      iconWidget: AppIcons.assignmentOutline(size: 24, color: Colors.red),
+    ),
+    _TabItem(
+      title: 'Grocery',
+      iconWidget: AppIcons.shoppingBasket(size: 24, color: Colors.orange),
+    ),
+    _TabItem(
+      title: 'Settings',
+      iconWidget: AppIcons.settings(size: 24, color: Colors.green),
+    ),
   ];
 
   @override
@@ -153,7 +166,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
       height: 50,
       child: Tab(
         text: item.title,
-        icon: Icon(item.icon, size: 24),
+        icon: item.iconWidget,
         iconMargin: const EdgeInsets.only(bottom: 2),
       ),
     );
@@ -165,34 +178,44 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
       alignment: Alignment.bottomRight,
       children: [
         // Profile image
-        CircleAvatar(
-          radius: 36,
-          backgroundColor: Colors.grey[200],
-          backgroundImage:
-              const AssetImage('assets/images/default_profile.png'),
-          onBackgroundImageError: (exception, stackTrace) {},
-          child: const Icon(
-            Icons.person,
-            size: 36,
-            color: Colors.grey,
+        InkWell(
+          onTap: () {
+            _showImageSourceDialog(context);
+          },
+          child: CircleAvatar(
+            radius: 36,
+            backgroundColor: Colors.grey[200],
+            backgroundImage:
+                const AssetImage('assets/images/default_profile.png'),
+            onBackgroundImageError: (exception, stackTrace) {},
+            child: const Icon(
+              Icons.person,
+              size: 36,
+              color: Colors.grey,
+            ),
           ),
         ),
         // Edit button
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.white,
-              width: 2,
+        InkWell(
+          onTap: () {
+            _showImageSourceDialog(context);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
             ),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(3.0),
-            child: Icon(
-              Icons.edit,
-              size: 12,
-              color: Colors.white,
+            child: const Padding(
+              padding: EdgeInsets.all(3.0),
+              child: Icon(
+                Icons.camera_alt,
+                size: 12,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -204,7 +227,67 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
 /// Data class to hold tab item configuration
 class _TabItem {
   final String title;
-  final IconData icon;
+  final Widget iconWidget;
 
-  const _TabItem({required this.title, required this.icon});
+  const _TabItem({required this.title, required this.iconWidget});
+}
+
+void _showImageSourceDialog(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) => Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'Change Profile Picture',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimaryColor,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            leading: Icon(Icons.photo_camera, color: AppColors.primary),
+            title: const Text('Take a photo'),
+            onTap: () {
+              // Handle camera option
+              context.pop();
+              // Implement camera functionality
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.photo_library, color: AppColors.primary),
+            title: const Text('Choose from gallery'),
+            onTap: () {
+              // Handle gallery option
+              context.pop();
+              // Implement gallery functionality
+            },
+          ),
+          if (_hasExistingProfilePicture())
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
+              title: const Text('Remove current photo'),
+              onTap: () {
+                // Handle remove option
+                context.pop();
+                // Implement remove functionality
+              },
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
+bool _hasExistingProfilePicture() {
+  // Check if user has a profile picture
+  // This would typically check the user model
+  return true; // Placeholder
 }

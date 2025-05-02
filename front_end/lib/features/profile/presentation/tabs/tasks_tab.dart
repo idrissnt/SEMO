@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_icons.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
@@ -21,23 +22,24 @@ class TasksTab extends StatelessWidget {
           const SizedBox(height: 24),
 
           // Published Tasks
-          const SettingsSection(
+          SettingsSection(
             title: 'My Published Tasks',
             children: [
               SettingsTile(
-                icon: Icons.post_add_outlined,
+                icon: AppIcons.postAdd(size: 24, color: Colors.red),
                 title: 'Active Tasks',
                 subtitle: 'Tasks currently open for applications',
                 routeName: ProfileRouteNames.publishedTasks,
               ),
               SettingsTile(
-                icon: Icons.assignment_turned_in_outlined,
+                icon:
+                    AppIcons.assignmentTurnedIn(size: 24, color: Colors.green),
                 title: 'Completed Tasks',
                 subtitle: 'Tasks that have been completed',
                 routeName: ProfileRouteNames.publishedTasks,
               ),
               SettingsTile(
-                icon: Icons.history_outlined,
+                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
                 title: 'Task History',
                 subtitle: 'All tasks you\'ve published',
                 routeName: ProfileRouteNames.publishedTasks,
@@ -48,23 +50,23 @@ class TasksTab extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Performed Tasks
-          const SettingsSection(
+          SettingsSection(
             title: 'My Performed Tasks',
             children: [
               SettingsTile(
-                icon: Icons.engineering_outlined,
+                icon: AppIcons.engineering(size: 24, color: Colors.purple),
                 title: 'Current Tasks',
                 subtitle: 'Tasks you\'re currently working on',
                 routeName: ProfileRouteNames.performedTasks,
               ),
               SettingsTile(
-                icon: Icons.check_circle_outline,
+                icon: AppIcons.checkCircle(size: 24, color: Colors.green),
                 title: 'Completed Tasks',
                 subtitle: 'Tasks you\'ve finished',
                 routeName: ProfileRouteNames.performedTasks,
               ),
               SettingsTile(
-                icon: Icons.history_outlined,
+                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
                 title: 'Task History',
                 subtitle: 'All tasks you\'ve performed',
                 routeName: ProfileRouteNames.performedTasks,
@@ -75,23 +77,23 @@ class TasksTab extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Task Preferences
-          const SettingsSection(
+          SettingsSection(
             title: 'Preferences',
             children: [
               SettingsTile(
-                icon: Icons.star_outline,
+                icon: AppIcons.star(size: 24, color: Colors.amber),
                 title: 'Skills & Categories',
                 subtitle: 'Set your skills and preferred task types',
                 routeName: ProfileRouteNames.taskPreferencesSkills,
               ),
               SettingsTile(
-                icon: Icons.notifications_outlined,
+                icon: AppIcons.notifications(size: 24, color: Colors.orange),
                 title: 'Task Notifications',
                 subtitle: 'Configure task alerts and updates',
                 routeName: ProfileRouteNames.taskPreferencesNotifications,
               ),
               SettingsTile(
-                icon: Icons.visibility_outlined,
+                icon: AppIcons.visibility(size: 24, color: Colors.blue),
                 title: 'Visibility Settings',
                 subtitle: 'Control who can see your task activity',
                 routeName: ProfileRouteNames.taskPreferencesVisibility,
@@ -135,9 +137,12 @@ class TasksTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem('12', 'Published', Icons.upload_outlined),
-              _buildStatItem('8', 'Performed', Icons.engineering_outlined),
-              _buildStatItem('4.8', 'Rating', Icons.star_outline),
+              _buildStatItem('12', 'Published',
+                  AppIcons.postAdd(size: 24, color: Colors.white)),
+              _buildStatItem('8', 'Performed',
+                  AppIcons.engineering(size: 24, color: Colors.white)),
+              _buildStatItem('4.8', 'Rating',
+                  AppIcons.star(size: 24, color: Colors.white)),
             ],
           ),
         ],
@@ -145,20 +150,16 @@ class TasksTab extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String value, String label, IconData icon) {
+  Widget _buildStatItem(String value, String label, Widget icon) {
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            color: Color(0x1A008000), // AppColors.primary with 10% opacity
+          decoration: BoxDecoration(
+            color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: AppColors.primary,
-            size: 24,
-          ),
+          child: icon,
         ),
         const SizedBox(height: 8),
         Text(
