@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
 
-import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
-import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
 import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
+import 'package:semo/features/auth/presentation/coordinators/auth_flow_coordinator.dart';
 
 import 'package:semo/features/auth/presentation/utils/init_elements.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
-import 'package:semo/features/auth/presentation/widgets/state_handler/welcom/state_handler.dart';
-import 'package:semo/features/auth/routes/auth_routes_const.dart';
+import 'package:semo/features/auth/presentation/state_handler/welcom/state_handler.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -28,65 +24,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // The blocs are already initialized in main.dart
-    // Just start navigation check after a delay
     _checkAuthAndNavigate();
   }
 
-  // Flag to track if we've already navigated
-  bool _hasNavigated = false;
-
   @override
   void dispose() {
-    // Clean up any resources
-    _hasNavigated = true;
     super.dispose();
   }
 
   Future<void> _checkAuthAndNavigate() async {
-    // Wait for assets to load and minimum splash time
-    await Future.delayed(
-        const Duration(milliseconds: AuthConstants.splashDuration));
+    // Get the AuthFlowCoordinator instance
+    final authCoordinator = context.read<AuthFlowCoordinator>();
+
+    // // Ensure minimum splash display time
+    // await Future.delayed(
+    //     const Duration(milliseconds: AuthConstants.splashDuration));
 
     if (!mounted) return;
 
-    // Get the current auth state
-    final authState = context.read<AuthBloc>().state;
-
-    // If we already have a definitive state, navigate immediately
-    if (authState is AuthAuthenticated) {
-      _navigateToHome();
-      return;
-    } else if (authState is AuthUnauthenticated) {
-      _navigateToWelcome();
-      return;
-    }
-
-    // Otherwise, wait for the auth state to change
-    context.read<AuthBloc>().stream.listen((state) {
-      // Only navigate if we haven't already and the widget is still mounted
-      if (!_hasNavigated) {
-        if (state is AuthAuthenticated) {
-          _navigateToHome();
-        } else if (state is AuthUnauthenticated) {
-          _navigateToWelcome();
-        }
-      }
-    });
-  }
-
-  void _navigateToHome() {
-    if (mounted && !_hasNavigated) {
-      _hasNavigated = true;
-      context.go(AppRoutes.home);
-    }
-  }
-
-  void _navigateToWelcome() {
-    if (mounted && !_hasNavigated) {
-      _hasNavigated = true;
-      context.go(AuthRoutesConstants.welcome);
-    }
+    // Let the AuthFlowCoordinator handle navigation
+    // This centralizes all auth-based navigation logic
+    authCoordinator.handleSplashNavigation();
   }
 
   @override

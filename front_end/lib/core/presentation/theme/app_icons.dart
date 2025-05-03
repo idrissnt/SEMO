@@ -22,6 +22,25 @@ class AppIcons {
     );
   }
 
+  // Other common icons
+  static Widget message({double? size, Color? color}) => _buildIcon(
+        CupertinoIcons.chat_bubble_fill,
+        size: size,
+        color: color,
+      );
+
+  static Widget cart({double? size, Color? color}) => _buildIcon(
+        CupertinoIcons.cart_fill,
+        size: size,
+        color: color,
+      );
+
+  static Widget home({double? size, Color? color}) => _buildIcon(
+        CupertinoIcons.house_fill,
+        size: size,
+        color: color,
+      );
+
   static Widget chevronForward({double? size, Color? color}) => _buildIcon(
         CupertinoIcons.chevron_forward,
         size: size,
@@ -209,25 +228,6 @@ class AppIcons {
 
   static Widget settings({double? size, Color? color}) => _buildIcon(
         CupertinoIcons.gear_alt_fill,
-        size: size,
-        color: color,
-      );
-
-  // Other common icons
-  static Widget message({double? size, Color? color}) => _buildIcon(
-        CupertinoIcons.chat_bubble_fill,
-        size: size,
-        color: color,
-      );
-
-  static Widget cart({double? size, Color? color}) => _buildIcon(
-        CupertinoIcons.cart_fill,
-        size: size,
-        color: color,
-      );
-
-  static Widget home({double? size, Color? color}) => _buildIcon(
-        CupertinoIcons.house_fill,
         size: size,
         color: color,
       );

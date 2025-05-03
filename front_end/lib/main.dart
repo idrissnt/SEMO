@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 // Core imports
 import 'package:semo/core/app/app.dart';
@@ -15,6 +16,7 @@ import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
+import 'package:semo/features/auth/presentation/coordinators/auth_flow_coordinator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,38 +32,49 @@ void main() async {
 
     // Register the BlocObserver to monitor all bloc events and state changes
     Bloc.observer = AppBlocObserver(logger);
-    
+
     // Initialize router and register all tabs
     AppRouter.initialize();
+
+    // Initialize the auth flow coordinator
+    // This starts listening to auth state changes and handling navigation
+    final authFlowCoordinator = sl<AuthFlowCoordinator>();
 
     logger.debug('Dependencies and navigation initialized successfully');
 
     // Initialize app
     runApp(
-      // Provide multiple BLoCs to the widget tree
-      MultiBlocProvider(
+      // Provide services to the widget tree
+      MultiProvider(
         providers: [
-          BlocProvider<AuthBloc>(
-            create: (context) {
-              // Get the AuthBloc directly from the service locator
-              final bloc = sl<AuthBloc>();
-              // Immediately check if the user is already authenticated
-              bloc.add(AuthCheckRequested());
-              return bloc;
-            },
-          ),
-          BlocProvider<WelcomeAssetsBloc>(
-            create: (context) {
-              // Get the WelcomeAssetsBloc from the service locator
-              final bloc = sl<WelcomeAssetsBloc>();
-              // Immediately load all welcome assets at once
-              bloc.add(const LoadAllAssetsEvent());
-              return bloc;
-            },
-          ),
+          // Provide the AuthFlowCoordinator to the widget tree
+          Provider<AuthFlowCoordinator>.value(value: authFlowCoordinator),
         ],
-        // MyApp is the root widget of the app
-        child: const MyApp(),
+        // Wrap with BlocProvider for state management
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthBloc>(
+              create: (context) {
+                // Get the AuthBloc directly from the service locator
+                final bloc = sl<AuthBloc>();
+                // Immediately check if the user is already authenticated
+                bloc.add(AuthCheckRequested());
+                return bloc;
+              },
+            ),
+            BlocProvider<WelcomeAssetsBloc>(
+              create: (context) {
+                // Get the WelcomeAssetsBloc from the service locator
+                final bloc = sl<WelcomeAssetsBloc>();
+                // Immediately load all welcome assets at once
+                bloc.add(const LoadAllAssetsEvent());
+                return bloc;
+              },
+            ),
+          ],
+          // MyApp is the root widget of the app
+          child: const MyApp(),
+        ),
       ),
     );
   } catch (e, stackTrace) {

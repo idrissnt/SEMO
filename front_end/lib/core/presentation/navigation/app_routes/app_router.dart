@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:semo/core/di/injection_container.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/main_shell_route.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/register_all_tabs.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/register_shell_providers.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+
+import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:semo/features/auth/presentation/coordinators/auth_flow_coordinator.dart';
 import 'package:semo/features/auth/routes/auth_routes.dart';
 import 'package:semo/features/auth/routes/auth_routes_const.dart';
 import 'package:semo/features/auth/routes/initial_route.dart';
+
 import 'package:semo/features/profile/routes/profile_routes.dart';
 
 import 'navigation_logger.dart';
@@ -32,11 +39,21 @@ class AppRouter {
     initialLocation: AuthRoutesConstants.splash,
     navigatorKey: profileNavigatorKey,
     redirect: (context, state) {
-      // Don't redirect from splash screen - let it handle navigation
+      // Skip redirection for splash screen
       if (state.uri.path == AuthRoutesConstants.splash) return null;
 
-      // Use existing auth redirect for other routes
-      return AuthRouter.authRedirect(context, state);
+      // Use the AuthFlowCoordinator for centralized auth redirection
+      try {
+        // Get the AuthFlowCoordinator instance
+        final coordinator = sl<AuthFlowCoordinator>();
+        // Get the current auth state
+        final authState = context.read<AuthBloc>().state;
+        // Let the coordinator handle redirection
+        return coordinator.handleRedirect(state.uri.path, authState);
+      } catch (e) {
+        // Fall back to AuthRouter if coordinator isn't available yet
+        return AuthRouter.authRedirect(context, state);
+      }
     },
     routes: [
       ...getInitialRoutes(),

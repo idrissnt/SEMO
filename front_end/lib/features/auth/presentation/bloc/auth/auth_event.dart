@@ -41,14 +41,11 @@ class AuthRegisterRequested extends AuthEvent {
 }
 
 class AuthLogoutRequested extends AuthEvent {
-  final String email;
-
-  const AuthLogoutRequested({
-    required this.email,
-  });
+  // No parameters needed for better security
+  const AuthLogoutRequested();
 
   @override
-  List<Object?> get props => [email];
+  List<Object?> get props => [];
 }
 
 class AuthCheckRequested extends AuthEvent {}

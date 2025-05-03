@@ -8,7 +8,7 @@ import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
-import 'package:semo/features/auth/presentation/widgets/state_handler/auth/state_handler.dart';
+import 'package:semo/features/auth/presentation/state_handler/auth/state_handler.dart';
 
 /// A reusable template for authentication screens (login, registration, etc.)
 ///
@@ -57,8 +57,6 @@ class AuthScreenTemplate extends StatelessWidget {
                     state: state,
                     loadingMessage: loadingMessage,
                     onSuccess: (_) {
-                      // This will be handled by the app's navigation logic
-                      // when AuthAuthenticated state is emitted
                       return const SizedBox.shrink();
                     },
                     onInitial: () => formBuilder(context, state),

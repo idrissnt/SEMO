@@ -5,8 +5,8 @@ import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
 
-import 'package:semo/features/auth/presentation/widgets/state_handler/welcom/error_state_widget.dart';
-import 'package:semo/features/auth/presentation/widgets/state_handler/welcom/loading_state_widget.dart';
+import 'package:semo/features/auth/presentation/state_handler/welcom/error_state_widget.dart';
+import 'package:semo/features/auth/presentation/state_handler/welcom/loading_state_widget.dart';
 
 /// A utility class that handles state management for widgets
 /// Provides consistent UI for loading, error, and success states

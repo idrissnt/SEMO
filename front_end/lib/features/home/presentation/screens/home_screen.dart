@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Still needed for BlocProvider in initState
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
 
 import 'package:semo/features/home/presentation/bloc/home_store/home_store_bloc.dart';
-import 'package:semo/features/home/presentation/bloc/home_store/home_store_event.dart';
 import 'package:semo/features/home/presentation/bloc/home_store/home_store_state.dart';
-
-import 'package:semo/features/home/presentation/bloc/user_address/user_address_bloc.dart';
-import 'package:semo/features/home/presentation/bloc/user_address/user_address_event.dart';
 
 // Import extracted widgets
 import 'package:semo/features/home/presentation/helpers/scroll_animation_helper.dart';
@@ -32,19 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
     _initScrollAnimation();
-  }
-
-  /// Initialize data loading
-  void _loadInitialData() {
-    try {
-      logger.debug('HomeScreen: Loading data');
-      context.read<HomeStoreBloc>().add(const LoadAllStoreBrandsEvent());
-      context.read<HomeUserAddressBloc>().add(const HomeGetUserAddressEvent());
-    } catch (e) {
-      logger.error('Error in HomeScreen._loadInitialData', error: e);
-    }
+    logger.debug('HomeScreen: Initialized');
   }
 
   /// Initialize scroll animation helper

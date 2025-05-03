@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
-import 'package:semo/features/auth/routes/auth_routes_const.dart';
 import 'package:semo/features/profile/presentation/full_screen_bottom_sheet/personal_info_bottom_sheet.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
@@ -56,9 +54,6 @@ class AccountTab extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // Logout Button
-          _buildLogoutButton(context),
-
           const SizedBox(height: 40),
         ],
       ),
@@ -81,52 +76,6 @@ class AccountTab extends StatelessWidget {
         expand: false,
         builder: (context, scrollController) =>
             PersonalInfoBottomSheet(scrollController: scrollController),
-      ),
-    );
-  }
-
-  Widget _buildLogoutButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          // Handle logout
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to login screen
-                    context.go(AuthRoutesConstants.login);
-                  },
-                  child: const Text('Logout'),
-                ),
-              ],
-            ),
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red[50],
-          foregroundColor: Colors.red,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        child: const Text(
-          'Logout',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
       ),
     );
   }

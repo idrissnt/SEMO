@@ -16,8 +16,8 @@ void registerHomeScreenDependencies() {
       ));
 
   // Register BLoCs
-  // see difference between registerLazySingleton and registerFactory
-  sl.registerLazySingleton(() => HomeStoreBloc(
+  // Both BLoCs are now registered as factories for consistent lifecycle management
+  sl.registerFactory(() => HomeStoreBloc(
         homeStoreUseCases: sl<HomeStoreUseCases>(),
       ));
   sl.registerFactory(() => HomeUserAddressBloc(

@@ -12,7 +12,7 @@ import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_stat
 import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/pagination_indicator.dart';
 
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
-import 'package:semo/features/auth/presentation/widgets/state_handler/welcom/state_handler.dart';
+import 'package:semo/features/auth/presentation/state_handler/welcom/state_handler.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/company_showcase.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/store_showcase.dart';
 import 'package:semo/features/auth/presentation/widgets/for_welcome/screen_sections/task_showcase_grid.dart';

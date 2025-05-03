@@ -14,12 +14,12 @@ class AuthModule {
   /// Register all dependencies for the auth feature
   static void registerAuthDependencies(GetIt getIt) {
     // Register exception mappers
-    getIt.registerFactory<AuthExceptionMapper>(
+    getIt.registerLazySingleton<AuthExceptionMapper>(
       () => AuthExceptionMapperImpl(logger: getIt()),
     );
 
     // Register repositories
-    // Use Lazy Singleton pattern for repositories to ensure they're only created when needed
+    // Use Lazy Singleton pattern for repositories to ensure consistent state management across
     if (!getIt.isRegistered<UserAuthRepository>()) {
       getIt.registerLazySingleton<UserAuthRepository>(
         () => UserAuthRepositoryImpl(
@@ -32,15 +32,15 @@ class AuthModule {
     }
 
     // Register use cases
-    // Use factory pattern for use cases to ensure fresh instances
-    getIt.registerFactory(() => UserProfileUseCase(
+    // Use Lazy Singleton pattern for use cases to ensure consistent state management across
+    getIt.registerLazySingleton(() => UserProfileUseCase(
           basicProfileRepository: getIt(),
           tokenService: getIt(),
         ));
 
     // Register BLoCs
-    // Use factory pattern for BLoCs to ensure fresh instances for each screen
-    getIt.registerFactory(() => AuthBloc(
+    // Use Lazy Singleton pattern for BLoCs to ensure consistent state management across
+    getIt.registerLazySingleton(() => AuthBloc(
           authRepository: getIt<UserAuthRepository>(),
           userProfileUseCase: getIt<UserProfileUseCase>(),
           logger: getIt<AppLogger>(),

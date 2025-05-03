@@ -17,7 +17,7 @@ import 'package:semo/features/auth/presentation/widgets/shared/auth_screen_templ
 import 'package:semo/features/auth/presentation/widgets/shared/form/auth_form_container.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/form/auth_text_field.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/form/auth_password_field.dart';
-import 'package:semo/features/auth/presentation/widgets/state_handler/auth/state_handler.dart';
+import 'package:semo/features/auth/presentation/state_handler/auth/state_handler.dart';
 import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
 
 final AppLogger logger = AppLogger();

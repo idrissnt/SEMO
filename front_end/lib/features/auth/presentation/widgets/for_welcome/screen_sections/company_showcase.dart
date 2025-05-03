@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
@@ -12,7 +10,6 @@ import 'package:semo/features/auth/presentation/widgets/for_welcome/styles/compa
 import 'package:semo/features/auth/domain/entities/welcom_entity.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
-import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 
 Widget buildCompanyAsset(BuildContext context, CompanyAsset companyAsset) {
   return CompanyShowcase(
@@ -98,44 +95,32 @@ class CompanyShowcase extends StatelessWidget {
 }
 
 Widget _buildPasserButton(BuildContext context) {
-  return BlocListener<AuthBloc, AuthState>(
-    listenWhen: (previous, current) {
-      // Only listen when transitioning from loading to authenticated with a guest user
-      return previous is AuthLoading &&
-          current is AuthAuthenticated &&
-          (current).user.isGuest;
-    },
-    listener: (context, state) {
-      // Navigate only after the state has changed to authenticated guest
-      debugPrint(
-          'Guest user authenticated, now navigating to: ${AppRoutes.home}');
-      context.go(AppRoutes.home);
-    },
-    child: TextButton.icon(
-      style: TextButton.styleFrom(
-        backgroundColor: AppColors.background,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppBorderRadius.large),
-        ),
-        padding: EdgeInsets.symmetric(
-            horizontal: AppDimensionsWidth.small,
-            vertical: AppDimensionsHeight.xxSmall),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        minimumSize: const Size(0, 0),
+  // No need for a BlocListener here - the AuthFlowCoordinator will handle navigation
+  // when the AuthBloc emits AuthAuthenticated with a guest user
+  return TextButton.icon(
+    style: TextButton.styleFrom(
+      backgroundColor: AppColors.background,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppBorderRadius.large),
       ),
-      onPressed: () {
-        // Only dispatch the EnterGuestMode event
-        // Navigation will happen in the listener above
-        context.read<AuthBloc>().add(EnterGuestMode());
-        debugPrint('Entering guest mode...');
-      },
-      icon: Icon(Icons.arrow_forward,
-          color: AppColors.iconColorFirstColor, size: AppIconSize.medium),
-      label: Text(AuthConstants.skipButtonLabel,
-          style: TextStyle(
-              color: AppColors.textPrimaryColor,
-              fontWeight: FontWeight.w600,
-              fontSize: AppFontSize.small)),
+      padding: EdgeInsets.symmetric(
+          horizontal: AppDimensionsWidth.small,
+          vertical: AppDimensionsHeight.xxSmall),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      minimumSize: const Size(0, 0),
     ),
+    onPressed: () {
+      // Only dispatch the EnterGuestMode event
+      // The AuthFlowCoordinator will handle navigation when state changes
+      context.read<AuthBloc>().add(EnterGuestMode());
+      debugPrint('Entering guest mode...');
+    },
+    icon: Icon(Icons.arrow_forward,
+        color: AppColors.iconColorFirstColor, size: AppIconSize.medium),
+    label: Text(AuthConstants.skipButtonLabel,
+        style: TextStyle(
+            color: AppColors.textPrimaryColor,
+            fontWeight: FontWeight.w600,
+            fontSize: AppFontSize.small)),
   );
 }
