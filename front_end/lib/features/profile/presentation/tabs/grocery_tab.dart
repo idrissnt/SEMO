@@ -26,19 +26,22 @@ class GroceryTab extends StatelessWidget {
             title: 'My Orders',
             children: [
               SettingsTile(
-                icon: AppIcons.shoppingBag(size: 24, color: Colors.orange),
+                icon: AppIcons.shoppingBagFill(size: 24, color: Colors.white),
+                iconContainerColor: Colors.orange,
                 title: 'Active Orders',
                 subtitle: 'Orders currently in progress',
                 routeName: ProfileRouteNames.groceryOrders,
               ),
               SettingsTile(
-                icon: AppIcons.checkCircle(size: 24, color: Colors.green),
+                icon: AppIcons.checkCircle(size: 24, color: Colors.white),
+                iconContainerColor: Colors.green,
                 title: 'Completed Orders',
                 subtitle: 'Orders that have been delivered',
                 routeName: ProfileRouteNames.groceryOrders,
               ),
               SettingsTile(
-                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
+                icon: AppIcons.history(size: 24, color: Colors.white),
+                iconContainerColor: Colors.grey,
                 title: 'Order History',
                 subtitle: 'All your past grocery orders',
                 routeName: ProfileRouteNames.groceryOrders,
@@ -53,19 +56,22 @@ class GroceryTab extends StatelessWidget {
             title: 'My Deliveries',
             children: [
               SettingsTile(
-                icon: AppIcons.delivery(size: 24, color: Colors.purple),
+                icon: AppIcons.delivery(size: 24, color: Colors.white),
+                iconContainerColor: Colors.orange,
                 title: 'Current Deliveries',
                 subtitle: 'Deliveries you\'re currently handling',
                 routeName: ProfileRouteNames.groceryDeliveries,
               ),
               SettingsTile(
-                icon: AppIcons.checkCircle(size: 24, color: Colors.green),
+                icon: AppIcons.checkCircle(size: 24, color: Colors.white),
+                iconContainerColor: Colors.green,
                 title: 'Completed Deliveries',
                 subtitle: 'Deliveries you\'ve finished',
                 routeName: ProfileRouteNames.groceryDeliveries,
               ),
               SettingsTile(
-                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
+                icon: AppIcons.history(size: 24, color: Colors.white),
+                iconContainerColor: Colors.grey,
                 title: 'Delivery History',
                 subtitle: 'All deliveries you\'ve made',
                 routeName: ProfileRouteNames.groceryDeliveries,
@@ -80,19 +86,22 @@ class GroceryTab extends StatelessWidget {
             title: 'Favorites & Preferences',
             children: [
               SettingsTile(
-                icon: AppIcons.favorite(size: 24, color: Colors.red),
+                icon: AppIcons.favorite(size: 24, color: Colors.white),
+                iconContainerColor: Colors.red,
                 title: 'Favorite Stores',
                 subtitle: 'Stores you frequently order from',
                 routeName: ProfileRouteNames.favoriteStores,
               ),
               SettingsTile(
-                icon: AppIcons.shoppingCart(size: 24, color: Colors.orange),
+                icon: AppIcons.shoppingCart(size: 24, color: Colors.white),
+                iconContainerColor: Colors.orange,
                 title: 'Favorite Products',
                 subtitle: 'Products you frequently order',
                 routeName: ProfileRouteNames.favoriteProducts,
               ),
               SettingsTile(
-                icon: AppIcons.car(size: 24, color: Colors.blue),
+                icon: AppIcons.car(size: 24, color: Colors.white),
+                iconContainerColor: Colors.blue,
                 title: 'Delivery Preferences',
                 subtitle: 'Vehicle details, availability, areas',
                 routeName: ProfileRouteNames.deliveryPreferences,

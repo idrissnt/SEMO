@@ -4,7 +4,8 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// A reusable settings tile widget for profile settings
 class SettingsTile extends StatelessWidget {
-  final Widget? icon;
+  final Widget icon;
+  final Color iconContainerColor;
   final String title;
   final String subtitle;
   final String? routeName;
@@ -12,7 +13,8 @@ class SettingsTile extends StatelessWidget {
 
   const SettingsTile({
     Key? key,
-    this.icon,
+    required this.icon,
+    required this.iconContainerColor,
     required this.title,
     required this.subtitle,
     this.routeName,
@@ -36,7 +38,7 @@ class SettingsTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: iconContainerColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: icon,

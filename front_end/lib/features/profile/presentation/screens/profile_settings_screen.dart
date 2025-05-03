@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 // Core imports
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
+import 'package:semo/core/utils/logger.dart';
 
 // Feature imports
 import 'package:semo/features/profile/presentation/tabs/account_tab.dart';
@@ -14,6 +15,9 @@ import 'package:semo/features/profile/presentation/tabs/settings_tab.dart';
 /// A screen that displays user profile settings with multiple tabs for different sections.
 ///
 /// This screen provides navigation to various profile-related settings through a tab interface.
+
+final AppLogger logger = AppLogger();
+
 class ProfileSettingsScreen extends StatefulWidget {
   /// Creates a profile settings screen.
   const ProfileSettingsScreen({Key? key}) : super(key: key);
@@ -31,30 +35,49 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
   static final List<_TabItem> _tabItems = [
     _TabItem(
       title: 'Account',
-      iconWidget: AppIcons.personOutline(size: 24, color: Colors.purple),
+      iconBuilder: (color) => AppIcons.person(size: 24, color: color),
+      originalColor: AppColors.primary,
     ),
     _TabItem(
       title: 'Tasks',
-      iconWidget: AppIcons.assignmentOutline(size: 24, color: Colors.red),
+      iconBuilder: (color) => AppIcons.assignmentFilled(size: 24, color: color),
+      originalColor: Colors.red,
     ),
     _TabItem(
       title: 'Grocery',
-      iconWidget: AppIcons.shoppingBasket(size: 24, color: Colors.orange),
+      iconBuilder: (color) => AppIcons.shoppingBagFill(size: 24, color: color),
+      originalColor: Colors.orange,
     ),
     _TabItem(
       title: 'Settings',
-      iconWidget: AppIcons.settings(size: 24, color: Colors.green),
+      iconBuilder: (color) => AppIcons.settings(size: 24, color: color),
+      originalColor: Colors.green,
     ),
   ];
+
+  // Keep track of the current tab index and animation value
+  int _currentIndex = 0;
+  double _animationValue = 0.0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabItems.length, vsync: this);
+
+    // Listen for tab changes and animation updates
+    _tabController.animation!.addListener(() {
+      setState(() {
+        // Get the current animation value
+        _animationValue = _tabController.animation!.value;
+        // The integer part of the animation value is the current index
+        _currentIndex = _tabController.animation!.value.floor();
+      });
+    });
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(() {});
     _tabController.dispose();
     super.dispose();
   }
@@ -136,6 +159,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
         labelPadding: const EdgeInsets.symmetric(horizontal: 4),
         indicatorPadding: const EdgeInsets.symmetric(horizontal: 4),
         padding: EdgeInsets.zero,
+        // No animation duration parameter for TabBar
       ),
     );
   }
@@ -157,19 +181,43 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
 
   /// Builds custom tabs with consistent styling
   List<Widget> _buildCustomTabs() {
-    return _tabItems.map((item) => _buildTabItem(item)).toList();
+    return List.generate(
+        _tabItems.length, (index) => _buildTabItem(_tabItems[index], index));
   }
 
   /// Builds a single tab item with consistent styling
-  Widget _buildTabItem(_TabItem item) {
+  Widget _buildTabItem(_TabItem item, int index) {
+    // Calculate color based on animation progress
+    Color color;
+
+    // Calculate the fraction part of the animation value
+    final fraction = _animationValue - _animationValue.floor();
+
+    if (index == _currentIndex) {
+      // Current tab - blend from original color to white as animation progresses
+      color = _blendColors(item.originalColor, Colors.white, 1.0 - fraction);
+    } else if (index == _currentIndex + 1 && fraction > 0) {
+      // Next tab - blend from original color to white as animation progresses
+      color = _blendColors(item.originalColor, Colors.white, fraction);
+    } else {
+      // Other tabs - use original color
+      color = item.originalColor;
+    }
+
     return SizedBox(
       height: 50,
       child: Tab(
         text: item.title,
-        icon: item.iconWidget,
+        icon: item.iconBuilder(color),
         iconMargin: const EdgeInsets.only(bottom: 2),
       ),
     );
+  }
+
+  /// Helper method to blend between two colors
+  Color _blendColors(Color color1, Color color2, double ratio) {
+    // Use Color.lerp which handles the properties correctly
+    return Color.lerp(color1, color2, ratio) ?? color1;
   }
 
   /// Builds the profile header with avatar and edit button
@@ -227,9 +275,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
 /// Data class to hold tab item configuration
 class _TabItem {
   final String title;
-  final Widget iconWidget;
+  final Widget Function(Color) iconBuilder;
+  final Color originalColor;
 
-  const _TabItem({required this.title, required this.iconWidget});
+  const _TabItem(
+      {required this.title,
+      required this.iconBuilder,
+      required this.originalColor});
 }
 
 void _showImageSourceDialog(BuildContext context) {

@@ -26,20 +26,22 @@ class TasksTab extends StatelessWidget {
             title: 'My Published Tasks',
             children: [
               SettingsTile(
-                icon: AppIcons.postAdd(size: 24, color: Colors.red),
+                icon: AppIcons.currentTask(size: 24, color: Colors.white),
+                iconContainerColor: Colors.red,
                 title: 'Active Tasks',
                 subtitle: 'Tasks currently open for applications',
                 routeName: ProfileRouteNames.publishedTasks,
               ),
               SettingsTile(
-                icon:
-                    AppIcons.assignmentTurnedIn(size: 24, color: Colors.green),
+                icon: AppIcons.performedTask(size: 24, color: Colors.white),
+                iconContainerColor: Colors.green,
                 title: 'Completed Tasks',
                 subtitle: 'Tasks that have been completed',
                 routeName: ProfileRouteNames.publishedTasks,
               ),
               SettingsTile(
-                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
+                icon: AppIcons.history(size: 24, color: Colors.white),
+                iconContainerColor: Colors.grey,
                 title: 'Task History',
                 subtitle: 'All tasks you\'ve published',
                 routeName: ProfileRouteNames.publishedTasks,
@@ -54,19 +56,22 @@ class TasksTab extends StatelessWidget {
             title: 'My Performed Tasks',
             children: [
               SettingsTile(
-                icon: AppIcons.engineering(size: 24, color: Colors.purple),
+                icon: AppIcons.currentTask(size: 24, color: Colors.white),
+                iconContainerColor: Colors.red,
                 title: 'Current Tasks',
                 subtitle: 'Tasks you\'re currently working on',
                 routeName: ProfileRouteNames.performedTasks,
               ),
               SettingsTile(
-                icon: AppIcons.checkCircle(size: 24, color: Colors.green),
+                icon: AppIcons.performedTask(size: 24, color: Colors.white),
+                iconContainerColor: Colors.green,
                 title: 'Completed Tasks',
                 subtitle: 'Tasks you\'ve finished',
                 routeName: ProfileRouteNames.performedTasks,
               ),
               SettingsTile(
-                icon: AppIcons.history(size: 24, color: Colors.grey[700]),
+                icon: AppIcons.history(size: 24, color: Colors.white),
+                iconContainerColor: Colors.grey,
                 title: 'Task History',
                 subtitle: 'All tasks you\'ve performed',
                 routeName: ProfileRouteNames.performedTasks,
@@ -81,19 +86,22 @@ class TasksTab extends StatelessWidget {
             title: 'Preferences',
             children: [
               SettingsTile(
-                icon: AppIcons.star(size: 24, color: Colors.amber),
+                icon: AppIcons.star(size: 24, color: Colors.white),
+                iconContainerColor: Colors.amber,
                 title: 'Skills & Categories',
                 subtitle: 'Set your skills and preferred task types',
                 routeName: ProfileRouteNames.taskPreferencesSkills,
               ),
               SettingsTile(
-                icon: AppIcons.notifications(size: 24, color: Colors.orange),
+                icon: AppIcons.notifications(size: 24, color: Colors.white),
+                iconContainerColor: Colors.orange,
                 title: 'Task Notifications',
                 subtitle: 'Configure task alerts and updates',
                 routeName: ProfileRouteNames.taskPreferencesNotifications,
               ),
               SettingsTile(
-                icon: AppIcons.visibility(size: 24, color: Colors.blue),
+                icon: AppIcons.visibility(size: 24, color: Colors.white),
+                iconContainerColor: Colors.blue,
                 title: 'Visibility Settings',
                 subtitle: 'Control who can see your task activity',
                 routeName: ProfileRouteNames.taskPreferencesVisibility,
@@ -140,7 +148,7 @@ class TasksTab extends StatelessWidget {
               _buildStatItem('12', 'Published',
                   AppIcons.postAdd(size: 24, color: Colors.white)),
               _buildStatItem('8', 'Performed',
-                  AppIcons.engineering(size: 24, color: Colors.white)),
+                  AppIcons.performedTask(size: 24, color: Colors.white)),
               _buildStatItem('4.8', 'Rating',
                   AppIcons.star(size: 24, color: Colors.white)),
             ],

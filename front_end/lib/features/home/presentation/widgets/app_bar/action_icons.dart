@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
-import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/home/presentation/widgets/app_bar/utils/action_icon_button.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
@@ -9,7 +9,7 @@ import 'package:semo/features/profile/routes/profile_routes_const.dart';
 /// Widget that displays the action icons (cart, notifications, profile) in the app bar
 /// //===========================================================================
 
-final AppLogger logger = AppLogger();
+// Action icons for the app bar
 
 class ActionIcons extends StatelessWidget {
   const ActionIcons({Key? key}) : super(key: key);
@@ -17,38 +17,71 @@ class ActionIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Cart icon
-        Padding(
+        Container(
           padding: const EdgeInsets.all(0),
-          child: ActionIconButton(
-            icon: Icons.shopping_cart_outlined,
-            onPressed: () {
-              // Handle cart tap
-            },
-            size: AppIconSize.xl,
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+            color: Colors.orange,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: ActionIconButton(
+              icon: CupertinoIcons.cart_fill,
+              color: Colors.white,
+              onPressed: () {
+                // Handle cart tap
+              },
+              size: 24,
+            ),
           ),
         ),
+        const SizedBox(width: 10),
         // Notifications icon
-        Padding(
+        Container(
           padding: const EdgeInsets.all(0),
-          child: ActionIconButton(
-            icon: Icons.notifications_none_outlined,
-            onPressed: () {
-              // Handle notifications tap
-            },
-            size: AppIconSize.xl,
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: ActionIconButton(
+              icon: CupertinoIcons.bell_fill,
+              color: Colors.white,
+              onPressed: () {
+                // Handle notifications tap
+              },
+              size: 24,
+            ),
           ),
         ),
+        const SizedBox(width: 10),
         // Profile icon
-        ActionIconButton(
-          icon: Icons.person_outline,
-          onPressed: () {
-            context.pushNamed(ProfileRouteNames.profile);
-          },
-          size: AppIconSize.xl,
+        Container(
+          padding: const EdgeInsets.all(0),
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: ActionIconButton(
+              icon: CupertinoIcons.person_fill,
+              color: Colors.white,
+              onPressed: () {
+                context.pushNamed(ProfileRouteNames.profile);
+              },
+              size: AppIconSize.xl,
+            ),
+          ),
         ),
       ],
     );
@@ -69,14 +102,25 @@ class CartProfileIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         _buildCartIconWithBadge(),
-        const SizedBox(width: 0),
-        ActionIconButton(
-          icon: Icons.person_outline,
-          color: Colors.grey[800],
-          onPressed: () {
-            context.pushNamed(ProfileRouteNames.profile);
-          },
-          size: AppIconSize.xl,
+        const SizedBox(width: 4),
+        Container(
+          padding: const EdgeInsets.all(0),
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: ActionIconButton(
+              icon: CupertinoIcons.person_fill,
+              color: Colors.white,
+              onPressed: () {
+                context.pushNamed(ProfileRouteNames.profile);
+              },
+              size: AppIconSize.xl,
+            ),
+          ),
         )
       ],
     );
@@ -87,13 +131,24 @@ class CartProfileIcon extends StatelessWidget {
     return Stack(
       alignment: Alignment.topRight,
       children: [
-        ActionIconButton(
-          icon: Icons.shopping_cart_outlined,
-          color: Colors.grey[800],
-          onPressed: () {
-            // Handle cart tap
-          },
-          size: AppIconSize.xl,
+        Container(
+          padding: const EdgeInsets.all(0),
+          height: 35,
+          width: 35,
+          decoration: BoxDecoration(
+            color: Colors.orange,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: ActionIconButton(
+              icon: CupertinoIcons.cart_fill,
+              color: Colors.white,
+              onPressed: () {
+                // Handle cart tap
+              },
+              size: AppIconSize.xl,
+            ),
+          ),
         ),
         // Cart badge
         Container(
