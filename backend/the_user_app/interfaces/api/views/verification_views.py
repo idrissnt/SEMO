@@ -54,11 +54,16 @@ class VerificationViewSet(viewsets.ViewSet):
         if result.is_success():
             # Always return success for security reasons
             return Response({
-                'message': 'If the email exists, a verification code has been sent',
-                'request_id': request_id
+                'success': True,
+                'data': {
+                    'message': 'If the email exists, a verification code has been sent',
+                    'request_id': request_id
+                },
+                'error': None
             })
         else:
             # If there's an error, raise it directly
+            # The exception middleware will format this into the proper error response
             raise result.error
     
     @extend_schema(
@@ -91,11 +96,16 @@ class VerificationViewSet(viewsets.ViewSet):
         if result.is_success():
             # Always return success for security reasons
             return Response({
-                'message': 'If the phone number exists, a verification code has been sent',
-                'request_id': request_id
+                'success': True,
+                'data': {
+                    'message': 'If the phone number exists, a verification code has been sent',
+                    'request_id': request_id
+                },
+                'error': None
             })
         else:
             # If there's an error, raise it directly
+            # The exception middleware will format this into the proper error response
             raise result.error
     
     @extend_schema(
@@ -129,11 +139,16 @@ class VerificationViewSet(viewsets.ViewSet):
         
         if result.is_success():
             return Response({
-                'message': 'Verification successful',
-                'request_id': request_id
+                'success': True,
+                'data': {
+                    'message': 'Verification successful',
+                    'request_id': request_id
+                },
+                'error': None
             })
         else:
             # If there's an error, raise it directly
+            # The exception middleware will format this into the proper error response
             raise result.error
     
     @extend_schema(
@@ -167,11 +182,16 @@ class VerificationViewSet(viewsets.ViewSet):
         if result.is_success():
             # Always return success for security reasons
             return Response({
-                'message': 'If the account exists, a password reset code has been sent',
-                'request_id': request_id
+                'success': True,
+                'data': {
+                    'message': 'If the account exists, a verification code has been sent',
+                    'request_id': request_id
+                },
+                'error': None
             })
         else:
             # If there's an error, raise it directly
+            # The exception middleware will format this into the proper error response
             raise result.error
     
     @extend_schema(
@@ -206,9 +226,14 @@ class VerificationViewSet(viewsets.ViewSet):
         
         if result.is_success():
             return Response({
-                'message': 'Password reset successful',
-                'request_id': request_id
+                'success': True,
+                'data': {
+                    'message': 'Password reset successful',
+                    'request_id': request_id
+                },
+                'error': None
             })
         else:
             # If there's an error, raise it directly
+            # The exception middleware will format this into the proper error response
             raise result.error

@@ -15,10 +15,12 @@ class BaseProfileService {
   })  : _apiClient = apiClient,
         _logger = logger;
 
+  final String logName = 'BaseProfileService';
+
   /// Retrieves the current user's profile information
   Future<User> getCurrentUser() async {
     try {
-      _logger.debug('Fetching current user profile');
+      _logger.debug(' [$logName] : Fetching current user profile');
 
       // The ApiClient automatically handles authentication headers and token refresh
       final data =
@@ -26,11 +28,11 @@ class BaseProfileService {
 
       // Convert the response data to a domain entity
       final user = UserModel.fromJson(data).toEntity();
-      _logger.debug('Successfully retrieved user profile');
+      _logger.debug(' [$logName] : Successfully retrieved user profile');
 
       return user;
     } catch (e) {
-      _logger.error('Failed to get user profile', error: e);
+      _logger.error(' [$logName] : Failed to get user profile', error: e);
       rethrow;
     }
   }
@@ -43,7 +45,7 @@ class BaseProfileService {
     String? profilePhotoUrl,
   }) async {
     try {
-      _logger.debug('Updating user profile');
+      _logger.debug(' [$logName] : Updating user profile');
 
       // Prepare request data
       final requestData = {
@@ -64,11 +66,11 @@ class BaseProfileService {
 
       // Convert the response data to a domain entity
       final user = UserModel.fromJson(data).toEntity();
-      _logger.debug('Successfully updated user profile');
+      _logger.debug(' [$logName] : Successfully updated user profile');
 
       return user;
     } catch (e) {
-      _logger.error('Failed to update user profile', error: e);
+      _logger.error(' [$logName] : Failed to update user profile', error: e);
       rethrow;
     }
   }
@@ -76,17 +78,17 @@ class BaseProfileService {
   /// Delete the user's account
   Future<bool> deleteAccount() async {
     try {
-      _logger.debug('Deleting account');
+      _logger.debug(' [$logName] : Deleting account');
 
       // The ApiClient automatically handles authentication headers and token refresh
       await _apiClient.delete<void>(
         ProfileApiRoutes.deleteAccount,
       );
 
-      _logger.debug('Successfully deleted user account');
+      _logger.debug(' [$logName] : Successfully deleted user account');
       return true;
     } catch (e) {
-      _logger.error('Failed to delete account', error: e);
+      _logger.error(' [$logName] : Failed to delete account', error: e);
       rethrow;
     }
   }

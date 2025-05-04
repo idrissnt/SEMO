@@ -15,6 +15,8 @@ class AuthService {
   final AppLogger _logger;
   final AuthExceptionMapper _exceptionMapper;
 
+  final String logName = 'AuthService';
+
   AuthService({
     required ApiClient apiClient,
     required TokenService tokenService,
@@ -33,7 +35,7 @@ class AuthService {
     required String password,
   }) async {
     try {
-      _logger.debug('Sending login request for user: $email');
+      _logger.debug(' [$logName] : Sending login request for user: $email');
       // Send login request to API
       final data = await _apiClient.post<Map<String, dynamic>>(
         AuthApiRoutes.login,
@@ -50,14 +52,14 @@ class AuthService {
       await _tokenService.saveAccessToken(authTokens.accessToken);
       await _tokenService.saveRefreshToken(authTokens.refreshToken);
 
-      _logger.debug('Login successful for user: $email');
+      _logger.debug(' [$logName] : Login successful for user: $email');
 
       // Return domain entity
       return authTokens.toEntity();
     } catch (e) {
       // Convert API exceptions to domain exceptions
       // Logging will be handled by the repository layer
-      _logger.error('Failed to login', error: e);
+      _logger.error(' [$logName] : Failed to login', error: e);
       return _exceptionMapper.mapApiExceptionToDomainException(e);
     }
   }
@@ -73,7 +75,8 @@ class AuthService {
     String? profilePhotoUrl,
   }) async {
     try {
-      _logger.debug('Sending registration request for user: $email');
+      _logger
+          .debug(' [$logName] : Sending registration request for user: $email');
       // Prepare request data
       final requestData = {
         'email': email,
@@ -93,7 +96,7 @@ class AuthService {
         data: requestData,
       );
 
-      _logger.debug('Registration successful for user: $email');
+      _logger.debug(' [$logName] : Registration successful for user: $email');
 
       // Parse the response using our model
       final authTokens = AuthTokensModel.fromJson(data);
@@ -106,7 +109,7 @@ class AuthService {
       return authTokens.toEntity();
     } catch (e) {
       // Map API exceptions to domain exceptions
-      _logger.error('Failed to register', error: e);
+      _logger.error(' [$logName] : Failed to register', error: e);
       return _exceptionMapper.mapApiExceptionToDomainException(e);
     }
   }
@@ -116,7 +119,7 @@ class AuthService {
     String email,
   ) async {
     try {
-      _logger.debug('Sending logout request for user: $email');
+      _logger.debug(' [$logName] : Sending logout request for user: $email');
 
       // Get both access and refresh tokens
       final accessToken = await _tokenService.getAccessToken();
@@ -130,10 +133,10 @@ class AuthService {
           data: {'refresh_token': refreshToken},
           options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
         );
-        _logger.debug('Logout successful for user: $email');
+        _logger.debug(' [$logName] : Logout successful for user: $email');
       } else {
-        _logger
-            .warning('Missing tokens for logout, clearing local storage only');
+        _logger.warning(
+            ' [$logName] : Missing tokens for logout, clearing local storage only');
       }
 
       // Always clear local tokens
@@ -141,9 +144,9 @@ class AuthService {
         _tokenService.deleteAccessToken(),
         _tokenService.deleteRefreshToken(),
       ]);
-      _logger.debug('Successfully cleared all tokens');
+      _logger.debug(' [$logName] : Successfully cleared all tokens');
     } catch (e) {
-      _logger.error('Failed to logout', error: e);
+      _logger.error(' [$logName] : Failed to logout', error: e);
       _exceptionMapper.mapApiExceptionToDomainException(e);
     }
   }

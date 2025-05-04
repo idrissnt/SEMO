@@ -84,11 +84,21 @@ GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY_PROD')
 
 # SendGrid Configuration (for email delivery)
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@yourdomain.com')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@semo.win')
 
 # Configure email backend based on SendGrid availability
 if SENDGRID_API_KEY:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    # Use SendGrid's API instead of SMTP for better deliverability and tracking
+    EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+    
+    # SendGrid settings
+    SENDGRID_SANDBOX_MODE_IN_DEBUG = False  # Always send real emails in production
+    
+    # Domain authentication settings
+    SENDGRID_TRACK_CLICKS_HTML = True  # Enable click tracking
+    SENDGRID_TRACK_OPENS = True  # Enable open tracking
+    
+    # For backward compatibility with Django's email system
     EMAIL_HOST = 'smtp.sendgrid.net'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True

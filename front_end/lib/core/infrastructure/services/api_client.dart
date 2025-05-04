@@ -12,6 +12,8 @@ class ApiClientImpl implements ApiClient {
   final Dio _dio;
   final AppLogger _logger;
 
+  final String logFileName = 'ApiClient';
+
   ApiClientImpl({
     required Dio dio,
     required AppLogger logger,
@@ -124,15 +126,25 @@ class ApiClientImpl implements ApiClient {
   /// Handles successful API responses
   T _handleResponse<T>(Response response) {
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      _logger.debug(
+          ' [$logFileName] : Request successful with status: ${response.statusCode}');
       if (T == dynamic || response.data is T) {
+        _logger.debug(
+            ' [$logFileName] : Response data is of type $T, returning it');
         return response.data as T;
       } else if (response.data == null) {
+        _logger
+            .debug(' [$logFileName] : Response data is null, returning null');
         throw Exception('Response data is null');
       } else {
+        _logger.debug(
+            ' [$logFileName] : Response data is of type ${response.data.runtimeType}, expected $T');
         throw Exception(
             'Type mismatch: Expected $T but got ${response.data.runtimeType}');
       }
     } else {
+      _logger.debug(
+          ' [$logFileName] : Request failed with status: ${response.statusCode}');
       throw Exception('Request failed with status: ${response.statusCode}');
     }
   }
@@ -159,8 +171,6 @@ class ApiClientImpl implements ApiClient {
       }
     }
   }
-
-  final String logFileName = 'ApiClient';
 
   /// Handles API errors and maps them to domain exceptions
   T _handleError<T>(dynamic error) {
@@ -242,13 +252,13 @@ class ApiClientImpl implements ApiClient {
                 requestId: requestId);
         }
       } else {
-        _logger.error('$logFileName: API Error: No response', error: error);
+        _logger.error(' [$logFileName] : API Error: No response', error: error);
         throw ApiNetworkException(
             message: 'No response from server: ${error.message}',
             code: ErrorCodes.networkError);
       }
     } else {
-      _logger.error('$logFileName: API Error: Unknown error', error: error);
+      _logger.error(' [$logFileName] : API Error: Unknown error', error: error);
       throw ApiException('Unknown error: $error', code: ErrorCodes.serverError);
     }
   }
@@ -269,14 +279,15 @@ class ApiClientImpl implements ApiClient {
 
       // Direct match with userNotFound code
       if (errorCode == ErrorCodes.userNotFound) {
-        _logger.debug('$logFileName: Direct match with user_not_found code');
+        _logger
+            .debug(' [$logFileName] : Direct match with user_not_found code');
         return true;
       }
 
       // Check for authentication_error code with nested user_not_found
       if (errorCode == ErrorCodes.authenticationError) {
         _logger.debug(
-            '$logFileName: Found authentication_error code, checking details');
+            ' [$logFileName] : Found authentication_error code, checking details');
 
         // Format 2: Complex nested structure with error field as Map
         // {"error": {"detail": "ErrorDetail(string='User not found',...", "code": "ErrorDetail(string='user_not_found',..."}, ...}

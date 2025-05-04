@@ -4,27 +4,47 @@ from core.domain.services.logging_service_interface import LoggingServiceInterfa
 class SendGridEmailService(EmailService):
     """
     Implementation of the EmailService interface using SendGrid.
+    This class follows the Dependency Inversion Principle by depending on abstractions
+    rather than concrete implementations.
     """
     
-    def __init__(self, api_key, from_email, logger: LoggingServiceInterface):
+    def __init__(self, api_key, from_email, logger: LoggingServiceInterface, html_to_text_converter=None):
         """
         Initialize the SendGrid email service
         
         Args:
             api_key: SendGrid API key
             from_email: Email address to send from
-            logger: Logger service
+            logger: Logger service for logging email operations
+            html_to_text_converter: Optional service for converting HTML to plain text
         """
         # Import here to avoid requiring sendgrid for the entire application
         from sendgrid import SendGridAPIClient
-        from sendgrid.helpers.mail import Mail
         
         self.client = SendGridAPIClient(api_key)
         self.from_email = from_email
         self.logger = logger
-        self.Mail = Mail  # Store the Mail class for later use
+        self.html_to_text_converter = html_to_text_converter or self._default_html_to_text_converter
     
-    def send_email(self, to_email, subject, content, is_html=True):
+    def _default_html_to_text_converter(self, html_content):
+        """
+        Default converter to transform HTML content to plain text.
+        
+        Args:
+            html_content: HTML content to convert
+            
+        Returns:
+            Plain text version of the HTML content
+        """
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(html_content, 'html.parser')
+            return soup.get_text(separator='\n')
+        except Exception as e:
+            self.logger.warning(f"Failed to convert HTML to text: {str(e)}")
+            return "Please view this email in an HTML-compatible email client."
+    
+    def send_email(self, to_email, subject, content, is_html=True, category=None):
         """
         Send an email using SendGrid
         
@@ -33,19 +53,36 @@ class SendGridEmailService(EmailService):
             subject: Email subject
             content: Email content
             is_html: Whether the content is HTML
+            category: Optional category for tracking purposes
             
         Returns:
             True if the email was sent successfully, False otherwise
         """
         try:
-            message = self.Mail(
+            # Import SendGrid specific classes here to keep infrastructure dependencies isolated
+            from sendgrid.helpers.mail import Mail, PlainTextContent, HtmlContent, Category
+            
+            # Create plain text content if needed for better deliverability
+            plain_text = None
+            if is_html:
+                plain_text = self.html_to_text_converter(content)
+            else:
+                plain_text = content
+            
+            # Create the email message using SendGrid's infrastructure classes
+            message = Mail(
                 from_email=self.from_email,
                 to_emails=to_email,
                 subject=subject,
-                html_content=content if is_html else None,
-                plain_text_content=None if is_html else content
+                html_content=HtmlContent(content) if is_html else None,
+                plain_text_content=PlainTextContent(plain_text)
             )
             
+            # Add category for tracking if provided
+            if category:
+                message.category = Category(category)
+            
+            # Send the email and get the response
             response = self.client.send(message)
             
             self.logger.info(

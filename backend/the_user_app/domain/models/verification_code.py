@@ -5,6 +5,31 @@ from enum import Enum
 import random
 from typing import Optional
 
+
+class EmailCategory(Enum):
+    """Enumeration of email verification types to
+    track the type of email sent to the user 
+    (this helps identify which email types are likely to go to spam)
+    """
+    EMAIL_VERIFICATION = "send_email_verification"
+    PASSWORD_RESET = "password_reset"
+    WELCOME_EMAIL = "welcome_email"
+    
+    @classmethod
+    def get_email_verification_category(cls):
+        """Return the category value for email verification"""
+        return cls.EMAIL_VERIFICATION.value
+    
+    @classmethod
+    def get_password_reset_category(cls):
+        """Return the category value for password reset"""
+        return cls.PASSWORD_RESET.value
+    
+    @classmethod
+    def get_welcome_email_category(cls):
+        """Return the category value for welcome emails"""
+        return cls.WELCOME_EMAIL.value
+
 class VerificationCodeType(Enum):
     """Enumeration of verification code types"""
     EMAIL_VERIFICATION_TYPE = "email"
@@ -69,3 +94,4 @@ class VerificationCode:
     def min_length_code_validation() -> int:
         """Get minimum length of code validation"""
         return 6
+

@@ -3,14 +3,10 @@ from the_user_app.domain.models.verification_code import VerificationCodeType
 from the_user_app.domain.repositories.verification_code_repository import VerificationCodeRepository
 from the_user_app.domain.services.template_services import TemplateService
 from the_user_app.domain.constants.template_paths import (
-    EMAIL_VERIFICATION,
-    PASSWORD_RESET,
-    SMS_VERIFICATION,
-    SMS_PASSWORD_RESET
+    TemplatePathsConstants
 )
 from the_user_app.domain.constants.verification_services import (
-    EMAIL_VERIFICATION_SUBJECT,
-    PASSWORD_RESET_SUBJECT,
+    VerificationServicesConstants
 )
 
 from core.domain.services.email_service import EmailService
@@ -29,7 +25,7 @@ class VerificationServiceImpl(VerificationService):
         verification_code_repository: VerificationCodeRepository,
         template_service: TemplateService,
         logger: LoggingServiceInterface,
-        code_expiry_minutes=15
+        code_expiry_minutes=VerificationServicesConstants.CODE_EXPIRY_MINUTES
     ):
         self.email_service = email_service
         self.sms_service = sms_service
@@ -98,7 +94,7 @@ class VerificationServiceImpl(VerificationService):
         
         return is_valid
     
-    def send_email_verification(self, user_id, email, first_name=None):
+    def send_email_verification(self, user_id, email, first_name=None, category=None):
         """
         Send an email verification code to a user
         
@@ -114,15 +110,21 @@ class VerificationServiceImpl(VerificationService):
         code = self.generate_verification_code(user_id, VerificationCodeType.get_email_verification_type())
         self.logger.info(f"Generated verification code: {code}")
         
-        subject = EMAIL_VERIFICATION_SUBJECT
+        subject = VerificationServicesConstants.EMAIL_VERIFICATION_SUBJECT
         context = {
             'code': code,
             'expiry_minutes': self.code_expiry_minutes,
             'first_name': first_name
         }
-        content = self.template_service.render_template(EMAIL_VERIFICATION, context)
+        content = self.template_service.render_template(TemplatePathsConstants.EMAIL_VERIFICATION, context)
         
-        success = self.email_service.send_email(email, subject, content)
+        success = self.email_service.send_email(
+            to_email=email,
+            subject=subject,
+            content=content,
+            is_html=True,
+            category=category
+        )
         
         if success:
             self.logger.info(
@@ -156,7 +158,7 @@ class VerificationServiceImpl(VerificationService):
             'expiry_minutes': self.code_expiry_minutes,
             'first_name': first_name
         }
-        message = self.template_service.render_template(SMS_VERIFICATION, context)
+        message = self.template_service.render_template(TemplatePathsConstants.SMS_VERIFICATION, context)
         
         success = self.sms_service.send_sms(phone_number, message)
         
@@ -196,13 +198,13 @@ class VerificationServiceImpl(VerificationService):
         code = self.generate_verification_code(user_id, VerificationCodeType.get_password_reset_type())
         
         if email:
-            subject = PASSWORD_RESET_SUBJECT
+            subject = VerificationServicesConstants.PASSWORD_RESET_SUBJECT
             context = {
                 'code': code,
                 'expiry_minutes': self.code_expiry_minutes,
                 'first_name': first_name
             }
-            content = self.template_service.render_template(PASSWORD_RESET, context)
+            content = self.template_service.render_template(TemplatePathsConstants.PASSWORD_RESET, context)
             
             success = self.email_service.send_email(email, subject, content)
             
@@ -225,7 +227,7 @@ class VerificationServiceImpl(VerificationService):
                 'expiry_minutes': self.code_expiry_minutes,
                 'first_name': first_name
             }
-            message = self.template_service.render_template(SMS_PASSWORD_RESET, context)
+            message = self.template_service.render_template(TemplatePathsConstants.SMS_PASSWORD_RESET, context)
             
             success = self.sms_service.send_sms(phone_number, message)
             

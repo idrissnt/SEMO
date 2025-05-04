@@ -12,6 +12,7 @@ from the_user_app.domain.user_exceptions import (
     PasswordResetFailedException
 )
 from core.domain.value_objects.result import Result
+from the_user_app.domain.models.verification_code import EmailCategory
 
 class VerificationApplicationService:
     """Application service for verification operations"""
@@ -48,7 +49,10 @@ class VerificationApplicationService:
             self.logger.info(f"User found for email verification, here is the user {user}")
 
             # Send verification code with user's first name
-            success = self.verification_service.send_email_verification(user.id, email, first_name=user.first_name)
+            success = self.verification_service.send_email_verification(user.id, 
+                                        email=email, 
+                                        first_name=user.first_name, 
+                                        category=EmailCategory.get_email_verification_category())
             
             if success:
                 self.logger.info("Email verification code sent", {"email": email, "user_id": str(user.id)})
@@ -81,7 +85,9 @@ class VerificationApplicationService:
                 return Result.success(True)  # Return success for security reasons
             
             # Send verification code with user's first name
-            success = self.verification_service.send_phone_verification(user.id, phone_number, first_name=user.first_name)
+            success = self.verification_service.send_phone_verification(user.id, 
+            phone_number=phone_number, 
+            first_name=user.first_name)
             
             if success:
                 self.logger.info("Phone verification code sent", {"phone_number": phone_number, "user_id": str(user.id)})

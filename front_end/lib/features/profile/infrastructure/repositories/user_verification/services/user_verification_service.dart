@@ -12,6 +12,8 @@ class UserVerificationService {
   final AppLogger _logger;
   final UserVerificationExceptionMapper _userVerificationExceptionMapper;
 
+  final logName = 'UserVerificationService';
+
   UserVerificationService({
     required ApiClient apiClient,
     required AppLogger logger,
@@ -24,17 +26,20 @@ class UserVerificationService {
   /// Returns a VerificationResponseModel containing message and requestId
   Future<VerificationResponseModel> requestEmailVerification(
       String email) async {
-    _logger.info('Requesting email verification for: $email');
+    _logger.info('[$logName] : Requesting email verification for: $email');
 
     try {
       final response = await _apiClient.post(
         UserVerifApiRoutes.requestEmailVerification,
         data: {'email': email},
       );
-      return VerificationResponseModel.fromJson(response.data);
+      // The response is already the JSON object, not a wrapper with .data property
+      return VerificationResponseModel.fromJson(response);
     } catch (e) {
-      _logger.error('Failed to request email verification', error: e);
-      _userVerificationExceptionMapper.mapApiExceptionToDomainException(e);
+      _logger.error('[$logName] : Failed to request email verification',
+          error: e);
+      throw _userVerificationExceptionMapper
+          .mapApiExceptionToDomainException(e);
     }
   }
 
@@ -42,17 +47,21 @@ class UserVerificationService {
   /// Returns a VerificationResponseModel containing message and requestId
   Future<VerificationResponseModel> requestPhoneVerification(
       String phoneNumber) async {
-    _logger.info('Requesting phone verification for: $phoneNumber');
+    _logger
+        .info('[$logName] : Requesting phone verification for: $phoneNumber');
 
     try {
       final response = await _apiClient.post(
         UserVerifApiRoutes.requestPhoneVerification,
         data: {'phone_number': phoneNumber},
       );
-      return VerificationResponseModel.fromJson(response.data);
+      // The response is already the JSON object, not a wrapper with .data property
+      return VerificationResponseModel.fromJson(response);
     } catch (e) {
-      _logger.error('Failed to request phone verification', error: e);
-      _userVerificationExceptionMapper.mapApiExceptionToDomainException(e);
+      _logger.error('[$logName] : Failed to request phone verification',
+          error: e);
+      throw _userVerificationExceptionMapper
+          .mapApiExceptionToDomainException(e);
     }
   }
 
@@ -60,7 +69,8 @@ class UserVerificationService {
   /// Returns a VerificationResponseModel containing message and requestId
   Future<VerificationResponseModel> verifyCode(
       String userId, String code, VerificationType verificationType) async {
-    _logger.info('Verifying code for user: $userId, type: $verificationType');
+    _logger.info(
+        '[$logName] : Verifying code for user: $userId, type: $verificationType');
 
     // Convert enum to string for API
     final typeString = verificationType.toString().split('.').last;
@@ -74,10 +84,12 @@ class UserVerificationService {
           'verification_type': typeString,
         },
       );
-      return VerificationResponseModel.fromJson(response.data);
+      // The response is already the JSON object, not a wrapper with .data property
+      return VerificationResponseModel.fromJson(response);
     } catch (e) {
-      _logger.error('Failed to verify code', error: e);
-      _userVerificationExceptionMapper.mapApiExceptionToDomainException(e);
+      _logger.error('[$logName] :  Failed to verify code', error: e);
+      throw _userVerificationExceptionMapper
+          .mapApiExceptionToDomainException(e);
     }
   }
 
@@ -85,7 +97,8 @@ class UserVerificationService {
   /// Returns a VerificationResponseModel containing message and requestId
   Future<VerificationResponseModel> requestPasswordReset(
       {String? email, String? phoneNumber}) async {
-    _logger.info('Requesting password reset for: ${email ?? phoneNumber}');
+    _logger.info(
+        '[$logName] : Requesting password reset for: ${email ?? phoneNumber}');
 
     final data = <String, dynamic>{};
     if (email != null) data['email'] = email;
@@ -96,10 +109,12 @@ class UserVerificationService {
         UserVerifApiRoutes.requestPasswordReset,
         data: data,
       );
-      return VerificationResponseModel.fromJson(response.data);
+      // The response is already the JSON object, not a wrapper with .data property
+      return VerificationResponseModel.fromJson(response);
     } catch (e) {
-      _logger.error('Failed to request password reset', error: e);
-      _userVerificationExceptionMapper.mapApiExceptionToDomainException(e);
+      _logger.error('[$logName] : Failed to request password reset', error: e);
+      throw _userVerificationExceptionMapper
+          .mapApiExceptionToDomainException(e);
     }
   }
 
@@ -107,7 +122,7 @@ class UserVerificationService {
   /// Returns a VerificationResponseModel containing message and requestId
   Future<VerificationResponseModel> resetPassword(
       String userId, String code, String newPassword) async {
-    _logger.info('Resetting password for user: $userId');
+    _logger.info('[$logName] : Resetting password for user: $userId');
 
     try {
       final response = await _apiClient.post(
@@ -118,10 +133,12 @@ class UserVerificationService {
           'new_password': newPassword,
         },
       );
-      return VerificationResponseModel.fromJson(response.data);
+      // The response is already the JSON object, not a wrapper with .data property
+      return VerificationResponseModel.fromJson(response);
     } catch (e) {
-      _logger.error('Failed to reset password', error: e);
-      _userVerificationExceptionMapper.mapApiExceptionToDomainException(e);
+      _logger.error('[$logName] : Failed to reset password', error: e);
+      throw _userVerificationExceptionMapper
+          .mapApiExceptionToDomainException(e);
     }
   }
 }

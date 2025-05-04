@@ -34,7 +34,7 @@ class VerificationCodeRepository(ABC):
         pass
     
     @abstractmethod
-    def create_for_user(self, user_id: uuid.UUID, code_type: VerificationCodeType, expiry_minutes: int = 15) -> VerificationCode:
+    def create_for_user(self, user_id: uuid.UUID, code_type: VerificationCodeType, expiry_minutes) -> VerificationCode:
         """Create a new verification code for a user
         
         Args:

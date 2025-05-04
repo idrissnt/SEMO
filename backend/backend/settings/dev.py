@@ -163,11 +163,22 @@ if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
 
 # SendGrid Configuration (for email delivery)
 SENDGRID_API_KEY = config('SENDGRID_API_KEY')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', 'noreply@yourdomain.com')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', 'noreply@semo.win')
 
 # Configure email backend based on SendGrid availability
 if SENDGRID_API_KEY:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    # Use SendGrid's API instead of SMTP for better deliverability and tracking
+    EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+    
+    # SendGrid settings
+    SENDGRID_SANDBOX_MODE_IN_DEBUG = False  # Set to True to prevent sending emails in DEBUG mode
+    SENDGRID_ECHO_TO_STDOUT = DEBUG  # Print emails to console in DEBUG mode
+    
+    # Domain authentication settings
+    SENDGRID_TRACK_CLICKS_HTML = True  # Enable click tracking
+    SENDGRID_TRACK_OPENS = True  # Enable open tracking
+    
+    # For backward compatibility with Django's email system
     EMAIL_HOST = 'smtp.sendgrid.net'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True

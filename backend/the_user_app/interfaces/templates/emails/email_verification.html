@@ -3,57 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verification</title>
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <title>SEMO - Email Verification</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f5f5f5;
         }
         .container {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .header {
+        .logo {
             text-align: center;
             margin-bottom: 20px;
         }
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 15px;
+        }
+        .header h2 {
+            color: #333333;
+            font-size: 22px;
+            margin: 0;
+        }
         .code {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             text-align: center;
-            padding: 10px;
-            background-color: #eee;
-            border-radius: 4px;
-            margin: 15px 0;
-            letter-spacing: 2px;
+            padding: 15px;
+            background-color: #f0f5ff;
+            border-radius: 6px;
+            margin: 20px 0;
+            letter-spacing: 3px;
+            color: #4a6cf7;
+            border: 1px dashed #4a6cf7;
         }
         .footer {
             font-size: 12px;
-            color: #777;
+            color: #888888;
             margin-top: 30px;
             text-align: center;
+            border-top: 1px solid #eeeeee;
+            padding-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo">
+            <img src="https://{{ s3_domain }}/media/email_assets/semo_logo.png" alt="SEMO" width="150">
+        </div>
         <div class="header">
             <h2>Verify Your Email</h2>
         </div>
         <p>Hello {% if first_name %}{{ first_name }}{% else %}there{% endif %},</p>
-        <p>Thank you for registering. Please use the following code to verify your email address:</p>
+        <p>Thank you for registering with SEMO. To complete your account setup, please use the following verification code:</p>
         <div class="code">{{ code }}</div>
-        <p>This code will expire in {{ expiry_minutes }} minutes.</p>
-        <p>If you didn't create an account, you can safely ignore this email.</p>
+        <p>This code will expire in <strong>{{ expiry_minutes }} minutes</strong>.</p>
+        <p>If you didn't create an account with SEMO, you can safely ignore this email.</p>
+        <p>Need help? Contact our support team at <a href="mailto:support@semo.win" style="color: #4a6cf7; text-decoration: none;">support@semo.win</a>.</p>
         <div class="footer">
             <p>This is an automated message, please do not reply to this email.</p>
-            <p>&copy; {% now "Y" %} Your App Name. All rights reserved.</p>
+            <p>&copy; {% now "Y" %} SEMO. All rights reserved.</p>
+            <p>Sent from <a href="https://semo.win" style="color: #4a6cf7; text-decoration: none;">semo.win</a></p>
         </div>
     </div>
 </body>

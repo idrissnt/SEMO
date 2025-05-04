@@ -37,7 +37,7 @@ class VerificationService(ABC):
         pass
     
     @abstractmethod
-    def send_email_verification(self, user_id, email, first_name=None):
+    def send_email_verification(self, user_id, email, first_name=None, category=None):
         """
         Send an email verification code to a user
         

@@ -20,6 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AppLogger _logger;
   final AuthErrorMessageService _errorMessageService;
 
+  final String logName = 'Auth Bloc';
+
   AuthBloc({
     required UserAuthRepository authRepository,
     required UserProfileUseCase userProfileUseCase,
@@ -44,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     _logger
-        .info(' [Auth Bloc] : Starting login process for user: ${event.email}');
+        .info(' [$logName] : Starting login process for user: ${event.email}');
     emit(AuthLoading());
 
     final result = await _authRepository.login(
@@ -55,11 +57,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // Use await with fold by converting it to a Future
     await Future.value(result.fold(
       (authTokens) async {
-        _logger.info(' [Auth Bloc] : Login successful, fetching user profile');
+        _logger.info(' [$logName] : Login successful, fetching user profile');
         await _fetchUserProfile(emit, 'login');
       },
       (error) {
-        _logger.error(' [Auth Bloc] : Bloc Login error', error: error.message);
+        _logger.error(' [$logName] : Bloc Login error', error: error.message);
         _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
         _mapErrorToState(emit, error, 'login');
       },
@@ -70,7 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthRegisterRequested event,
     Emitter<AuthState> emit,
   ) async {
-    _logger.info(' [Auth Bloc] : Starting registration process');
+    _logger.info(' [$logName] : Starting registration process');
     emit(AuthLoading());
 
     final result = await _authRepository.register(
@@ -85,31 +87,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await Future.value(result.fold(
       (authTokens) async {
         _logger.info(
-            ' [Auth Bloc] : Registration successful, fetching user profile');
+            ' [$logName] : Registration successful, fetching user profile');
         await _fetchUserProfile(emit, 'registration');
 
         // Automatically send email verification after successful registration
         _logger.info(
-            ' [Auth Bloc] : Requesting email verification for: ${event.email}');
+            ' [$logName] : Requesting email verification for: ${event.email}');
+
         final verificationResult = await _emailVerificationUseCase
             .requestEmailVerification(event.email);
 
         verificationResult.fold(
           (response) {
             _logger.info(
-                ' [Auth Bloc] : Email verification requested successfully');
+                ' [$logName] : Email verification requested successfully');
           },
           (error) {
             // Just log the error but don't change the auth state
             // This way the user can still proceed with using the app
-            _logger.error(' [Auth Bloc] : Failed to request email verification',
+            _logger.error(' [$logName] : Failed to request email verification',
                 error: error);
           },
         );
       },
       (error) {
-        _logger.error(' [Auth Bloc] : Registration error',
-            error: error.message);
+        _logger.error(' [$logName] : Registration error', error: error.message);
         _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
         _mapErrorToState(emit, error, 'registration');
       },
@@ -126,8 +128,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       email = (state as AuthAuthenticated).user.email;
     }
 
-    _logger
-        .info(' [Auth Bloc] : BLOC Starting logout process for user: $email');
+    _logger.info(' [$logName] : BLOC Starting logout process for user: $email');
     emit(AuthLoading());
 
     final result = await _authRepository.logout(email: email);
@@ -135,17 +136,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // Even if the server request fails, we want to log out locally
     result.fold(
       (_) {
-        _logger.info(' [Auth Bloc] : BLOC Logout successful for user: $email');
+        _logger.info(' [$logName] : BLOC Logout successful for user: $email');
         emit(AuthUnauthenticated());
       },
       (error) {
-        _logger.error(' [Auth Bloc] : Logout error', error: error.message);
+        _logger.error(' [$logName] : Logout error', error: error.message);
         _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
 
         // Special case for logout - handle missing token gracefully
         if (error is MissingRefreshTokenException) {
           _logger.warning(
-              '[Auth Bloc] : Missing refresh token during logout: ${error.message}');
+              ' [$logName] : Missing refresh token during logout: ${error.message}');
           emit(AuthUnauthenticated());
           return;
         }
@@ -165,7 +166,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthResetState event,
     Emitter<AuthState> emit,
   ) {
-    _logger.info(' [Auth Bloc] : Resetting auth state to initial');
+    _logger.info(' [$logName] : Resetting auth state to initial');
     emit(AuthInitial());
   }
 
@@ -174,32 +175,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     _logger.info(
-        ' [Auth Bloc] : BLOC AuthCheckRequested: Starting authentication check');
+        ' [$logName] : BLOC AuthCheckRequested: Starting authentication check');
     emit(AuthLoading());
     try {
       // First, check if tokens exist
       final hasAccessToken = await _userProfileUseCase.getAccessToken();
       final hasRefreshToken = await _userProfileUseCase.getRefreshToken();
       _logger.info(
-          ' [Auth Bloc] : Access Token Status: ${hasAccessToken ? 'EXISTS' : 'NULL'}');
+          ' [$logName] : Access Token Status: ${hasAccessToken ? 'EXISTS' : 'NULL'}');
       _logger.info(
-          ' [Auth Bloc] : Refresh Token Status: ${hasRefreshToken ? 'EXISTS' : 'NULL'}');
+          ' [$logName] : Refresh Token Status: ${hasRefreshToken ? 'EXISTS' : 'NULL'}');
 
       // If no refresh token, user must log in
       if (!hasRefreshToken) {
         _logger.info(
-            'BLOC No refresh token found. Emitting Unauthenticated state.');
+            ' [$logName] : No refresh token found. Emitting Unauthenticated state.');
         emit(AuthUnauthenticated());
         return;
       }
 
       // Try to refresh the token
-      _logger.debug('[Auth Bloc] : About to attempt token refresh');
+      _logger.debug(' [$logName] : About to attempt token refresh');
       final tokenRefreshed = await _userProfileUseCase.refreshToken();
 
       if (!tokenRefreshed) {
         _logger.info(
-            ' [Auth Bloc] : Token refresh failed. Emitting token error state.');
+            ' [$logName] : Token refresh failed. Emitting token error state.');
         emit(const AuthFailure('Session expired. Please log in again.',
             canRetry: false));
         emit(AuthUnauthenticated());
@@ -210,15 +211,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final userResult = await _userProfileUseCase.getCurrentUser();
       userResult.fold(
         (user) {
-          _logger.info(' [Auth Bloc] : User authenticated: ${user.email}');
+          _logger.info(' [$logName] : User authenticated: ${user.email}');
           emit(AuthAuthenticated(user));
         },
         (error) {
-          _logger.error(' [Auth Bloc] : Failed to get user data', error: error);
+          _logger.error(' [$logName] : Failed to get user data', error: error);
           // Check if the error is a "user not found" error
           if (error is UserNotFoundException || error.isUserNotFoundException) {
             _logger.warning(
-                ' [Auth Bloc] : User not found exception detected, clearing tokens and logging out');
+                ' [$logName] : User not found exception detected, clearing tokens and logging out');
             // Clear tokens since the user doesn't exist anymore
             _userProfileUseCase.clearAllTokens();
 
@@ -237,7 +238,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         },
       );
     } catch (e) {
-      _logger.error(' [Auth Bloc] : Authentication check failed', error: e);
+      _logger.error(' [$logName] : Authentication check failed', error: e);
     }
   }
 
@@ -259,12 +260,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       userResult.fold(
         (user) {
-          _logger.info(' [Auth Bloc] : User profile fetched: ${user.email}');
+          _logger.info(' [$logName] : User profile fetched: ${user.email}');
           emit(AuthAuthenticated(user));
         },
         (error) {
           _logger.error(
-              ' [Auth Bloc] : Failed to get user profile after $operation',
+              ' [$logName] : Failed to get user profile after $operation',
               error: error);
           _logger.debug(_errorMessageService.getTechnicalErrorDetails(error));
           // Use specific profile fetch error state with retry option
@@ -274,7 +275,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         },
       );
     } catch (e) {
-      _logger.error(' [Auth Bloc] : Exception in _fetchUserProfile', error: e);
+      _logger.error(' [$logName] : Exception in _fetchUserProfile', error: e);
       if (!emit.isDone) {
         emit(const AuthFailure(
             'An unexpected error occurred fetching your profile'));
@@ -289,14 +290,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     EnterGuestMode event,
     Emitter<AuthState> emit,
   ) async {
-    _logger.info(' [Auth Bloc] : Entering guest mode');
+    _logger.info(' [$logName] : Entering guest mode');
     emit(AuthLoading());
 
     // Create a guest user using the factory constructor
     final guestUser = User.guest();
 
     // Emit authenticated state with the guest user
-    _logger.info(' [Auth Bloc] : Guest user created: ${guestUser.email}');
+    _logger.info(' [$logName] : Guest user created: ${guestUser.email}');
     emit(AuthAuthenticated(guestUser));
   }
 

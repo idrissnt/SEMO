@@ -9,13 +9,11 @@ import 'package:semo/features/profile/infrastructure/repositories/user_profile/s
 /// Implementation of the BasicProfileRepository interface that delegates to specialized services
 class BasicProfileRepositoryImpl implements BasicProfileRepository {
   final BaseProfileService _profileService;
-  final AppLogger _logger;
 
   BasicProfileRepositoryImpl({
     required ApiClient apiClient,
     required AppLogger logger,
-  })  : _logger = logger,
-        _profileService = BaseProfileService(
+  }) : _profileService = BaseProfileService(
           apiClient: apiClient,
           logger: logger,
         );
@@ -25,9 +23,7 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
     try {
       final user = await _profileService.getCurrentUser();
       return Result.success(user);
-    } catch (e, stackTrace) {
-      _logger.error('Error getting current user',
-          error: e, stackTrace: stackTrace);
+    } catch (e) {
       return Result.failure(BasicProfileException(e.toString()));
     }
   }
@@ -47,9 +43,7 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
         phoneNumber: phoneNumber,
       );
       return Result.success(user);
-    } catch (e, stackTrace) {
-      _logger.error('Error updating user profile',
-          error: e, stackTrace: stackTrace);
+    } catch (e) {
       return Result.failure(BasicProfileException(e.toString()));
     }
   }
@@ -59,8 +53,7 @@ class BasicProfileRepositoryImpl implements BasicProfileRepository {
     try {
       final success = await _profileService.deleteAccount();
       return Result.success(success);
-    } catch (e, stackTrace) {
-      _logger.error('Error deleting account', error: e, stackTrace: stackTrace);
+    } catch (e) {
       return Result.failure(BasicProfileException(e.toString()));
     }
   }

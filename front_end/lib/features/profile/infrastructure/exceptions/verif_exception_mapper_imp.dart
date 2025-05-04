@@ -9,61 +9,103 @@ import 'package:semo/core/domain/exceptions/api_exceptions.dart';
 class UserVerificationExceptionMapperImpl
     extends ApiExceptionMapperImpl<UserVerifException>
     implements UserVerificationExceptionMapper {
-  UserVerificationExceptionMapperImpl({required AppLogger logger})
+  final AppLogger logger;
+
+  final String theLogName = 'UserVerificationExceptionMapperImpl';
+
+  UserVerificationExceptionMapperImpl({required this.logger})
       : super(logger: logger);
 
   @override
   Never mapApiExceptionToDomainException(dynamic e) {
-    // First check for domain exceptions that might have been thrown already
+    // If the error is already a domain exception, just rethrow it
     if (e is UserVerifException) {
-      // If it's already a domain exception, just rethrow it
       throw e;
+    }
+
+    // Safely extract message, code and requestId if they exist
+    String errorMessage;
+    String? errorCode;
+    String? requestId;
+
+    if (e is ApiException) {
+      // The ApiClientImpl has already processed the DioException and created an ApiException
+      // with the appropriate message, code, and requestId
+      errorMessage = e.message;
+      errorCode = e.code;
+      requestId = e.requestId;
+    } else {
+      // Handle non-API exceptions
+      errorMessage = e.toString();
+      logger.error('[$logName] : Non-API Exception: $errorMessage', error: e);
+      throw GenericUserVerifException(
+        errorMessage,
+        code: UserVerifErrorCodes.genericError,
+        requestId: requestId,
+      );
     }
 
     // Map specific API exceptions to user verification domain exceptions
     if (e is NotFoundException) {
+      logger.error('[$logName] : NotFoundException: $errorMessage', error: e);
       throw UserNotFoundException(
-        e.message,
+        errorMessage,
         code: UserVerifErrorCodes.userNotFoundException,
-        requestId: e.requestId,
+        requestId: requestId,
       );
     } else if (e is BadRequestException) {
+      logger.error('[$logName] : BadRequestException: $errorMessage', error: e);
       throw InvalidVerificationCodeException(
-        e.message,
+        errorMessage,
         code: UserVerifErrorCodes.invalidVerificationCodeException,
-        requestId: e.requestId,
+        requestId: requestId,
       );
     } else if (e is ApiServerException) {
-      switch (e.code) {
+      logger.error('[$logName] : ApiServerException: $errorMessage', error: e);
+      switch (errorCode) {
         case UserVerifErrorCodes.emailVerificationRequestFailedException:
+          logger.error(
+              '[$logName] : EmailVerificationRequestFailedException: $errorMessage',
+              error: e);
           throw EmailVerificationRequestFailedException(
-            e.message,
+            errorMessage,
             code: UserVerifErrorCodes.emailVerificationRequestFailedException,
-            requestId: e.requestId,
+            requestId: requestId,
           );
         case UserVerifErrorCodes.phoneVerificationRequestFailedException:
+          logger.error(
+              '[$logName] : PhoneVerificationRequestFailedException: $errorMessage',
+              error: e);
           throw PhoneVerificationRequestFailedException(
-            e.message,
+            errorMessage,
             code: UserVerifErrorCodes.phoneVerificationRequestFailedException,
-            requestId: e.requestId,
+            requestId: requestId,
           );
         case UserVerifErrorCodes.passwordResetRequestFailedException:
+          logger.error(
+              '[$logName] : PasswordResetRequestFailedException: $errorMessage',
+              error: e);
           throw PasswordResetRequestFailedException(
-            e.message,
+            errorMessage,
             code: UserVerifErrorCodes.passwordResetRequestFailedException,
-            requestId: e.requestId,
+            requestId: requestId,
           );
         case UserVerifErrorCodes.passwordResetFailedException:
+          logger.error(
+              '[$logName] : PasswordResetFailedException: $errorMessage',
+              error: e);
           throw PasswordResetFailedException(
-            e.message,
+            errorMessage,
             code: UserVerifErrorCodes.passwordResetFailedException,
-            requestId: e.requestId,
+            requestId: requestId,
           );
         default:
+          logger.error('[$logName] : GenericUserVerifException: $errorMessage',
+              error: e);
           throw GenericUserVerifException(
-            e.message,
+            errorMessage,
             code: UserVerifErrorCodes.genericError,
-            requestId: e.requestId,
+            requestId: requestId,
           );
       }
     }

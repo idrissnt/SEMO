@@ -1,7 +1,4 @@
-import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/domain/entities/user_entity.dart';
-
-final AppLogger _logger = AppLogger();
 
 class UserModel {
   final String id;
@@ -21,8 +18,6 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    _logger.debug('Creating UserModel from JSON: $json');
-
     // Check if user data is nested
     final userData = json['user'] ?? json;
 
