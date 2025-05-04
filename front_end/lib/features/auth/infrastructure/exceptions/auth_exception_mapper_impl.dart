@@ -1,5 +1,6 @@
 // auth_exception_mapper.dart
 import 'package:semo/core/domain/exceptions/api_exceptions.dart';
+import 'package:semo/core/domain/exceptions/api_error_code.dart';
 import 'package:semo/core/infrastructure/exceptions/api_exception_mapper.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/domain/exceptions/auth/auth_error_codes.dart';
@@ -9,7 +10,11 @@ import 'package:semo/features/auth/domain/exceptions/auth/auth_exception_mapper.
 class AuthExceptionMapperImpl
     extends ApiExceptionMapperImpl<AuthenticationException>
     implements AuthExceptionMapper {
-  AuthExceptionMapperImpl({required AppLogger logger}) : super(logger: logger);
+  final AppLogger logger;
+
+  AuthExceptionMapperImpl({required this.logger}) : super(logger: logger);
+
+  final logFileName = 'AuthExceptionMapperImpl';
 
   @override
   Never mapApiExceptionToDomainException(dynamic e) {
@@ -21,7 +26,27 @@ class AuthExceptionMapperImpl
 
     // We override backend error codes with our frontend constants for consistency
     // The original code is still logged above for debugging purposes
-    if (e is UnauthorizedException) {
+    if (e is NotFoundException) {
+      // Check if this is a user not found error
+      if (e.code == ErrorCodes.userNotFound) {
+        logger.warning(
+            '$logFileName: User not found exception detected in mapper');
+        throw _createUserNotFoundException(e);
+      }
+      // For other not found errors, use the generic exception
+      throw GenericAuthException(
+        e.message,
+        code: AuthErrorCodes.genericError,
+        requestId: e.requestId,
+      );
+    } else if (e is UnauthorizedException) {
+      // Check if this is a user not found error that came as a 401
+      if (e.code == ErrorCodes.userNotFound) {
+        logger.warning(
+            '$logFileName: User not found exception detected in mapper (from 401)');
+        throw _createUserNotFoundException(e);
+      }
+
       throw InvalidCredentialsException(
         message: e.message,
         code: AuthErrorCodes.invalidCredentials,
@@ -67,6 +92,15 @@ class AuthExceptionMapperImpl
       message,
       code: code ?? AuthErrorCodes.genericError,
       requestId: requestId,
+    );
+  }
+
+  /// Creates a UserNotFoundException from an API exception
+  UserNotFoundException _createUserNotFoundException(ApiException e) {
+    return UserNotFoundException(
+      message: e.message,
+      code: ErrorCodes.userNotFound,
+      requestId: e.requestId,
     );
   }
 }

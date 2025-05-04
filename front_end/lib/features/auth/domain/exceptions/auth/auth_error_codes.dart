@@ -1,3 +1,5 @@
+import 'package:semo/core/domain/exceptions/api_error_code.dart';
+
 /// Authentication-specific error code constants
 /// These codes are specific to the auth feature and should not be in the core module
 class AuthErrorCodes {
@@ -9,6 +11,8 @@ class AuthErrorCodes {
 
   // Generic error code
   static const String genericError = 'generic_auth_error';
+
+  static const String userNotFound = ErrorCodes.userNotFound;
 
   // Private constructor to prevent instantiation
   AuthErrorCodes._();

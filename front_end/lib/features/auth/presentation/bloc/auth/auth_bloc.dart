@@ -7,6 +7,7 @@ import 'package:semo/core/domain/entities/user_entity.dart';
 import 'package:semo/features/auth/domain/exceptions/auth/auth_exceptions.dart';
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:semo/features/auth/domain/services/auth_check_usecase.dart';
+import 'package:semo/features/auth/domain/services/email_verification_usecase.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
@@ -15,15 +16,18 @@ import 'package:semo/features/auth/presentation/services/auth/auth_error_message
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserAuthRepository _authRepository;
   final UserProfileUseCase _userProfileUseCase;
+  final EmailVerificationUseCase _emailVerificationUseCase;
   final AppLogger _logger;
   final AuthErrorMessageService _errorMessageService;
 
   AuthBloc({
     required UserAuthRepository authRepository,
     required UserProfileUseCase userProfileUseCase,
+    required EmailVerificationUseCase emailVerificationUseCase,
     required AppLogger logger,
   })  : _authRepository = authRepository,
         _userProfileUseCase = userProfileUseCase,
+        _emailVerificationUseCase = emailVerificationUseCase,
         _logger = logger,
         _errorMessageService = AuthErrorMessageService(),
         super(AuthInitial()) {
@@ -83,6 +87,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _logger.info(
             ' [Auth Bloc] : Registration successful, fetching user profile');
         await _fetchUserProfile(emit, 'registration');
+
+        // Automatically send email verification after successful registration
+        _logger.info(
+            ' [Auth Bloc] : Requesting email verification for: ${event.email}');
+        final verificationResult = await _emailVerificationUseCase
+            .requestEmailVerification(event.email);
+
+        verificationResult.fold(
+          (response) {
+            _logger.info(
+                ' [Auth Bloc] : Email verification requested successfully');
+          },
+          (error) {
+            // Just log the error but don't change the auth state
+            // This way the user can still proceed with using the app
+            _logger.error(' [Auth Bloc] : Failed to request email verification',
+                error: error);
+          },
+        );
       },
       (error) {
         _logger.error(' [Auth Bloc] : Registration error',
@@ -192,8 +215,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         },
         (error) {
           _logger.error(' [Auth Bloc] : Failed to get user data', error: error);
-          emit(const ProfileFetchFailure(
-              'Could not retrieve your profile. Tap to retry.'));
+          // Check if the error is a "user not found" error
+          if (error is UserNotFoundException || error.isUserNotFoundException) {
+            _logger.warning(
+                ' [Auth Bloc] : User not found exception detected, clearing tokens and logging out');
+            // Clear tokens since the user doesn't exist anymore
+            _userProfileUseCase.clearAllTokens();
+
+            // Show a more specific error message
+            emit(const AuthFailure(
+                'Your account could not be found. Please log in again.',
+                canRetry: false));
+
+            // Transition to unauthenticated state
+            emit(AuthUnauthenticated());
+          } else {
+            // For other errors, keep the current behavior
+            emit(const ProfileFetchFailure(
+                'Could not retrieve your profile. Tap to retry.'));
+          }
         },
       );
     } catch (e) {

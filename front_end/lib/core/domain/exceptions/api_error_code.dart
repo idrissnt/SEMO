@@ -7,4 +7,7 @@ class ErrorCodes {
 
   // Server error codes
   static const String serverError = 'server_error';
+
+  static const String userNotFound = 'user_not_found';
+  static const String authenticationError = 'authentication_error';
 }

@@ -7,9 +7,21 @@ from typing import Optional
 
 class VerificationCodeType(Enum):
     """Enumeration of verification code types"""
-    EMAIL_VERIFICATION = "email"
-    PHONE_VERIFICATION = "phone"
-    PASSWORD_RESET = "password_reset"
+    EMAIL_VERIFICATION_TYPE = "email"
+    PHONE_VERIFICATION_TYPE = "phone"
+    PASSWORD_RESET_TYPE = "password_reset"
+
+    @classmethod
+    def get_email_verification_type(cls):
+        return cls.EMAIL_VERIFICATION_TYPE.value
+    
+    @classmethod
+    def get_phone_verification_type(cls):
+        return cls.PHONE_VERIFICATION_TYPE.value
+    
+    @classmethod
+    def get_password_reset_type(cls):
+        return cls.PASSWORD_RESET_TYPE.value
     
     @classmethod
     def values(cls):

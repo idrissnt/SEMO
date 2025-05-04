@@ -45,6 +45,8 @@ class VerificationApplicationService:
                 self.logger.warning("User not found for email verification", {"email": email})
                 return Result.success(True)  # Return success for security reasons
             
+            self.logger.info(f"User found for email verification, here is the user {user}")
+
             # Send verification code with user's first name
             success = self.verification_service.send_email_verification(user.id, email, first_name=user.first_name)
             

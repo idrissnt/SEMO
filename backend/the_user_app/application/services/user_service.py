@@ -69,34 +69,6 @@ class UserApplicationService:
             logger.error(f"Error updating user: {str(e)}")
             return None, f"Error updating user: {str(e)}"
     
-    def change_password(self, user_id: uuid.UUID, old_password: str, new_password: str) -> Tuple[bool, str]:
-        """Change a user's password
-        
-        Args:
-            user_id: UUID of the user
-            old_password: Current password
-            new_password: New password
-            
-        Returns:
-            Tuple of (success, error_message)
-            success is True if password change is successful
-            error_message is empty if password change is successful, otherwise contains the error
-        """
-        # Verify old password
-        if not self.user_repository.check_password(user_id, old_password):
-            return False, "Current password is incorrect"
-        
-        # Set new password
-        try:
-            success = self.user_repository.set_password(user_id, new_password)
-            if success:
-                return True, ""
-            else:
-                return False, "Error changing password"
-        except Exception as e:
-            logger.error(f"Error changing password: {str(e)}")
-            return False, f"Error changing password: {str(e)}"
-    
     def delete_user(self, user_id: uuid.UUID) -> Tuple[bool, str]:
         """Delete a user
         

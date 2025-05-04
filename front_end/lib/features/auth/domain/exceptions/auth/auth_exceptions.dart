@@ -57,3 +57,22 @@ class GenericAuthException extends AuthenticationException {
       : super(message,
             code: code ?? AuthErrorCodes.genericError, requestId: requestId);
 }
+
+/// Exception thrown when a user is not found in the database
+///
+/// This is a specific type of authentication exception that indicates
+/// the user's tokens are valid but the user no longer exists in the database.
+/// This can happen if the user was deleted from the database but their tokens
+/// are still valid on the client side.
+class UserNotFoundException extends AuthenticationException {
+  /// Creates a new UserNotFoundException
+  UserNotFoundException({
+    String message = 'User not found in the database',
+    String? code,
+    String? requestId,
+  }) : super(
+          message,
+          code: code ?? AuthErrorCodes.userNotFound,
+          requestId: requestId,
+        );
+}

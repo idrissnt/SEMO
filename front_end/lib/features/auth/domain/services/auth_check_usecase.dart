@@ -29,6 +29,11 @@ class UserProfileUseCase {
     return await _tokenService.refreshToken();
   }
 
+  /// clear all tokens
+  Future<void> clearAllTokens() async {
+    await _tokenService.clearAllTokens();
+  }
+
   /// Retrieves the current user's profile information
   Future<Result<User, BasicProfileException>> getCurrentUser() {
     return _basicProfileRepository.getCurrentUser();

@@ -9,7 +9,7 @@ import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc
 import 'package:semo/features/auth/presentation/constants/auth_constants.dart';
 import 'package:semo/features/auth/presentation/coordinators/auth_flow_coordinator.dart';
 
-import 'package:semo/features/auth/presentation/utils/init_elements.dart';
+import 'package:semo/features/auth/presentation/utils/init_app_elements.dart';
 import 'package:semo/features/auth/presentation/widgets/shared/background.dart';
 import 'package:semo/features/auth/presentation/state_handler/welcom/state_handler.dart';
 

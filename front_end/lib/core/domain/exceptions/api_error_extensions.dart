@@ -11,16 +11,6 @@ extension DomainExceptionTypeExtension on DomainException {
   /// Returns true if this exception represents a network error
   bool get isNetworkError =>
       code == ErrorCodes.networkError || code == ErrorCodes.timeout;
-}
 
-/// Extension methods for creating user-friendly error messages
-extension DomainExceptionMessageExtension on DomainException {
-  /// Returns a user-friendly error message for network errors
-  /// context: "login" or "registration" or "logout"
-  String getNetworkErrorMessage(String context) =>
-      'Network error during $context: $message';
-
-  /// Returns a user-friendly error message for server errors
-  String getServerErrorMessage(String context) =>
-      'Server error during $context: $message';
+  bool get isUserNotFoundException => code == ErrorCodes.userNotFound;
 }

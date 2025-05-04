@@ -22,7 +22,7 @@ router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'profiles', UserProfileViewSet, basename='profiles')
 router.register(r'addresses', AddressViewSet, basename='addresses')
 router.register(r'task-performers', TaskPerformerProfileViewSet, basename='task-performers')
-router.register(r'verification', verification_views.VerificationViewSet, basename='verification')
+router.register(r'verifications', verification_views.VerificationViewSet, basename='verification')
 
 # The API URLs are now determined automatically by the router
 urlpatterns = [

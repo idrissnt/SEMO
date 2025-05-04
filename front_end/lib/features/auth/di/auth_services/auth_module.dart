@@ -6,6 +6,7 @@ import 'package:semo/features/auth/infrastructure/exceptions/auth_exception_mapp
 // Auth feature imports
 import 'package:semo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:semo/features/auth/domain/services/auth_check_usecase.dart';
+import 'package:semo/features/auth/domain/services/email_verification_usecase.dart';
 import 'package:semo/features/auth/infrastructure/repositories/auth_repository_impl.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 
@@ -43,6 +44,7 @@ class AuthModule {
     getIt.registerLazySingleton(() => AuthBloc(
           authRepository: getIt<UserAuthRepository>(),
           userProfileUseCase: getIt<UserProfileUseCase>(),
+          emailVerificationUseCase: getIt<EmailVerificationUseCase>(),
           logger: getIt<AppLogger>(),
         ));
   }

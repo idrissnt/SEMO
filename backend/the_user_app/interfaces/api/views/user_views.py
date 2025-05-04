@@ -121,32 +121,3 @@ class UserProfileViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-    @extend_schema(
-        request=PasswordChangeSerializer,
-        responses={
-            200: OpenApiResponse(description='Success'),
-            400: OpenApiResponse(description='Bad Request'),
-            401: OpenApiResponse(description='Unauthorized')
-        },
-        description='Change user password'
-    )
-    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated], url_path='change-password')
-    def change_password(self, request):
-        serializer = PasswordChangeSerializer(data=request.data)
-        if serializer.is_valid():
-            # Get user service from factory
-            user_service = UserFactory.create_user_service()
-            
-            # Change password
-            success, error = user_service.change_password(
-                user_id=uuid.UUID(request.user_id),
-                old_password=serializer.validated_data['old_password'],
-                new_password=serializer.validated_data['new_password']
-            )
-            
-            if success:
-                return Response({'message': 'Password changed successfully'})
-            else:
-                return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
-                
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

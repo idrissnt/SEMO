@@ -107,7 +107,7 @@ class NotFoundException extends ApiException {
           message,
           statusCode: 404,
           details: details,
-          code: code ?? 'not_found',
+          code: code ?? ErrorCodes.userNotFound,
           requestId: requestId,
         );
 }

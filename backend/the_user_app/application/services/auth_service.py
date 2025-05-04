@@ -77,7 +77,6 @@ class AuthApplicationService:
             self.logger.info("Starting user registration", {"email": user_data['email']})
             # Check if user with this email already exists
             existing_user = self.user_repository.get_by_email(user_data['email'])
-            self.logger.info("User already exists", {"email": user_data['email']})
             if existing_user:
                 self.logger.warning("User already exists", {"email": user_data['email']})
                 return Result.failure(UserAlreadyExistsException(user_data['email']))

@@ -110,7 +110,9 @@ class VerificationServiceImpl(VerificationService):
         Returns:
             True if the email was sent successfully, False otherwise
         """
-        code = self.generate_verification_code(user_id, 'email_verification')
+        self.logger.info(f"Sending email verification code to {email}")
+        code = self.generate_verification_code(user_id, VerificationCodeType.get_email_verification_type())
+        self.logger.info(f"Generated verification code: {code}")
         
         subject = EMAIL_VERIFICATION_SUBJECT
         context = {
@@ -147,7 +149,7 @@ class VerificationServiceImpl(VerificationService):
         Returns:
             True if the SMS was sent successfully, False otherwise
         """
-        code = self.generate_verification_code(user_id, 'phone_verification')
+        code = self.generate_verification_code(user_id, VerificationCodeType.get_phone_verification_type())
         
         context = {
             'code': code,
@@ -191,7 +193,7 @@ class VerificationServiceImpl(VerificationService):
             )
             return False
         
-        code = self.generate_verification_code(user_id, 'password_reset')
+        code = self.generate_verification_code(user_id, VerificationCodeType.get_password_reset_type())
         
         if email:
             subject = PASSWORD_RESET_SUBJECT

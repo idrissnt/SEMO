@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:semo/core/domain/exceptions/api_error_code.dart';
 
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/infrastructure/models/error_response_model.dart';
@@ -148,16 +149,18 @@ class ApiClientImpl implements ApiClient {
           error.type == DioExceptionType.sendTimeout) {
         throw ApiTimeoutException(
           message: 'Request timed out',
-          code: 'timeout',
+          code: ErrorCodes.timeout,
         );
       } else {
         throw ApiNetworkException(
           message: error.message ?? 'Network error',
-          code: 'network_error',
+          code: ErrorCodes.networkError,
         );
       }
     }
   }
+
+  final String logFileName = 'ApiClient';
 
   /// Handles API errors and maps them to domain exceptions
   T _handleError<T>(dynamic error) {
@@ -168,7 +171,7 @@ class ApiClientImpl implements ApiClient {
 
       // Log a clean error message without the verbose Dio details
       _logger.error(
-        'API Error: ${statusCode ?? 'Unknown'} ${error.requestOptions.uri}',
+        '$logFileName: API Error: ${statusCode ?? 'Unknown'} ${error.requestOptions.uri}',
         error: _getCleanErrorMessage(error),
       );
 
@@ -179,6 +182,19 @@ class ApiClientImpl implements ApiClient {
         final errorCode = errorResponse?.code;
         final requestId = errorResponse?.requestId;
         final details = errorResponse?.details;
+
+        // Check for user not found error regardless of status code
+        // This allows the AuthInterceptor to properly handle these errors
+        if (_isUserNotFoundError(error)) {
+          _logger.warning(
+              '$logFileName: User not found error detected in API client');
+          throw NotFoundException(
+            message: 'User not found in database',
+            details: details,
+            code: ErrorCodes.userNotFound,
+            requestId: requestId,
+          );
+        }
 
         // Map HTTP status codes to generic API exceptions
         switch (statusCode) {
@@ -226,14 +242,93 @@ class ApiClientImpl implements ApiClient {
                 requestId: requestId);
         }
       } else {
-        _logger.error('API Error: No response', error: error);
+        _logger.error('$logFileName: API Error: No response', error: error);
         throw ApiNetworkException(
             message: 'No response from server: ${error.message}',
-            code: 'connection_error');
+            code: ErrorCodes.networkError);
       }
     } else {
-      _logger.error('API Error: Unknown error', error: error);
-      throw ApiException('Unknown error: $error', code: 'unknown_error');
+      _logger.error('$logFileName: API Error: Unknown error', error: error);
+      throw ApiException('Unknown error: $error', code: ErrorCodes.serverError);
     }
+  }
+
+  /// Checks if an error is a user not found error by examining the response data
+  /// This handles various formats that might come from the backend
+  bool _isUserNotFoundError(dynamic error) {
+    if (error is! DioException) return false;
+    if (error.response?.data == null) return false;
+
+    // Handle different possible response formats
+    final data = error.response!.data;
+
+    // Format 1: {"code": "user_not_found", ...}
+    if (data is Map<String, dynamic>) {
+      final errorCode = data['code'];
+      final errorData = data['error'];
+
+      // Direct match with userNotFound code
+      if (errorCode == ErrorCodes.userNotFound) {
+        _logger.debug('$logFileName: Direct match with user_not_found code');
+        return true;
+      }
+
+      // Check for authentication_error code with nested user_not_found
+      if (errorCode == ErrorCodes.authenticationError) {
+        _logger.debug(
+            '$logFileName: Found authentication_error code, checking details');
+
+        // Format 2: Complex nested structure with error field as Map
+        // {"error": {"detail": "ErrorDetail(string='User not found',...", "code": "ErrorDetail(string='user_not_found',..."}, ...}
+        if (errorData is Map<String, dynamic>) {
+          final nestedCode = errorData['code'];
+          final nestedDetail = errorData['detail'];
+
+          if (nestedCode != null &&
+              nestedCode.toString().contains('user_not_found')) {
+            return true;
+          }
+
+          if (nestedDetail != null &&
+              nestedDetail
+                  .toString()
+                  .toLowerCase()
+                  .contains('user not found')) {
+            return true;
+          }
+        }
+        // Format 3: Complex nested structure with error field as String
+        else if (errorData is String) {
+          final errorStr = errorData.toLowerCase();
+          if (errorStr.contains('user not found') ||
+              errorStr.contains('user does not exist')) {
+            return true;
+          }
+        }
+      }
+
+      // Format 4: Check message field
+      final errorMessage = data['message'] ?? '';
+      if (errorMessage is String) {
+        final message = errorMessage.toLowerCase();
+        if (message.contains('user not found') ||
+            message.contains('user does not exist') ||
+            message.contains('no user with this id')) {
+          return true;
+        }
+      }
+    }
+
+    // Format 5: String error message
+    if (data is String) {
+      final message = data.toLowerCase();
+      if (message.contains('user not found') ||
+          message.contains('user does not exist') ||
+          message.contains('no user with this id')) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
