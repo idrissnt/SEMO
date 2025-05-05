@@ -6,12 +6,13 @@ import 'package:semo/core/presentation/theme/app_constant.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/features/home/presentation/bottom_sheets/address_app_bar/address_bottom_sheet.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/home/presentation/bloc/home_store/home_store_bloc.dart';
 import 'package:semo/features/home/presentation/bloc/home_store/home_store_state.dart';
-import 'package:semo/features/home/presentation/full_screen_bottom_sheet/verify_email_bottom_sheet.dart';
+import 'package:semo/features/home/presentation/bottom_sheets/after_register/verify_email_screen.dart';
 import 'package:semo/features/home/routes/home_routes_constants.dart';
 
 // Import extracted widgets
@@ -111,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
               HomeAppBar(
                 isScrolled: _isScrolled,
                 scrollController: _scrollController,
+                onLocationTap: () => _showAddressBottomSheet(context),
               ),
               const SizedBox(height: 8),
               Expanded(
@@ -148,6 +150,26 @@ class _HomeScreenState extends State<HomeScreen> {
         expand: false,
         builder: (context, scrollController) =>
             VerifyEmailBottomSheet(scrollController: scrollController),
+      ),
+    );
+  }
+
+  void _showAddressBottomSheet(BuildContext context) {
+    logger.debug('Showing address bottom sheet');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      enableDrag: true,
+      isDismissible: true,
+      useSafeArea: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.98,
+        minChildSize: 0.5,
+        maxChildSize: 0.98,
+        expand: false,
+        builder: (context, scrollController) =>
+            AddressBottomSheet(scrollController: scrollController),
       ),
     );
   }

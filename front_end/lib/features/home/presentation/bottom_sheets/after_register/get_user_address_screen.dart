@@ -3,8 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
+import 'package:semo/features/home/presentation/bottom_sheets/shared/bottom_sheet_navigator.dart';
 import 'package:semo/features/home/presentation/constant/home_constants.dart';
-import 'package:semo/features/home/routes/bottom_sheet/bottom_sheet_routes_constants.dart';
+import 'package:semo/features/home/routes/bottom_sheet/after_register/routes_constants.dart';
 
 /// A screen for collecting user address information
 /// This is designed to be used as a sub-route within the email verification bottom sheet
@@ -16,10 +17,24 @@ class UserAddressScreen extends StatefulWidget {
 }
 
 class _UserAddressScreenState extends State<UserAddressScreen> {
-  final _formKey = GlobalKey<FormState>();
+  // ScrollController for the scrollbar
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Ensure the controller is properly initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _scrollController.hasClients) {
+        setState(() {}); // Trigger a rebuild after the controller is attached
+      }
+    });
+  }
 
   @override
   void dispose() {
+    // Dispose the scroll controller to prevent memory leaks
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -33,15 +48,7 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
       child: Column(
         children: [
           // Drag handle
-          Container(
-            width: 40,
-            height: 5,
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(2.5),
-            ),
-          ),
+          _buildDragHandle(),
 
           // Title with back button
           Padding(
@@ -50,7 +57,8 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () => context.go(BottomSheetRoutesConstants.root),
+                  onPressed: () =>
+                      context.go(RegisterVerificationSheetRoutesConstants.root),
                 ),
                 const Text(
                   "Votre adresse",
@@ -65,40 +73,51 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
             ),
           ),
 
-          // Form content
+          // Content
           Expanded(
             child: Scrollbar(
               thickness: 6,
               radius: const Radius.circular(10),
               thumbVisibility: true,
+              controller: _scrollController,
               child: SingleChildScrollView(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildSearchBar(),
-                      const SizedBox(height: 24),
-                      _buildUseCurrentLocationButton(),
-                      const SizedBox(height: 32),
-                      _buildAllAddress(context),
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: Color(0xFFEEEEEE),
-                      ),
-                      // const SizedBox(height: 16),
-                      _buildAddress(context),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSearchBar(),
+                    const SizedBox(height: 24),
+                    _buildUseCurrentLocationButton(),
+                    const SizedBox(height: 32),
+                    _buildAllAddress(context),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      indent: 16,
+                      endIndent: 16,
+                      color: Color(0xFFEEEEEE),
+                    ),
+                    // const SizedBox(height: 16),
+                    _buildAddress(context),
+                  ],
                 ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDragHandle() {
+    return Container(
+      width: 40,
+      height: 5,
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(2.5),
       ),
     );
   }
@@ -231,7 +250,8 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text(
-            '123 Main St, Anytown, USA',
+            // default value
+            'Ajouter une adresse',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -252,7 +272,20 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
               padding: EdgeInsets.zero,
               icon: AppIcons.pencil(
                   size: AppIconSize.xxl, color: AppColors.iconColorFirstColor),
-              onPressed: () {},
+              onPressed: () {
+                // In a bottom sheet, we need to use the parent Navigator's context
+                // to find the BottomSheetNavigator and use its navigation methods
+                final navigator = context
+                    .findAncestorStateOfType<BottomSheetNavigatorState>();
+                if (navigator != null) {
+                  // Use the navigator's navigateTo method to navigate within the bottom sheet
+                  navigator.navigateTo(
+                      RegisterVerificationSheetRoutesConstants.addressEdit);
+                } else {
+                  debugPrint(
+                      'BottomSheetNavigator not found in the widget tree');
+                }
+              },
             ),
           ),
         ],

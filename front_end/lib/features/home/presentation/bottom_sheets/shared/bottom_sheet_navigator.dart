@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/home/routes/bottom_sheet/bottom_sheet_routes_constants.dart';
-import 'package:semo/features/home/routes/bottom_sheet/bottom_sheet_router_config.dart';
+
+/// Type definition for a function that creates routes
+typedef RouteCreator = List<RouteBase> Function(Widget initialPage);
 
 /// A widget that provides navigation capabilities within a bottom sheet
 /// This allows for sub-routes within the bottom sheet without closing it
@@ -12,11 +13,19 @@ class BottomSheetNavigator extends StatefulWidget {
 
   /// The initial route path for the navigator
   final String initialRoute;
+  
+  /// Function that creates routes for this navigator
+  final RouteCreator routeCreator;
+  
+  /// ScrollController for the bottom sheet
+  final ScrollController? scrollController;
 
   const BottomSheetNavigator({
     Key? key,
     required this.initialPage,
-    this.initialRoute = BottomSheetRoutesConstants.root,
+    required this.initialRoute,
+    required this.routeCreator,
+    this.scrollController,
   }) : super(key: key);
 
   @override
@@ -44,7 +53,7 @@ class BottomSheetNavigatorState extends State<BottomSheetNavigator> {
 
   /// Create the list of routes for the router
   List<RouteBase> _createRoutes() {
-    return BottomSheetRouterConfig.createRoutes(widget.initialPage);
+    return widget.routeCreator(widget.initialPage);
   }
 
   /// Navigate to a specific route path

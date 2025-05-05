@@ -8,8 +8,9 @@ import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
-import 'package:semo/features/home/presentation/full_screen_bottom_sheet/bottom_sheet_navigator.dart';
-import 'package:semo/features/home/routes/bottom_sheet/bottom_sheet_routes_constants.dart';
+import 'package:semo/features/home/presentation/bottom_sheets/shared/bottom_sheet_navigator.dart';
+import 'package:semo/features/home/routes/bottom_sheet/after_register/router_config.dart';
+import 'package:semo/features/home/routes/bottom_sheet/after_register/routes_constants.dart';
 
 /// A bottom sheet that prompts the user to verify their email address
 /// This is designed to be shown as a modal bottom sheet after registration
@@ -38,7 +39,8 @@ class _VerifyEmailBottomSheetState extends State<VerifyEmailBottomSheet> {
 
   // Navigate to the address screen
   void _navigateToAddressScreen() {
-    _navigatorKey.currentState?.navigateTo(BottomSheetRoutesConstants.address);
+    _navigatorKey.currentState
+        ?.navigateTo(RegisterVerificationSheetRoutesConstants.address);
   }
 
   @override
@@ -46,6 +48,9 @@ class _VerifyEmailBottomSheetState extends State<VerifyEmailBottomSheet> {
     return BottomSheetNavigator(
       key: _navigatorKey,
       initialPage: _buildVerificationPage(),
+      initialRoute: RegisterVerificationSheetRoutesConstants.root,
+      routeCreator: BottomSheetRouterConfig.createRoutes,
+      scrollController: widget.scrollController,
     );
   }
 
