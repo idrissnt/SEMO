@@ -5,6 +5,7 @@ from the_user_app.domain.repositories.task_performer_repository_interfaces impor
 from the_user_app.domain.repositories.verification_code_repository import VerificationCodeRepository
 from the_user_app.domain.services.template_services import TemplateService
 from the_user_app.domain.services.verification_service import VerificationService
+from the_user_app.domain.constants.verification_services import VerificationServicesConstants
 
 from the_user_app.infrastructure.django_repositories.django_user_repository import DjangoUserRepository
 from the_user_app.infrastructure.django_repositories.django_address_repository import DjangoAddressRepository
@@ -15,8 +16,7 @@ from the_user_app.infrastructure.services.verification_service_impl import Verif
 from the_user_app.infrastructure.services.template_service_impl import DjangoTemplateService
 
 from core.infrastructure.factories.logging_factory import CoreLoggingFactory
-from core.infrastructure.services.email_service_impl import DummyEmailService, SendGridEmailService
-from core.infrastructure.services.ovh_sms_service_impl import OVHSmsService, DummySmsService
+from core.infrastructure.factories.communication_factory import CommunicationFactory
 
 from the_user_app.application.services.auth_service import AuthApplicationService
 from the_user_app.application.services.user_service import UserApplicationService
@@ -129,16 +129,7 @@ class UserFactory:
         """
         if UserFactory._email_service is None:
             logger = CoreLoggingFactory.create_logger("email")
-            
-            # Use SendGrid in production, dummy in development
-            if hasattr(settings, 'SENDGRID_API_KEY') and settings.SENDGRID_API_KEY:
-                UserFactory._email_service = SendGridEmailService(
-                    api_key=settings.SENDGRID_API_KEY,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    logger=logger
-                )
-            else:
-                UserFactory._email_service = DummyEmailService(logger)
+            UserFactory._email_service = CommunicationFactory.create_email_service(logger)
                 
         return UserFactory._email_service
     
@@ -151,20 +142,7 @@ class UserFactory:
         """
         if UserFactory._sms_service is None:
             logger = CoreLoggingFactory.create_logger("sms")
-            
-            # Prioritize OVH if configured
-            if hasattr(settings, 'OVH_APPLICATION_KEY') and settings.OVH_APPLICATION_KEY:
-                UserFactory._sms_service = OVHSmsService(
-                    application_key=settings.OVH_APPLICATION_KEY,
-                    application_secret=settings.OVH_APPLICATION_SECRET,
-                    consumer_key=settings.OVH_CONSUMER_KEY,
-                    service_name=settings.OVH_SMS_SERVICE_NAME,
-                    sender=settings.OVH_SMS_SENDER,
-                    logger=logger
-                )
-            # Use dummy service if neither is configured
-            else:
-                UserFactory._sms_service = DummySmsService(logger)
+            UserFactory._sms_service = CommunicationFactory.create_sms_service(logger)
                 
         return UserFactory._sms_service
     
@@ -207,16 +185,13 @@ class UserFactory:
             template_service = UserFactory.create_template_service()
             logger = CoreLoggingFactory.create_logger("verification")
             
-            # Get code expiry time from settings or use default
-            code_expiry_minutes = getattr(settings, 'VERIFICATION_CODE_EXPIRY_MINUTES', 15)
-            
             UserFactory._verification_service = VerificationServiceImpl(
                 email_service=email_service,
                 sms_service=sms_service,
                 verification_code_repository=verification_code_repository,
                 template_service=template_service,
                 logger=logger,
-                code_expiry_minutes=code_expiry_minutes
+                code_expiry_minutes=VerificationServicesConstants.CODE_EXPIRY_MINUTES
             )
             
         return UserFactory._verification_service

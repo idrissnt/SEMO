@@ -40,8 +40,6 @@ class _SplashScreenState extends State<SplashScreen> {
     // await Future.delayed(
     //     const Duration(milliseconds: AuthConstants.splashDuration));
 
-    if (!mounted) return;
-
     // Let the AuthFlowCoordinator handle navigation
     // This centralizes all auth-based navigation logic
     authCoordinator.handleSplashNavigation();

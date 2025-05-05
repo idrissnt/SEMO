@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
+
 import 'package:semo/features/profile/presentation/full_screen_bottom_sheet/personal_info_bottom_sheet.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
@@ -80,5 +81,3 @@ class AccountTab extends StatelessWidget {
     );
   }
 }
-
-class AuthRoutes {}

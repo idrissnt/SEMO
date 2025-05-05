@@ -3,15 +3,16 @@ import 'package:semo/features/profile/domain/entities/verification_response_enti
 import 'package:semo/features/profile/domain/exceptions/user_verifications/verif_exceptions.dart';
 import 'package:semo/features/profile/domain/repositories/user_verification/user_verification_repository.dart';
 
-class EmailVerificationUseCase {
+class VerifyEmailCodeUseCase {
   final UserVerificationRepository _verificationRepository;
 
-  EmailVerificationUseCase({
+  VerifyEmailCodeUseCase({
     required UserVerificationRepository verificationRepository,
   }) : _verificationRepository = verificationRepository;
 
-  Future<Result<VerificationResponse, UserVerifException>>
-      requestEmailVerification(String email) async {
-    return await _verificationRepository.requestEmailVerification(email);
+  Future<Result<VerificationResponse, UserVerifException>> verifyEmailCode(
+      String userId, String code) async {
+    return await _verificationRepository.verifyCode(
+        userId, code, VerificationType.email);
   }
 }

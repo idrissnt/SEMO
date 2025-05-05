@@ -70,8 +70,20 @@ class SendGridEmailService(EmailService):
                 plain_text = content
             
             # Create the email message using SendGrid's infrastructure classes
+            # Import EmailAddress to properly format sender with name
+            from sendgrid.helpers.mail import Email
+            
+            # Format from_email to include sender name if it doesn't already
+            if '<' not in self.from_email:
+                # Extract domain from email to use as company name if needed
+                domain = self.from_email.split('@')[1].split('.')[0]
+                company_name = domain.upper()
+                formatted_from_email = Email(self.from_email, company_name)
+            else:
+                formatted_from_email = self.from_email
+                
             message = Mail(
-                from_email=self.from_email,
+                from_email=formatted_from_email,
                 to_emails=to_email,
                 subject=subject,
                 html_content=HtmlContent(content) if is_html else None,

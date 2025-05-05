@@ -18,7 +18,7 @@ class AppColors {
   // Search Bar Colors
   static Color searchBarColor =
       Colors.grey[200] ?? const Color(0xFFEEEEEE); // Provide a fallback color
-  static const Color searchBarHintColor = Color.fromARGB(255, 112, 112, 112);
+  static const Color searchBarHintColor = Color.fromARGB(255, 77, 77, 77);
 
   // Icon Colors
   static const Color iconColorFirstColor =

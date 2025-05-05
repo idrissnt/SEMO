@@ -71,3 +71,10 @@ class AppIconSize {
   static double get xxxl => 32.r;
   static double get xxxxl => 40.r;
 }
+
+/// Access to responsive Button dimensions using ScreenUtil
+class AppButtonDimensions {
+  AppButtonDimensions._();
+  static double minWidth = 300.w;
+  static double minHeight = 50.h;
+}

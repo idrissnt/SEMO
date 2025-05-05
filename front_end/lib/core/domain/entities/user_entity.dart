@@ -7,6 +7,7 @@ class User {
   final String? profilePhotoUrl;
   final DateTime? createdAt;
   final bool isGuest;
+  final bool needsEmailVerification;
 
   User({
     required this.id,
@@ -17,6 +18,7 @@ class User {
     this.profilePhotoUrl,
     this.createdAt,
     this.isGuest = false,
+    this.needsEmailVerification = false,
   });
 
   /// Factory constructor to create a guest user
@@ -29,7 +31,7 @@ class User {
       );
 
   String get fullName => '$firstName ${lastName ?? ''}';
-  
+
   /// Whether this user requires authentication for protected features
   bool get requiresAuthentication => !isGuest;
 }

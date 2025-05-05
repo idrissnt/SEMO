@@ -101,6 +101,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           (response) {
             _logger.info(
                 ' [$logName] : Email verification requested successfully');
+            // Make sure we emit the verification requested state AFTER authentication
+            // This ensures the HomeScreen will receive this state and show the verification sheet
+            emit(const AuthEmailVerificationRequested());
           },
           (error) {
             // Just log the error but don't change the auth state
@@ -261,7 +264,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       userResult.fold(
         (user) {
           _logger.info(' [$logName] : User profile fetched: ${user.email}');
-          emit(AuthAuthenticated(user));
+          
+          // For newly registered users, set the needsEmailVerification flag
+          if (operation == 'registration') {
+            // Create a new user instance with needsEmailVerification set to true
+            final userWithVerificationFlag = User(
+              id: user.id,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              phoneNumber: user.phoneNumber,
+              profilePhotoUrl: user.profilePhotoUrl,
+              createdAt: user.createdAt,
+              isGuest: user.isGuest,
+              needsEmailVerification: true, // Set this flag for new registrations
+            );
+            
+            _logger.info(' [$logName] : New user registered, setting needsEmailVerification flag');
+            emit(AuthAuthenticated(userWithVerificationFlag));
+          } else {
+            // For regular logins, use the user as is
+            emit(AuthAuthenticated(user));
+          }
         },
         (error) {
           _logger.error(

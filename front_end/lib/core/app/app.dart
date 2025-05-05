@@ -41,7 +41,18 @@ class MyApp extends StatelessWidget {
                 labelStyle: TextStyle(
                   fontSize: AppFontSize.medium,
                   color: AppColors.textPrimaryColor,
+                  decoration: TextDecoration.none,
                 ),
+              ),
+              textTheme: TextTheme(
+                bodyLarge: TextStyle(
+                  fontSize: AppFontSize.medium,
+                  color: AppColors.textPrimaryColor,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+              textSelectionTheme: TextSelectionThemeData(
+                cursorColor: AppColors.primary,
               ),
             ),
             // this is set as the routing configuration

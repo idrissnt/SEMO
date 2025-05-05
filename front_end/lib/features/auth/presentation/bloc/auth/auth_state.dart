@@ -81,3 +81,11 @@ class ServerFailure extends AuthFailureState {
 class ProfileFetchFailure extends AuthFailureState {
   const ProfileFetchFailure(String message) : super(message, canRetry: true);
 }
+
+/// Email verification requested
+class AuthEmailVerificationRequested extends AuthState {
+  const AuthEmailVerificationRequested();
+
+  @override
+  List<Object?> get props => [];
+}

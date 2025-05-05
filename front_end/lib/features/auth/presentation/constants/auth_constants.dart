@@ -1,5 +1,3 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 /// Constants used in the authentication feature screens and widgets
 class AuthConstants {
   /// //===========================================================================
@@ -53,11 +51,4 @@ class AuthConstants {
   /// //===========================================================================
   /// UI Constants
   /// //===========================================================================
-  static const int animationDurationMs = 300;
-
-  /// //===========================================================================
-  /// Button Dimensions
-  /// //===========================================================================
-  static double buttonMinWidth = 300.w;
-  static double buttonMinHeight = 50.h;
 }

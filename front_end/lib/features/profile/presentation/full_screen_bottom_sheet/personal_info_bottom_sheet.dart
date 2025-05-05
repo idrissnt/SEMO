@@ -245,6 +245,7 @@ class _PersonalInfoBottomSheetState extends State<PersonalInfoBottomSheet> {
     // Simulate API call
     Future.delayed(const Duration(seconds: 1), () {
       // Hide loading indicator
+      if (!mounted) return;
       Navigator.pop(context);
 
       // Show success message

@@ -27,6 +27,9 @@ class AppLogger {
   // Getter for the current log file path
   String get logFilePath => _logFile?.path ?? 'No log file';
 
+  // Maximum number of log files to keep (adjust as needed)
+  static const int _maxLogFiles = 5;
+  
   Future<void> initialize({String? absoluteLogPath}) async {
     if (_isInitialized) {
       return;
@@ -67,6 +70,9 @@ class AppLogger {
 
       // Open file in write mode (not append)
       _logSink = _logFile?.openWrite(mode: FileMode.write);
+      
+      // Clean up old log files
+      _cleanupOldLogFiles(logsSubDir);
 
       print('Logging to: ${_logFile?.path}');
       _isInitialized = true;
@@ -231,6 +237,48 @@ class AppLogger {
       print('📋 Log File Contents END   ===========================');
     } catch (e) {
       print('❌ Error reading log file: $e');
+    }
+  }
+  
+  // Clean up old log files, keeping only the most recent ones
+  Future<void> _cleanupOldLogFiles(Directory logDirectory) async {
+    try {
+      // List all log files
+      final logFiles = await logDirectory
+          .list()
+          .where((entity) => 
+              entity is File && 
+              entity.path.contains('app_log_') && 
+              entity.path.endsWith('.txt'))
+          .toList();
+      
+      // Sort by modification time (newest first)
+      logFiles.sort((a, b) {
+        return (b as File).lastModifiedSync()
+            .compareTo((a as File).lastModifiedSync());
+      });
+      
+      // Delete old files, keeping only _maxLogFiles most recent ones
+      if (logFiles.length > _maxLogFiles) {
+        for (var i = _maxLogFiles; i < logFiles.length; i++) {
+          try {
+            await (logFiles[i] as File).delete();
+            print('Deleted old log file: ${logFiles[i].path}');
+          } catch (e) {
+            print('Error deleting old log file: $e');
+          }
+        }
+      }
+    } catch (e) {
+      print('Error during log cleanup: $e');
+    }
+  }
+  
+  // Manually trigger log cleanup
+  Future<void> cleanupLogs() async {
+    if (_logFile != null) {
+      final logDirectory = Directory(_logFile!.parent.path);
+      await _cleanupOldLogFiles(logDirectory);
     }
   }
 

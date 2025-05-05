@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_constant.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
@@ -143,14 +144,14 @@ class _LoginScreenState extends State<LoginScreen> {
               highlightColor: AppColors.primary,
               boxShadowColor: AppColors.primary,
               // Dimensions
-              minWidth: AuthConstants.buttonMinWidth,
-              minHeight: AuthConstants.buttonMinHeight,
+              minWidth: AppButtonDimensions.minWidth,
+              minHeight: AppButtonDimensions.minHeight,
               verticalPadding: AppDimensionsWidth.xSmall,
               horizontalPadding: AppDimensionsHeight.small,
               borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
               // Animation
-              animationDuration: const Duration(
-                  milliseconds: AuthConstants.animationDurationMs),
+              animationDuration:
+                  Duration(milliseconds: AppConstant.buttonAnimationDurationMs),
               enableHapticFeedback: true,
               // Text style
               textStyle: TextStyle(

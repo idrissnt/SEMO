@@ -59,6 +59,18 @@ class AppIcons {
         color: color,
       );
 
+  static Widget locationLookFor({double? size, Color? color}) => _buildIcon(
+        CupertinoIcons.location,
+        size: size,
+        color: color,
+      );
+
+  static Widget pencil({double? size, Color? color}) => _buildIcon(
+        CupertinoIcons.pencil,
+        size: size,
+        color: color,
+      );
+
   // Account tab icons
   static Widget person({double? size, Color? color}) => _buildIcon(
         CupertinoIcons.person_fill,
