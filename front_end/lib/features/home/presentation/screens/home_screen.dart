@@ -11,13 +11,14 @@ import 'package:semo/features/home/presentation/bottom_sheets/address_app_bar/ad
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/home/presentation/bottom_sheets/after_register/verify_email_screen.dart';
+import 'package:semo/features/home/presentation/test_date/store.dart';
+import 'package:semo/features/home/presentation/widgets/sections/delivery_section.dart';
 import 'package:semo/features/home/presentation/widgets/sections/store_section.dart';
 import 'package:semo/features/home/routes/home_routes_constants.dart';
 
 // Import extracted widgets
 import 'package:semo/features/home/presentation/helpers/scroll_animation_helper.dart';
 import 'package:semo/features/home/presentation/widgets/app_bar/home_app_bar.dart';
-import 'package:semo/features/store/domain/entities/store.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -174,34 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  final stores = [
-    StoreBrand(
-      id: '1',
-      name: 'E.Leclerc',
-      slug: 'store-1',
-      type: 'type 1',
-      imageLogo:
-          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/ELeclerc-logo-home.png',
-      imageBanner: 'https://via.placeholder.com/300x150',
-    ),
-    StoreBrand(
-      id: '2',
-      name: 'Carrefour',
-      slug: 'store-2',
-      type: 'type 2',
-      imageLogo:
-          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Carrefour-logo-home.png',
-      imageBanner: 'https://via.placeholder.com/300x150',
-    ),
-    StoreBrand(
-      id: '3',
-      name: 'Lidl',
-      slug: 'store-3',
-      type: 'type 3',
-      imageLogo:
-          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
-      imageBanner: 'https://via.placeholder.com/300x150',
-    ),
+  final List<String> productsImages = [
+    'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/ELeclerc-logo-home.png',
+    'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Carrefour-logo-home.png',
+    'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
   ];
 
   Widget _buildMainContent() {
@@ -213,6 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
           title: 'Les magasins',
           stores: stores,
         ),
+
+        DeliverySection(productsImages: productsImages),
         // Promotional banner
         Container(
           margin: const EdgeInsets.all(16),
