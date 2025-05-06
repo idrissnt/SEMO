@@ -10,9 +10,10 @@ import 'package:semo/features/home/presentation/widgets/app_bar/utils/action_ico
 /// Widget that displays the user's current location with an icon
 class LocationSection extends StatelessWidget {
   /// Callback when the location icon or address text is tapped
-  final VoidCallback? onLocationTap;
-  
-  const LocationSection({Key? key, this.onLocationTap}) : super(key: key);
+  final VoidCallback onLocationTap;
+
+  const LocationSection({Key? key, required this.onLocationTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +38,14 @@ class LocationSection extends StatelessWidget {
               icon: Icons.location_on_outlined,
               color: AppColors.primary,
               size: AppIconSize.large,
-              onPressed: onLocationTap != null ? () => onLocationTap!() : () {},
+              onPressed: onLocationTap,
             ),
             // Use Material's InkWell with better tap area
             Material(
               color: AppColors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-                onTap: onLocationTap != null ? () => onLocationTap!() : null,
+                onTap: onLocationTap,
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: AppDimensionsHeight.small),
@@ -70,9 +71,7 @@ class LocationSection extends StatelessWidget {
                         icon: Icons.keyboard_arrow_down,
                         color: AppColors.iconColorFirstColor,
                         size: AppIconSize.large,
-                        onPressed: () {
-                          // Handle down arrow tap
-                        },
+                        onPressed: onLocationTap,
                       ),
                     ],
                   ),

@@ -30,15 +30,13 @@ class ActionIcons extends StatelessWidget {
             color: Colors.orange,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(
-            child: ActionIconButton(
-              icon: CupertinoIcons.cart_fill,
-              color: Colors.white,
-              onPressed: () {
-                // Handle cart tap
-              },
-              size: 24,
-            ),
+          child: ActionIconButton(
+            icon: CupertinoIcons.cart_fill,
+            color: Colors.white,
+            onPressed: () {
+              // Handle cart tap
+            },
+            size: 24,
           ),
         ),
         const SizedBox(width: 10),
@@ -51,15 +49,13 @@ class ActionIcons extends StatelessWidget {
             color: Colors.red,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(
-            child: ActionIconButton(
-              icon: CupertinoIcons.bell_fill,
-              color: Colors.white,
-              onPressed: () {
-                // Handle notifications tap
-              },
-              size: 24,
-            ),
+          child: ActionIconButton(
+            icon: CupertinoIcons.bell_fill,
+            color: Colors.white,
+            onPressed: () {
+              // Handle notifications tap
+            },
+            size: 24,
           ),
         ),
         const SizedBox(width: 10),
@@ -72,15 +68,13 @@ class ActionIcons extends StatelessWidget {
             color: Colors.blue,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(
-            child: ActionIconButton(
-              icon: CupertinoIcons.person_fill,
-              color: Colors.white,
-              onPressed: () {
-                context.pushNamed(ProfileRouteNames.profile);
-              },
-              size: AppIconSize.xl,
-            ),
+          child: ActionIconButton(
+            icon: CupertinoIcons.person_fill,
+            color: Colors.white,
+            onPressed: () {
+              context.pushNamed(ProfileRouteNames.profile);
+            },
+            size: AppIconSize.xl,
           ),
         ),
       ],
@@ -111,15 +105,13 @@ class CartProfileIcon extends StatelessWidget {
             color: Colors.blue,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(
-            child: ActionIconButton(
-              icon: CupertinoIcons.person_fill,
-              color: Colors.white,
-              onPressed: () {
-                context.pushNamed(ProfileRouteNames.profile);
-              },
-              size: AppIconSize.xl,
-            ),
+          child: ActionIconButton(
+            icon: CupertinoIcons.person_fill,
+            color: Colors.white,
+            onPressed: () {
+              context.pushNamed(ProfileRouteNames.profile);
+            },
+            size: AppIconSize.xl,
           ),
         )
       ],
@@ -139,15 +131,13 @@ class CartProfileIcon extends StatelessWidget {
             color: Colors.orange,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(
-            child: ActionIconButton(
-              icon: CupertinoIcons.cart_fill,
-              color: Colors.white,
-              onPressed: () {
-                // Handle cart tap
-              },
-              size: AppIconSize.xl,
-            ),
+          child: ActionIconButton(
+            icon: CupertinoIcons.cart_fill,
+            color: Colors.white,
+            onPressed: () {
+              // Handle cart tap
+            },
+            size: AppIconSize.xl,
           ),
         ),
         // Cart badge

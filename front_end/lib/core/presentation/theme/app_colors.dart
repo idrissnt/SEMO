@@ -27,6 +27,7 @@ class AppColors {
 
   // Shadow Colors
   static const Color appBarShadowColor = Color.fromARGB(13, 13, 13, 13);
+  static const Color storeCardShadowColor = Colors.black;
 
   // Text Colors
   static const Color textPrimaryColor = Color.fromARGB(255, 8, 8, 8);

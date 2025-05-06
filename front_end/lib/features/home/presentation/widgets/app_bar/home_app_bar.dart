@@ -9,14 +9,15 @@ import 'package:semo/features/home/presentation/widgets/app_bar/action_icons.dar
 class HomeAppBar extends StatelessWidget {
   final bool isScrolled;
   final ScrollController scrollController;
+
   /// Callback for when the location section is tapped
-  final VoidCallback? onLocationTap;
+  final VoidCallback onLocationTap;
 
   const HomeAppBar({
     Key? key,
     required this.isScrolled,
     required this.scrollController,
-    this.onLocationTap,
+    required this.onLocationTap,
   }) : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class HomeAppBar extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      height: isScrolled ? 60 : 120,
+      height: isScrolled ? 60 : 110,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: isScrolled

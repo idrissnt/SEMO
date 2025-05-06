@@ -30,6 +30,7 @@ class ActionIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      padding: EdgeInsets.zero,
       icon: Icon(icon,
           color: color ?? AppColors.iconColorFirstColor,
           size: size ?? AppIconSize.xl),
