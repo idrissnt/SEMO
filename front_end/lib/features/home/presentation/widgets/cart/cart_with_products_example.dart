@@ -15,9 +15,8 @@ class CartWithProductsExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
+    return Padding(
+      padding: const EdgeInsets.only(left: 50),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -69,7 +68,7 @@ class CartWithProductsExample extends StatelessWidget {
                   border: Border.all(color: Colors.white, width: 1.5),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 2,
                       spreadRadius: 0.5,
                     ),
@@ -106,7 +105,7 @@ class CartWithProductsExample extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 2,
             spreadRadius: 0.5,
             offset: const Offset(0, 1),
