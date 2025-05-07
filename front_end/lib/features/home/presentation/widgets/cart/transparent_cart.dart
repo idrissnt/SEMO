@@ -6,29 +6,29 @@ import 'cart_painter.dart';
 class TransparentCart extends StatelessWidget {
   /// The size of the cart
   final double size;
-  
+
   /// The main dark color of the cart (outline, handle, frame)
   final Color outlineColor;
-  
+
   /// The fill color of the cart's basket
   final Color basketColor;
-  
+
   /// The opacity of the cart's basket (0.0 to 1.0)
   /// Lower values make the basket more transparent
   final double basketOpacity;
-  
+
   /// The color of the cart's wheel centers
   final Color wheelCenterColor;
-  
+
   /// Optional child widget to be displayed inside the cart
   final Widget? child;
 
   const TransparentCart({
     Key? key,
-    this.size = 50.0,
+    required this.size,
     this.outlineColor = const Color(0xFF2D7DD2), // Dark blue
-    this.basketColor = const Color(0xFF8ECAE6),  // Light blue
-    this.basketOpacity = 0.7,
+    this.basketColor = const Color(0xFF8ECAE6), // Light blue
+    this.basketOpacity = 0.5,
     this.wheelCenterColor = const Color(0xFF8ECAE6), // Light blue
     this.child,
   }) : super(key: key);
@@ -51,7 +51,7 @@ class TransparentCart extends StatelessWidget {
             ),
             size: Size(size, size),
           ),
-          
+
           // Optional child widget (could be product images)
           if (child != null) child!,
         ],
