@@ -312,3 +312,22 @@ class _VerifyEmailBottomSheetState extends State<VerifyEmailBottomSheet> {
     );
   }
 }
+
+void showVerifyEmailBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    enableDrag: true, // Enable dragging to dismiss
+    isDismissible: true, // Allow dismissing by tapping outside
+    useSafeArea: true,
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: 0.98, // Start at 95% of screen height
+      minChildSize: 0.5, // Allow dragging down to 50%
+      maxChildSize: 0.98, // Maximum 95% of screen height
+      expand: false,
+      builder: (context, scrollController) =>
+          VerifyEmailBottomSheet(scrollController: scrollController),
+    ),
+  );
+}

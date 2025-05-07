@@ -173,6 +173,10 @@ class _StoreImageButtonState extends State<StoreImageButton>
       width: widget.size,
       height: widget.size,
       decoration: BoxDecoration(
+        border: Border.all(
+          color: AppColors.storeCardBorderColor,
+          width: 2,
+        ),
         shape: BoxShape.circle,
         gradient: LinearGradient(
           begin: Alignment.topLeft,

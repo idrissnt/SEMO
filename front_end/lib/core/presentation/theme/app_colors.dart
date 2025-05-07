@@ -25,6 +25,9 @@ class AppColors {
       Colors.black; // Using Color(0xFF000000) would also work
   static const Color iconColorSecondColor = Colors.grey;
 
+  // Store Card Colors
+  static const Color storeCardBorderColor = Color.fromARGB(255, 7, 59, 137);
+
   // Shadow Colors
   static const Color appBarShadowColor = Color.fromARGB(13, 13, 13, 13);
   static const Color storeCardShadowColor = Colors.black;

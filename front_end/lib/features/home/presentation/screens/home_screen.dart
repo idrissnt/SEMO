@@ -11,6 +11,7 @@ import 'package:semo/features/home/presentation/bottom_sheets/address_app_bar/ad
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/home/presentation/bottom_sheets/after_register/verify_email_screen.dart';
+import 'package:semo/features/home/presentation/test_date/cart.dart';
 import 'package:semo/features/home/presentation/test_date/store.dart';
 import 'package:semo/features/home/presentation/widgets/sections/delivery_section.dart';
 import 'package:semo/features/home/presentation/widgets/sections/store_section.dart';
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (authState is AuthEmailVerificationRequested) {
       logger.info(
           'HomeScreen: Email verification requested, showing bottom sheet');
-      _showVerifyEmailBottomSheet(context);
+      showVerifyEmailBottomSheet(context);
       _checkedEmailVerification = true;
     }
     // Check if the user needs email verification based on the flag
@@ -81,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
         authState.user.needsEmailVerification) {
       logger.info(
           'HomeScreen: User needs email verification, showing bottom sheet');
-      _showVerifyEmailBottomSheet(context);
+      showVerifyEmailBottomSheet(context);
       _checkedEmailVerification = true;
     }
   }
@@ -100,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             !_checkedEmailVerification) {
           logger.info(
               'HomeScreen: Email verification state detected, showing bottom sheet');
-          _showVerifyEmailBottomSheet(context);
+          showVerifyEmailBottomSheet(context);
           _checkedEmailVerification = true;
         }
       },
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
               HomeAppBar(
                 isScrolled: _isScrolled,
                 scrollController: _scrollController,
-                onLocationTap: () => _showAddressBottomSheet(context),
+                onLocationTap: () => showAddressBottomSheet(context),
               ),
               const SizedBox(height: 8),
               Expanded(
@@ -136,51 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showVerifyEmailBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      enableDrag: true, // Enable dragging to dismiss
-      isDismissible: true, // Allow dismissing by tapping outside
-      useSafeArea: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.98, // Start at 95% of screen height
-        minChildSize: 0.5, // Allow dragging down to 50%
-        maxChildSize: 0.98, // Maximum 95% of screen height
-        expand: false,
-        builder: (context, scrollController) =>
-            VerifyEmailBottomSheet(scrollController: scrollController),
-      ),
-    );
-  }
-
-  void _showAddressBottomSheet(BuildContext context) {
-    logger.debug('Showing address bottom sheet');
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      enableDrag: true,
-      isDismissible: true,
-      useSafeArea: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.98,
-        minChildSize: 0.5,
-        maxChildSize: 0.98,
-        expand: false,
-        builder: (context, scrollController) =>
-            AddressBottomSheet(scrollController: scrollController),
-      ),
-    );
-  }
-
-  final List<String> productsImages = [
-    'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/ELeclerc-logo-home.png',
-    'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Carrefour-logo-home.png',
-    'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
-  ];
-
   Widget _buildMainContent() {
     // Add dummy content to make the screen scrollable for testing
     return Column(
@@ -191,7 +147,13 @@ class _HomeScreenState extends State<HomeScreen> {
           stores: stores,
         ),
 
-        DeliverySection(productsImages: productsImages),
+        SizedBox(
+          height: 200,
+          child: DeliverySection(
+            productsImagesList: productsImagesList,
+            sectionSize: 180,
+          ),
+        ),
         // Promotional banner
         Container(
           margin: const EdgeInsets.all(16),
@@ -348,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ButtonFactory.createAnimatedButton(
           context: context,
           onPressed: () {
-            _showVerifyEmailBottomSheet(context);
+            showVerifyEmailBottomSheet(context);
           },
           text: 'Valider',
           backgroundColor: AppColors.primary,

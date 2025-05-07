@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:vibration/vibration.dart';
 
 /// A button with animation effects for improved user feedback
 ///
@@ -114,12 +114,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
     _controller.forward();
   }
 
-  // Method to trigger haptic feedback
   Future<void> _triggerHapticFeedback() async {
-    bool canVibrate = await Vibrate.canVibrate;
-    if (canVibrate) {
-      // Use light impact for a subtle feedback
-      Vibrate.feedback(FeedbackType.light);
+    if (await Vibration.hasVibrator()) {
+      Vibration.vibrate(duration: 10); // 50 ms light vibration
     }
   }
 

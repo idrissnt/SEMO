@@ -303,3 +303,25 @@ class _AddressBottomSheetState extends State<AddressBottomSheet> {
     );
   }
 }
+
+void showAddressBottomSheet(BuildContext context) {
+  final logger = AppLogger();
+  logger.debug('Showing address bottom sheet');
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    enableDrag: true,
+    isDismissible: true,
+    useSafeArea: true,
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: 0.98,
+      minChildSize: 0.5,
+      maxChildSize: 0.98,
+      expand: false,
+      builder: (context, scrollController) =>
+          AddressBottomSheet(scrollController: scrollController),
+    ),
+  );
+}
