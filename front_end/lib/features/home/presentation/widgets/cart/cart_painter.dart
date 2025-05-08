@@ -16,10 +16,10 @@ class CartPainter extends CustomPainter {
   final Color wheelCenterColor;
 
   CartPainter({
-    this.outlineColor = const Color(0xFF2D7DD2), // Dark blue
-    this.basketColor = const Color.fromARGB(255, 166, 212, 233), // Light blue
-    this.basketOpacity = 0.5,
-    this.wheelCenterColor = const Color(0xFF8ECAE6), // Light blue
+    required this.outlineColor,
+    required this.basketColor,
+    required this.basketOpacity,
+    required this.wheelCenterColor,
   });
 
   @override
@@ -54,7 +54,7 @@ class CartPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final handleLightPaint = Paint()
-      ..color = basketColor
+      ..color = wheelCenterColor
       ..style = PaintingStyle.fill
       ..strokeWidth = width * 0.04
       ..strokeCap = StrokeCap.round;
@@ -104,11 +104,11 @@ class CartPainter extends CustomPainter {
     for (int i = 0; i <= 4; i++) {
       final initStart = width * (0.30 + (i * 0.12));
 
-      final startX = initStart - width * 0.02;
+      final startX = initStart - width * 0.019;
       final endX = initStart;
 
-      canvas.drawLine(Offset(startX, height * 0.25),
-          Offset(endX, height * 0.55), slitsPaint);
+      canvas.drawLine(Offset(startX, height * 0.17),
+          Offset(endX, height * 0.67), slitsPaint);
     }
 
     // Draw the cart frame

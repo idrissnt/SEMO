@@ -30,80 +30,36 @@ class DeliverySection extends StatelessWidget {
   Widget _buildDeliverySection(BuildContext context, int index) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      width: sectionSize,
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      width: sectionSize * 0.95,
       height: sectionSize,
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFFF8C6A8), // Lighter peach at top
+            Color.fromARGB(255, 191, 88, 44), // Slightly darker peach at bottom
+          ],
+        ),
         borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 4,
+            spreadRadius: 0,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: sectionSize * 0.21,
-                height: sectionSize * 0.25,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      productsImagesList[index][0],
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: sectionSize * 0.2,
-                child: Container(
-                  width: sectionSize * 0.35,
-                  height: sectionSize * 0.21,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "13${'€'}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: sectionSize * 0.2,
-                child: Container(
-                  width: sectionSize * 0.35,
-                  height: sectionSize * 0.21,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '1.5 Km',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          _buildCartImage(context, productsImagesList[index], cartImageSize),
+          _buildHeader(index),
+          _builCartImageWithShadow(
+              context, productsImagesList[index], cartImageSize),
+          SizedBox(height: sectionSize * 0.05),
         ],
       ),
     );
@@ -114,8 +70,124 @@ class DeliverySection extends StatelessWidget {
 //
 //
 //
+
+  _buildHeader(int index) {
+    return SizedBox(
+      width: sectionSize,
+      height: sectionSize * 0.43,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: sectionSize * 0.25,
+            child: Container(
+              width: sectionSize * 0.4,
+              height: sectionSize * 0.18,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(
+                    productsImagesList[index][5],
+                  ),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: sectionSize * 0.15,
+            left: sectionSize * 0.05,
+            child: SizedBox(
+              width: sectionSize * 0.8,
+              height: sectionSize * 0.2,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      width: sectionSize * 0.3,
+                      height: sectionSize * 0.15,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "13${'€'}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Container(
+                      width: sectionSize * 0.3,
+                      height: sectionSize * 0.15,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '1.5 Km',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
 //
 //
+//
+
+  Widget _builCartImageWithShadow(
+      BuildContext context, List<String> productImages, double cartImageSize) {
+    return Column(
+      children: [
+        _buildCartImage(context, productImages, cartImageSize),
+        const SizedBox(height: 3),
+        Container(
+          width: cartImageSize * 0.8,
+          height: 2,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromARGB(255, 123, 42, 7),
+                blurRadius: 5,
+                spreadRadius: 2,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
 //
 //
 //
@@ -170,7 +242,7 @@ class DeliverySection extends StatelessWidget {
                 width: cartImageSize * 0.3,
                 height: cartImageSize * 0.3,
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade100,
+                  color: AppColors.primary,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: AppColors.storeCardBorderColor,
@@ -187,10 +259,10 @@ class DeliverySection extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '+${productImages.length - 3}',
-                    style: TextStyle(
-                      fontSize: cartImageSize * 0.2,
+                    style: const TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade800,
+                      color: AppColors.textSecondaryColor,
                     ),
                   ),
                 ),
@@ -201,7 +273,7 @@ class DeliverySection extends StatelessWidget {
           TransparentCart(
             size: cartImageSize,
             basketOpacity: 0.4, // Semi-transparent basket
-          )
+          ),
         ],
       ),
     );

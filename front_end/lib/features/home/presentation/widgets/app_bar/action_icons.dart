@@ -27,7 +27,7 @@ class ActionIcons extends StatelessWidget {
           height: 35,
           width: 35,
           decoration: BoxDecoration(
-            color: Colors.orange,
+            color: Colors.green,
             borderRadius: BorderRadius.circular(8),
           ),
           child: ActionIconButton(
@@ -128,7 +128,7 @@ class CartProfileIcon extends StatelessWidget {
           height: 35,
           width: 35,
           decoration: BoxDecoration(
-            color: Colors.orange,
+            color: Colors.green,
             borderRadius: BorderRadius.circular(8),
           ),
           child: ActionIconButton(
@@ -144,7 +144,7 @@ class CartProfileIcon extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(4),
           decoration: const BoxDecoration(
-            color: Colors.green,
+            color: Colors.red,
             shape: BoxShape.circle,
           ),
           child: const Text(
