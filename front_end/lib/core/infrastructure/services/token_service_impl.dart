@@ -289,9 +289,6 @@ class TokenServiceImpl implements TokenService {
           '[TokenService] Refresh token payload: {"refresh": "${refreshToken.substring(0, 10)}..."}');
 
       try {
-        // First, delete the current access token to prevent conflicts
-        await deleteAccessToken();
-
         final response = await _dio.post(
           TokenApiRoutes.refresh,
           data: {'refresh': refreshToken},
@@ -313,6 +310,11 @@ class TokenServiceImpl implements TokenService {
           if (accessToken != null) {
             _logger.debug(
                 '[TokenService] Token refresh successful, received access token');
+
+            // First, delete the current access token to prevent conflicts
+            _logger.debug(
+                '[TokenService] Deleting old access token to prevent conflicts');
+            await deleteAccessToken();
 
             // Save the access token with retry logic
             bool tokenSaved = false;
@@ -376,6 +378,18 @@ class TokenServiceImpl implements TokenService {
       } catch (e) {
         if (e is DioException) {
           _logger.error('[TokenService] Token refresh DioException', error: e);
+
+          // Only clear tokens for authentication errors (401, 403)
+          if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
+            _logger.debug(
+                '[TokenService] Authentication error detected, clearing tokens');
+            await clearAllTokens();
+          } else {
+            // For network errors or other errors, log but don't clear tokens
+            _logger
+                .debug('[TokenService] Network or other error, keeping tokens');
+          }
+
           if (e.response != null) {
             _logger.error(
                 '[TokenService] Response status: ${e.response?.statusCode}');
@@ -389,8 +403,8 @@ class TokenServiceImpl implements TokenService {
               error: e);
         }
 
-        // Clear tokens on error
-        await clearAllTokens();
+        // // Clear tokens on error
+        // await clearAllTokens();
 
         _completeRefresh(false);
         return false;

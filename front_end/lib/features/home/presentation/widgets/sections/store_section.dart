@@ -81,8 +81,7 @@ class StoreSection extends StatelessWidget {
                         Text(
                           store.name,
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                           textAlign: TextAlign.center,

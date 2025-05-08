@@ -23,13 +23,14 @@ class _EarnScreenState extends State<EarnScreen> {
       _logger.debug('Building EarnScreen', {'component': 'EarnScreen'});
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Earn Money'),
+          title: const Text('Rendez service, touchez une prime'),
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Earn Money Screen (Coming Soon)'),
+              const Text(
+                  'Livrez pour vos voisins, gagnez au passage ! (Coming Soon)'),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {

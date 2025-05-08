@@ -5,11 +5,13 @@ import 'package:semo/features/home/presentation/widgets/cart/transparent_cart.da
 /// An example widget that demonstrates how to use the TransparentCart
 /// with product images positioned at various angles inside it.
 class DeliverySection extends StatelessWidget {
+  final String title;
   final List<List<String>> productsImagesList;
   final double sectionSize;
 
   const DeliverySection({
     Key? key,
+    required this.title,
     required this.productsImagesList,
     this.sectionSize = 180,
   }) : super(key: key);
@@ -18,12 +20,71 @@ class DeliverySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: productsImagesList.length,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return _buildDeliverySection(context, index);
-      },
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(left: 16),
+                child: Text(
+                  textAlign: TextAlign.start,
+                  maxLines: 2,
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 4.0),
+              child: TextButton(
+                onPressed: () {
+                  // Navigate to recipes page
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(30, 30),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.arrow_forward,
+                      size: 20,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 220,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ListView.builder(
+              itemCount: productsImagesList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return _buildDeliverySection(context, index);
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 
@@ -59,7 +120,25 @@ class DeliverySection extends StatelessWidget {
           _buildHeader(index),
           _builCartImageWithShadow(
               context, productsImagesList[index], cartImageSize),
-          SizedBox(height: sectionSize * 0.05),
+          // SizedBox(height: sectionSize * 0.05),
+          Container(
+            width: sectionSize * 0.8,
+            height: sectionSize * 0.17,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Center(
+              child: Text(
+                "Je m'en occupe",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -71,10 +150,10 @@ class DeliverySection extends StatelessWidget {
 //
 //
 
-  _buildHeader(int index) {
+  Widget _buildHeader(int index) {
     return SizedBox(
       width: sectionSize,
-      height: sectionSize * 0.43,
+      height: sectionSize * 0.32,
       child: Stack(
         children: [
           Positioned(
@@ -105,14 +184,14 @@ class DeliverySection extends StatelessWidget {
                 children: [
                   Positioned(
                     top: 0,
-                    right: 0,
+                    right: 6,
                     child: Container(
                       width: sectionSize * 0.3,
                       height: sectionSize * 0.15,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         color: Colors.red,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Center(
                         child: Text(
@@ -129,14 +208,14 @@ class DeliverySection extends StatelessWidget {
                   ),
                   Positioned(
                     top: 0,
-                    left: 0,
+                    left: 6,
                     child: Container(
                       width: sectionSize * 0.3,
                       height: sectionSize * 0.15,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         color: Colors.green,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Center(
                         child: Text(

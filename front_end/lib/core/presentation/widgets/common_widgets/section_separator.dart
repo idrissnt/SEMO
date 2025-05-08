@@ -1,30 +1,18 @@
-// import 'package:flutter/material.dart';
-// import '../../theme/responsive_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 
-// class SectionSeparator extends StatelessWidget {
-//   const SectionSeparator({
-//     Key? key,
-//     this.height,
-//     this.color,
-//   }) : super(key: key);
+class SectionSeparator extends StatelessWidget {
+  const SectionSeparator({
+    Key? key,
+  }) : super(key: key);
 
-//   final double? height;
-//   final Color? color;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       height: height ?? context.smallHeight,
-//       width: double.infinity,
-//       decoration: BoxDecoration(
-//         color: color ?? context.textSecondaryColor,
-//         border: Border.symmetric(
-//           horizontal: BorderSide(
-//             color: context.textSecondaryColor,
-//             width: context.xxsWidth,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: AppDimensionsHeight.xxSmall,
+      width: double.infinity,
+      color: AppColors.searchBarColor,
+    );
+  }
+}

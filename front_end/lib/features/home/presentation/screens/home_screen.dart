@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_constant.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
+import 'package:semo/core/presentation/widgets/common_widgets/section_separator.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/home/presentation/bottom_sheets/address_app_bar/address_bottom_sheet.dart';
 
@@ -12,10 +12,11 @@ import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/home/presentation/bottom_sheets/after_register/verify_email_screen.dart';
 import 'package:semo/features/home/presentation/test_date/cart.dart';
+import 'package:semo/features/home/presentation/test_date/recipe.dart';
 import 'package:semo/features/home/presentation/test_date/store.dart';
 import 'package:semo/features/home/presentation/widgets/sections/delivery_section.dart';
 import 'package:semo/features/home/presentation/widgets/sections/store_section.dart';
-import 'package:semo/features/home/routes/home_routes_constants.dart';
+import 'package:semo/features/home/presentation/widgets/sections/weekly_recipes_section.dart';
 
 // Import extracted widgets
 import 'package:semo/features/home/presentation/helpers/scroll_animation_helper.dart';
@@ -142,171 +143,31 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        //
+        // Store section
         StoreSection(
-          title: 'Les magasins',
+          title: 'Passez vos commandes',
           stores: stores,
         ),
+        const SectionSeparator(),
 
-        SizedBox(
-          height: 200,
-          child: DeliverySection(
-            productsImagesList: productsImagesList,
-            sectionSize: 180,
-          ),
+        // Delivery section
+        const SizedBox(height: 16),
+        DeliverySection(
+          title: 'Vous allez au magasin ? Prenez le panier de votre voisin',
+          productsImagesList: productsImagesList,
+          sectionSize: 180,
         ),
-        // Promotional banner
-        Container(
-          margin: const EdgeInsets.all(16),
-          height: 180,
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Center(child: Text('Promotional Banner')),
-        ),
+        const SectionSeparator(),
 
-        // Categories section
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Categories',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 120,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    final categoryId = 'cat_${index + 1}';
-                    return GestureDetector(
-                      onTap: () {
-                        // Navigate to category details
-                        logger.debug('Navigating to category: $categoryId');
-                        context.go(HomeRoutesConstants.getCategoryDetailsRoute(
-                            categoryId));
-                      },
-                      child: Container(
-                        width: 100,
-                        margin: const EdgeInsets.only(right: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.category,
-                              color: AppColors.primary,
-                              size: 32,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Category ${index + 1}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+        // Weekly recipes section
+        const SizedBox(height: 16),
+        WeeklyRecipesSection(
+          title: 'Nos recettes de la semaine',
+          recipes: getSampleRecipes(),
         ),
 
-        // Popular items section
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Popular Items',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  final productId = 'popular_product_${index + 1}';
-                  return GestureDetector(
-                    onTap: () {
-                      // Navigate to product details
-                      logger.debug('Navigating to product: $productId');
-                      context.go(HomeRoutesConstants.getProductDetailsRoute(
-                          productId));
-                    },
-                    child: Container(
-                      height: 100,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            color: Colors.grey[300],
-                            child: Center(
-                              child: Icon(
-                                Icons.shopping_bag,
-                                color: AppColors.primary,
-                                size: 32,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Product ${index + 1}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Text(
-                                  'Tap to view details',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.grey[400],
-                              size: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+        //
         ButtonFactory.createAnimatedButton(
           context: context,
           onPressed: () {
