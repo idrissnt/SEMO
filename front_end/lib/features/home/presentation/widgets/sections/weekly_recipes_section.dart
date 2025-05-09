@@ -80,7 +80,7 @@ class RecipeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.grey.shade300,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -154,38 +154,32 @@ class RecipeCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Day of week and Edit button
+                    // Day of week
                     Positioned(
                       top: 8,
                       left: 8,
-                      right: 8,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 1),
-                                ),
-                              ],
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.searchBarHintColor,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 1),
                             ),
-                            child: Text(
-                              recipe.dayOfWeek,
-                              style: const TextStyle(
-                                color: AppColors.textSecondaryColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                          ],
+                        ),
+                        child: Text(
+                          recipe.dayOfWeek,
+                          style: const TextStyle(
+                            color: AppColors.textSecondaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
@@ -211,28 +205,49 @@ class RecipeCard extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       left: 8.0, right: 8.0, bottom: 8.0, top: 2.0),
                   child: SizedBox(
-                    height: 36,
+                    height: 46,
                     child: ElevatedButton(
                       onPressed: onAddToCartTap,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        shadowColor: Colors.black,
+                        elevation: 12,
+                        backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         minimumSize: const Size(double.infinity, 30),
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(24),
                         ),
                       ),
                       child: const Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            'Ajouter ingrédients',
-                            style: TextStyle(fontSize: 13),
-                            overflow: TextOverflow.ellipsis,
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  size: 24,
+                                  color: Colors.white,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    'Ajouter les ingrédients',
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(width: 4),
-                          Icon(Icons.shopping_cart, size: 16),
+                          Icon(Icons.shopping_cart,
+                              size: 24, color: Colors.white),
                         ],
                       ),
                     ),

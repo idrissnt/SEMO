@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 
-import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_event.dart';
 import 'package:semo/features/auth/presentation/bloc/welcome/welcome_assets_state.dart';
 
 import 'package:semo/features/auth/presentation/state_handler/welcom/error_state_widget.dart';
@@ -107,7 +107,7 @@ class WelcomeStateHandler {
 
   /// Helper method to retry loading assets
   static void _retryLoad(BuildContext context) {
-    context.read<WelcomeAssetsBloc>().add(const LoadAllAssetsEvent());
+    context.read<AuthBloc>().add(AuthCheckRequested());
   }
 
   /// Schedule a retry after a delay (useful for automatic retries)

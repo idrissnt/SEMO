@@ -22,56 +22,11 @@ class DeliverySection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(left: 16),
-                child: Text(
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
-                  title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 4.0),
-              child: TextButton(
-                onPressed: () {
-                  // Navigate to recipes page
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(30, 30),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.arrow_forward,
-                      size: 20,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        _buildSectionTitle(title),
         const SizedBox(height: 16),
         SizedBox(
           height: 220,
+          width: double.infinity,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ListView.builder(
@@ -88,11 +43,61 @@ class DeliverySection extends StatelessWidget {
     );
   }
 
+  Widget _buildSectionTitle(String sectionTitle) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.only(left: 16),
+            child: Text(
+              textAlign: TextAlign.start,
+              maxLines: 2,
+              sectionTitle,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: TextButton(
+            onPressed: () {
+              // Navigate to all delivery available
+            },
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: const Size(30, 30),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.arrow_forward,
+                  size: 20,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildDeliverySection(BuildContext context, int index) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-      width: sectionSize * 0.95,
+      width: sectionSize,
       height: sectionSize,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -104,12 +109,12 @@ class DeliverySection extends StatelessWidget {
           ],
         ),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black,
             blurRadius: 4,
             spreadRadius: 0,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -121,24 +126,7 @@ class DeliverySection extends StatelessWidget {
           _builCartImageWithShadow(
               context, productsImagesList[index], cartImageSize),
           // SizedBox(height: sectionSize * 0.05),
-          Container(
-            width: sectionSize * 0.8,
-            height: sectionSize * 0.17,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Center(
-              child: Text(
-                "Je m'en occupe",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
+          _buildDoButton(sectionSize),
         ],
       ),
     );
@@ -158,7 +146,7 @@ class DeliverySection extends StatelessWidget {
         children: [
           Positioned(
             top: 0,
-            left: sectionSize * 0.25,
+            left: 50,
             child: Container(
               width: sectionSize * 0.4,
               height: sectionSize * 0.18,
@@ -175,55 +163,106 @@ class DeliverySection extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: sectionSize * 0.15,
-            left: sectionSize * 0.05,
+            top: 0,
+            left: 5,
             child: SizedBox(
-              width: sectionSize * 0.8,
-              height: sectionSize * 0.2,
+              width: sectionSize * 0.9,
+              height: sectionSize * 0.32,
               child: Stack(
                 children: [
                   Positioned(
-                    top: 0,
-                    right: 6,
-                    child: Container(
-                      width: sectionSize * 0.3,
-                      height: sectionSize * 0.15,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "13${'€'}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    top: 7,
+                    right: 0,
+                    child: Transform.rotate(
+                      angle: 20 * 0.0174533,
+                      child: Container(
+                        width: sectionSize * 0.33,
+                        height: sectionSize * 0.22,
+                        decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                          shape: BoxShape.rectangle,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Center(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '12 €  ',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'pour vous',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                     ),
                   ),
                   Positioned(
-                    top: 0,
-                    left: 6,
-                    child: Container(
-                      width: sectionSize * 0.3,
-                      height: sectionSize * 0.15,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '1.5 Km',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                    top: 7,
+                    left: 0,
+                    child: Transform.rotate(
+                      angle: -20 * 0.0174533,
+                      child: Container(
+                        width: sectionSize * 0.33,
+                        height: sectionSize * 0.22,
+                        decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                          shape: BoxShape.rectangle,
+                          color: const Color.fromARGB(255, 191, 88, 44),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Center(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '1.5 Km ',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'de vous',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
@@ -351,7 +390,7 @@ class DeliverySection extends StatelessWidget {
 
           TransparentCart(
             size: cartImageSize,
-            basketOpacity: 0.4, // Semi-transparent basket
+            basketOpacity: 0.0, // Semi-transparent basket
           ),
         ],
       ),
@@ -376,6 +415,36 @@ class DeliverySection extends StatelessWidget {
         image: DecorationImage(
           image: NetworkImage(imageUrl),
           fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDoButton(double sectionSize) {
+    return SizedBox(
+      height: sectionSize * 0.17,
+      width: sectionSize * 0.9,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          shadowColor: Colors.black,
+          elevation: 12,
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          // minimumSize: const Size(double.infinity, 30),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ),
+        child: const Text(
+          textAlign: TextAlign.center,
+          'Je m\'en occupe',
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
