@@ -96,25 +96,34 @@ class DeliverySection extends StatelessWidget {
   Widget _buildDeliverySection(BuildContext context, int index) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      // padding: const EdgeInsets.symmetric(vertical: 4),
       width: sectionSize,
       height: sectionSize,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFF8C6A8), // Lighter peach at top
-            Color.fromARGB(255, 191, 88, 44), // Slightly darker peach at bottom
-          ],
-        ),
+        color: Colors.white,
+        // gradient: const SweepGradient(
+        //   center: Alignment.center,
+        //   startAngle: 0.0,
+        //   endAngle: 3.14 * 2,
+        //   stops: [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875],
+        //   colors: [
+        //     Color.fromARGB(255, 0, 0, 255),    // Top (blue)
+        //     Color.fromARGB(255, 255, 0, 0),    // Top-right (red)
+        //     Color.fromARGB(255, 255, 255, 0),  // Right (yellow)
+        //     Color.fromARGB(255, 0, 128, 0),    // Bottom-right (green)
+        //     Color.fromARGB(255, 255, 140, 0),  // Bottom (orange)
+        //     Color.fromARGB(255, 139, 69, 19),  // Bottom-left (brown)
+        //     Color.fromARGB(255, 0, 0, 255),    // Left (blue)
+        //     Color.fromARGB(255, 255, 255, 255),// Top-left (white)
+        //   ],
+        //   tileMode: TileMode.clamp,
+        // ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: const [
           BoxShadow(
             color: Colors.black,
             blurRadius: 4,
-            spreadRadius: 0,
-            offset: Offset(0, 2),
+            // offset: Offset(0, 2),
           ),
         ],
       ),
@@ -145,11 +154,11 @@ class DeliverySection extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            top: 0,
-            left: 50,
+            top: 3,
+            left: 3,
             child: Container(
-              width: sectionSize * 0.4,
-              height: sectionSize * 0.18,
+              width: sectionSize * 0.22,
+              height: sectionSize * 0.22,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
@@ -163,112 +172,33 @@ class DeliverySection extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 0,
-            left: 5,
-            child: SizedBox(
-              width: sectionSize * 0.9,
-              height: sectionSize * 0.32,
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 7,
-                    right: 0,
-                    child: Transform.rotate(
-                      angle: 20 * 0.0174533,
-                      child: Container(
-                        width: sectionSize * 0.33,
-                        height: sectionSize * 0.22,
-                        decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 4,
-                              spreadRadius: 0,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                          shape: BoxShape.rectangle,
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Center(
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '12 €  ',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'pour vous',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
+            top: 11.5,
+            right: 0,
+            child: Container(
+              width: sectionSize * 0.5,
+              height: sectionSize * 0.12,
+              decoration: BoxDecoration(
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 4,
+                    spreadRadius: 0,
+                    offset: Offset(0, 2),
                   ),
-                  Positioned(
-                    top: 7,
-                    left: 0,
-                    child: Transform.rotate(
-                      angle: -20 * 0.0174533,
-                      child: Container(
-                        width: sectionSize * 0.33,
-                        height: sectionSize * 0.22,
-                        decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 4,
-                              spreadRadius: 0,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                          shape: BoxShape.rectangle,
-                          color: const Color.fromARGB(255, 191, 88, 44),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Center(
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '1.5 Km ',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'de vous',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
                 ],
+                shape: BoxShape.rectangle,
+                color: Colors.red.shade600,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Center(
+                child: Text(
+                  '1.2 km de vous',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           )
@@ -313,7 +243,7 @@ class DeliverySection extends StatelessWidget {
       BuildContext context, List<String> productImages, double cartImageSize) {
     return SizedBox(
       width: cartImageSize,
-      height: cartImageSize,
+      height: cartImageSize * 0.8,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -321,7 +251,7 @@ class DeliverySection extends StatelessWidget {
           if (productImages.length > 2)
             Positioned(
               top: cartImageSize * -0.1, // Position in the middle of the basket
-              left: cartImageSize * 0.3,
+              left: cartImageSize * 0.25,
               child: Transform.rotate(
                 angle: 0.2, // Slight tilt to the right
                 child: _buildProductImage(
@@ -342,12 +272,12 @@ class DeliverySection extends StatelessWidget {
 
           if (productImages.isNotEmpty)
             Positioned(
-              top: cartImageSize * 0.25,
+              top: cartImageSize * 0.15,
               left: cartImageSize * 0.35,
               child: Transform.rotate(
                 angle: 0.1, // Very slight tilt to the right
                 child: _buildProductImage(
-                    productImages[2], cartImageSize * 0.4, cartImageSize * 0.4),
+                    productImages[2], cartImageSize * 0.3, cartImageSize * 0.4),
               ),
             ),
 
@@ -421,7 +351,8 @@ class DeliverySection extends StatelessWidget {
   }
 
   Widget _buildDoButton(double sectionSize) {
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 4),
       height: sectionSize * 0.17,
       width: sectionSize * 0.9,
       child: ElevatedButton(

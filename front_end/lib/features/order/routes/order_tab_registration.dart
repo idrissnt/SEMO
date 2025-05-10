@@ -3,17 +3,17 @@ import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registra
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_registry.dart';
 import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/features/home/presentation/constant/home_constants.dart';
-import 'package:semo/features/mission/mission_screen.dart';
+import 'package:semo/features/order/order_screen.dart';
 
 /// Registers the mission tab in the tab registry
-void registerMissionTab() {
+void registerOrderTab() {
   TabRegistry.registerTab(
     const TabInfo(
-      route: AppRoutes.mission,
-      label: HomeConstants.publish,
+      route: AppRoutes.order,
+      label: HomeConstants.order,
       icon: Icons.note_add_outlined,
       activeIcon: Icons.note_add,
-      screen: MissionScreen(),
+      screen: OrderScreen(),
     ),
   );
 }

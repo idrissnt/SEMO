@@ -211,8 +211,8 @@ class RecipeCard extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         shadowColor: Colors.black,
                         elevation: 12,
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
                         minimumSize: const Size(double.infinity, 30),
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         shape: RoundedRectangleBorder(
@@ -229,7 +229,7 @@ class RecipeCard extends StatelessWidget {
                                 Icon(
                                   Icons.add,
                                   size: 24,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                                 Expanded(
                                   child: Text(
@@ -247,7 +247,7 @@ class RecipeCard extends StatelessWidget {
                           ),
                           SizedBox(width: 4),
                           Icon(Icons.shopping_cart,
-                              size: 24, color: Colors.white),
+                              size: 24, color: Colors.black),
                         ],
                       ),
                     ),

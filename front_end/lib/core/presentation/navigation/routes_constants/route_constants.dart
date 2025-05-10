@@ -5,8 +5,8 @@
 class AppRoutes {
   // Main app routes
   static const String home = '/homeScreen';
-  static const String mission = '/mission';
-  static const String earn = '/earn';
+  static const String order = '/order';
+  static const String deliver = '/deliver';
   static const String message = '/message';
-  static const String semoAi = '/semo-ai';
+  // static const String semoAi = '/semo-ai';
 }

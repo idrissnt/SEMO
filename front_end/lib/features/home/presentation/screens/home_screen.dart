@@ -146,7 +146,8 @@ class _HomeScreenState extends State<HomeScreen> {
         //
         // Store section
         StoreSection(
-          title: 'Passez vos commandes',
+          title: 'Choisissez votre magasin',
+          // title: 'Passez vos commandes',
           stores: stores,
         ),
         const SectionSeparator(),
@@ -168,31 +169,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         //
-        ButtonFactory.createAnimatedButton(
-          context: context,
-          onPressed: () {
-            showVerifyEmailBottomSheet(context);
-          },
-          text: 'Valider',
-          backgroundColor: AppColors.primary,
-          textColor: AppColors.secondary,
-          splashColor: AppColors.primary,
-          highlightColor: AppColors.primary,
-          boxShadowColor: AppColors.primary,
-          minWidth: AppButtonDimensions.minWidth,
-          minHeight: AppButtonDimensions.minHeight,
-          verticalPadding: AppDimensionsWidth.xSmall,
-          horizontalPadding: AppDimensionsHeight.small,
-          borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
-          animationDuration:
-              Duration(milliseconds: AppConstant.buttonAnimationDurationMs),
-          enableHapticFeedback: true,
-          textStyle: TextStyle(
-            fontSize: AppFontSize.large,
-            fontWeight: FontWeight.w800,
-            color: AppColors.secondary,
-          ),
-        )
+        // ButtonFactory.createAnimatedButton(
+        //   context: context,
+        //   onPressed: () {
+        //     showVerifyEmailBottomSheet(context);
+        //   },
+        //   text: 'Valider',
+        //   backgroundColor: AppColors.primary,
+        //   textColor: AppColors.secondary,
+        //   splashColor: AppColors.primary,
+        //   highlightColor: AppColors.primary,
+        //   boxShadowColor: AppColors.primary,
+        //   minWidth: AppButtonDimensions.minWidth,
+        //   minHeight: AppButtonDimensions.minHeight,
+        //   verticalPadding: AppDimensionsWidth.xSmall,
+        //   horizontalPadding: AppDimensionsHeight.small,
+        //   borderRadius: BorderRadius.circular(AppBorderRadius.xxl),
+        //   animationDuration:
+        //       Duration(milliseconds: AppConstant.buttonAnimationDurationMs),
+        //   enableHapticFeedback: true,
+        //   textStyle: TextStyle(
+        //     fontSize: AppFontSize.large,
+        //     fontWeight: FontWeight.w800,
+        //     color: AppColors.secondary,
+        //   ),
+        // )
       ],
     );
   }

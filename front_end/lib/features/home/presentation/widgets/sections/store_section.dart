@@ -5,6 +5,7 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StoreSection extends StatelessWidget {
   final String title;
@@ -33,10 +34,11 @@ class StoreSection extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: 16),
           child: Text(
+            // 'Recipes',
             title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+            style: GoogleFonts.roboto(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
               color: Colors.black,
             ),
           ),
@@ -180,7 +182,7 @@ class _StoreImageButtonState extends State<StoreImageButton>
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.primary, AppColors.secondary],
+          colors: const [AppColors.primary, AppColors.secondary],
         ),
         boxShadow: const [
           BoxShadow(

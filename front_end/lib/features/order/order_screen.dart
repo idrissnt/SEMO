@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/utils/logger.dart';
 
-class MissionScreen extends StatefulWidget {
-  const MissionScreen({Key? key}) : super(key: key);
+class OrderScreen extends StatefulWidget {
+  const OrderScreen({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _MissionScreenState createState() => _MissionScreenState();
+  _OrderScreenState createState() => _OrderScreenState();
 }
 
-class _MissionScreenState extends State<MissionScreen> {
+class _OrderScreenState extends State<OrderScreen> {
   final AppLogger _logger = AppLogger();
   final List<Map<String, dynamic>> _missions = [
     {
@@ -48,7 +48,8 @@ class _MissionScreenState extends State<MissionScreen> {
   @override
   void initState() {
     super.initState();
-    _logger.debug('MissionScreen: Initializing', {'component': 'MissionScreen'});
+    _logger
+        .debug('MissionScreen: Initializing', {'component': 'MissionScreen'});
     _logger.info('Total missions available: ${_missions.length}');
   }
 

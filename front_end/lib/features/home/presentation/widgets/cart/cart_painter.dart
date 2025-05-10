@@ -50,13 +50,13 @@ class CartPainter extends CustomPainter {
     final slitsPaint = Paint()
       ..color = outlineColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = width * 0.02
+      ..strokeWidth = width * 0.035
       ..strokeCap = StrokeCap.round;
 
     final handleLightPaint = Paint()
       ..color = wheelCenterColor
       ..style = PaintingStyle.fill
-      ..strokeWidth = width * 0.04
+      ..strokeWidth = width * 0.055
       ..strokeCap = StrokeCap.round;
 
     // Now draw the blue vertical part of the handle

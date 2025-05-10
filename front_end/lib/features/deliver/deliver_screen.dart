@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/logger.dart';
 
-class EarnScreen extends StatefulWidget {
-  const EarnScreen({Key? key}) : super(key: key);
+class DeliverScreen extends StatefulWidget {
+  const DeliverScreen({Key? key}) : super(key: key);
 
   @override
-  _EarnScreenState createState() => _EarnScreenState();
+  _DeliverScreenState createState() => _DeliverScreenState();
 }
 
-class _EarnScreenState extends State<EarnScreen> {
+class _DeliverScreenState extends State<DeliverScreen> {
   final AppLogger _logger = AppLogger();
 
   @override
   void initState() {
     super.initState();
-    _logger.debug('EarnScreen: Initializing', {'component': 'EarnScreen'});
+    _logger
+        .debug('DeliverScreen: Initializing', {'component': 'DeliverScreen'});
   }
 
   @override
