@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/navigation/routes_constants/route_constants.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/auth/routes/auth_routes_const.dart';
+import 'package:semo/features/order/routes/const.dart';
 
 /// Coordinates authentication flow throughout the app
 /// Serves as the single source of truth for auth-based navigation
@@ -17,7 +17,7 @@ class AuthFlowCoordinator {
 
   // Singleton instance for global access
   static AuthFlowCoordinator? _instance;
-  
+
   // Factory constructor to return the singleton instance
   factory AuthFlowCoordinator.getInstance({
     required AuthBloc authBloc,
@@ -27,7 +27,7 @@ class AuthFlowCoordinator {
     _instance ??= AuthFlowCoordinator._internal(authBloc, router, logger);
     return _instance!;
   }
-  
+
   // Internal constructor
   AuthFlowCoordinator._internal(this._authBloc, this._router, this._logger) {
     _authSubscription = _authBloc.stream.listen(_handleAuthStateChange);
@@ -49,12 +49,13 @@ class AuthFlowCoordinator {
 
   /// Handle auth state changes and coordinate navigation
   void _handleAuthStateChange(AuthState state) {
-    _logger.debug('AuthFlowCoordinator: Handling state change: ${state.runtimeType}');
-    
+    _logger.debug(
+        'AuthFlowCoordinator: Handling state change: ${state.runtimeType}');
+
     // Get the current location from the router configuration
     final location = _router.routerDelegate.currentConfiguration.uri.path;
     _logger.debug('Current location: $location');
-    
+
     if (state is AuthUnauthenticated) {
       // When user logs out, navigate to welcome screen
       _logger.info('User logged out, navigating to welcome screen');
@@ -62,10 +63,11 @@ class AuthFlowCoordinator {
     } else if (state is AuthAuthenticated) {
       // When user logs in, navigate to home if currently on an auth screen
       _logger.debug('User authenticated, current location: $location');
-      
+
       if (isAuthRoute(location)) {
-        _logger.info('User authenticated while on auth screen, navigating to home');
-        _router.go(AppRoutes.home);
+        _logger.info(
+            'User authenticated while on auth screen, navigating to home');
+        _router.go(OrderRoutesConstants.order);
       }
     } else if (state is AuthLoading) {
       _logger.debug('Auth loading state detected');
@@ -74,24 +76,24 @@ class AuthFlowCoordinator {
       _logger.debug('Other auth state detected: ${state.runtimeType}');
     }
   }
-  
+
   /// Check if the current route is an authentication route
   /// Made public so it can be used by the router and other components
   bool isAuthRoute(String location) {
     return location == AuthRoutesConstants.welcome ||
-           location == AuthRoutesConstants.login ||
-           location == AuthRoutesConstants.register ||
-           location == AuthRoutesConstants.splash;
+        location == AuthRoutesConstants.login ||
+        location == AuthRoutesConstants.register ||
+        location == AuthRoutesConstants.splash;
   }
-  
+
   /// Centralized auth redirect logic for the router
   /// This replaces the redirect logic in AuthRouter
   String? handleRedirect(String path, AuthState state) {
     _logger.debug('AuthFlowCoordinator: Handling redirect for path: $path');
-    
+
     final isAuthenticated = state is AuthAuthenticated;
     final isAuthPath = isAuthRoute(path);
-    
+
     // Check if the user is a guest user
     bool isGuestUser = false;
     if (state is AuthAuthenticated) {
@@ -107,7 +109,7 @@ class AuthFlowCoordinator {
     // If authenticated, prevent access to auth routes
     if (isAuthenticated && isAuthPath) {
       _logger.info('Authenticated user redirected from auth route to home');
-      return AppRoutes.home;
+      return OrderRoutesConstants.order;
     }
 
     // If not authenticated, redirect to welcome
@@ -118,15 +120,15 @@ class AuthFlowCoordinator {
 
     return null; // no redirect needed
   }
-  
+
   /// Handle initial navigation from splash screen
   /// This centralizes the initial navigation logic
   void handleSplashNavigation() {
     _logger.debug('AuthFlowCoordinator: Handling splash navigation');
-    
+
     // Trigger auth check
     _authBloc.add(AuthCheckRequested());
-    
+
     // Default to welcome screen
     // The auth state change handler will redirect if needed
     _router.go(AuthRoutesConstants.welcome);

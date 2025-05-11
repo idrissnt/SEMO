@@ -14,6 +14,7 @@ class AppColors {
   static const Color background =
       Colors.white; // Using Color(0xFFFFFFFF) would also work
   static const Color surface = Color.fromARGB(255, 241, 240, 240);
+  static Color bottomNavigationColor = Colors.grey.shade200;
 
   // Search Bar Colors
   static Color searchBarColor =

@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:semo/features/auth/di/auth_injection.dart';
 import 'package:semo/features/store/di/store_injection.dart';
-import 'package:semo/features/home/di/home_screen_injection.dart';
+import 'package:semo/features/order/di/order_injection.dart';
 import 'package:semo/features/profile/di/profile_injection.dart';
 
 /// Registry for all feature modules
@@ -19,16 +19,16 @@ class FeatureModuleRegistry {
   static void registerAll(GetIt getIt) {
     // Auth feature
     registerAuthDependencies();
-    
+
     // Store feature
     registerStoreDependencies();
-    
-    // Home screen feature
-    registerHomeScreenDependencies();
-    
+
+    // Order feature
+    registerOrderDependencies();
+
     // Profile feature
     registerProfileDependencies();
-    
+
     // Additional features can be registered here
   }
 }

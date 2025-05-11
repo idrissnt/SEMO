@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/shell_provider.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_info.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_registry.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// Creates the main shell route with bottom navigation
 /// This is in the core module because it's a cross-feature concern
@@ -77,6 +78,13 @@ class MainShellScaffold extends StatelessWidget {
           // Navigate to the selected tab
           context.go(tabs[index].route);
         },
+        // Customize bottom navigation bar colors
+        backgroundColor: AppColors.bottomNavigationColor, // Background color
+        selectedItemColor: AppColors.primary, // Active item color
+        unselectedItemColor: AppColors.textPrimaryColor, // Inactive item color
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        elevation: 8, // Add a slight shadow
         items: tabs
             .map((tab) => BottomNavigationBarItem(
                   icon: Icon(tab.icon),

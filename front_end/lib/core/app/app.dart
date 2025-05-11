@@ -31,10 +31,10 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               scaffoldBackgroundColor: AppColors.background,
               appBarTheme: const AppBarTheme(
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white,
                 elevation: 0,
                 iconTheme: IconThemeData(
-                  color: Colors.black,
+                  color: AppColors.primary,
                 ),
               ),
               inputDecorationTheme: InputDecorationTheme(
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                   decoration: TextDecoration.none,
                 ),
               ),
-              textSelectionTheme: TextSelectionThemeData(
+              textSelectionTheme: const TextSelectionThemeData(
                 cursorColor: AppColors.primary,
               ),
             ),

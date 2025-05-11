@@ -1,3 +1,7 @@
+# Connect to physical android device
+adb devices # to list connected devices
+adb connect 172.20.10.4:5555 # to connect to physical android device
+
 # Create and activate virtual environment
 python -m venv venv
 .\venv\Scripts\Activate.ps1

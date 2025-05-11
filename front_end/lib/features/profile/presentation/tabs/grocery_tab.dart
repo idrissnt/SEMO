@@ -81,6 +81,22 @@ class GroceryTab extends StatelessWidget {
 
           const SizedBox(height: 16),
 
+          // Time availability
+          SettingsSection(
+            title: 'Time Availability',
+            children: [
+              SettingsTile(
+                icon: AppIcons.calendar(size: 24, color: Colors.white),
+                iconContainerColor: Colors.red,
+                title: 'Available Times',
+                subtitle: 'When do you go to the grocery ?',
+                routeName: ProfileRouteNames.groceryDeliveries,
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
           // Favorites & Preferences
           SettingsSection(
             title: 'Favorites & Preferences',
@@ -163,7 +179,7 @@ class GroceryTab extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
@@ -172,7 +188,7 @@ class GroceryTab extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w800,
             color: AppColors.primary,

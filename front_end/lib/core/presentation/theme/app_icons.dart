@@ -29,6 +29,12 @@ class AppIcons {
         color: color,
       );
 
+  static Widget calendar({double? size, Color? color}) => _buildIcon(
+        CupertinoIcons.calendar,
+        size: size,
+        color: color,
+      );
+
   static Widget cart({double? size, Color? color}) => _buildIcon(
         CupertinoIcons.cart_fill,
         size: size,
