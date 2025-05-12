@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/deliver/presentation/widgets/filters/components/filter_chips.dart';
+import 'package:semo/features/deliver/presentation/widgets/filters/components/filter_constants.dart';
+import 'package:semo/features/deliver/presentation/widgets/filters/components/filter_dialogs.dart';
 
 /// A widget that displays a horizontal list of filter chips for quick filtering
 /// of community shopping orders.
@@ -9,7 +11,7 @@ class QuickFilters extends StatefulWidget {
 
   /// Initial selected filters
   final Map<String, dynamic> initialFilters;
-  
+
   /// Whether to automatically select "Tous les magasins" filter
   final bool autoSelectAllMarkets;
 
@@ -27,111 +29,118 @@ class QuickFilters extends StatefulWidget {
 class _QuickFiltersState extends State<QuickFilters> {
   // Map to store filter selections with their values
   late Map<String, dynamic> _filterValues;
-  
-  // Constants for filter keys
-  static const String kAllMarkets = 'all_markets';
-  static const String kOneMarket = 'one_market';
-  static const String kUrgent = 'urgent';
-  static const String kScheduled = 'scheduled';
-  static const String kDistance = 'distance';
-  static const String kHighReward = 'high_reward';
 
   @override
   void initState() {
     super.initState();
     // Initialize filter values
     _filterValues = Map<String, dynamic>.from(widget.initialFilters);
-    
+
     // Auto-select all markets if enabled and not already set
-    if (widget.autoSelectAllMarkets && !_filterValues.containsKey(kAllMarkets)) {
-      _filterValues[kAllMarkets] = true;
+    if (widget.autoSelectAllMarkets &&
+        !_filterValues.containsKey(FilterConstants.kAllMarkets)) {
+      _filterValues[FilterConstants.kAllMarkets] = true;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 0.0),
       child: SizedBox(
         height: 40,
         child: ListView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           children: [
-            _buildSimpleFilterChip(
-              kAllMarkets,
-              'Tous les magasins',
-              Icons.store,
-              _filterValues[kAllMarkets] == true,
+            // All markets filter
+            SimpleFilterChip(
+              filterKey: FilterConstants.kAllMarkets,
+              label: 'Tous les magasins',
+              icon: Icons.store,
+              selected: _filterValues[FilterConstants.kAllMarkets] == true,
               onSelected: (selected) {
-                _updateFilter(kAllMarkets, selected);
+                _updateFilter(FilterConstants.kAllMarkets, selected);
                 // Deselect one market if all markets is selected
-                if (selected && _filterValues.containsKey(kOneMarket)) {
-                  _updateFilter(kOneMarket, null);
+                if (selected && _filterValues.containsKey(FilterConstants.kOneMarket)) {
+                  _updateFilter(FilterConstants.kOneMarket, null);
                 }
               },
             ),
             const SizedBox(width: 8),
-            _buildExpandableFilterChip(
-              kOneMarket,
-              'Un magasin',
-              Icons.storefront,
-              _filterValues.containsKey(kOneMarket),
+            
+            // One market filter
+            ExpandableFilterChip(
+              filterKey: FilterConstants.kOneMarket,
+              label: 'Un magasin',
+              icon: Icons.storefront,
+              selected: _filterValues.containsKey(FilterConstants.kOneMarket),
+              filterValues: _filterValues,
               onSelected: (selected) {
                 if (selected) {
-                  _showStoreSelector(context);
+                  _showStoreSelector();
                 } else {
-                  _updateFilter(kOneMarket, null);
+                  _updateFilter(FilterConstants.kOneMarket, null);
                 }
                 // Deselect all markets if one market is selected
-                if (selected && _filterValues[kAllMarkets] == true) {
-                  _updateFilter(kAllMarkets, false);
+                if (selected && _filterValues[FilterConstants.kAllMarkets] == true) {
+                  _updateFilter(FilterConstants.kAllMarkets, false);
                 }
               },
             ),
             const SizedBox(width: 8),
-            _buildSimpleFilterChip(
-              kUrgent,
-              'Urgent',
-              Icons.timer,
-              _filterValues[kUrgent] == true,
-              onSelected: (selected) => _updateFilter(kUrgent, selected),
+            
+            // Urgent filter
+            SimpleFilterChip(
+              filterKey: FilterConstants.kUrgent,
+              label: 'Urgent',
+              icon: Icons.timer,
+              selected: _filterValues[FilterConstants.kUrgent] == true,
+              onSelected: (selected) => _updateFilter(FilterConstants.kUrgent, selected),
             ),
             const SizedBox(width: 8),
-            _buildExpandableFilterChip(
-              kScheduled,
-              'Programmé',
-              Icons.calendar_today,
-              _filterValues.containsKey(kScheduled),
+            
+            // Scheduled filter
+            ExpandableFilterChip(
+              filterKey: FilterConstants.kScheduled,
+              label: 'Programmé',
+              icon: Icons.calendar_today,
+              selected: _filterValues.containsKey(FilterConstants.kScheduled),
+              filterValues: _filterValues,
               onSelected: (selected) {
                 if (selected) {
-                  _showDateTimePicker(context);
+                  _showDateTimePicker();
                 } else {
-                  _updateFilter(kScheduled, null);
+                  _updateFilter(FilterConstants.kScheduled, null);
                 }
               },
             ),
             const SizedBox(width: 8),
-            _buildExpandableFilterChip(
-              kDistance,
-              'Distance',
-              Icons.place,
-              _filterValues.containsKey(kDistance),
+            
+            // Distance filter
+            ExpandableFilterChip(
+              filterKey: FilterConstants.kDistance,
+              label: 'Distance',
+              icon: Icons.place,
+              selected: _filterValues.containsKey(FilterConstants.kDistance),
+              filterValues: _filterValues,
               onSelected: (selected) {
                 if (selected) {
-                  _showDistanceSelector(context);
+                  _showDistanceSelector();
                 } else {
-                  _updateFilter(kDistance, null);
+                  _updateFilter(FilterConstants.kDistance, null);
                 }
               },
             ),
             const SizedBox(width: 8),
-            _buildSimpleFilterChip(
-              kHighReward,
-              'Récompense élevée',
-              Icons.star,
-              _filterValues[kHighReward] == true,
-              onSelected: (selected) => _updateFilter(kHighReward, selected),
+            
+            // High reward filter
+            SimpleFilterChip(
+              filterKey: FilterConstants.kHighReward,
+              label: 'Récompense élevée',
+              icon: Icons.star,
+              selected: _filterValues[FilterConstants.kHighReward] == true,
+              onSelected: (selected) => _updateFilter(FilterConstants.kHighReward, selected),
             ),
           ],
         ),
@@ -139,80 +148,6 @@ class _QuickFiltersState extends State<QuickFilters> {
     );
   }
 
-  /// Build a simple filter chip that can be toggled on/off
-  Widget _buildSimpleFilterChip(String key, String label, IconData icon, bool selected, {required Function(bool) onSelected}) {
-    return FilterChip(
-      label: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 16,
-            color: selected ? Colors.white : AppColors.primary,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: selected ? Colors.white : AppColors.primary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-      selected: selected,
-      onSelected: onSelected,
-      backgroundColor: Colors.white,
-      selectedColor: AppColors.primary,
-      checkmarkColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: AppColors.primary),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-    );
-  }
-  
-  /// Build a filter chip that expands to show more options
-  Widget _buildExpandableFilterChip(String key, String label, IconData icon, bool selected, {required Function(bool) onSelected}) {
-    return FilterChip(
-      label: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 16,
-            color: selected ? Colors.white : AppColors.primary,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: selected ? Colors.white : AppColors.primary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(width: 2),
-          Icon(
-            Icons.arrow_drop_down,
-            size: 16,
-            color: selected ? Colors.white : AppColors.primary,
-          ),
-        ],
-      ),
-      selected: selected,
-      onSelected: onSelected,
-      backgroundColor: Colors.white,
-      selectedColor: AppColors.primary,
-      checkmarkColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: AppColors.primary),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-    );
-  }
-  
   /// Update a filter and notify listeners
   void _updateFilter(String key, dynamic value) {
     setState(() {
@@ -226,125 +161,43 @@ class _QuickFiltersState extends State<QuickFilters> {
   }
   
   /// Show store selector dialog
-  void _showStoreSelector(BuildContext context) {
+  void _showStoreSelector() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Choisir un magasin'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildStoreOption('Carrefour', 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/carrefoures-log-for-cart.jpeg'),
-            _buildStoreOption('Lidl', 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png'),
-            _buildStoreOption('E.Leclerc', 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/E-Leclerc-logo-for-cart.png'),
-          ],
-        ),
+      builder: (context) => StoreSelector(
+        onStoreSelected: (storeData) {
+          _updateFilter(FilterConstants.kOneMarket, storeData);
+        },
       ),
-    );
-  }
-  
-  /// Build a store option for the selector
-  Widget _buildStoreOption(String name, String logoUrl) {
-    return ListTile(
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Image.network(
-          logoUrl,
-          width: 24,
-          height: 24,
-          fit: BoxFit.cover,
-        ),
-      ),
-      title: Text(name),
-      onTap: () {
-        Navigator.of(context).pop();
-        _updateFilter(kOneMarket, name);
-      },
     );
   }
   
   /// Show date/time picker dialog
-  void _showDateTimePicker(BuildContext context) {
+  void _showDateTimePicker() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Choisir une date'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.today),
-              title: const Text("Aujourd'hui"),
-              onTap: () {
-                Navigator.of(context).pop();
-                _updateFilter(kScheduled, "Aujourd'hui");
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.calendar_today),
-              title: const Text('Demain'),
-              onTap: () {
-                Navigator.of(context).pop();
-                _updateFilter(kScheduled, 'Demain');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.date_range),
-              title: const Text('Cette semaine'),
-              onTap: () {
-                Navigator.of(context).pop();
-                _updateFilter(kScheduled, 'Cette semaine');
-              },
-            ),
-          ],
-        ),
+      builder: (context) => DateTimePicker(
+        onDateSelected: (date) {
+          _updateFilter(FilterConstants.kScheduled, date);
+        },
       ),
     );
   }
   
   /// Show distance selector dialog
-  void _showDistanceSelector(BuildContext context) {
-    double distance = _filterValues[kDistance] ?? 1.0;
+  void _showDistanceSelector() {
+    double initialDistance = FilterConstants.defaultDistance;
+    if (_filterValues.containsKey(FilterConstants.kDistance)) {
+      initialDistance = _filterValues[FilterConstants.kDistance];
+    }
     
     showDialog(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Distance maximale'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('${distance.toStringAsFixed(1)} km', 
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Slider(
-                value: distance,
-                min: 0.5,
-                max: 5.0,
-                divisions: 9,
-                label: '${distance.toStringAsFixed(1)} km',
-                onChanged: (value) {
-                  setDialogState(() {
-                    distance = value;
-                  });
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Annuler'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _updateFilter(kDistance, distance);
-              },
-              child: const Text('Confirmer'),
-            ),
-          ],
-        ),
+      builder: (context) => DistanceSelector(
+        initialDistance: initialDistance,
+        onDistanceSelected: (distance) {
+          _updateFilter(FilterConstants.kDistance, distance);
+        },
       ),
     );
   }

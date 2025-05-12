@@ -5,7 +5,6 @@ import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/features/order/presentation/bloc/user_address/user_address_bloc.dart';
 import 'package:semo/features/order/presentation/bloc/user_address/user_address_state.dart';
 import 'package:semo/features/order/presentation/constant/constants.dart';
-import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
 
 /// Widget that displays the user's current location with an icon
 class LocationSection extends StatelessWidget {
@@ -29,56 +28,40 @@ class LocationSection extends StatelessWidget {
           addressText = '${address.streetNumber} ${address.streetName}';
         }
 
-        return Row(
-          // Set mainAxisSize to min to prevent unbounded width error
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Location icon
-            ActionIconButton(
-              icon: Icons.location_on_outlined,
-              color: AppColors.primary,
-              size: AppIconSize.large,
-              onPressed: onLocationTap,
+        return SizedBox(
+          height: OrderConstants.searchBarHeight,
+          width: OrderConstants.addressSizedBoxWidth,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            // Use Material's InkWell with better tap area
-            Material(
-              color: AppColors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-                onTap: onLocationTap,
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: AppDimensionsHeight.small),
-                  child: Row(
-                    children: [
-                      // Address text
-                      SizedBox(
-                        width: OrderConstants
-                            .addressSizedBoxWidth, // Fixed width for long addresses
-                        child: Text(
-                          addressText,
-                          style: TextStyle(
-                            fontSize: AppFontSize.medium,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimaryColor,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
-                      // Down arrow icon
-                      ActionIconButton(
-                        icon: Icons.keyboard_arrow_down,
-                        color: AppColors.iconColorFirstColor,
-                        size: AppIconSize.large,
-                        onPressed: onLocationTap,
-                      ),
-                    ],
-                  ),
+            onPressed: () {
+              onLocationTap();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.location_on_outlined,
+                    color: AppColors.primary),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(addressText,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: AppFontSize.medium,
+                          color: AppColors.textPrimaryColor,
+                          fontWeight: FontWeight.bold)),
                 ),
-              ),
+                const Icon(Icons.keyboard_arrow_down,
+                    color: AppColors.iconColorFirstColor),
+              ],
             ),
-          ],
+          ),
         );
       },
     );

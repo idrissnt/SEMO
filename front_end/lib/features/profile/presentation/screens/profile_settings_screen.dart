@@ -8,7 +8,6 @@ import 'package:semo/core/utils/logger.dart';
 
 // Feature imports
 import 'package:semo/features/profile/presentation/tabs/account_tab.dart';
-import 'package:semo/features/profile/presentation/tabs/tasks_tab.dart';
 import 'package:semo/features/profile/presentation/tabs/grocery_tab.dart';
 import 'package:semo/features/profile/presentation/tabs/settings_tab.dart';
 
@@ -38,11 +37,11 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
       iconBuilder: (color) => AppIcons.person(size: 24, color: color),
       originalColor: AppColors.primary,
     ),
-    _TabItem(
-      title: 'Tasks',
-      iconBuilder: (color) => AppIcons.assignmentFilled(size: 24, color: color),
-      originalColor: Colors.red,
-    ),
+    // _TabItem(
+    //   title: 'Tasks',
+    //   iconBuilder: (color) => AppIcons.assignmentFilled(size: 24, color: color),
+    //   originalColor: Colors.red,
+    // ),
     _TabItem(
       title: 'Grocery',
       iconBuilder: (color) => AppIcons.shoppingBagFill(size: 24, color: color),
@@ -171,7 +170,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
         controller: _tabController,
         children: const [
           AccountTab(),
-          TasksTab(),
+          // TasksTab(),
           GroceryTab(),
           SettingsTab(),
         ],
@@ -305,7 +304,7 @@ void _showImageSourceDialog(BuildContext context) {
           ),
           const SizedBox(height: 16),
           ListTile(
-            leading: Icon(Icons.photo_camera, color: AppColors.primary),
+            leading: const Icon(Icons.photo_camera, color: AppColors.primary),
             title: const Text('Take a photo'),
             onTap: () {
               // Handle camera option
@@ -314,7 +313,7 @@ void _showImageSourceDialog(BuildContext context) {
             },
           ),
           ListTile(
-            leading: Icon(Icons.photo_library, color: AppColors.primary),
+            leading: const Icon(Icons.photo_library, color: AppColors.primary),
             title: const Text('Choose from gallery'),
             onTap: () {
               // Handle gallery option

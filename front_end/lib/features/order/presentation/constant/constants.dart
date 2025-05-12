@@ -5,7 +5,7 @@ class OrderConstants {
   static const String order = 'Commander';
 
   // App Bar
-  static double addressSizedBoxWidth = 120.w;
+  static double addressSizedBoxWidth = 150.w;
   static double horizontalDensityBetweenIconAndText = -2.w;
   static double searchBarHeight = 45.h;
   static double searchBarWidth = double.infinity;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/deliver/presentation/test_data/community_orders.dart';
 import 'package:semo/features/deliver/presentation/widgets/cart/transparent_cart.dart';
@@ -24,29 +25,55 @@ class CommunityOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // The order card
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  order.storeName.contains('Ca')
+                      ? Colors.blue.withValues(alpha: 0.5)
+                      : order.storeName.contains('Lec')
+                          ? Colors.orange.withValues(alpha: 0.5)
+                          : const Color.fromARGB(
+                              255, 21, 104, 103), // Top (blue)
+                  order.storeName.contains('Ca')
+                      ? Colors.red.withValues(alpha: 0.5)
+                      : order.storeName.contains('Lec')
+                          ? Colors.blue.withValues(alpha: 0.5)
+                          : const Color.fromARGB(
+                              255, 165, 122, 12), // Top-right (red)
+                  Colors.white, // Right (yellow)
+                  Colors.white, // Bottom-right (gr
+                  // Colors.white, // Bottom-right (gr
+                ],
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+              ),
+              borderRadius: BorderRadius.circular(20), // Slightly larger radius
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  blurRadius: 2,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-          ],
+            child: Column(
+              children: [
+                _buildHeader(),
+                _buildOrderContent(),
+                _buildFooter(),
+              ],
+            ),
+          ),
         ),
-        child: Column(
-          children: [
-            _buildHeader(),
-            _buildOrderContent(),
-            _buildFooter(),
-          ],
-        ),
-      ),
+      ],
     );
   }
 
@@ -56,40 +83,32 @@ class CommunityOrderCard extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          // Customer image
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(order.customerImageUrl),
-          ),
-          const SizedBox(width: 12),
-          // Customer name and store
+          // Store logo and name
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  order.customerName,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
                 Row(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        order.storeLogoUrl,
-                        width: 16,
-                        height: 16,
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(order.storeLogoUrl),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 8),
                     Text(
                       order.storeName,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
+                      style: const TextStyle(
+                        color: AppColors.textPrimaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -101,8 +120,9 @@ class CommunityOrderCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.primary),
             ),
             child: Row(
               children: [
@@ -113,10 +133,10 @@ class CommunityOrderCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 2),
                 Text(
-                  '${order.distanceKm.toStringAsFixed(1)} km',
+                  '${order.distanceKm.toStringAsFixed(1)} km de vous',
                   style: const TextStyle(
                     color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
                     fontSize: 12,
                   ),
                 ),
@@ -143,57 +163,66 @@ class CommunityOrderCard extends StatelessWidget {
               size: 120,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 4),
           // Order details
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildInfoRow(
-                  Icons.shopping_basket,
-                  '${order.totalItems} articles',
-                ),
-                const SizedBox(height: 8),
-                _buildInfoRow(
-                  Icons.euro,
-                  '${order.totalPrice.toStringAsFixed(2)}€',
-                ),
-                const SizedBox(height: 8),
-                _buildInfoRow(
-                  Icons.schedule,
-                  order.deliveryTime,
-                ),
-                const SizedBox(height: 8),
-                if (order.isUrgent)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.red.shade200),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.priority_high,
-                          size: 14,
-                          color: Colors.red,
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          'Urgent',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
+            child: Container(
+              padding:
+                  const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.textPrimaryColor),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInfoRow(
+                    Icons.shopping_basket,
+                    '${order.totalItems} articles',
                   ),
-              ],
+                  const SizedBox(height: 8),
+                  _buildInfoRow(
+                    Icons.euro,
+                    '${order.totalPrice.toStringAsFixed(2)}€',
+                  ),
+                  const SizedBox(height: 8),
+                  _buildInfoRow(
+                    Icons.schedule,
+                    order.deliveryTime,
+                  ),
+                  const SizedBox(height: 8),
+                  if (order.isUrgent)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.red.shade200),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.priority_high,
+                            size: 14,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            'Urgent',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
@@ -208,14 +237,15 @@ class CommunityOrderCard extends StatelessWidget {
         Icon(
           icon,
           size: 16,
-          color: Colors.grey[600],
+          color: AppColors.textPrimaryColor,
         ),
         const SizedBox(width: 8),
         Text(
           text,
-          style: TextStyle(
-            color: Colors.grey[800],
+          style: const TextStyle(
+            color: AppColors.textPrimaryColor,
             fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -232,22 +262,22 @@ class CommunityOrderCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.amber.shade50,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.amber.shade200),
+              border: Border.all(color: AppColors.textPrimaryColor),
             ),
             child: Row(
               children: [
                 const Icon(
-                  Icons.star,
+                  FontAwesomeIcons.sackDollar,
                   size: 16,
-                  color: Colors.amber,
+                  color: Colors.black,
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '${order.reward.toStringAsFixed(1)} points',
+                  '${order.reward.toStringAsFixed(1)}€ pour vous',
                   style: const TextStyle(
-                    color: Colors.amber,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),
@@ -260,19 +290,20 @@ class CommunityOrderCard extends StatelessWidget {
           ElevatedButton(
             onPressed: onAccept,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: AppColors.primary,
-              elevation: 0,
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              elevation: 3,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(24),
                 side: const BorderSide(color: AppColors.primary),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              // padding: const EdgeInsets.symmetric(horizontal: 16),
             ),
             child: const Text(
               'Je prends',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
             ),
           ),

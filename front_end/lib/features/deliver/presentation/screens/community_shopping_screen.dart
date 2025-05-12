@@ -1,9 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/deliver/presentation/test_data/community_orders.dart';
 import 'package:semo/features/deliver/presentation/widgets/filters/quick_filters.dart';
 import 'package:semo/features/deliver/presentation/widgets/orders/community_order_card.dart';
+import 'package:semo/features/order/presentation/widgets/app_bar/location_section.dart';
+import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
+import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// A screen that displays available community shopping orders
 /// that users can pick up for their neighbors.
@@ -11,7 +17,8 @@ class CommunityShoppingScreen extends StatefulWidget {
   const CommunityShoppingScreen({Key? key}) : super(key: key);
 
   @override
-  State<CommunityShoppingScreen> createState() => _CommunityShoppingScreenState();
+  State<CommunityShoppingScreen> createState() =>
+      _CommunityShoppingScreenState();
 }
 
 class _CommunityShoppingScreenState extends State<CommunityShoppingScreen> {
@@ -46,7 +53,18 @@ class _CommunityShoppingScreenState extends State<CommunityShoppingScreen> {
         }
         // Check specific market filter
         else if (filters.containsKey('one_market')) {
-          String selectedStore = filters['one_market'];
+          var storeData = filters['one_market'];
+          String selectedStore;
+
+          if (storeData is Map<String, dynamic> &&
+              storeData.containsKey('name')) {
+            selectedStore = storeData['name'];
+          } else if (storeData is String) {
+            selectedStore = storeData; // For backward compatibility
+          } else {
+            return false; // Invalid store data
+          }
+
           if (order.storeName != selectedStore) {
             return false; // Skip if not from selected store
           }
@@ -90,19 +108,40 @@ class _CommunityShoppingScreenState extends State<CommunityShoppingScreen> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             _buildHeader(),
             _buildQuickFilters(),
+            const SizedBox(height: 4),
             Expanded(
               child: _filteredOrders.isEmpty
                   ? _buildEmptyState()
                   : ListView.builder(
-                      itemCount: _filteredOrders.length,
+                      padding: EdgeInsets.zero,
+                      itemCount: _filteredOrders.length + 1, // +1 for the title
                       itemBuilder: (context, index) {
+                        if (index == 0) {
+                          // First item is the title
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildOrderTitle(
+                                'Vous allez au magasin? ',
+                                'Prenez le panier de votre voisin',
+                              ),
+                              const SizedBox(height: 8),
+                            ],
+                          );
+                        }
+                        // Adjust index to account for the title
+                        final orderIndex = index - 1;
                         return CommunityOrderCard(
-                          order: _filteredOrders[index],
-                          onTap: () => _handleOrderTap(_filteredOrders[index]),
-                          onAccept: () => _handleOrderAccept(_filteredOrders[index]),
+                          order: _filteredOrders[orderIndex],
+                          onTap: () =>
+                              _handleOrderTap(_filteredOrders[orderIndex]),
+                          onAccept: () =>
+                              _handleOrderAccept(_filteredOrders[orderIndex]),
                         );
                       },
                     ),
@@ -116,35 +155,136 @@ class _CommunityShoppingScreenState extends State<CommunityShoppingScreen> {
   /// Builds the header with title and map button
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Courses Solidaires',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          ElevatedButton.icon(
-            onPressed: _openMapView,
-            icon: const Icon(Icons.map, color: AppColors.primary),
-            label: const Text('Carte'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: AppColors.primary,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: AppColors.primary),
+          LocationSection(onLocationTap: () {}),
+          // ElevatedButton.icon(
+          //   onPressed: _openMapView,
+          //   icon: const Icon(Icons.map, color: Colors.black),
+          //   label: const Text(
+          //     'Carte',
+          //     style:
+          //         TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+          //   ),
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Colors.grey.shade300,
+          //     foregroundColor: Colors.black,
+          //     elevation: 0,
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(12),
+          //     ),
+          //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          //   ),
+          // ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(0),
+                height: 35,
+                width: 35,
+                decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ActionIconButton(
+                  icon: CupertinoIcons.cube_box_fill,
+                  color: Colors.white,
+                  onPressed: () {},
+                  size: AppIconSize.xl,
+                ),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.all(0),
+                height: 35,
+                width: 35,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ActionIconButton(
+                  icon: CupertinoIcons.person_fill,
+                  color: Colors.white,
+                  onPressed: () {
+                    context.pushNamed(ProfileRouteNames.profile);
+                  },
+                  size: AppIconSize.xl,
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  // build the order title
+  Widget _buildOrderTitle(String titleOne, String titleTwo) {
+    return Container(
+        margin: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 4),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.green,
+              Colors.red,
+              AppColors.primary,
+              Colors.yellow.shade700,
+            ],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.thirdColor,
+              blurRadius: 8,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    border: Border.all(color: Colors.black)),
+                child: Text(
+                  titleOne,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 1),
+              Container(
+                margin: const EdgeInsets.only(left: 25),
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  border: Border.all(color: Colors.black),
+                ),
+                child: Text(
+                  titleTwo,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   /// Builds the quick filters section

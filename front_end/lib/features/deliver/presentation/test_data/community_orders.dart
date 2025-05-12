@@ -44,7 +44,8 @@ List<CommunityOrder> getSampleCommunityOrders() {
       customerImageUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
       distanceKm: 0.8,
       storeName: 'Carrefour',
-      storeLogoUrl: 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/carrefoures-log-for-cart.jpeg',
+      storeLogoUrl:
+          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/carrefoures-log-for-cart.jpeg',
       productImageUrls: [
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/filets-poulet.png',
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/paves-de-saumon.png',
@@ -64,11 +65,15 @@ List<CommunityOrder> getSampleCommunityOrders() {
       customerImageUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
       distanceKm: 1.2,
       storeName: 'Lidl',
-      storeLogoUrl: 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
+      storeLogoUrl:
+          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
       productImageUrls: [
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/pommes.png',
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/bananes.png',
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/radis.png',
+        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/filets-poulet.png',
+        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/paves-de-saumon.png',
+        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/tomates.png',
       ],
       totalItems: 5,
       totalPrice: 22.75,
@@ -83,10 +88,14 @@ List<CommunityOrder> getSampleCommunityOrders() {
       customerImageUrl: 'https://randomuser.me/api/portraits/women/65.jpg',
       distanceKm: 0.5,
       storeName: 'E.Leclerc',
-      storeLogoUrl: 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/E-Leclerc-logo-for-cart.png',
+      storeLogoUrl:
+          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/E-Leclerc-logo-for-cart.png',
       productImageUrls: [
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/jus/jus-orange.png',
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/jus/jus-pomme.png',
+        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/filets-poulet.png',
+        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/paves-de-saumon.png',
+        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/tomates.png',
       ],
       totalItems: 4,
       totalPrice: 18.20,
@@ -102,7 +111,8 @@ List<CommunityOrder> getSampleCommunityOrders() {
       customerImageUrl: 'https://randomuser.me/api/portraits/men/55.jpg',
       distanceKm: 1.5,
       storeName: 'Carrefour',
-      storeLogoUrl: 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/carrefoures-log-for-cart.jpeg',
+      storeLogoUrl:
+          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/carrefoures-log-for-cart.jpeg',
       productImageUrls: [
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/viande-hachee.png',
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/saucisson.png',
@@ -120,7 +130,8 @@ List<CommunityOrder> getSampleCommunityOrders() {
       customerImageUrl: 'https://randomuser.me/api/portraits/women/22.jpg',
       distanceKm: 0.9,
       storeName: 'Lidl',
-      storeLogoUrl: 'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
+      storeLogoUrl:
+          'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
       productImageUrls: [
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/carottes.png',
         'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/oignons.png',
