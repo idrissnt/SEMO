@@ -37,11 +37,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
       iconBuilder: (color) => AppIcons.person(size: 24, color: color),
       originalColor: AppColors.primary,
     ),
-    // _TabItem(
-    //   title: 'Tasks',
-    //   iconBuilder: (color) => AppIcons.assignmentFilled(size: 24, color: color),
-    //   originalColor: Colors.red,
-    // ),
     _TabItem(
       title: 'Grocery',
       iconBuilder: (color) => AppIcons.shoppingBagFill(size: 24, color: color),
@@ -170,7 +165,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
         controller: _tabController,
         children: const [
           AccountTab(),
-          // TasksTab(),
           GroceryTab(),
           SettingsTab(),
         ],

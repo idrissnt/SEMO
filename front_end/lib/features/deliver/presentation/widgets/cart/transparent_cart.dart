@@ -28,7 +28,7 @@ class TransparentCart extends StatelessWidget {
     required this.size,
     this.outlineColor = Colors.black, // Dark blue
     this.basketColor = Colors.white, // Light blue
-    this.basketOpacity = 0.5,
+    this.basketOpacity = 0.0,
     this.wheelCenterColor = const Color.fromARGB(255, 87, 92, 95), // Light blue
     this.child,
   }) : super(key: key);

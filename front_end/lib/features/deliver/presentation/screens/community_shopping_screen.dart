@@ -160,24 +160,6 @@ class _CommunityShoppingScreenState extends State<CommunityShoppingScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           LocationSection(onLocationTap: () {}),
-          // ElevatedButton.icon(
-          //   onPressed: _openMapView,
-          //   icon: const Icon(Icons.map, color: Colors.black),
-          //   label: const Text(
-          //     'Carte',
-          //     style:
-          //         TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
-          //   ),
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.grey.shade300,
-          //     foregroundColor: Colors.black,
-          //     elevation: 0,
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(12),
-          //     ),
-          //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          //   ),
-          // ),
           Row(
             children: [
               Container(
@@ -327,19 +309,6 @@ class _CommunityShoppingScreenState extends State<CommunityShoppingScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  /// Opens the map view of available orders
-  void _openMapView() {
-    _logger.info('Opening map view');
-    // This would navigate to a map view screen
-    // For now, we'll just show a snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Carte des commandes à proximité'),
-        duration: Duration(seconds: 2),
       ),
     );
   }

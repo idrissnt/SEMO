@@ -156,11 +156,69 @@ class CommunityOrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Transparent cart with products
-          const SizedBox(
+          SizedBox(
             width: 120,
             height: 120,
-            child: TransparentCart(
-              size: 120,
+            child: Stack(
+              children: [
+                if (order.productImageUrls.length > 1)
+                  Positioned(
+                    top: 0, // Position in the middle of the basket
+                    left: 30,
+                    child: Transform.rotate(
+                        angle: 0.2, // Slight tilt to the right
+                        child: _buildProductImage(
+                            order.productImageUrls[0], 50, 70)),
+                  ),
+                if (order.productImageUrls.isNotEmpty)
+                  Positioned(
+                    top: 5,
+                    left: 45,
+                    child: Transform.rotate(
+                      angle: -0.3, // Tilt to the left
+                      child:
+                          _buildProductImage(order.productImageUrls[1], 50, 70),
+                    ),
+                  ),
+                // If there are more products, show a +N indicator
+                if (order.productImageUrls.length > 2)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.storeCardBorderColor,
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 2,
+                            spreadRadius: 0.5,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          '+${order.productImageUrls.length - 2}',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textSecondaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                const TransparentCart(
+                  size: 120,
+                ),
+              ],
             ),
           ),
           const SizedBox(width: 4),
@@ -308,6 +366,29 @@ class CommunityOrderCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProductImage(String imageUrl, double width, double height) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.5),
+            blurRadius: 2,
+            spreadRadius: 0.5,
+            offset: const Offset(0, 1),
+          ),
+        ],
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
