@@ -16,6 +16,7 @@ import 'package:semo/features/auth/routes/auth_routes_const.dart';
 import 'package:semo/features/auth/routes/initial_route.dart';
 
 import 'package:semo/features/profile/routes/profile_routes.dart';
+import 'package:semo/features/store/routes/store_routes.dart';
 
 import 'navigation_logger.dart';
 
@@ -62,6 +63,8 @@ class AppRouter {
       getMainShellRoute(),
       // Add profile routes directly at the top level
       ...ProfileRouter.getProfileRoutes(),
+      // Add store routes
+      ...StoreRouter.getStoreRoutes(),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(

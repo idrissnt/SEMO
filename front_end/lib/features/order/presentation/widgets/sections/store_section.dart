@@ -5,6 +5,7 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
+import 'package:semo/features/store/routes/store_routes_const.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StoreSection extends StatelessWidget {
@@ -76,7 +77,7 @@ class StoreSection extends StatelessWidget {
                           store: store,
                           onTap: () {
                             _logger.info('Navigating to store: ${store.name}');
-                            context.go('/store/${store.id}');
+                            context.go(StoreRoutesConst.getStoreDetailRoute(store.id));
                           },
                         ),
                         SizedBox(height: 8),
@@ -200,7 +201,7 @@ class _StoreImageButtonState extends State<StoreImageButton>
   void _handleTap() {
     _controller.forward().then((_) {
       _controller.reverse().then((_) {
-        // widget.onTap();
+        widget.onTap();
       });
     });
   }
