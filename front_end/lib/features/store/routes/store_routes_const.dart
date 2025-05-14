@@ -10,7 +10,7 @@ class StoreRoutesConst {
   static const String storeShop = 'shop';
   static const String storeAisles = 'aisles';
   static const String storeBuyAgain = 'buyagain';
-  
+
   /// Category and subcategory routes
   static const String storeCategory = 'category/:categoryId';
   static const String storeSubcategory = 'subcategory/:subcategoryId';
@@ -25,12 +25,8 @@ class StoreRoutesConst {
       '/store/$storeId/$storeAisles';
   static String getStoreBuyAgainRoute(String storeId) =>
       '/store/$storeId/$storeBuyAgain';
-      
+
   /// Helper methods for category routes
   static String getStoreCategoryRoute(String storeId, String categoryId) =>
       '/store/$storeId/category/$categoryId';
-      
-  /// Helper methods for subcategory routes
-  static String getStoreSubcategoryRoute(String storeId, String categoryId, String subcategoryId) =>
-      '/store/$storeId/category/$categoryId/subcategory/$subcategoryId';
 }

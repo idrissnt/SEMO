@@ -13,9 +13,6 @@ class SubcategoryFilters extends StatelessWidget {
   /// Callback when a subcategory filter is tapped
   final Function(int index) onSubcategoryTap;
 
-  /// Callback when the back button is tapped
-  final VoidCallback onBackTap;
-
   /// Scroll controller for the filters
   final ScrollController scrollController;
 
@@ -25,7 +22,6 @@ class SubcategoryFilters extends StatelessWidget {
     required this.subcategories,
     required this.selectedIndex,
     required this.onSubcategoryTap,
-    required this.onBackTap,
     required this.scrollController,
   }) : super(key: key);
 
@@ -34,49 +30,14 @@ class SubcategoryFilters extends StatelessWidget {
     // Define consistent style values
     const double buttonHeight = 36;
     const double horizontalPadding = 12;
-    const double verticalPadding = 8;
+    const double verticalPadding = 1;
     const double borderRadius = 12;
     const double rightMargin = 4;
 
-    return Container(
-      height: buttonHeight + 16, // Height + vertical margins
-      margin: const EdgeInsets.only(top: 8),
+    return SizedBox(
+      height: buttonHeight + 8, // Height + vertical margins
       child: Row(
         children: [
-          // Categories button
-          GestureDetector(
-            onTap: onBackTap,
-            child: Container(
-              height: buttonHeight,
-              margin: const EdgeInsets.only(left: 8, right: rightMargin),
-              padding: const EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(borderRadius),
-              ),
-              alignment: Alignment.center,
-              child: const Row(
-                // mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.view_list, size: 16),
-                  SizedBox(width: 4),
-                  Text(
-                    'Categories',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        color: AppColors.textPrimaryColor),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
           // Subcategory filters
           Expanded(
             child: SizedBox(
@@ -85,7 +46,7 @@ class SubcategoryFilters extends StatelessWidget {
                 shrinkWrap: true,
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(left: 8, right: 8),
                 itemCount: subcategories.length,
                 itemBuilder: (context, index) {
                   final subcategory = subcategories[index];

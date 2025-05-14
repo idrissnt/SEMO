@@ -24,23 +24,28 @@ class ProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTitle(subcategoryName: subcategory.name),
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    return CustomScrollView(
+      slivers: [
+        // Title as a non-scrollable header
+        SliverToBoxAdapter(
+          child: _buildTitle(subcategoryName: subcategory.name),
+        ),
+
+        // Products grid
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.80, // Reduced to allow more vertical space
+              childAspectRatio: 0.80,
               crossAxisSpacing: 8,
-              mainAxisSpacing: 4, // Small spacing between rows
+              mainAxisSpacing: 4,
             ),
-            itemCount: subcategory.products.length,
-            itemBuilder: (context, index) {
-              return ProductCard(product: subcategory.products[index]);
-            },
+            delegate: SliverChildBuilderDelegate(
+              (context, index) =>
+                  ProductCard(product: subcategory.products[index]),
+              childCount: subcategory.products.length,
+            ),
           ),
         ),
       ],

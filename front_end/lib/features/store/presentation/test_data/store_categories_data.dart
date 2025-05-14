@@ -60,6 +60,78 @@ class StoreCategoriesData {
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
+              CategoryProduct(
+                id: 'prod-004',
+                name: 'Avocados',
+                imageUrl:
+                    'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                price: 2.49,
+                unit: 'each',
+                description: 'Ripe and ready to eat avocados',
+              ),
             ],
           ),
           // Vegetables Subcategory

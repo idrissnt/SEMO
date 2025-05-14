@@ -5,122 +5,81 @@ class SubcategoryAnimationManager {
   /// Animation controller for the filter bar transition
   final AnimationController filterController;
 
-  /// Animation controller for the elevation effect
-  final AnimationController elevationController;
+  /// Animation controller for the products appearance
+  final AnimationController productsController;
 
   /// Animation for the filter bar transition
   late final Animation<double> filterAnimation;
+  
+  /// Animation for the filter slide-in from top
+  late final Animation<Offset> filterSlideAnimation;
 
-  /// Animation for the elevation effect
-  late final Animation<double> elevationAnimation;
+  /// Animation for the products appearance
+  late final Animation<double> productsAnimation;
+  
+  /// Animation for the products slide-in from top
+  late final Animation<Offset> productsSlideAnimation;
 
-  /// Animation for the scale effect
-  late final Animation<double> scaleAnimation;
-
-  /// Animation for the position effect
-  Animation<Offset>? positionAnimation;
-
-  /// Stores the position of the tapped subcategory
-  Offset? tappedItemPosition;
-
-  /// Size of the tapped subcategory
-  Size? tappedItemSize;
+  /// Callback to be executed when the animation sequence is complete
+  final VoidCallback? onAnimationComplete;
 
   /// Creates a new subcategory animation manager
   SubcategoryAnimationManager({
     required this.filterController,
-    required this.elevationController,
+    required this.productsController,
+    this.onAnimationComplete,
   }) {
-    // Initialize filter animation
+    // Initialize animations with appropriate curves
     filterAnimation = CurvedAnimation(
+      parent: filterController, 
+      curve: Curves.easeOutQuad
+    );
+    
+    // Slide-in animation for filters (from top)
+    filterSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, -1.0),  // Start from above the screen
+      end: Offset.zero,              // End at normal position
+    ).animate(CurvedAnimation(
       parent: filterController,
-      curve: Curves.easeInOut,
-    );
-
-    // Initialize elevation animation
-    elevationAnimation = CurvedAnimation(
-      parent: elevationController,
       curve: Curves.easeOutQuad,
+    ));
+    
+    // Fade-in animation for products
+    productsAnimation = CurvedAnimation(
+      parent: productsController, 
+      curve: Curves.easeOutQuad
     );
-
-    // Initialize scale animation
-    scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.8,
+    
+    // Slide-in animation for products (from behind filters)
+    productsSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, -0.1),  // Start just behind filters
+      end: Offset.zero,              // End at normal position
     ).animate(CurvedAnimation(
-      parent: elevationController,
-      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+      parent: productsController,
+      curve: Curves.easeOutQuad,
     ));
   }
 
-  /// Calculates the position of a widget using its global key
-  void calculateItemPosition(GlobalKey key) {
-    final RenderBox? renderBox =
-        key.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox != null) {
-      tappedItemPosition = renderBox.localToGlobal(Offset.zero);
-      tappedItemSize = renderBox.size;
-    }
+  /// Starts the animation sequence with filters sliding in from the top, followed by products
+  void startAnimationSequenceFromTheTop(BuildContext context) {
+    reset();
+    
+    // Start the animation sequence - first filters, then products
+    filterController.forward().then((_) {
+      // After filter animation completes, start the products animation
+      productsController.forward().whenComplete(() {
+        // Notify when all animations are complete
+        if (onAnimationComplete != null) {
+          onAnimationComplete!();
+        }
+      });
+    });
   }
-
-  /// Initializes the position animation
-  void initPositionAnimation(double targetY) {
-    // Calculate the distance to move from current position to the top
-    final double startY = tappedItemPosition?.dy ?? 0;
-
-    positionAnimation = Tween<Offset>(
-      begin: const Offset(0, 0),
-      end: Offset(0, targetY - startY),
-    ).animate(CurvedAnimation(
-      parent: elevationController,
-      curve: const Interval(0.0, 0.6, curve: Curves.easeOutQuad),
-    ));
-  }
-
+  
   /// Resets the animation state
   void reset() {
-    tappedItemPosition = null;
-    tappedItemSize = null;
-    positionAnimation = null;
-  }
-
-  /// Builds the animated subcategory that elevates to the top
-  Widget buildElevatedItem() {
-    if (tappedItemPosition == null ||
-        tappedItemSize == null ||
-        positionAnimation == null ||
-        elevationAnimation.value <= 0 ||
-        elevationController.isCompleted) {
-      return const SizedBox.shrink();
-    }
-
-    return Positioned(
-      left: tappedItemPosition!.dx,
-      top: tappedItemPosition!.dy +
-          (positionAnimation!.value.dy * elevationAnimation.value),
-      child: AnimatedBuilder(
-        animation: elevationAnimation,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: scaleAnimation.value,
-            child: Opacity(
-              opacity: 1 - (elevationAnimation.value * 0.5),
-              child: Material(
-                elevation: 8 * elevationAnimation.value,
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: tappedItemSize!.width,
-                  height: tappedItemSize!.height,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+    // Reset animation controllers to their initial state
+    filterController.reset();
+    productsController.reset();
   }
 }

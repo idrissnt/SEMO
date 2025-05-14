@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/presentation/screens/store_detail_screen.dart';
-import 'package:semo/features/store/presentation/screens/subcategory_screen.dart';
+import 'package:semo/features/store/presentation/screens/product_screen.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
 
 /// Router configuration for store-related routes
@@ -35,7 +35,7 @@ class StoreRouter {
           GoRoute(
             path: StoreRoutesConst.storeCategory,
             builder: (context, state) {
-              return SubcategoryScreen(
+              return ProductScreen(
                 storeId: state.pathParameters['storeId']!,
                 categoryId: state.pathParameters['categoryId']!,
               );

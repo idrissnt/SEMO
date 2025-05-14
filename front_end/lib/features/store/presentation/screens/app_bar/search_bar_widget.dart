@@ -1,62 +1,97 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
-import 'package:semo/features/order/presentation/constant/constants.dart';
 
-/// A custom search bar widget that adapts its appearance based on scroll state
+/// A custom search bar widget that can be used across the application
 class SearchBarWidget extends StatelessWidget {
+  /// Whether the search bar is in a scrolled state (for animations)
   final bool isScrolled;
 
+  /// Hint text to display when the search field is empty
+  final String hintText;
+
+  /// Callback when the search query changes
+  final Function(String)? onQueryChanged;
+
+  /// Minimum query length before triggering the onQueryChanged callback
+  final int minQueryLength;
+
+  /// Height of the search bar
+  final double height;
+
+  /// Background color of the search bar
+  final Color? backgroundColor;
+
+  /// Border radius of the search bar
+  final double borderRadius;
+
+  /// Icon to show in the search bar
+  final IconData icon;
+
+  /// Size of the search icon
+  final double iconSize;
+
+  /// Horizontal padding inside the search bar
+  final double horizontalPadding;
+
+  /// Text controller for the search field
+  final TextEditingController? controller;
+
+  /// Creates a new search bar widget
   const SearchBarWidget({
     Key? key,
-    required this.isScrolled,
+    this.isScrolled = false,
+    this.hintText = 'Rechercher',
+    this.onQueryChanged,
+    this.minQueryLength = 3,
+    this.height = 40,
+    this.backgroundColor,
+    this.borderRadius = 20,
+    this.icon = Icons.search,
+    this.iconSize = 20,
+    this.horizontalPadding = 12,
+    this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: OrderConstants.animationDuration,
-      curve: Curves.easeInOut,
-      height: OrderConstants.searchBarHeight,
+    return Container(
+      height: height,
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.searchBarColor,
-        borderRadius: BorderRadius.circular(AppBorderRadius.xl),
+        color: backgroundColor ?? Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
-      padding: EdgeInsets.symmetric(horizontal: AppDimensionsWidth.medium),
-      // Animate width changes
-      width: isScrolled
-          ? OrderConstants.searchBarWidth
-          : OrderConstants.searchBarWidth,
-      // No margin to avoid overflow
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Animated icon
-          AnimatedContainer(
-            duration: OrderConstants.animationDuration,
-            curve: Curves.easeInOut,
-            padding: EdgeInsets.zero,
-            child:
-                const Icon(Icons.search, color: AppColors.iconColorFirstColor),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            child: Icon(
+              icon,
+              color: AppColors.iconColorFirstColor,
+              size: iconSize,
+            ),
           ),
-          SizedBox(width: AppDimensionsWidth.xSmall),
           Expanded(
             child: TextField(
+              controller: controller,
               decoration: InputDecoration(
-                hintText: OrderConstants.searchHintText,
+                hintText: hintText,
                 hintStyle: const TextStyle(color: AppColors.searchBarHintColor),
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: AppDimensionsHeight.xSmall),
+                contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
               style: TextStyle(fontSize: AppFontSize.medium),
               onChanged: (query) {
-                if (query.length >= OrderConstants.queryLength) {
-                  // Handle search query
+                if (onQueryChanged != null && query.length >= minQueryLength) {
+                  onQueryChanged!(query);
                 }
               },
             ),
           ),
+          const SizedBox(width: 8),
         ],
       ),
     );

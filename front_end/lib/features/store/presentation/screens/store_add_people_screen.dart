@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/utils/logger.dart';
+import 'package:semo/core/utils/logger.dart';
 
 class StorePeopleScreen extends StatefulWidget {
   final String storeId;
