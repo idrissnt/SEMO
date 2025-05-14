@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:semo/features/store/presentation/screens/category_detail_screen.dart';
 import 'package:semo/features/store/presentation/screens/store_detail_screen.dart';
-import 'package:semo/features/store/presentation/screens/subcategory_products_screen.dart';
+import 'package:semo/features/store/presentation/screens/subcategory_screen.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
 
 /// Router configuration for store-related routes
@@ -36,24 +35,24 @@ class StoreRouter {
           GoRoute(
             path: StoreRoutesConst.storeCategory,
             builder: (context, state) {
-              return CategoryDetailScreen(
+              return SubcategoryScreen(
                 storeId: state.pathParameters['storeId']!,
                 categoryId: state.pathParameters['categoryId']!,
               );
             },
-            routes: [
-              // Subcategory route
-              GoRoute(
-                path: StoreRoutesConst.storeSubcategory,
-                builder: (context, state) {
-                  return SubcategoryProductsScreen(
-                    storeId: state.pathParameters['storeId']!,
-                    categoryId: state.pathParameters['categoryId']!,
-                    subcategoryId: state.pathParameters['subcategoryId']!,
-                  );
-                },
-              ),
-            ],
+            // routes: [
+            //   // Subcategory route
+            //   GoRoute(
+            //     path: StoreRoutesConst.storeSubcategory,
+            //     builder: (context, state) {
+            //       return SubcategoryProductsScreen(
+            //         storeId: state.pathParameters['storeId']!,
+            //         categoryId: state.pathParameters['categoryId']!,
+            //         subcategoryId: state.pathParameters['subcategoryId']!,
+            //       );
+            //     },
+            //   ),
+            // ],
           ),
         ],
       ),
