@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/features/store/domain/entities/categories/store_category.dart';
-import 'package:semo/features/store/presentation/test_data/store_categories_data.dart';
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
 
 /// Tab that displays the aisles content for a specific store
@@ -21,12 +21,10 @@ class StoreAislesTab extends StatefulWidget {
 class _StoreAislesTabState extends State<StoreAislesTab>
     with AutomaticKeepAliveClientMixin {
   /// Categories data
-  List<StoreCategory> _categories = [];
+  List<StoreAisle> _aisles = [];
 
   /// Loading state
   bool _isLoading = true;
-
-
 
   @override
   bool get wantKeepAlive => true;
@@ -34,20 +32,20 @@ class _StoreAislesTabState extends State<StoreAislesTab>
   @override
   void initState() {
     super.initState();
-    _loadCategories();
+    _loadAisles();
   }
 
-  /// Loads the categories data
-  Future<void> _loadCategories() async {
+  /// Loads the aisles data
+  Future<void> _loadAisles() async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 300));
 
-    // Get categories from mock data
-    final categories = StoreCategoriesData.getMockCategories();
+    // Get aisles from mock data
+    final aisles = StoreAisleData.getMockAisles();
 
     if (mounted) {
       setState(() {
-        _categories = categories;
+        _aisles = aisles;
         _isLoading = false;
       });
     }
@@ -61,24 +59,59 @@ class _StoreAislesTabState extends State<StoreAislesTab>
       return const Center(child: CircularProgressIndicator());
     }
 
-    return ListView.separated(
+    return _buildListWithPaddedSeparators(
+      items: _aisles,
+      itemBuilder: (aisle) => _buildAisleItem(aisle),
       padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: _categories.length,
-      separatorBuilder: (context, index) => const Divider(height: 1),
+    );
+  }
+
+  /// Helper function to build a list with padded separators, including one at the end
+  Widget _buildListWithPaddedSeparators<T>({
+    required List<T> items,
+    required Widget Function(T item) itemBuilder,
+    EdgeInsetsGeometry? padding,
+  }) {
+    return ListView.builder(
+      padding: padding,
+      itemCount: items.length + 1, // +1 for the final separator
       itemBuilder: (context, index) {
-        return _buildCategoryItem(_categories[index]);
+        // If it's the last index, show only the final separator
+        if (index == items.length) {
+          return _buildPaddedSeparator();
+        }
+
+        final item = itemBuilder(items[index]);
+
+        // Add a separator after each item except the last one
+        if (index < items.length - 1) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [item, _buildPaddedSeparator()],
+          );
+        }
+
+        return item;
       },
     );
   }
-  
-  /// Builds a simple category item with a small image on the left
-  Widget _buildCategoryItem(StoreCategory category) {
+
+  /// Helper function to build a padded separator
+  Widget _buildPaddedSeparator() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+    );
+  }
+
+  /// Builds a simple aisle item with a small image on the left
+  Widget _buildAisleItem(StoreAisle aisle) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Image.network(
-          category.imageUrl,
+          aisle.imageUrl,
           width: 56,
           height: 56,
           fit: BoxFit.cover,
@@ -91,7 +124,7 @@ class _StoreAislesTabState extends State<StoreAislesTab>
         ),
       ),
       title: Text(
-        category.name,
+        aisle.name,
         style: const TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 16,
@@ -99,10 +132,10 @@ class _StoreAislesTabState extends State<StoreAislesTab>
       ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: () {
-        // Navigate to category detail
-        context.go(StoreRoutesConst.getStoreCategoryRoute(
+        // Navigate to aisle detail
+        context.go(StoreRoutesConst.getStoreProductForAisleRoute(
           widget.storeId,
-          category.id,
+          aisle.id,
         ));
       },
     );

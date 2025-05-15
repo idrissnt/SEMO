@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/features/store/domain/entities/categories/store_category.dart';
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 
-/// Widget that displays subcategory filters at the top of the screen
-class SubcategoryFilters extends StatelessWidget {
-  /// The list of subcategories
-  final List<StoreSubcategory> subcategories;
+/// Widget that displays Category filters at the top of the screen
+class CategoryFilters extends StatelessWidget {
+  /// The list of Categories
+  final List<AisleCategory> categories;
 
-  /// The currently selected subcategory index
+  /// The currently selected Category index
   final int selectedIndex;
 
-  /// Callback when a subcategory filter is tapped
-  final Function(int index) onSubcategoryTap;
+  /// Callback when a Category filter is tapped
+  final Function(int index) onCategoryTap;
 
   /// Scroll controller for the filters
   final ScrollController scrollController;
 
-  /// Creates a new subcategory filters widget
-  const SubcategoryFilters({
+  /// Creates a new Category filters widget
+  const CategoryFilters({
     Key? key,
-    required this.subcategories,
+    required this.categories,
     required this.selectedIndex,
-    required this.onSubcategoryTap,
+    required this.onCategoryTap,
     required this.scrollController,
   }) : super(key: key);
 
@@ -38,7 +38,7 @@ class SubcategoryFilters extends StatelessWidget {
       height: buttonHeight + 8, // Height + vertical margins
       child: Row(
         children: [
-          // Subcategory filters
+          // Category filters
           Expanded(
             child: SizedBox(
               height: buttonHeight,
@@ -47,13 +47,13 @@ class SubcategoryFilters extends StatelessWidget {
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.only(left: 8, right: 8),
-                itemCount: subcategories.length,
+                itemCount: categories.length,
                 itemBuilder: (context, index) {
-                  final subcategory = subcategories[index];
+                  final category = categories[index];
                   final isSelected = index == selectedIndex;
 
                   return GestureDetector(
-                    onTap: () => onSubcategoryTap(index),
+                    onTap: () => onCategoryTap(index),
                     child: Container(
                       height: buttonHeight,
                       margin: const EdgeInsets.only(right: rightMargin),
@@ -71,7 +71,7 @@ class SubcategoryFilters extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            subcategory.name,
+                            category.name,
                             style: TextStyle(
                               color: isSelected
                                   ? Colors.white

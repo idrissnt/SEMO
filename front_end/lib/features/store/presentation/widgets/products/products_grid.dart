@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/features/store/domain/entities/categories/store_category.dart';
-import 'package:semo/features/store/presentation/widgets/product_card.dart';
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/presentation/widgets/products/product_card.dart';
 
 /// Widget that displays a grid of products for a subcategory
 class ProductsGrid extends StatelessWidget {
   /// The subcategory to display products for
-  final StoreSubcategory subcategory;
+  final AisleCategory category;
 
   /// Store ID for navigation
   final String storeId;
 
   /// Category ID for navigation
-  final String categoryId;
+  final String aisleId;
 
   /// Creates a new products grid
   const ProductsGrid({
     Key? key,
-    required this.subcategory,
+    required this.category,
     required this.storeId,
-    required this.categoryId,
+    required this.aisleId,
   }) : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class ProductsGrid extends StatelessWidget {
       slivers: [
         // Title as a non-scrollable header
         SliverToBoxAdapter(
-          child: _buildTitle(subcategoryName: subcategory.name),
+          child: _buildTitle(subcategoryName: category.name),
         ),
 
         // Products grid
@@ -43,8 +43,8 @@ class ProductsGrid extends StatelessWidget {
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) =>
-                  ProductCard(product: subcategory.products[index]),
-              childCount: subcategory.products.length,
+                  ProductCard(product: category.products[index]),
+              childCount: category.products.length,
             ),
           ),
         ),

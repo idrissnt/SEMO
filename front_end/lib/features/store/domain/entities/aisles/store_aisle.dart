@@ -1,54 +1,54 @@
 /// Domain entity representing a store category
-class StoreCategory {
+class StoreAisle {
   /// Unique identifier for the category
   final String id;
-  
+
   /// Name of the category
   final String name;
-  
+
   /// URL of the category image
   final String imageUrl;
-  
+
   /// Description of the category (optional)
   final String? description;
-  
-  /// List of subcategories in this category
-  final List<StoreSubcategory> subcategories;
-  
-  /// Creates a new store category
-  StoreCategory({
+
+  /// List of categories in this aisle
+  final List<AisleCategory> categories;
+
+  /// Creates a new store aisle
+  StoreAisle({
     required this.id,
     required this.name,
     required this.imageUrl,
     this.description,
-    required this.subcategories,
+    required this.categories,
   });
 }
 
-/// Domain entity representing a store subcategory
-class StoreSubcategory {
-  /// Unique identifier for the subcategory
+/// Domain entity representing a store category
+class AisleCategory {
+  /// Unique identifier for the category
   final String id;
-  
-  /// ID of the parent category
-  final String categoryId;
-  
-  /// Name of the subcategory
+
+  /// ID of the parent aisle
+  final String aisleId;
+
+  /// Name of the category
   final String name;
-  
-  /// URL of the subcategory image
+
+  /// URL of the category image
   final String imageUrl;
-  
-  /// Description of the subcategory (optional)
+
+  /// Description of the category (optional)
   final String? description;
-  
-  /// List of products in this subcategory
+
+  /// List of products in this category
   final List<CategoryProduct> products;
-  
-  /// Creates a new store subcategory
-  StoreSubcategory({
+
+  /// Creates a new store category
+  AisleCategory({
     required this.id,
-    required this.categoryId,
+    required this.aisleId,
     required this.name,
     required this.imageUrl,
     this.description,
@@ -60,28 +60,28 @@ class StoreSubcategory {
 class CategoryProduct {
   /// Unique identifier for the product
   final String id;
-  
+
   /// Name of the product
   final String name;
-  
+
   /// URL of the product image
   final String imageUrl;
-  
+
   /// Price of the product
   final double price;
-  
+
   /// Original price before discount (optional)
   final double? originalPrice;
-  
+
   /// Unit of measurement (e.g., kg, piece)
   final String unit;
-  
+
   /// Whether the product is in stock
   final bool inStock;
-  
+
   /// Description of the product (optional)
   final String? description;
-  
+
   /// Creates a new category product
   CategoryProduct({
     required this.id,

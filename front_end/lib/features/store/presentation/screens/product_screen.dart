@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 
-// Core imports
+// Feature imports
+// cart imports
 import 'package:semo/features/cart/presentation/test/cart_items.dart';
 import 'package:semo/features/cart/presentation/widgets/cart_scaffold.dart';
 
-// Feature imports
-import 'package:semo/features/store/domain/entities/categories/store_category.dart';
-import 'package:semo/features/store/presentation/animations/subcategory_animation_manager.dart';
-import 'package:semo/features/store/presentation/screens/app_bar/search_bar_widget.dart';
-import 'package:semo/features/store/presentation/test_data/store_categories_data.dart';
-import 'package:semo/features/store/presentation/widgets/products_grid.dart';
-import 'package:semo/features/store/presentation/widgets/subcategory_filters.dart';
+// store imports
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/presentation/animations/category_animation_manager.dart';
+import 'package:semo/features/store/presentation/widgets/shared/app_bar.dart';
+import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
+import 'package:semo/features/store/presentation/widgets/products/products_grid.dart';
+import 'package:semo/features/store/presentation/widgets/category/category_filters.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
 
 Logger _logger = Logger('ProductScreen');
 
-/// Screen that displays a specific category and its subcategories
+/// Screen that displays a specific aisle and its categories
 class ProductScreen extends StatefulWidget {
   /// The store ID
   final String storeId;
 
-  /// The category ID
-  final String categoryId;
+  /// The aisle ID
+  final String aisleId;
 
-  /// Creates a new category detail screen
+  /// Creates a new aisle detail screen
   const ProductScreen({
     Key? key,
     required this.storeId,
-    required this.categoryId,
+    required this.aisleId,
   }) : super(key: key);
 
   @override
@@ -40,11 +40,11 @@ class _ProductScreenState extends State<ProductScreen>
     with TickerProviderStateMixin {
   // ===== State Variables =====
 
-  /// The category to display
-  StoreCategory? _category;
+  /// The aisle to display
+  StoreAisle? _aisle;
 
-  /// Currently selected subcategory index
-  int _selectedSubcategoryIndex = -1;
+  /// Currently selected category index
+  int _selectedCategoryIndex = -1;
 
   /// Loading state
   bool _isLoading = true;
@@ -58,18 +58,23 @@ class _ProductScreenState extends State<ProductScreen>
   late final AnimationController _productsController;
 
   /// Animation manager
-  late SubcategoryAnimationManager _animationManager;
+  late CategoryAnimationManager _animationManager;
 
-  /// Scroll controller for subcategory filters
+  /// Scroll controller for category filters
   final ScrollController _filtersScrollController = ScrollController();
+
+  // ===== AppBar =====
+
+  late AppBarBuilder appBarBuilder;
 
   // ===== Lifecycle Methods =====
 
   @override
   void initState() {
     super.initState();
+    appBarBuilder = AppBarBuilder();
     _initializeAnimations();
-    _loadCategory();
+    _loadAisle();
   }
 
   @override
@@ -97,7 +102,7 @@ class _ProductScreenState extends State<ProductScreen>
     );
 
     // Initialize animation manager with all controllers
-    _animationManager = SubcategoryAnimationManager(
+    _animationManager = CategoryAnimationManager(
       filterController: _filterController,
       productsController: _productsController,
       onAnimationComplete: _onAnimationComplete,
@@ -106,26 +111,26 @@ class _ProductScreenState extends State<ProductScreen>
 
   // ===== Data Loading =====
 
-  /// Loads the category data
-  Future<void> _loadCategory() async {
+  /// Loads the aisle data
+  Future<void> _loadAisle() async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 300));
 
-    // Find the category in our mock data
-    final categories = StoreCategoriesData.getMockCategories();
-    final category = categories.firstWhere(
-      (c) => c.id == widget.categoryId,
-      orElse: () => throw Exception('Category not found'),
+    // Find the aisle in our mock data
+    final aisles = StoreAisleData.getMockAisles();
+    final aisle = aisles.firstWhere(
+      (c) => c.id == widget.aisleId,
+      orElse: () => throw Exception('Aisle not found'),
     );
 
     if (mounted) {
       setState(() {
-        _category = category;
+        _aisle = aisle;
         _isLoading = false;
 
-        // Auto-select the first subcategory if available
-        if (category.subcategories.isNotEmpty) {
-          _selectedSubcategoryIndex = 0;
+        // Auto-select the first category if available
+        if (aisle.categories.isNotEmpty) {
+          _selectedCategoryIndex = 0;
         }
       });
 
@@ -149,7 +154,7 @@ class _ProductScreenState extends State<ProductScreen>
 
   /// Animates the initial transition when entering the screen
   void _animateInitialTransition() {
-    if (_category == null || _category!.subcategories.isEmpty) return;
+    if (_aisle == null || _aisle!.categories.isEmpty) return;
 
     // Let the animation manager handle the entire animation sequence
     _animationManager.startAnimationSequenceFromTheTop(context);
@@ -169,7 +174,13 @@ class _ProductScreenState extends State<ProductScreen>
   @override
   Widget build(BuildContext context) {
     return CartScaffold(
-      appBar: _buildAppBar(context),
+      appBar: appBarBuilder.buildAppBar(
+          context,
+          StoreRoutesConst.getStoreAislesRoute(widget.storeId),
+          true,
+          'Search aisles...', (query) {
+        _logger.info('Search query: $query');
+      }),
       body: _buildContent(),
       cart: mockCart, // Use the mock cart
       onCartTap: () {
@@ -195,54 +206,17 @@ class _ProductScreenState extends State<ProductScreen>
     );
   }
 
-  // ===== App Bar Methods =====
-
-  /// Builds the app bar with title and actions
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Colors.white,
-      titleSpacing: 0,
-      title: Padding(
-        padding: const EdgeInsets.only(right: 16.0),
-        child: _buildSearchBar(),
-      ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: () =>
-            context.go(StoreRoutesConst.getStoreAislesRoute(widget.storeId)),
-      ),
-    );
-  }
-
-  /// Builds the search bar using the reusable SearchBarWidget component
-  Widget _buildSearchBar() {
-    return SearchBarWidget(
-      hintText: 'Rechercher',
-      onQueryChanged: _handleSearchQuery,
-      minQueryLength: 3,
-      backgroundColor: Colors.grey.shade200,
-    );
-  }
-  
-  /// Handles search queries from the search bar
-  void _handleSearchQuery(String query) {
-    _logger.info('Search query: $query');
-    // Implement search functionality here
-    // For example, navigate to search results or filter current products
-  }
-
   // ===== Main Content Methods =====
 
   /// Builds the main content of the screen
   Widget _buildContent() {
-    if (_isLoading || _category == null) {
+    if (_isLoading || _aisle == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return Column(
       children: [
-        // Subcategory filters with slide-in and fade animation
+        // Category filters with slide-in and fade animation
         _buildAnimatedFilters(),
 
         // Products grid with fade-in animation
@@ -259,7 +233,7 @@ class _ProductScreenState extends State<ProductScreen>
       position: _animationManager.filterSlideAnimation,
       child: FadeTransition(
         opacity: _animationManager.filterAnimation,
-        child: _buildSubcategoryFilters(),
+        child: _buildCategoryFilters(),
       ),
     );
   }
@@ -279,38 +253,38 @@ class _ProductScreenState extends State<ProductScreen>
 
   // ===== Component UI Methods =====
 
-  /// Builds the subcategory filters at the top of the screen
-  Widget _buildSubcategoryFilters() {
-    if (_category == null) {
+  /// Builds the category filters at the top of the screen
+  Widget _buildCategoryFilters() {
+    if (_aisle == null) {
       return const SizedBox.shrink();
     }
 
-    return SubcategoryFilters(
-      subcategories: _category!.subcategories,
-      selectedIndex: _selectedSubcategoryIndex,
+    return CategoryFilters(
+      categories: _aisle!.categories,
+      selectedIndex: _selectedCategoryIndex,
       scrollController: _filtersScrollController,
-      onSubcategoryTap: (index) {
+      onCategoryTap: (index) {
         setState(() {
-          _selectedSubcategoryIndex = index;
+          _selectedCategoryIndex = index;
         });
       },
     );
   }
 
-  /// Builds a grid of products for the selected subcategory
+  /// Builds a grid of products for the selected category
   Widget _buildProductsGridWithTitle() {
-    if (_category == null ||
-        _selectedSubcategoryIndex < 0 ||
-        _selectedSubcategoryIndex >= _category!.subcategories.length) {
+    if (_aisle == null ||
+        _selectedCategoryIndex < 0 ||
+        _selectedCategoryIndex >= _aisle!.categories.length) {
       return const SizedBox.shrink();
     }
 
-    final subcategory = _category!.subcategories[_selectedSubcategoryIndex];
+    final category = _aisle!.categories[_selectedCategoryIndex];
 
     return ProductsGrid(
-      subcategory: subcategory,
+      category: category,
       storeId: widget.storeId,
-      categoryId: widget.categoryId,
+      aisleId: widget.aisleId,
     );
   }
 }

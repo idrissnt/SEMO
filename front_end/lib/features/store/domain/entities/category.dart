@@ -18,14 +18,14 @@ class Category {
 
   @override
   String toString() => name;
-  
+
   /// Returns the parent category path or null if this is a root category
   String? get parentPath {
     final lastDotIndex = path.lastIndexOf('.');
     if (lastDotIndex == -1) return null;
     return path.substring(0, lastDotIndex);
   }
-  
+
   /// Returns the category level in the hierarchy (0 for root categories)
   int get level => path.split('.').length - 1;
 }

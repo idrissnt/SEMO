@@ -1,22 +1,22 @@
-import 'package:semo/features/store/domain/entities/categories/store_category.dart';
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 
 /// Mock data for store categories, subcategories, and products
-class StoreCategoriesData {
-  /// Get mock categories data
-  static List<StoreCategory> getMockCategories() {
+class StoreAisleData {
+  /// Get mock aisles data
+  static List<StoreAisle> getMockAisles() {
     return [
       // Fresh Produce Category
-      StoreCategory(
+      StoreAisle(
         id: 'cat-001',
         name: 'Fresh Produce',
         imageUrl:
             'https://images.unsplash.com/photo-1610348725531-843dff563e2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         description: 'Fresh fruits and vegetables',
-        subcategories: [
+        categories: [
           // Fruits Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-001',
-            categoryId: 'cat-001',
+            aisleId: 'cat-001',
             name: 'Fruits',
             imageUrl:
                 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -135,9 +135,9 @@ class StoreCategoriesData {
             ],
           ),
           // Vegetables Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-002',
-            categoryId: 'cat-001',
+            aisleId: 'cat-001',
             name: 'Vegetables',
             imageUrl:
                 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -176,17 +176,17 @@ class StoreCategoriesData {
       ),
 
       // Dairy & Eggs Category
-      StoreCategory(
-        id: 'cat-002',
+      StoreAisle(
+        id: 'aisle-002',
         name: 'Dairy & Eggs',
         imageUrl:
             'https://images.unsplash.com/photo-1628088062854-d1870b4553da?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         description: 'Fresh dairy products and eggs',
-        subcategories: [
+        categories: [
           // Milk & Cream Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-003',
-            categoryId: 'cat-002',
+            aisleId: 'aisle-002',
             name: 'Milk & Cream',
             imageUrl:
                 'https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -223,9 +223,9 @@ class StoreCategoriesData {
             ],
           ),
           // Cheese Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-004',
-            categoryId: 'cat-002',
+            aisleId: 'aisle-002',
             name: 'Cheese',
             imageUrl:
                 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -261,9 +261,9 @@ class StoreCategoriesData {
             ],
           ),
           // Eggs Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-005',
-            categoryId: 'cat-002',
+            aisleId: 'aisle-002',
             name: 'Eggs',
             imageUrl:
                 'https://images.unsplash.com/photo-1509479100390-f83a8349e79c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -294,17 +294,17 @@ class StoreCategoriesData {
       ),
 
       // Bakery Category
-      StoreCategory(
-        id: 'cat-003',
+      StoreAisle(
+        id: 'aisle-003',
         name: 'Bakery',
         imageUrl:
             'https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         description: 'Fresh baked goods',
-        subcategories: [
+        categories: [
           // Bread Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-006',
-            categoryId: 'cat-003',
+            aisleId: 'aisle-003',
             name: 'Bread',
             imageUrl:
                 'https://images.unsplash.com/photo-1549931319-a545dcf3bc7c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -340,9 +340,9 @@ class StoreCategoriesData {
             ],
           ),
           // Pastries Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-007',
-            categoryId: 'cat-003',
+            aisleId: 'aisle-003',
             name: 'Pastries',
             imageUrl:
                 'https://images.unsplash.com/photo-1517433367423-c7e5b0f35086?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -382,17 +382,17 @@ class StoreCategoriesData {
       ),
 
       // Meat & Seafood Category
-      StoreCategory(
-        id: 'cat-004',
+      StoreAisle(
+        id: 'aisle-004',
         name: 'Meat & Seafood',
         imageUrl:
             'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         description: 'Fresh meat and seafood',
-        subcategories: [
+        categories: [
           // Beef Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-008',
-            categoryId: 'cat-004',
+            aisleId: 'aisle-004',
             name: 'Beef',
             imageUrl:
                 'https://images.unsplash.com/photo-1551028150-64b9f398f678?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -419,9 +419,9 @@ class StoreCategoriesData {
             ],
           ),
           // Poultry Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-009',
-            categoryId: 'cat-004',
+            aisleId: 'aisle-004',
             name: 'Poultry',
             imageUrl:
                 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -448,9 +448,9 @@ class StoreCategoriesData {
             ],
           ),
           // Seafood Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-010',
-            categoryId: 'cat-004',
+            aisleId: 'aisle-004',
             name: 'Seafood',
             imageUrl:
                 'https://images.unsplash.com/photo-1498654077810-12c21d4d6dc3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -481,17 +481,17 @@ class StoreCategoriesData {
       ),
 
       // Pantry & Dry Goods Category
-      StoreCategory(
-        id: 'cat-005',
+      StoreAisle(
+        id: 'aisle-005',
         name: 'Pantry & Dry Goods',
         imageUrl:
             'https://images.unsplash.com/photo-1584473457493-17c4c24290b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         description: 'Pantry staples and dry goods',
-        subcategories: [
+        categories: [
           // Pasta & Rice Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-011',
-            categoryId: 'cat-005',
+            aisleId: 'aisle-005',
             name: 'Pasta & Rice',
             imageUrl:
                 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -518,9 +518,9 @@ class StoreCategoriesData {
             ],
           ),
           // Canned Goods Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-012',
-            categoryId: 'cat-005',
+            aisleId: 'aisle-005',
             name: 'Canned Goods',
             imageUrl:
                 'https://images.unsplash.com/photo-1584473457493-17c4c24290b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -550,17 +550,17 @@ class StoreCategoriesData {
       ),
 
       // Beverages Category
-      StoreCategory(
-        id: 'cat-006',
+      StoreAisle(
+        id: 'aisle-006',
         name: 'Beverages',
         imageUrl:
             'https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         description: 'Drinks and beverages',
-        subcategories: [
+        categories: [
           // Coffee & Tea Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-013',
-            categoryId: 'cat-006',
+            aisleId: 'aisle-006',
             name: 'Coffee & Tea',
             imageUrl:
                 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
@@ -587,9 +587,9 @@ class StoreCategoriesData {
             ],
           ),
           // Soft Drinks Subcategory
-          StoreSubcategory(
+          AisleCategory(
             id: 'sub-014',
-            categoryId: 'cat-006',
+            aisleId: 'aisle-006',
             name: 'Soft Drinks',
             imageUrl:
                 'https://images.unsplash.com/photo-1581636625402-29b2a704ef13?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',

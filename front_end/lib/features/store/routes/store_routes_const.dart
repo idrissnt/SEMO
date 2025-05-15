@@ -11,9 +11,8 @@ class StoreRoutesConst {
   static const String storeAisles = 'aisles';
   static const String storeBuyAgain = 'buyagain';
 
-  /// Category and subcategory routes
-  static const String storeCategory = 'category/:categoryId';
-  static const String storeSubcategory = 'subcategory/:subcategoryId';
+  /// Aisle routes
+  static const String storeProductForAisle = 'aisle/:aisleId';
 
   /// Helper method to generate store detail route
   static String getStoreDetailRoute(String storeId) => '/store/$storeId';
@@ -26,7 +25,7 @@ class StoreRoutesConst {
   static String getStoreBuyAgainRoute(String storeId) =>
       '/store/$storeId/$storeBuyAgain';
 
-  /// Helper methods for category routes
-  static String getStoreCategoryRoute(String storeId, String categoryId) =>
-      '/store/$storeId/category/$categoryId';
+  /// Helper method for aisle routes
+  static String getStoreProductForAisleRoute(String storeId, String aisleId) =>
+      '/store/$storeId/aisle/$aisleId';
 }

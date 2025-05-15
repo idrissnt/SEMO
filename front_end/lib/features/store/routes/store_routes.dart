@@ -31,28 +31,13 @@ class StoreRouter {
               initialTab: 2, // Buy again tab index
             ),
           ),
-          // Category route
+          // Category products route - this is a sibling to the tab routes, not nested under aisles
           GoRoute(
-            path: StoreRoutesConst.storeCategory,
-            builder: (context, state) {
-              return ProductScreen(
-                storeId: state.pathParameters['storeId']!,
-                categoryId: state.pathParameters['categoryId']!,
-              );
-            },
-            // routes: [
-            //   // Subcategory route
-            //   GoRoute(
-            //     path: StoreRoutesConst.storeSubcategory,
-            //     builder: (context, state) {
-            //       return SubcategoryProductsScreen(
-            //         storeId: state.pathParameters['storeId']!,
-            //         categoryId: state.pathParameters['categoryId']!,
-            //         subcategoryId: state.pathParameters['subcategoryId']!,
-            //       );
-            //     },
-            //   ),
-            // ],
+            path: StoreRoutesConst.storeProductForAisle,
+            builder: (context, state) => ProductScreen(
+              storeId: state.pathParameters['storeId']!,
+              aisleId: state.pathParameters['aisleId']!,
+            ),
           ),
         ],
       ),

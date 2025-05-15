@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semo/features/store/domain/entities/categories/store_category.dart';
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:vibration/vibration.dart';
 
 /// Widget that displays a product card

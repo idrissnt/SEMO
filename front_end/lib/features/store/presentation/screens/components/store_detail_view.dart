@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/store/presentation/navigation/store_navigation_coordinator.dart';
 import 'package:semo/features/store/presentation/navigation/store_tab_controller.dart';
 import 'package:semo/features/store/presentation/navigation/store_tab_item.dart';
 import 'package:semo/features/store/presentation/screens/tabs/store_aisles_tab.dart';
 import 'package:semo/features/store/presentation/screens/tabs/store_buy_again_tab.dart';
 import 'package:semo/features/store/presentation/screens/tabs/store_shop_tab.dart';
-import 'package:semo/features/store/presentation/widgets/store_bottom_nav_bar.dart';
+import 'package:semo/features/store/presentation/widgets/store/bottom_nav_bar.dart';
+import 'package:semo/features/store/presentation/widgets/store/app_bar_factory_store_tab.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
+
+final _logger = AppLogger();
 
 /// The view component for the store detail screen
 class StoreDetailView extends StatelessWidget {
@@ -48,27 +52,7 @@ class StoreDetailView extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: coordinator.navigateBack,
-        ),
-        title: const Text('Nom du magasin'), // Placeholder for store name
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Handle search
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              // Navigate to cart
-            },
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(tabController.selectedIndex, coordinator),
       body: _buildBody(tabController.selectedIndex),
       bottomNavigationBar: StoreBottomNavBar(
         selectedIndex: tabController.selectedIndex,
@@ -78,6 +62,28 @@ class StoreDetailView extends StatelessWidget {
         },
         tabs: _tabs,
       ),
+    );
+  }
+
+  /// Builds a custom AppBar based on the selected tab
+  PreferredSizeWidget _buildAppBar(
+      int selectedIndex, StoreNavigationCoordinator coordinator) {
+    return StoreTabAppBarFactory.createAppBar(
+      tabIndex: selectedIndex,
+      storeTitle: 'Nom du magasin',
+      coordinator: coordinator,
+      onSearchTap: () {
+        // Handle search tap
+        _logger.debug('Search tapped');
+      },
+      onSearchChanged: (query) {
+        // Handle search query
+        _logger.debug('Searching for: $query');
+      },
+      onCartTap: () {
+        // Handle cart tap
+        _logger.debug('Cart tapped');
+      },
     );
   }
 
