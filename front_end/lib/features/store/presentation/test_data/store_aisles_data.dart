@@ -1,6 +1,24 @@
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/domain/entities/store.dart';
 
 /// Mock data for store categories, subcategories, and products
+///
+///
+///
+
+StoreBrand storeBrandData = StoreBrand(
+  id: '1',
+  name: 'Sample Store',
+  slug: 'sample-store', // Add required slug parameter
+  type: 'grocery', // Add required type parameter
+  imageLogo:
+      'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/store_logos/logo.png',
+  imageBanner:
+      'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/store_baners/baner.webp',
+);
+
+///
+///
 class StoreAisleData {
   /// Get mock aisles data
   static List<StoreAisle> getMockAisles() {

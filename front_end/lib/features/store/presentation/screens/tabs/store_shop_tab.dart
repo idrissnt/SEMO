@@ -1,35 +1,218 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
+import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
+import 'package:semo/features/order/routes/const.dart';
+import 'package:semo/features/store/domain/entities/store.dart';
+import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
+import 'package:logging/logging.dart';
+
+Logger _logger = Logger('StoreShopTab');
 
 /// Tab that displays the shop content for a specific store
-class StoreShopTab extends StatelessWidget {
+class StoreShopTab extends StatefulWidget {
   /// The ID of the store
   final String storeId;
-  
+
   const StoreShopTab({
-    Key? key, 
+    Key? key,
     required this.storeId,
   }) : super(key: key);
-  
+
+  @override
+  State<StoreShopTab> createState() => _StoreShopTabState();
+}
+
+class _StoreShopTabState extends State<StoreShopTab> {
+  final ScrollController _scrollController = ScrollController();
+  // state variables that will change based on scroll position
+  bool _isScrolled = false;
+
+  /// Sample store brand data
+  final StoreBrand _store = storeBrandData;
+
+  @override
+  void initState() {
+    super.initState();
+    // add listener to scroll controller
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    // Instead of a binary state, calculate a progress value between 0 and 1
+    // based on scroll position between 0 and 100
+    final scrollProgress = (_scrollController.offset / 100).clamp(0.0, 1.0);
+
+    // Update the state regardless of threshold to get smooth animation
+    setState(() {
+      // For binary state changes (when needed)
+      _isScrolled = scrollProgress > 0.5;
+
+      // Store the scroll progress for smooth animations
+      _scrollProgress = scrollProgress;
+    });
+  }
+
+  // Scroll progress value from 0.0 (not scrolled) to 1.0 (fully scrolled)
+  double _scrollProgress = 0.0;
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildAppBar(),
+            Expanded(
+                child: SingleChildScrollView(
+                    controller: _scrollController, child: _buildMainContent())),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBar() {
+    // Calculate height based on scroll progress for smooth transition
+    final appBarHeight = 160.0 - (100.0 * _scrollProgress);
+
+    // Calculate search bar position and width based on scroll progress
+    final searchBarLeftPosition = 16.0 + (50.0 * _scrollProgress);
+    const searchBarRightPosition = 16.0;
+
+    return SizedBox(
+      height: appBarHeight,
+      child: Stack(
+        children: [
+          // Banner image with opacity based on scroll progress
+          Opacity(
+            opacity: 1.0 - _scrollProgress,
+            child: Container(
+              width: double.infinity,
+              height: 160,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                image: DecorationImage(
+                  image: NetworkImage(_store.imageBanner),
+                  fit: BoxFit.cover,
+                  onError: (exception, stackTrace) {
+                    return _logger.log(Level.SEVERE, 'Error loading image',
+                        exception, stackTrace);
+                  },
+                ),
+              ),
+            ),
+          ),
+
+          // Search bar with dynamic positioning and width
+          Positioned(
+            bottom: 12,
+            left: searchBarLeftPosition,
+            right: searchBarRightPosition,
+            child: SearchBarWidget(
+              isScrolled: _isScrolled,
+              searchBarColor: const Color.fromARGB(255, 177, 172, 172),
+              iconColor: Colors.black,
+              hintColor: Colors.black,
+            ),
+          ),
+
+          // Back button - always visible
+          Positioned(
+            top: 12,
+            left: 16,
+            child: _buildActionIcons(
+              onPressed: () {
+                // Use GoRouter to navigate to the order screen
+                context.go(OrderRoutesConstants.order);
+              },
+              icon: CupertinoIcons.xmark_circle_fill,
+              iconColor: Colors.white,
+              backgroundColor: AppColors.primary,
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+
+          // Info and Add Person buttons with opacity based on scroll progress
+          Positioned(
+            top: 12,
+            right: 16,
+            child: Opacity(
+              opacity: 1.0 - _scrollProgress,
+              child: Row(
+                children: [
+                  _buildActionIcons(
+                    onPressed: () {},
+                    icon: CupertinoIcons.info,
+                    iconColor: Colors.white,
+                    backgroundColor: Colors.red,
+                  ),
+                  const SizedBox(width: 10),
+                  _buildActionIcons(
+                    onPressed: () {},
+                    icon: CupertinoIcons.person_add,
+                    iconColor: Colors.white,
+                    backgroundColor: Colors.green,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionIcons({
+    required VoidCallback onPressed,
+    required IconData icon,
+    required Color iconColor,
+    required Color backgroundColor,
+    BorderRadius? borderRadius,
+    double? size,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(0),
+      height: 35,
+      width: 35,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: borderRadius ?? BorderRadius.circular(8),
+      ),
+      child: ActionIconButton(
+        icon: icon,
+        color: iconColor,
+        onPressed: onPressed,
+        size: size ?? 24,
+      ),
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Column(
       children: [
         // Featured categories section
         _buildSectionTitle('Categories'),
         const SizedBox(height: 12),
         _buildCategoriesGrid(),
-        
+
         const SizedBox(height: 24),
-        
+
         // Featured products section
         _buildSectionTitle('Featured Products'),
         const SizedBox(height: 12),
         _buildFeaturedProducts(),
-        
+
         const SizedBox(height: 24),
-        
+
         // Promotions section
         _buildSectionTitle('Current Promotions'),
         const SizedBox(height: 12),
@@ -37,7 +220,7 @@ class StoreShopTab extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildSectionTitle(String title) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,7 +241,7 @@ class StoreShopTab extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildCategoriesGrid() {
     // Mock categories for demonstration
     final categories = [
@@ -69,7 +252,7 @@ class StoreShopTab extends StatelessWidget {
       {'name': 'Small Pets', 'icon': Icons.pets},
       {'name': 'Reptiles', 'icon': Icons.pest_control},
     ];
-    
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -114,7 +297,7 @@ class StoreShopTab extends StatelessWidget {
       },
     );
   }
-  
+
   Widget _buildFeaturedProducts() {
     // Mock products for demonstration
     return SizedBox(
@@ -165,7 +348,7 @@ class StoreShopTab extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildPromotions() {
     return Container(
       height: 120,

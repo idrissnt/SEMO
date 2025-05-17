@@ -14,10 +14,17 @@ import 'package:semo/features/store/routes/store_routes_const.dart';
 final _logger = AppLogger();
 
 /// The view component for the store detail screen
-class StoreDetailView extends StatelessWidget {
+class StoreDetailView extends StatefulWidget {
   /// The ID of the store
   final String storeId;
 
+  const StoreDetailView({Key? key, required this.storeId}) : super(key: key);
+
+  @override
+  State<StoreDetailView> createState() => _StoreDetailViewState();
+}
+
+class _StoreDetailViewState extends State<StoreDetailView> {
   /// List of available tabs
   static const List<StoreTabItem> _tabs = [
     StoreTabItem(
@@ -37,22 +44,21 @@ class StoreDetailView extends StatelessWidget {
     ),
   ];
 
-  /// Creates a new store detail view
-  const StoreDetailView({
-    Key? key,
-    required this.storeId,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final tabController = Provider.of<StoreTabController>(context);
+    // Create the coordinator locally instead of getting it from Provider
     final coordinator = StoreNavigationCoordinator(
       context: context,
-      storeId: storeId,
+      storeId: widget.storeId,
     );
+    final tabController = Provider.of<StoreTabController>(context);
 
+    // Only show app bar for non-shop tabs (index != 0)
+    // Shop tab has its own animated app bar
     return Scaffold(
-      appBar: _buildAppBar(tabController.selectedIndex, coordinator),
+      appBar: tabController.selectedIndex != 0
+          ? _buildAppBar(tabController.selectedIndex, coordinator)
+          : null,
       body: _buildBody(tabController.selectedIndex),
       bottomNavigationBar: StoreBottomNavBar(
         selectedIndex: tabController.selectedIndex,
@@ -70,7 +76,6 @@ class StoreDetailView extends StatelessWidget {
       int selectedIndex, StoreNavigationCoordinator coordinator) {
     return StoreTabAppBarFactory.createAppBar(
       tabIndex: selectedIndex,
-      storeTitle: 'Nom du magasin',
       coordinator: coordinator,
       onSearchTap: () {
         // Handle search tap
@@ -80,35 +85,22 @@ class StoreDetailView extends StatelessWidget {
         // Handle search query
         _logger.debug('Searching for: $query');
       },
-      onCartTap: () {
-        // Handle cart tap
-        _logger.debug('Cart tapped');
-      },
     );
   }
 
   /// Builds the body based on the selected tab
   Widget _buildBody(int selectedIndex) {
     // Use IndexedStack to preserve state of each tab
-    // In the futue we will BLoC to Store tab-specific state in
+    // In the future we will use BLoC to store tab-specific state
     return IndexedStack(
       index: selectedIndex,
       children: [
-        StoreShopTab(storeId: storeId),
-        StoreAislesTab(storeId: storeId),
-        StoreBuyAgainTab(storeId: storeId),
+        StoreShopTab(
+          storeId: widget.storeId,
+        ),
+        StoreAislesTab(storeId: widget.storeId),
+        StoreBuyAgainTab(storeId: widget.storeId),
       ],
     );
-
-    // switch (selectedIndex) {
-    //   case 0:
-    //     return StoreShopTab(storeId: storeId);
-    //   case 1:
-    //     return StoreAislesTab(storeId: storeId);
-    //   case 2:
-    //     return StoreBuyAgainTab(storeId: storeId);
-    //   default:
-    //     return StoreShopTab(storeId: storeId);
-    // }
   }
 }

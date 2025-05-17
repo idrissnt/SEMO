@@ -8,7 +8,6 @@ import 'package:semo/features/order/presentation/widgets/app_bar/action_icons.da
 /// A collapsible app bar for the home screen that changes appearance on scroll
 class OrderAppBar extends StatelessWidget {
   final bool isScrolled;
-  final ScrollController scrollController;
 
   /// Callback for when the location section is tapped
   final VoidCallback onLocationTap;
@@ -16,7 +15,6 @@ class OrderAppBar extends StatelessWidget {
   const OrderAppBar({
     Key? key,
     required this.isScrolled,
-    required this.scrollController,
     required this.onLocationTap,
   }) : super(key: key);
 

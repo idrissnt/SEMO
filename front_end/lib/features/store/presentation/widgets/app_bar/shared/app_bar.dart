@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Feature imports
-import 'package:semo/features/store/presentation/widgets/shared/search_bar_widget.dart';
+import 'package:semo/features/store/presentation/widgets/app_bar/shared/search_bar_widget.dart';
 
 class AppBarBuilder {
   //

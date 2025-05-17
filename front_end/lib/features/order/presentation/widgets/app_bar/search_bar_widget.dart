@@ -6,10 +6,16 @@ import 'package:semo/features/order/presentation/constant/constants.dart';
 /// A custom search bar widget that adapts its appearance based on scroll state
 class SearchBarWidget extends StatelessWidget {
   final bool isScrolled;
+  final Color? searchBarColor;
+  final Color? iconColor;
+  final Color? hintColor;
 
   const SearchBarWidget({
     Key? key,
     required this.isScrolled,
+    this.searchBarColor,
+    this.iconColor,
+    this.hintColor,
   }) : super(key: key);
 
   @override
@@ -19,7 +25,7 @@ class SearchBarWidget extends StatelessWidget {
       curve: Curves.easeInOut,
       height: OrderConstants.searchBarHeight,
       decoration: BoxDecoration(
-        color: AppColors.searchBarColor,
+        color: searchBarColor ?? AppColors.searchBarColor,
         borderRadius: BorderRadius.circular(AppBorderRadius.xl),
       ),
       padding: EdgeInsets.symmetric(horizontal: AppDimensionsWidth.medium),
@@ -35,21 +41,24 @@ class SearchBarWidget extends StatelessWidget {
             duration: OrderConstants.animationDuration,
             curve: Curves.easeInOut,
             padding: EdgeInsets.zero,
-            child:
-                const Icon(Icons.search, color: AppColors.iconColorFirstColor),
+            child: Icon(Icons.search,
+                color: iconColor ?? AppColors.iconColorFirstColor),
           ),
           SizedBox(width: AppDimensionsWidth.xSmall),
           Expanded(
             child: TextField(
               decoration: InputDecoration(
                 hintText: OrderConstants.searchHintText,
-                hintStyle: const TextStyle(color: AppColors.searchBarHintColor),
+                hintStyle:
+                    TextStyle(color: hintColor ?? AppColors.searchBarHintColor),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: AppDimensionsHeight.xSmall),
               ),
-              style: TextStyle(fontSize: AppFontSize.medium),
+              style: TextStyle(
+                  fontSize: AppFontSize.medium,
+                  color: iconColor ?? AppColors.iconColorFirstColor),
               onChanged: (query) {
                 if (query.length >= OrderConstants.queryLength) {
                   // Handle search query

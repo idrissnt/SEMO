@@ -3,10 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
-// import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/animations/store_animation_service.dart';
-// import 'package:semo/features/store/routes/store_routes_const.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StoreSection extends StatelessWidget {
@@ -36,7 +34,6 @@ class StoreSection extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: 16),
           child: Text(
-            // 'Recipes',
             title,
             style: GoogleFonts.roboto(
               fontSize: 24,
@@ -80,7 +77,6 @@ class StoreSection extends StatelessWidget {
                             _logger.info('Navigating to store: ${store.name}');
                             StoreAnimationService.showStoreEntryAnimation(
                                 context, store);
-                            // context.go(StoreRoutesConst.getStoreDetailRoute(store.id));
                           },
                         ),
                         SizedBox(height: 8),

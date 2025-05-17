@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:semo/features/store/presentation/animations/page_transition.dart';
 import 'package:semo/features/store/presentation/screens/store_detail_screen.dart';
 import 'package:semo/features/store/presentation/screens/product_screen.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
@@ -9,10 +10,15 @@ class StoreRouter {
   static List<RouteBase> getStoreRoutes() {
     return [
       // Store detail route with nested routes for tabs
+
       GoRoute(
         path: StoreRoutesConst.storeDetail,
-        builder: (context, state) => StoreDetailScreen(
-          storeId: state.pathParameters['storeId']!,
+        pageBuilder: (context, state) => buildTopToBottomExitTransition(
+          context: context,
+          state: state,
+          child: StoreDetailScreen(
+            storeId: state.pathParameters['storeId']!,
+          ),
         ),
         routes: [
           // Aisles tab route

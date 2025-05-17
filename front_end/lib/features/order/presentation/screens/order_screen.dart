@@ -118,10 +118,11 @@ class _OrderScreenState extends State<OrderScreen> {
               // App bar with animated elevation based on scroll
               OrderAppBar(
                 isScrolled: _isScrolled,
-                scrollController: _scrollController,
                 onLocationTap: () => showAddressBottomSheet(context),
               ),
               const SizedBox(height: 8),
+
+              // Main content
               Expanded(
                 child: SingleChildScrollView(
                   controller: _scrollController,
@@ -129,7 +130,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Main content
                       _buildMainContent(),
                     ],
                   ),

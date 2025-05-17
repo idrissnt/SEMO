@@ -9,7 +9,7 @@ import 'package:semo/features/cart/presentation/widgets/cart_scaffold.dart';
 // store imports
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/animations/category_animation_manager.dart';
-import 'package:semo/features/store/presentation/widgets/shared/app_bar.dart';
+import 'package:semo/features/store/presentation/widgets/app_bar/shared/app_bar.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/presentation/widgets/products/products_grid.dart';
 import 'package:semo/features/store/presentation/widgets/category/category_filters.dart';

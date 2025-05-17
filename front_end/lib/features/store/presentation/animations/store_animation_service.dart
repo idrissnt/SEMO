@@ -12,8 +12,8 @@ class StoreAnimationService {
     showGeneralDialog(
       context: context,
       barrierDismissible: false, // User must wait for animation
-      barrierColor: Colors.black,
-      transitionDuration: const Duration(milliseconds: 300),
+      // barrierColor: Colors.black,
+      transitionDuration: const Duration(milliseconds: 100),
       pageBuilder: (context, _, __) {
         return Material(
           type: MaterialType.transparency,
