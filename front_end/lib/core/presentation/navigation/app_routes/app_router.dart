@@ -7,6 +7,7 @@ import 'package:semo/core/di/injection_container.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/main_shell_route.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/register_all_tabs.dart';
 import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/register_shell_providers.dart';
+import 'package:semo/core/presentation/navigation/app_routes/route_transition_observer.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -25,6 +26,8 @@ class AppRouter {
   /// Navigator key for profile routes
   static final GlobalKey<NavigatorState> profileNavigatorKey =
       GlobalKey<NavigatorState>();
+
+  static final routeTransitionObserver = RouteTransitionObserver();
 
   /// Initialize the router
   static void initialize() {
@@ -88,6 +91,9 @@ class AppRouter {
         ),
       ),
     ),
-    observers: [NavigationLogger()],
+    observers: [
+      NavigationLogger(),
+      routeTransitionObserver,
+    ],
   );
 }

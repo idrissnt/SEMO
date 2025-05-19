@@ -12,7 +12,7 @@ StoreBrand storeBrandData = StoreBrand(
   slug: 'sample-store', // Add required slug parameter
   type: 'grocery', // Add required type parameter
   imageLogo:
-      'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/store_logos/logo.png',
+      'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
   imageBanner:
       'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/store_baners/baner.webp',
 );

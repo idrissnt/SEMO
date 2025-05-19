@@ -1,48 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
+import 'package:semo/features/store/presentation/widgets/shared/gradient_app_bar.dart';
 
 /// Tab that displays previously purchased items for a specific store
 class StoreBuyAgainTab extends StatelessWidget {
   /// The ID of the store
   final String storeId;
-  
+
   const StoreBuyAgainTab({
-    Key? key, 
+    Key? key,
     required this.storeId,
   }) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        // Recent orders section
-        const Text(
-          'Recent Orders',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+    return Scaffold(
+      appBar: GradientAppBar(
+        showBackButton: false,
+        title: const SearchBarWidget(
+          isScrolled: false,
+          searchBarColor: Colors.white,
+          iconColor: Colors.black,
+          hintColor: Colors.black,
         ),
-        const SizedBox(height: 16),
-        _buildRecentOrders(),
-        
-        const SizedBox(height: 24),
-        
-        // Frequently purchased items
-        const Text(
-          'Frequently Purchased',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        height: 94.0,
+        onQueryChanged: (query) {},
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // Recent orders section
+          const Text(
+            'Recent Orders',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        _buildFrequentItems(),
-      ],
+          const SizedBox(height: 16),
+          _buildRecentOrders(),
+
+          const SizedBox(height: 24),
+
+          // Frequently purchased items
+          const Text(
+            'Frequently Purchased',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildFrequentItems(),
+        ],
+      ),
     );
   }
-  
+
   Widget _buildRecentOrders() {
     // Mock recent orders
     return ListView.builder(
@@ -144,7 +159,7 @@ class StoreBuyAgainTab extends StatelessWidget {
       },
     );
   }
-  
+
   Widget _buildFrequentItems() {
     // Mock frequent items
     return GridView.builder(

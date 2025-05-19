@@ -5,15 +5,15 @@ import 'package:logging/logging.dart';
 // cart imports
 import 'package:semo/features/cart/presentation/test/cart_items.dart';
 import 'package:semo/features/cart/presentation/widgets/cart_scaffold.dart';
+import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 
 // store imports
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/animations/category_animation_manager.dart';
-import 'package:semo/features/store/presentation/widgets/app_bar/shared/app_bar.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/presentation/widgets/products/products_grid.dart';
 import 'package:semo/features/store/presentation/widgets/category/category_filters.dart';
-import 'package:semo/features/store/routes/store_routes_const.dart';
+import 'package:semo/features/store/presentation/widgets/shared/gradient_app_bar.dart';
 
 Logger _logger = Logger('ProductScreen');
 
@@ -63,16 +63,11 @@ class _ProductScreenState extends State<ProductScreen>
   /// Scroll controller for category filters
   final ScrollController _filtersScrollController = ScrollController();
 
-  // ===== AppBar =====
-
-  late AppBarBuilder appBarBuilder;
-
   // ===== Lifecycle Methods =====
 
   @override
   void initState() {
     super.initState();
-    appBarBuilder = AppBarBuilder();
     _initializeAnimations();
     _loadAisle();
   }
@@ -174,13 +169,23 @@ class _ProductScreenState extends State<ProductScreen>
   @override
   Widget build(BuildContext context) {
     return CartScaffold(
-      appBar: appBarBuilder.buildAppBar(
-          context,
-          StoreRoutesConst.getStoreAislesRoute(widget.storeId),
-          true,
-          'Search aisles...', (query) {
-        _logger.info('Search query: $query');
-      }),
+      // appBar: appBarBuilder.buildAppBar(
+      //     context,
+      //     StoreRoutesConst.getStoreAislesRoute(widget.storeId),
+      //     'Search aisles...', (query) {
+      //   _logger.info('Search query: $query');
+      // }),
+      appBar: GradientAppBar(
+        showBackButton: true,
+        title: const SearchBarWidget(
+          isScrolled: false,
+          searchBarColor: Colors.white,
+          iconColor: Colors.black,
+          hintColor: Colors.black,
+        ),
+        height: 94.0,
+        onQueryChanged: (query) {},
+      ),
       body: _buildContent(),
       cart: mockCart, // Use the mock cart
       onCartTap: () {

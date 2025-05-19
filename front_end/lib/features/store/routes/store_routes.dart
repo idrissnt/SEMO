@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:semo/features/store/presentation/animations/page_transition.dart';
-import 'package:semo/features/store/presentation/screens/store_detail_screen.dart';
 import 'package:semo/features/store/presentation/screens/product_screen.dart';
+import 'package:semo/features/store/presentation/screens/tabs/store_shop_tab.dart';
+import 'package:semo/features/store/presentation/screens/tabs/store_aisles_tab.dart';
+import 'package:semo/features/store/presentation/screens/tabs/store_buy_again_tab.dart';
+import 'package:semo/features/store/routes/navigation/store_navigation_shell.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
 
 /// Router configuration for store-related routes
@@ -9,40 +11,74 @@ class StoreRouter {
   /// Get all store routes
   static List<RouteBase> getStoreRoutes() {
     return [
-      // Store detail route with nested routes for tabs
-
+      // Store detail route with ShellRoute for bottom navigation
       GoRoute(
-        path: StoreRoutesConst.storeDetail,
-        pageBuilder: (context, state) => buildTopToBottomExitTransition(
-          context: context,
-          state: state,
-          child: StoreDetailScreen(
-            storeId: state.pathParameters['storeId']!,
-          ),
-        ),
+        path: StoreRoutesConst.storeBase,
+        redirect: (_, __) => null, // No-op redirect for the base path
+      ),
+
+      ShellRoute(
+        builder: (context, state, child) {
+          // Extract storeId from the path
+          final String storeId = state.pathParameters['storeId'] ?? '';
+
+          // Get the current route path to determine active tab
+          final String path = state.uri.path;
+          int selectedIndex = 0;
+
+          // Determine the selected tab based on the path
+          if (path.contains(StoreRoutesConst.storeAisles)) {
+            selectedIndex = 1;
+          } else if (path.contains(StoreRoutesConst.storeBuyAgain)) {
+            selectedIndex = 2;
+          }
+
+          // Return a stateful shell that manages the bottom navigation
+          return StoreNavigationShell(
+            storeId: storeId,
+            selectedIndex: selectedIndex,
+            child: child,
+          );
+        },
         routes: [
-          // Aisles tab route
+          // Shop tab (default)
           GoRoute(
-            path: StoreRoutesConst.storeAisles,
-            builder: (context, state) => StoreDetailScreen(
-              storeId: state.pathParameters['storeId']!,
-              initialTab: 1, // Aisles tab index
-            ),
+            path: StoreRoutesConst.selectedStore,
+            name: StoreRoutesConst.storeDetailName,
+            builder: (context, state) {
+              final storeId = state.pathParameters['storeId'] ?? '';
+              // Use the animated wrapper instead of directly using StoreShopTab
+              return StoreShopTab(storeId: storeId);
+            },
           ),
-          // Buy again tab route
+          // Aisles tab
           GoRoute(
-            path: StoreRoutesConst.storeBuyAgain,
-            builder: (context, state) => StoreDetailScreen(
+            path:
+                '${StoreRoutesConst.selectedStore}/${StoreRoutesConst.storeAisles}',
+            name: StoreRoutesConst.storeAislesName,
+            builder: (context, state) => StoreAislesTab(
               storeId: state.pathParameters['storeId']!,
-              initialTab: 2, // Buy again tab index
             ),
+            routes: [
+              // Category products route
+              GoRoute(
+                path: StoreRoutesConst.storeProductForAisle,
+                name: StoreRoutesConst.storeProductForAisleName,
+                builder: (context, state) => ProductScreen(
+                  storeId: state.pathParameters['storeId']!,
+                  aisleId: state.pathParameters['aisleId']!,
+                ),
+              ),
+            ],
           ),
-          // Category products route - this is a sibling to the tab routes, not nested under aisles
+
+          // Buy Again tab
           GoRoute(
-            path: StoreRoutesConst.storeProductForAisle,
-            builder: (context, state) => ProductScreen(
+            path:
+                '${StoreRoutesConst.selectedStore}/${StoreRoutesConst.storeBuyAgain}',
+            name: StoreRoutesConst.storeBuyAgainName,
+            builder: (context, state) => StoreBuyAgainTab(
               storeId: state.pathParameters['storeId']!,
-              aisleId: state.pathParameters['aisleId']!,
             ),
           ),
         ],

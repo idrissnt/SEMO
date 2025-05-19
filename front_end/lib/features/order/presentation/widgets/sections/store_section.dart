@@ -1,17 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
-import 'package:semo/features/store/presentation/animations/store_animation_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:semo/features/store/routes/store_routes_const.dart';
 
 class StoreSection extends StatelessWidget {
   final String title;
   final List<StoreBrand> stores;
 
-  final AppLogger _logger = AppLogger();
+  // final AppLogger _logger = AppLogger();
 
   StoreSection({
     Key? key,
@@ -74,10 +75,12 @@ class StoreSection extends StatelessWidget {
                           size: storeWidth,
                           store: store,
                           onTap: () {
-                            _logger.info('Navigating to store: ${store.name}');
-                            StoreAnimationService.showStoreEntryAnimation(
-                                context, store);
+                            // Use standard navigation to preserve bottom nav bar
+                            context.go(
+                              StoreRoutesConst.getStoreDetailRoute(store.id),
+                            );
                           },
+                          heroTag: StoreRoutesConst.getStoreHeroTag(store.id),
                         ),
                         SizedBox(height: 8),
                         Text(
@@ -107,12 +110,14 @@ class StoreImageButton extends StatefulWidget {
   final double size;
   final StoreBrand store;
   final VoidCallback onTap;
+  final String heroTag;
 
   const StoreImageButton({
     Key? key,
     required this.size,
     required this.store,
     required this.onTap,
+    required this.heroTag,
   }) : super(key: key);
 
   @override
@@ -148,6 +153,23 @@ class _StoreImageButtonState extends State<StoreImageButton>
 
   @override
   Widget build(BuildContext context) {
+    Widget content = _buildAnimatedImage();
+
+    // Wrap with Hero if tag is provided
+    if (widget.heroTag.isNotEmpty) {
+      content = Hero(
+        tag: widget.heroTag,
+        child: Material(
+          color: Colors.transparent,
+          child: content,
+        ),
+      );
+    }
+
+    return content;
+  }
+
+  Widget _buildAnimatedImage() {
     return AnimatedBuilder(
       animation: _scaleAnimation,
       builder: (context, child) {

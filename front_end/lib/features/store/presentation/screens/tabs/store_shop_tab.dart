@@ -1,15 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
-import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
 import 'package:semo/features/order/routes/const.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
-import 'package:logging/logging.dart';
-
-Logger _logger = Logger('StoreShopTab');
+import 'package:semo/features/store/presentation/widgets/store_shop_tab/app_bar.dart';
+import 'package:semo/features/store/routes/store_routes_const.dart';
 
 /// Tab that displays the shop content for a specific store
 class StoreShopTab extends StatefulWidget {
@@ -25,7 +20,8 @@ class StoreShopTab extends StatefulWidget {
   State<StoreShopTab> createState() => _StoreShopTabState();
 }
 
-class _StoreShopTabState extends State<StoreShopTab> {
+class _StoreShopTabState extends State<StoreShopTab>
+    with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   // state variables that will change based on scroll position
   bool _isScrolled = false;
@@ -68,12 +64,16 @@ class _StoreShopTabState extends State<StoreShopTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
             _buildAppBar(),
             Expanded(
-                child: SingleChildScrollView(
-                    controller: _scrollController, child: _buildMainContent())),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: _buildMainContent(),
+              ),
+            ),
           ],
         ),
       ),
@@ -81,117 +81,17 @@ class _StoreShopTabState extends State<StoreShopTab> {
   }
 
   Widget _buildAppBar() {
-    // Calculate height based on scroll progress for smooth transition
-    final appBarHeight = 160.0 - (100.0 * _scrollProgress);
-
-    // Calculate search bar position and width based on scroll progress
-    final searchBarLeftPosition = 16.0 + (50.0 * _scrollProgress);
-    const searchBarRightPosition = 16.0;
-
-    return SizedBox(
-      height: appBarHeight,
-      child: Stack(
-        children: [
-          // Banner image with opacity based on scroll progress
-          Opacity(
-            opacity: 1.0 - _scrollProgress,
-            child: Container(
-              width: double.infinity,
-              height: 160,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                image: DecorationImage(
-                  image: NetworkImage(_store.imageBanner),
-                  fit: BoxFit.cover,
-                  onError: (exception, stackTrace) {
-                    return _logger.log(Level.SEVERE, 'Error loading image',
-                        exception, stackTrace);
-                  },
-                ),
-              ),
-            ),
-          ),
-
-          // Search bar with dynamic positioning and width
-          Positioned(
-            bottom: 12,
-            left: searchBarLeftPosition,
-            right: searchBarRightPosition,
-            child: SearchBarWidget(
-              isScrolled: _isScrolled,
-              searchBarColor: const Color.fromARGB(255, 177, 172, 172),
-              iconColor: Colors.black,
-              hintColor: Colors.black,
-            ),
-          ),
-
-          // Back button - always visible
-          Positioned(
-            top: 12,
-            left: 16,
-            child: _buildActionIcons(
-              onPressed: () {
-                // Use GoRouter to navigate to the order screen
-                context.go(OrderRoutesConstants.order);
-              },
-              icon: CupertinoIcons.xmark_circle_fill,
-              iconColor: Colors.white,
-              backgroundColor: AppColors.primary,
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-
-          // Info and Add Person buttons with opacity based on scroll progress
-          Positioned(
-            top: 12,
-            right: 16,
-            child: Opacity(
-              opacity: 1.0 - _scrollProgress,
-              child: Row(
-                children: [
-                  _buildActionIcons(
-                    onPressed: () {},
-                    icon: CupertinoIcons.info,
-                    iconColor: Colors.white,
-                    backgroundColor: Colors.red,
-                  ),
-                  const SizedBox(width: 10),
-                  _buildActionIcons(
-                    onPressed: () {},
-                    icon: CupertinoIcons.person_add,
-                    iconColor: Colors.white,
-                    backgroundColor: Colors.green,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionIcons({
-    required VoidCallback onPressed,
-    required IconData icon,
-    required Color iconColor,
-    required Color backgroundColor,
-    BorderRadius? borderRadius,
-    double? size,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(0),
-      height: 35,
-      width: 35,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: borderRadius ?? BorderRadius.circular(8),
-      ),
-      child: ActionIconButton(
-        icon: icon,
-        color: iconColor,
-        onPressed: onPressed,
-        size: size ?? 24,
+    return Hero(
+      tag: StoreRoutesConst.getStoreHeroTag(widget.storeId),
+      child: Material(
+        color: Colors.transparent,
+        child: StoreShopAppBar(
+          store: _store,
+          scrollController: _scrollController,
+          isScrolled: _isScrolled,
+          scrollProgress: _scrollProgress,
+          backRoute: OrderRoutesConstants.order,
+        ),
       ),
     );
   }
