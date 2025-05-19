@@ -5,6 +5,7 @@ import 'package:semo/features/store/presentation/screens/tabs/store_aisles_tab.d
 import 'package:semo/features/store/presentation/screens/tabs/store_buy_again_tab.dart';
 import 'package:semo/features/store/routes/navigation/store_navigation_shell.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
+import 'package:semo/features/store/routes/transitions/no_transition_page.dart';
 
 /// Router configuration for store-related routes
 class StoreRouter {
@@ -45,10 +46,12 @@ class StoreRouter {
           GoRoute(
             path: StoreRoutesConst.selectedStore,
             name: StoreRoutesConst.storeDetailName,
-            builder: (context, state) {
+            pageBuilder: (context, state) {
               final storeId = state.pathParameters['storeId'] ?? '';
-              // Use the animated wrapper instead of directly using StoreShopTab
-              return StoreShopTab(storeId: storeId);
+              return TabNoTransitionPage(
+                name: state.name!,
+                child: StoreShopTab(storeId: storeId),
+              );
             },
           ),
           // Aisles tab
@@ -56,8 +59,11 @@ class StoreRouter {
             path:
                 '${StoreRoutesConst.selectedStore}/${StoreRoutesConst.storeAisles}',
             name: StoreRoutesConst.storeAislesName,
-            builder: (context, state) => StoreAislesTab(
-              storeId: state.pathParameters['storeId']!,
+            pageBuilder: (context, state) => TabNoTransitionPage(
+              name: state.name!,
+              child: StoreAislesTab(
+                storeId: state.pathParameters['storeId']!,
+              ),
             ),
             routes: [
               // Category products route
@@ -72,13 +78,16 @@ class StoreRouter {
             ],
           ),
 
-          // Buy Again tab
+          // Buy again tab
           GoRoute(
             path:
                 '${StoreRoutesConst.selectedStore}/${StoreRoutesConst.storeBuyAgain}',
             name: StoreRoutesConst.storeBuyAgainName,
-            builder: (context, state) => StoreBuyAgainTab(
-              storeId: state.pathParameters['storeId']!,
+            pageBuilder: (context, state) => TabNoTransitionPage(
+              name: state.name!,
+              child: StoreBuyAgainTab(
+                storeId: state.pathParameters['storeId']!,
+              ),
             ),
           ),
         ],
