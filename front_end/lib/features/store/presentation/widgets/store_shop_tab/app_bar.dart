@@ -150,6 +150,7 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
                 child: Row(
                   children: [
                     _buildActionIcons(
+                      isScrolled: true,
                       onPressed: () {},
                       icon: CupertinoIcons.info,
                       iconColor: Colors.white,
@@ -157,6 +158,7 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
                     ),
                     const SizedBox(width: 10),
                     _buildActionIcons(
+                      isScrolled: true,
                       onPressed: () {},
                       icon: CupertinoIcons.person_add,
                       iconColor: Colors.white,
@@ -173,17 +175,19 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
   }
 
   Widget _buildActionIcons({
+    bool isScrolled = false,
     required VoidCallback onPressed,
     required IconData icon,
     required Color iconColor,
     required Color backgroundColor,
     BorderRadius? borderRadius,
-    double? size,
   }) {
     return Container(
       padding: const EdgeInsets.all(0),
-      height: 35,
-      width: 35,
+      height:
+          isScrolled ? 35 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0)) : 35,
+      width:
+          isScrolled ? 35 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0)) : 35,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: borderRadius ?? BorderRadius.circular(8),
@@ -192,7 +196,9 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
         icon: icon,
         color: iconColor,
         onPressed: onPressed,
-        size: size ?? 24,
+        size: isScrolled
+            ? 24 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0))
+            : 24,
       ),
     );
   }

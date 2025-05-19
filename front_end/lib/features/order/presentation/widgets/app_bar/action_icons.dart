@@ -13,7 +13,8 @@ import 'package:semo/features/profile/routes/profile_routes_const.dart';
 // Action icons for the app bar
 
 class ActionIcons extends StatelessWidget {
-  const ActionIcons({Key? key}) : super(key: key);
+  final double scrollProgress;
+  const ActionIcons({Key? key, required this.scrollProgress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,124 +23,73 @@ class ActionIcons extends StatelessWidget {
       // mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Cart icon
-        Container(
-          padding: const EdgeInsets.all(0),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ActionIconButton(
-            icon: CupertinoIcons.cart_fill,
-            color: Colors.white,
-            onPressed: () {
-              // Handle cart tap
-            },
-            size: 24,
-          ),
-        ),
-        const SizedBox(width: 10),
         // Notifications icon
-        Container(
-          padding: const EdgeInsets.all(0),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ActionIconButton(
+        Opacity(
+          opacity: 1.0 - (scrollProgress * 2).clamp(0.0, 1.0),
+          child: _buildIcon(
+            isScrolled: true,
             icon: CupertinoIcons.bell_fill,
-            color: Colors.white,
+            iconColor: Colors.white,
+            backgroundColor: Colors.red,
             onPressed: () {
               // Handle notifications tap
             },
-            size: 24,
           ),
         ),
         const SizedBox(width: 10),
+        // Cart icon
+        _buildCartIconWithBadge(),
+        const SizedBox(width: 10),
         // Profile icon
-        Container(
-          padding: const EdgeInsets.all(0),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ActionIconButton(
-            icon: CupertinoIcons.person_fill,
-            color: Colors.white,
-            onPressed: () {
-              context.pushNamed(ProfileRouteNames.profile);
-            },
-            size: AppIconSize.xl,
-          ),
+        _buildIcon(
+          icon: CupertinoIcons.person_fill,
+          iconColor: Colors.white,
+          backgroundColor: AppColors.primary,
+          onPressed: () {
+            context.pushNamed(ProfileRouteNames.profile);
+          },
         ),
       ],
     );
   }
-}
 
-/// //===========================================================================
-/// Widget that displays the cart icon with badge and profile icon
-/// Used in the collapsed app bar state
-/// //===========================================================================
-
-class CartProfileIcon extends StatelessWidget {
-  const CartProfileIcon({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        _buildCartIconWithBadge(),
-        const SizedBox(width: 4),
-        Container(
-          padding: const EdgeInsets.all(0),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ActionIconButton(
-            icon: CupertinoIcons.person_fill,
-            color: Colors.white,
-            onPressed: () {
-              context.pushNamed(ProfileRouteNames.profile);
-            },
-            size: AppIconSize.xl,
-          ),
-        )
-      ],
+  _buildIcon({
+    bool isScrolled = false,
+    required IconData icon,
+    required Color iconColor,
+    required Color backgroundColor,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(0),
+      height: isScrolled ? 35 * (1.0 - scrollProgress.clamp(0.0, 1.0)) : 35,
+      width: isScrolled ? 35 * (1.0 - scrollProgress.clamp(0.0, 1.0)) : 35,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ActionIconButton(
+        icon: icon,
+        color: iconColor,
+        onPressed: onPressed,
+        size: isScrolled
+            ? AppIconSize.xl * (1.0 - scrollProgress.clamp(0.0, 1.0))
+            : AppIconSize.xl,
+      ),
     );
   }
 
-  /// Creates a cart icon with a notification badge
   Widget _buildCartIconWithBadge() {
     return Stack(
       alignment: Alignment.topRight,
       children: [
-        Container(
-          padding: const EdgeInsets.all(0),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ActionIconButton(
-            icon: CupertinoIcons.cart_fill,
-            color: Colors.white,
-            onPressed: () {
-              // Handle cart tap
-            },
-            size: AppIconSize.xl,
-          ),
+        _buildIcon(
+          icon: CupertinoIcons.cart_fill,
+          iconColor: Colors.white,
+          backgroundColor: Colors.green,
+          onPressed: () {
+            // Handle cart tap
+          },
         ),
         // Cart badge
         Container(

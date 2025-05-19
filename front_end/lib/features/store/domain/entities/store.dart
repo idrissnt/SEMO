@@ -1,3 +1,5 @@
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+
 /// Domain entity representing a store brand
 class StoreBrand {
   final String id;
@@ -6,6 +8,7 @@ class StoreBrand {
   final String type;
   final String imageLogo;
   final String imageBanner;
+  final List<StoreAisle>? aisles;
 
   StoreBrand({
     required this.id,
@@ -14,6 +17,7 @@ class StoreBrand {
     required this.type,
     required this.imageLogo,
     required this.imageBanner,
+    this.aisles,
   });
 
   @override

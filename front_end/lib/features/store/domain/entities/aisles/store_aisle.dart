@@ -58,39 +58,23 @@ class AisleCategory {
 
 /// Domain entity representing a product in a category
 class CategoryProduct {
-  /// Unique identifier for the product
   final String id;
-
-  /// Name of the product
   final String name;
-
-  /// URL of the product image
   final String imageUrl;
-
-  /// Price of the product
   final double price;
-
-  /// Original price before discount (optional)
-  final double? originalPrice;
-
-  /// Unit of measurement (e.g., kg, piece)
+  final String productUnit;
+  final double pricePerUnit;
   final String unit;
-
-  /// Whether the product is in stock
-  final bool inStock;
-
-  /// Description of the product (optional)
   final String? description;
 
-  /// Creates a new category product
   CategoryProduct({
     required this.id,
     required this.name,
     required this.imageUrl,
     required this.price,
-    this.originalPrice,
+    required this.productUnit,
+    required this.pricePerUnit,
     required this.unit,
-    this.inStock = true,
     this.description,
   });
 }

@@ -8,17 +8,17 @@ import 'package:semo/features/order/presentation/bottom_sheets/address_app_bar/a
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/order/presentation/bottom_sheets/after_register/verify_email_screen.dart';
+import 'package:semo/features/order/presentation/test_date/popular_products_copy.dart';
 import 'package:semo/features/order/presentation/test_date/recipe.dart';
 import 'package:semo/features/order/presentation/test_date/store.dart';
-import 'package:semo/features/order/presentation/test_date/popular_products.dart';
 
 // Import extracted widgets
-import 'package:semo/features/order/presentation/widgets/helpers/scroll_animation_helper.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/order_app_bar.dart';
 import 'package:semo/features/order/presentation/widgets/sections/store_section.dart';
 import 'package:semo/features/order/presentation/widgets/promotions/first_order_banner.dart';
 import 'package:semo/features/order/presentation/widgets/products/popular_products_section.dart';
 import 'package:semo/features/order/presentation/widgets/sections/weekly_recipes_section.dart';
+import 'package:semo/features/store/domain/entities/store.dart';
 
 final AppLogger logger = AppLogger();
 
@@ -37,16 +37,17 @@ class _OrderScreenState extends State<OrderScreen> {
   bool _checkedEmailVerification = false;
 
   // Sample data for popular products
-  late List<StoreWithCategoryProducts> _storesWithPopularProducts;
+  late List<StoreBrand> _storesWithPopularProducts;
+  // Scroll progress value from 0.0 (not scrolled) to 1.0 (fully scrolled)
+  double _scrollProgress = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _initScrollAnimation();
-    logger.debug('OrderScreen: Initialized');
-
+    // add listener to scroll controller
+    _scrollController.addListener(_onScroll);
     // Initialize sample data
-    _storesWithPopularProducts = getSampleStoresWithCategoryProducts();
+    _storesWithPopularProducts = StoreWithCategoryProducts.getMockStoreBrands();
 
     // Check email verification status after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,18 +55,25 @@ class _OrderScreenState extends State<OrderScreen> {
     });
   }
 
-  /// Initialize scroll animation helper
-  void _initScrollAnimation() {
-    // Create the animation helper directly without storing it as a field
-    // since we only need its initialization logic
-    ScrollAnimationHelper(
-      scrollController: _scrollController,
-      onScrollStateChanged: (isScrolled) {
-        setState(() {
-          _isScrolled = isScrolled;
-        });
-      },
-    );
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    // Instead of a binary state, calculate a progress value between 0 and 1
+    // based on scroll position between 0 and 100
+    final scrollProgress = (_scrollController.offset / 100).clamp(0.0, 1.0);
+
+    // Update the state regardless of threshold to get smooth animation
+    setState(() {
+      // For binary state changes (when needed)
+      _isScrolled = scrollProgress > 0.5;
+
+      // Store the scroll progress for smooth animations
+      _scrollProgress = scrollProgress;
+    });
   }
 
   /// Check if the user needs email verification and show the bottom sheet if needed
@@ -92,11 +100,8 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+  // For testing the first-time user banner
+  bool get _isFirstTimeUser => true;
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +123,7 @@ class _OrderScreenState extends State<OrderScreen> {
               // App bar with animated elevation based on scroll
               OrderAppBar(
                 isScrolled: _isScrolled,
+                scrollProgress: _scrollProgress,
                 onLocationTap: () => showAddressBottomSheet(context),
               ),
               const SizedBox(height: 8),
@@ -180,58 +186,13 @@ class _OrderScreenState extends State<OrderScreen> {
     List<Widget> sections = [];
 
     for (var storeWithProducts in _storesWithPopularProducts) {
-      // Convert PopularProduct objects to maps
-      final productMaps =
-          storeWithProducts.products.map((product) => product.toMap()).toList();
-
-      sections.add(
-        PopularProductsSection(
-          sectionTitle: storeWithProducts.category,
-          storeName: storeWithProducts.name,
-          storeLogo: storeWithProducts.logo,
-          products: productMaps,
-          onProductTap: (product) => _handleProductTap(product),
-          onAddToCart: (product) => _handleAddToCart(product),
-          onSeeAllTap: () => _navigateToStore(storeWithProducts.id),
-        ),
-      );
+      sections.add(PopularProductsSection(
+        storeWithProducts: storeWithProducts,
+      ));
 
       sections.add(const SectionSeparator());
     }
 
     return sections;
   }
-
-  /// Handle product tap
-  void _handleProductTap(Map<String, dynamic> product) {
-    logger.info('Product tapped: ${product['name']}');
-    // Navigate to product detail page
-    // This would typically use your router
-  }
-
-  /// Handle add to cart
-  void _handleAddToCart(Map<String, dynamic> product) {
-    logger.info('Add to cart: ${product['name']}');
-    // Add product to cart
-    // This would typically dispatch an event to a cart bloc
-
-    // Show confirmation
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${product['name']} ajouté au panier'),
-        backgroundColor: AppColors.success,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  /// Navigate to store page
-  void _navigateToStore(String storeId) {
-    logger.info('Navigating to store: $storeId');
-    // Navigate to store page
-    // This would typically use your router
-  }
-
-  // For testing the first-time user banner
-  bool get _isFirstTimeUser => true;
 }

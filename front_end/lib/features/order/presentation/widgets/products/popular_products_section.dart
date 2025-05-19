@@ -1,50 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/order/presentation/widgets/products/product_card.dart';
+import 'package:semo/features/store/domain/entities/store.dart';
+import 'package:semo/features/store/presentation/widgets/products/product_card.dart';
 
 /// A section that displays popular products for a specific store
 ///
 /// This widget is used in the OrderScreen to show popular products
 /// for each store, encouraging users to place orders.
 class PopularProductsSection extends StatelessWidget {
-  final String sectionTitle;
+  final StoreBrand storeWithProducts;
 
-  /// The name of the store
-  final String storeName;
-
-  /// The URL of the store logo
-  final String storeLogo;
-
-  /// The list of products to display
-  final List<Map<String, dynamic>> products;
-
-  /// Callback when a product is tapped
-  final Function(Map<String, dynamic>) onProductTap;
-
-  /// Callback when a product is added to cart
-  final Function(Map<String, dynamic>) onAddToCart;
-
-  /// Callback when "See all" is tapped
-  final VoidCallback onSeeAllTap;
-
-  /// Logger instance
   final AppLogger _logger = AppLogger();
 
   PopularProductsSection({
     Key? key,
-    required this.sectionTitle,
-    required this.storeName,
-    required this.storeLogo,
-    required this.products,
-    required this.onProductTap,
-    required this.onAddToCart,
-    required this.onSeeAllTap,
+    required this.storeWithProducts,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (products.isEmpty) {
+    if (storeWithProducts.aisles?.first.categories.first.products.isEmpty ??
+        true) {
       return const SizedBox.shrink();
     }
 
@@ -72,7 +49,7 @@ class PopularProductsSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  sectionTitle,
+                  storeWithProducts.aisles?.first.categories.first.name ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
@@ -80,7 +57,7 @@ class PopularProductsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Chez $storeName',
+                  storeWithProducts.aisles?.first.name ?? '',
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -92,8 +69,9 @@ class PopularProductsSection extends StatelessWidget {
           // See all button
           TextButton(
             onPressed: () {
-              _logger.info('Navigating to see all products for $storeName');
-              onSeeAllTap();
+              _logger.info(
+                  'Navigating to see all products for ${storeWithProducts.aisles?.first.name}');
+              ();
             },
             child: const Row(
               children: [
@@ -115,9 +93,9 @@ class PopularProductsSection extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.primary),
         shape: BoxShape.circle,
-        image: storeLogo.isNotEmpty
+        image: storeWithProducts.imageLogo.isNotEmpty
             ? DecorationImage(
-                image: NetworkImage(storeLogo),
+                image: NetworkImage(storeWithProducts.imageLogo),
                 fit: BoxFit.cover,
                 onError: (exception, stackTrace) {
                   _logger.error('Error loading store logo: $exception');
@@ -125,7 +103,7 @@ class PopularProductsSection extends StatelessWidget {
               )
             : null,
       ),
-      child: storeLogo.isEmpty
+      child: storeWithProducts.imageLogo.isEmpty
           ? const Icon(Icons.store, size: 16, color: Colors.grey)
           : null,
     );
@@ -134,28 +112,19 @@ class PopularProductsSection extends StatelessWidget {
   /// Builds the horizontal list of product cards
   Widget _buildProductsList() {
     return SizedBox(
-      height: 205,
+      height: 210, // Fixed height for the product list
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        itemCount: products.length,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount:
+            storeWithProducts.aisles?.first.categories.first.products.length,
         itemBuilder: (context, index) {
-          final product = products[index];
-          return ProductCard(
-            name: product['name'],
-            imageUrl: product['imageUrl'],
-            productPrice: product['productPrice'],
-            productUnit: product['productUnit'],
-            pricePerUnit: product['pricePerUnit'],
-            baseUnit: product['baseUnit'],
-            onTap: () {
-              _logger.info('Product tapped: ${product['name']}');
-              onProductTap(product);
-            },
-            onAddToCart: () {
-              _logger.info('Add to cart: ${product['name']}');
-              onAddToCart(product);
-            },
+          final product =
+              storeWithProducts.aisles?.first.categories.first.products[index];
+          return Container(
+            width: 140, // Fixed width for each product card
+            margin: const EdgeInsets.only(right: 12),
+            child: ProductCard(product: product!),
           );
         },
       ),

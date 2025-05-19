@@ -46,6 +46,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1603833665858-e61d17a86224?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 1.99,
+                pricePerUnit: 2.5,
+                productUnit: 'bunch',
                 unit: 'bunch',
                 description:
                     'Organic bananas, perfect for smoothies and snacks',
@@ -56,6 +58,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 0.79,
+                pricePerUnit: 1,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Sweet and crisp red apples',
               ),
@@ -65,7 +69,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 3.99,
-                originalPrice: 4.99,
+                pricePerUnit: 4.99,
+                productUnit: 'pack',
                 unit: 'pack',
                 description: 'Sweet and juicy strawberries',
               ),
@@ -75,6 +80,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -84,6 +91,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -93,6 +102,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -102,6 +113,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -111,6 +124,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -120,6 +135,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -129,6 +146,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -138,6 +157,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -147,6 +168,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Ripe and ready to eat avocados',
               ),
@@ -167,6 +190,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 1.49,
+                pricePerUnit: 1.49,
+                productUnit: 'head',
                 unit: 'head',
                 description: 'Fresh broccoli, rich in vitamins and minerals',
               ),
@@ -176,6 +201,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 0.99,
+                pricePerUnit: 0.99,
+                productUnit: 'lb',
                 unit: 'lb',
                 description: 'Fresh carrots, perfect for snacking or cooking',
               ),
@@ -185,6 +212,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.99,
+                pricePerUnit: 2.99,
+                productUnit: 'bag',
                 unit: 'bag',
                 description: 'Fresh spinach, perfect for salads and smoothies',
               ),
@@ -216,6 +245,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1576186726115-4d51596775d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 3.49,
+                pricePerUnit: 3.49,
+                productUnit: 'gallon',
                 unit: 'gallon',
                 description: 'Fresh whole milk',
               ),
@@ -225,6 +256,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1600788907416-456578634209?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 3.99,
+                pricePerUnit: 3.99,
+                productUnit: 'half gallon',
                 unit: 'half gallon',
                 description: 'Unsweetened almond milk',
               ),
@@ -234,6 +267,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1587657565520-6c0c825f3d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 4.29,
+                pricePerUnit: 4.29,
+                productUnit: 'pint',
                 unit: 'pint',
                 description:
                     'Fresh heavy cream, perfect for cooking and baking',
@@ -255,6 +290,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1618164436241-4473940d1f5c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 4.99,
+                pricePerUnit: 4.99,
+                productUnit: 'block',
                 unit: 'block',
                 description: 'Sharp cheddar cheese',
               ),
@@ -264,6 +301,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1551489186-cf8726f514f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 3.99,
+                pricePerUnit: 3.99,
+                productUnit: 'pack',
                 unit: 'pack',
                 description: 'Fresh mozzarella cheese',
               ),
@@ -273,6 +312,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1528747045269-390fe33c19f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 5.99,
+                pricePerUnit: 5.99,
+                productUnit: 'wedge',
                 unit: 'wedge',
                 description: 'Aged parmesan cheese',
               ),
@@ -293,6 +334,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.99,
+                pricePerUnit: 2.99,
+                productUnit: 'dozen',
                 unit: 'dozen',
                 description: 'Farm fresh large eggs',
               ),
@@ -302,7 +345,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1498654077810-12c21d4d6dc3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 4.99,
-                originalPrice: 5.99,
+                pricePerUnit: 4.99,
+                productUnit: 'dozen',
                 unit: 'dozen',
                 description: 'Organic free-range eggs',
               ),
@@ -334,6 +378,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1585478259715-1c093a7b7d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 4.49,
+                pricePerUnit: 4.49,
+                productUnit: 'loaf',
                 unit: 'loaf',
                 description: 'Freshly baked sourdough bread',
               ),
@@ -343,6 +389,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1598373182133-52452f7691ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 3.99,
+                pricePerUnit: 3.99,
+                productUnit: 'loaf',
                 unit: 'loaf',
                 description: 'Freshly baked whole wheat bread',
               ),
@@ -352,6 +400,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1597079910443-60c43fc5b7b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.99,
+                pricePerUnit: 2.99,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Freshly baked French baguette',
               ),
@@ -372,6 +422,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 1.99,
+                pricePerUnit: 1.99,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Freshly baked butter croissants',
               ),
@@ -381,6 +433,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1604882406385-6eb3f54eb4c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.49,
+                pricePerUnit: 2.49,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Freshly baked chocolate muffins',
               ),
@@ -390,7 +444,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1583527976767-a57cdcbcd5ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 3.49,
-                originalPrice: 3.99,
+                pricePerUnit: 3.49,
+                productUnit: 'pack of 4',
                 unit: 'pack of 4',
                 description: 'Freshly baked cinnamon rolls',
               ),
@@ -422,6 +477,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 5.99,
+                pricePerUnit: 5.99,
+                productUnit: 'lb',
                 unit: 'lb',
                 description: 'Fresh ground beef, 85% lean',
               ),
@@ -431,6 +488,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1588167047098-c8e3a901657d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 14.99,
+                pricePerUnit: 14.99,
+                productUnit: 'lb',
                 unit: 'lb',
                 description: 'Prime ribeye steak',
               ),
@@ -451,6 +510,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1604503468506-a8da13d82791?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 4.99,
+                pricePerUnit: 4.99,
+                productUnit: 'lb',
                 unit: 'lb',
                 description: 'Boneless, skinless chicken breast',
               ),
@@ -460,6 +521,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1501200291289-c5a76c232e5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 7.99,
+                pricePerUnit: 7.99,
+                productUnit: 'each',
                 unit: 'each',
                 description: 'Fresh whole chicken',
               ),
@@ -480,6 +543,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 12.99,
+                pricePerUnit: 12.99,
+                productUnit: 'lb',
                 unit: 'lb',
                 description: 'Fresh Atlantic salmon fillet',
               ),
@@ -489,7 +554,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1565680018160-64b74e0186b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 14.99,
-                originalPrice: 16.99,
+                pricePerUnit: 14.99,
+                productUnit: 'lb',
                 unit: 'lb',
                 description: 'Large peeled and deveined shrimp',
               ),
@@ -521,6 +587,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1551462147-ff29053bfc14?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 1.99,
+                pricePerUnit: 1.99,
+                productUnit: 'box',
                 unit: 'box',
                 description: 'Dried spaghetti pasta',
               ),
@@ -530,6 +598,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1586201375761-83865001e8ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 4.99,
+                pricePerUnit: 4.99,
+                productUnit: '2 lb bag',
                 unit: '2 lb bag',
                 description: 'Premium jasmine rice',
               ),
@@ -550,6 +620,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1589927986089-35812388d1f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 1.49,
+                pricePerUnit: 1.49,
+                productUnit: 'can',
                 unit: 'can',
                 description: 'Diced canned tomatoes',
               ),
@@ -559,6 +631,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 2.29,
+                pricePerUnit: 2.29,
+                productUnit: 'can',
                 unit: 'can',
                 description: 'Classic chicken noodle soup',
               ),
@@ -590,6 +664,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 8.99,
+                pricePerUnit: 8.99,
+                productUnit: '12 oz bag',
                 unit: '12 oz bag',
                 description: 'Medium roast ground coffee',
               ),
@@ -599,6 +675,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 4.99,
+                pricePerUnit: 4.99,
+                productUnit: 'box',
                 unit: 'box',
                 description: 'Organic green tea, 20 tea bags',
               ),
@@ -619,6 +697,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1554866585-cd94860890b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 1.99,
+                pricePerUnit: 1.99,
+                productUnit: '2L bottle',
                 unit: '2L bottle',
                 description: 'Classic cola soda',
               ),
@@ -628,6 +708,8 @@ class StoreAisleData {
                 imageUrl:
                     'https://images.unsplash.com/photo-1560508179-b2c9a3f8e92b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
                 price: 0.99,
+                pricePerUnit: 0.99,
+                productUnit: 'can',
                 unit: 'can',
                 description: 'Lime flavored sparkling water',
               ),

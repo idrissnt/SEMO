@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/location_section.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/action_icons.dart';
@@ -12,92 +10,58 @@ class OrderAppBar extends StatelessWidget {
   /// Callback for when the location section is tapped
   final VoidCallback onLocationTap;
 
+  final double scrollProgress;
+
   const OrderAppBar({
     Key? key,
     required this.isScrolled,
     required this.onLocationTap,
+    required this.scrollProgress,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      height: isScrolled ? 60 : 110,
-      decoration: BoxDecoration(
+    final statusBarHeight = MediaQuery.of(context).padding.top;
+    // Calculate height based on scroll progress for smooth transition
+    final appBarHeight = statusBarHeight + 110.0 - (60.0 * scrollProgress);
+
+    // Calculate search bar position and width based on scroll progress
+    final searchBarRightPosition = 16.0 + (90.0 * scrollProgress);
+    const searchBarLeftPosition = 16.0;
+
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Container(
         color: Colors.white,
-        boxShadow: isScrolled
-            ? [
-                const BoxShadow(
-                  color: AppColors.appBarShadowColor,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                )
-              ]
-            : null,
-      ),
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Container(
-          color: Colors.white,
-          width: double.infinity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Location row with animated opacity
-              AnimatedOpacity(
-                opacity: isScrolled ? 0.0 : 1.0,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeOut,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: isScrolled ? 0 : 50,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: AppDimensionsWidth.medium),
-                  child: isScrolled
-                      ? const SizedBox.shrink()
-                      : Row(
-                          children: [
-                            // Location section
-                            LocationSection(onLocationTap: onLocationTap),
-                            const Spacer(),
-                            // Action icons
-                            const ActionIcons(),
-                          ],
-                        ),
-                ),
+        width: double.infinity,
+        height: appBarHeight,
+        child: Stack(
+          children: [
+            //
+            // Location section
+            Positioned(
+              top: 12,
+              left: 16,
+              child: Opacity(
+                opacity: 1.0 - (scrollProgress * 2).clamp(0.0, 1.0),
+                child: LocationSection(onLocationTap: onLocationTap),
               ),
-              // Add spacing only when showing the location row
-              if (!isScrolled) const SizedBox(height: 8),
-              // Search bar row - with cart icon when scrolled
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: AppDimensionsWidth.medium),
-                child: Row(
-                  children: [
-                    // Search bar takes most of the space
-                    Expanded(
-                      child: SearchBarWidget(isScrolled: isScrolled),
-                    ),
-                    // Animated cart icon with fade in/out
-                    AnimatedOpacity(
-                      opacity: isScrolled ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: isScrolled ? null : 0,
-                        padding: EdgeInsets.only(left: isScrolled ? 4 : 0),
-                        child: isScrolled
-                            ? const CartProfileIcon()
-                            : const SizedBox.shrink(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+            // Action icons
+            Positioned(
+              top: 12,
+              right: 16,
+              child: ActionIcons(scrollProgress: scrollProgress),
+            ),
+
+            // Search bar takes most of the space
+            Positioned(
+              bottom: 0,
+              left: searchBarLeftPosition,
+              right: searchBarRightPosition,
+              child: SearchBarWidget(isScrolled: isScrolled),
+            ),
+          ],
         ),
       ),
     );
