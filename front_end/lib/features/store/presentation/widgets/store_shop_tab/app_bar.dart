@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
-import 'package:semo/features/store/presentation/animations/animated_gradient_background.dart';
 
 final Logger _logger = Logger('StoreShopAppBar');
 
@@ -66,7 +64,12 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
 
     return SizedBox(
       height: appBarHeight,
-      child: AnimatedGradientBackground(
+      child: Container(
+        color: widget.store.name.toLowerCase().contains('lec')
+            ? Colors.blue.withValues(alpha: 0.4)
+            : widget.store.name.toLowerCase().contains('car')
+                ? const Color.fromARGB(255, 249, 47, 47).withValues(alpha: 0.4)
+                : const Color.fromARGB(255, 255, 196, 0).withValues(alpha: 0.4),
         height: statusBarHeight + 160,
         child: Stack(
           children: [
@@ -134,10 +137,11 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
                   // Use GoRouter to navigate to the order screen
                   context.go(widget.backRoute);
                 },
-                icon: CupertinoIcons.xmark_circle_fill,
-                iconColor: Colors.white,
-                backgroundColor: AppColors.primary,
+                icon: CupertinoIcons.back,
+                iconColor: Colors.black,
+                backgroundColor: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                shape: BoxShape.circle,
               ),
             ),
 
@@ -181,6 +185,7 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
     required Color iconColor,
     required Color backgroundColor,
     BorderRadius? borderRadius,
+    BoxShape? shape,
   }) {
     return Container(
       padding: const EdgeInsets.all(0),
@@ -190,7 +195,9 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
           isScrolled ? 35 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0)) : 35,
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: borderRadius ?? BorderRadius.circular(8),
+        borderRadius:
+            shape == BoxShape.circle ? null : BorderRadius.circular(8),
+        shape: shape ?? BoxShape.rectangle,
       ),
       child: ActionIconButton(
         icon: icon,

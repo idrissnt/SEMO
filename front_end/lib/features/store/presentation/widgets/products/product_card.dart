@@ -5,7 +5,7 @@ import 'package:vibration/vibration.dart';
 /// Widget that displays a product card
 class ProductCard extends StatefulWidget {
   /// The product to display
-  final CategoryProduct product;
+  final CategoryProduct? product;
 
   /// Creates a new product card
   const ProductCard({
@@ -45,7 +45,7 @@ class _ProductCardState extends State<ProductCard> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  widget.product.imageUrl,
+                  widget.product?.imageUrl ?? '',
                   height: 120,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -76,7 +76,7 @@ class _ProductCardState extends State<ProductCard> {
             children: [
               // Product name
               Text(
-                widget.product.name,
+                widget.product?.name ?? '',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -88,7 +88,7 @@ class _ProductCardState extends State<ProductCard> {
 
               // Price
               Text(
-                '\$${widget.product.price.toStringAsFixed(2)} - ${widget.product.productUnit}',
+                '\$${widget.product?.price.toStringAsFixed(2)} - ${widget.product?.productUnit}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -100,7 +100,7 @@ class _ProductCardState extends State<ProductCard> {
 
               // Product unit
               Text(
-                '${widget.product.pricePerUnit.toStringAsFixed(2)}/${widget.product.unit}',
+                '${widget.product?.pricePerUnit.toStringAsFixed(2)}/${widget.product?.unit}',
                 style: const TextStyle(
                   color: Colors.grey,
                 ),

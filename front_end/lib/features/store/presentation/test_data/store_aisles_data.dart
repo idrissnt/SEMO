@@ -8,13 +8,14 @@ import 'package:semo/features/store/domain/entities/store.dart';
 
 StoreBrand storeBrandData = StoreBrand(
   id: '1',
-  name: 'Sample Store',
-  slug: 'sample-store', // Add required slug parameter
+  name: 'Carrefour',
+  slug: 'carrefour', // Add required slug parameter
   type: 'grocery', // Add required type parameter
   imageLogo:
       'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/logo/Lidl-logo-home.png',
   imageBanner:
       'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/store_baners/baner.webp',
+  aisles: StoreAisleData.getMockAisles(),
 );
 
 ///

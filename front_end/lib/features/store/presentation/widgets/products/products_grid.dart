@@ -26,7 +26,7 @@ class ProductsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        // Title as a non-scrollable header
+        // Title as a scrollable header
         SliverToBoxAdapter(
           child: _buildTitle(subcategoryName: category.name),
         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:semo/features/cart/presentation/test/cart_items.dart';
+import 'package:semo/features/cart/presentation/widgets/cart_scaffold.dart';
 import 'package:semo/features/order/routes/const.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
@@ -6,6 +8,9 @@ import 'package:semo/features/store/presentation/test_data/store_aisles_data.dar
 import 'package:semo/features/store/presentation/widgets/category/category_products_list.dart';
 import 'package:semo/features/store/presentation/widgets/store_shop_tab/app_bar.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
+import 'package:logging/logging.dart';
+
+Logger _logger = Logger('StoreShopTab');
 
 /// Tab that displays the shop content for a specific store
 class StoreShopTab extends StatefulWidget {
@@ -62,7 +67,7 @@ class _StoreShopTabState extends State<StoreShopTab>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CartScaffold(
       body: SafeArea(
         top: false,
         child: Column(
@@ -78,23 +83,34 @@ class _StoreShopTabState extends State<StoreShopTab>
           ],
         ),
       ),
+      cart: mockCart,
+      onCartTap: () {
+        _logger.info('Cart tapped');
+      },
+      onUpdateQuantity: (productId, quantity) {
+        _logger.info('Update quantity: $productId, $quantity');
+      },
+      onRemoveItem: (productId) {
+        _logger.info('Remove item: $productId');
+      },
+      onViewCartPressed: () {
+        _logger.info('View cart pressed');
+      },
     );
   }
 
   Widget _buildAppBar() {
     return Hero(
-      tag: StoreRoutesConst.getStoreHeroTag(widget.storeId),
-      child: Material(
-        color: Colors.transparent,
-        child: StoreShopAppBar(
-          store: _store,
-          scrollController: _scrollController,
-          isScrolled: _isScrolled,
-          scrollProgress: _scrollProgress,
-          backRoute: OrderRoutesConstants.order,
-        ),
-      ),
-    );
+        tag: StoreRoutesConst.getStoreHeroTag(widget.storeId),
+        child: Material(
+            color: Colors.transparent,
+            child: StoreShopAppBar(
+              store: _store,
+              scrollController: _scrollController,
+              isScrolled: _isScrolled,
+              scrollProgress: _scrollProgress,
+              backRoute: OrderRoutesConstants.order,
+            )));
   }
 
   Widget _buildMainContent() {

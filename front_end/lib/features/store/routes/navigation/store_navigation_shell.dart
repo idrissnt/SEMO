@@ -29,7 +29,7 @@ class StoreNavigationShell extends StatelessWidget {
     ),
     StoreTabItem(
       icon: Icons.replay,
-      label: 'Achats encore',
+      label: 'Acheter encore',
       route: StoreRoutesConst.storeBuyAgain,
     ),
   ];

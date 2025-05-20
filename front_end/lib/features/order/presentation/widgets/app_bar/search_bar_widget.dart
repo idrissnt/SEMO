@@ -9,6 +9,7 @@ class SearchBarWidget extends StatelessWidget {
   final Color? searchBarColor;
   final Color? iconColor;
   final Color? hintColor;
+  final String? hintText;
 
   const SearchBarWidget({
     Key? key,
@@ -16,6 +17,7 @@ class SearchBarWidget extends StatelessWidget {
     this.searchBarColor,
     this.iconColor,
     this.hintColor,
+    this.hintText,
   }) : super(key: key);
 
   @override
@@ -48,7 +50,7 @@ class SearchBarWidget extends StatelessWidget {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: OrderConstants.searchHintText,
+                hintText: hintText ?? OrderConstants.searchHintText,
                 hintStyle:
                     TextStyle(color: hintColor ?? AppColors.searchBarHintColor),
                 border: InputBorder.none,

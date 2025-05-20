@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
@@ -14,7 +15,7 @@ class StoreSection extends StatelessWidget {
 
   // final AppLogger _logger = AppLogger();
 
-  StoreSection({
+  const StoreSection({
     Key? key,
     required this.title,
     required this.stores,
@@ -220,6 +221,9 @@ class _StoreImageButtonState extends State<StoreImageButton>
 
   // Helper method to handle tap animation
   void _handleTap() {
+    // Trigger stronger haptic feedback
+    HapticFeedback.heavyImpact();
+
     _controller.forward().then((_) {
       _controller.reverse().then((_) {
         widget.onTap();

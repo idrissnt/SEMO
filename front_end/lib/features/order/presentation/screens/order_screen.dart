@@ -9,7 +9,6 @@ import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:semo/features/order/presentation/bottom_sheets/after_register/verify_email_screen.dart';
 import 'package:semo/features/order/presentation/test_date/popular_products_copy.dart';
-import 'package:semo/features/order/presentation/test_date/recipe.dart';
 import 'package:semo/features/order/presentation/test_date/store.dart';
 
 // Import extracted widgets
@@ -17,7 +16,6 @@ import 'package:semo/features/order/presentation/widgets/app_bar/order_app_bar.d
 import 'package:semo/features/order/presentation/widgets/sections/store_section.dart';
 import 'package:semo/features/order/presentation/widgets/promotions/first_order_banner.dart';
 import 'package:semo/features/order/presentation/widgets/products/popular_products_section.dart';
-import 'package:semo/features/order/presentation/widgets/sections/weekly_recipes_section.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 
 final AppLogger logger = AppLogger();
@@ -171,11 +169,6 @@ class _OrderScreenState extends State<OrderScreen> {
 
         // Popular products sections for each store
         ..._buildPopularProductsSections(),
-        const SectionSeparator(),
-        WeeklyRecipesSection(
-          title: 'Nos recettes de la semaine',
-          recipes: getSampleRecipes(),
-        ),
         const SectionSeparator(),
       ],
     );

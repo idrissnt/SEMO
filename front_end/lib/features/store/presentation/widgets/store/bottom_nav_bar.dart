@@ -24,6 +24,7 @@ class StoreBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: AppColors.bottomNavigationColor,
       currentIndex: selectedIndex,
       onTap: onTap,
       items: tabs
@@ -33,7 +34,9 @@ class StoreBottomNavBar extends StatelessWidget {
               ))
           .toList(),
       selectedItemColor: AppColors.primary,
-      unselectedItemColor: Colors.grey,
+      unselectedItemColor: Colors.black.withValues(alpha: 0.5),
+      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
     );
   }
 }

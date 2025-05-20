@@ -37,17 +37,17 @@ class CommunityOrderCard extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  order.storeName.contains('Lec')
+                  order.storeName.toLowerCase().contains('lec')
                       ? Colors.blue.withValues(alpha: 0.4)
-                      : order.storeName.contains('Ca')
+                      : order.storeName.toLowerCase().contains('car')
                           ? const Color.fromARGB(255, 249, 47, 47)
                               .withValues(alpha: 0.4)
                           : const Color.fromARGB(255, 255, 196, 0)
                               .withValues(alpha: 0.4), // Top (blue)
 
-                  order.storeName.contains('Lec')
+                  order.storeName.toLowerCase().contains('lec')
                       ? Colors.blue.withValues(alpha: 0.4)
-                      : order.storeName.contains('Ca')
+                      : order.storeName.toLowerCase().contains('car')
                           ? const Color.fromARGB(255, 249, 47, 47)
                               .withValues(alpha: 0.4)
                           : const Color.fromARGB(255, 255, 196, 0)

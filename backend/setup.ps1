@@ -1,6 +1,18 @@
-# Connect to physical android device
-adb devices # to list connected devices
-adb connect 172.20.10.4:5555 # to connect to physical android device
+
+# to connect to physical android device wirelessly
+# first connect via USB
+# Restart the TCP/IP connection
+adb tcpip 5555
+# Get your device's current IP address
+adb shell ip addr show wlan0 | grep "inet "
+# Connect wirelessly using the IP address:
+adb connect 172.20.10.4:5555
+# Verify the connection
+adb devices
+
+
+
+
 
 # Create and activate virtual environment
 python -m venv venv

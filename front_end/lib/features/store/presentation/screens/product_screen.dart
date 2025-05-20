@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
+// import 'package:logging/logging.dart';
 
 // Feature imports
 // cart imports
-import 'package:semo/features/cart/presentation/test/cart_items.dart';
-import 'package:semo/features/cart/presentation/widgets/cart_scaffold.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 
 // store imports
@@ -13,19 +11,14 @@ import 'package:semo/features/store/presentation/animations/category_animation_m
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/presentation/widgets/products/products_grid.dart';
 import 'package:semo/features/store/presentation/widgets/category/category_filters.dart';
-import 'package:semo/features/store/presentation/widgets/shared/gradient_app_bar.dart';
 
-Logger _logger = Logger('ProductScreen');
+// Logger _logger = Logger('ProductScreen');
 
 /// Screen that displays a specific aisle and its categories
 class ProductScreen extends StatefulWidget {
-  /// The store ID
   final String storeId;
-
-  /// The aisle ID
   final String aisleId;
 
-  /// Creates a new aisle detail screen
   const ProductScreen({
     Key? key,
     required this.storeId,
@@ -40,27 +33,15 @@ class _ProductScreenState extends State<ProductScreen>
     with TickerProviderStateMixin {
   // ===== State Variables =====
 
-  /// The aisle to display
   StoreAisle? _aisle;
-
-  /// Currently selected category index
   int _selectedCategoryIndex = -1;
-
-  /// Loading state
   bool _isLoading = true;
 
   // ===== Controllers =====
 
-  /// Animation controller for the filter bar transition
   late final AnimationController _filterController;
-
-  /// Animation controller for the products appearance
   late final AnimationController _productsController;
-
-  /// Animation manager
   late CategoryAnimationManager _animationManager;
-
-  /// Scroll controller for category filters
   final ScrollController _filtersScrollController = ScrollController();
 
   // ===== Lifecycle Methods =====
@@ -168,46 +149,24 @@ class _ProductScreenState extends State<ProductScreen>
 
   @override
   Widget build(BuildContext context) {
-    return CartScaffold(
-      // appBar: appBarBuilder.buildAppBar(
-      //     context,
-      //     StoreRoutesConst.getStoreAislesRoute(widget.storeId),
-      //     'Search aisles...', (query) {
-      //   _logger.info('Search query: $query');
-      // }),
-      appBar: GradientAppBar(
-        showBackButton: true,
-        title: const SearchBarWidget(
-          isScrolled: false,
-          searchBarColor: Colors.white,
-          iconColor: Colors.black,
-          hintColor: Colors.black,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        titleSpacing: 0, // Remove default title spacing
+        title: Container(
+          margin: const EdgeInsets.only(
+              right: 16), // Add right margin to match left side
+          child: const SearchBarWidget(
+            isScrolled: false,
+          ),
         ),
-        height: 94.0,
-        onQueryChanged: (query) {},
+        leading: null,
+        // Remove any default padding
+        toolbarHeight: kToolbarHeight - 4, // Slightly reduce the toolbar height
       ),
       body: _buildContent(),
-      cart: mockCart, // Use the mock cart
-      onCartTap: () {
-        // Simple print for testing
-        _logger.info('Cart tapped');
-      },
-      onUpdateQuantity: (productId, quantity) {
-        // Simple print for testing
-        _logger.info('Update quantity: $productId, $quantity');
-      },
-      onRemoveItem: (productId) {
-        // Simple print for testing
-        _logger.info('Remove item: $productId');
-      },
-      onViewCartPressed: () {
-        // Simple print for testing
-        _logger.info('View cart pressed');
-      },
-      onCheckoutPressed: () {
-        // Simple print for testing
-        _logger.info('Checkout pressed');
-      },
     );
   }
 

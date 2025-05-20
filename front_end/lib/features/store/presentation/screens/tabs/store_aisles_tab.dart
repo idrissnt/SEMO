@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
-import 'package:semo/features/store/presentation/widgets/shared/gradient_app_bar.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
 
 /// Tab that displays the aisles content for a specific store
@@ -62,16 +61,15 @@ class _StoreAislesTabState extends State<StoreAislesTab>
     }
 
     return Scaffold(
-      appBar: GradientAppBar(
-        showBackButton: false,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
         title: const SearchBarWidget(
+          hintText: 'Que souhaitez-vous acheter ? ',
           isScrolled: false,
-          searchBarColor: Colors.white,
-          iconColor: Colors.black,
-          hintColor: Colors.black,
         ),
-        height: 94.0,
-        onQueryChanged: (query) {},
+        leading: null,
       ),
       body: _buildListWithPaddedSeparators(
         items: _aisles,
