@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/core/presentation/theme/app_dimensions.dart';
+import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/location_section.dart';
-import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// Header component for the community shopping screen
@@ -22,38 +21,20 @@ class CommunityHeader extends StatelessWidget {
           LocationSection(onLocationTap: () {}),
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(0),
-                height: 35,
-                width: 35,
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: ActionIconButton(
-                  icon: CupertinoIcons.hourglass,
-                  color: Colors.white,
-                  onPressed: () {},
-                  size: AppIconSize.xl,
-                ),
+              buildIcon(
+                iconColor: Colors.white,
+                backgroundColor: Colors.orange,
+                icon: CupertinoIcons.hourglass,
+                onPressed: () {},
               ),
               const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.all(0),
-                height: 35,
-                width: 35,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: ActionIconButton(
-                  icon: CupertinoIcons.person_fill,
-                  color: Colors.white,
-                  onPressed: () {
-                    context.pushNamed(ProfileRouteNames.profile);
-                  },
-                  size: AppIconSize.xl,
-                ),
+              buildIcon(
+                iconColor: Colors.white,
+                backgroundColor: AppColors.primary,
+                icon: CupertinoIcons.person_fill,
+                onPressed: () {
+                  context.pushNamed(ProfileRouteNames.profile);
+                },
               ),
             ],
           ),

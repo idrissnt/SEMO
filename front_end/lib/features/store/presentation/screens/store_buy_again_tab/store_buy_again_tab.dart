@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/presentation/widgets/products/product_card.dart';
+import 'package:semo/features/store/routes/store_routes_const.dart';
 
 /// Tab that displays previously purchased items for a specific store
 class StoreBuyAgainTab extends StatefulWidget {
@@ -82,7 +84,14 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
       itemCount: 3,
       itemBuilder: (context, index) {
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            // Navigate to product list screen with Hero transition
+            context.goNamed(
+              StoreRoutesConst.storeProductListName,
+              pathParameters: {'storeId': widget.storeId},
+              extra: products,
+            );
+          },
           borderRadius: BorderRadius.circular(12),
           child: Card(
             color: Colors.white,
@@ -131,7 +140,13 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
                           .toList(),
                       if (products.length > 3)
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.goNamed(
+                              StoreRoutesConst.storeProductListName,
+                              pathParameters: {'storeId': widget.storeId},
+                              extra: products,
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey[200],
                             foregroundColor: Colors.black,
@@ -151,18 +166,22 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      // Add all items to cart
+                      context.goNamed(
+                        StoreRoutesConst.storeProductListName,
+                        pathParameters: {'storeId': widget.storeId},
+                        extra: products,
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       minimumSize: const Size(double.infinity, 40),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(24),
                       ),
                     ),
                     child: const Text(
-                      'Ajouter tout au panier',
-                      style: TextStyle(color: Colors.white),
+                      'Ajouter les articles au panier',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                 ],

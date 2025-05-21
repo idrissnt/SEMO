@@ -36,4 +36,20 @@ class StoreRoutesConst {
   /// Helper method for aisle routes
   static String getStoreProductForAisleRoute(String storeId, String aisleId) =>
       '/store/$storeId/$storeAisles/$aisleId';
+      
+  /// Product list route
+  static const String storeProductList = 'products';
+  static const String storeProductListName = 'storeProductList';
+  
+  /// Product detail route
+  static const String storeProductDetail = 'product-detail';
+  static const String storeProductDetailName = 'storeProductDetail';
+  
+  /// Helper method for product list route
+  static String getStoreProductListRoute(String storeId) =>
+      '/store/$storeId/$storeBuyAgain/$storeProductList';
+      
+  /// Helper method for product detail route
+  static String getStoreProductDetailRoute(String storeId) =>
+      '/store/$storeId/$storeProductDetail';
 }

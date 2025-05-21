@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/core/presentation/theme/app_dimensions.dart';
-import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
+import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// //===========================================================================
@@ -26,7 +25,8 @@ class ActionIcons extends StatelessWidget {
         // Notifications icon
         Opacity(
           opacity: 1.0 - (scrollProgress * 2).clamp(0.0, 1.0),
-          child: _buildIcon(
+          child: buildIcon(
+            scrollProgress: scrollProgress,
             isScrolled: true,
             icon: CupertinoIcons.bell_fill,
             iconColor: Colors.white,
@@ -41,7 +41,8 @@ class ActionIcons extends StatelessWidget {
         _buildCartIconWithBadge(),
         const SizedBox(width: 10),
         // Profile icon
-        _buildIcon(
+        buildIcon(
+          scrollProgress: scrollProgress,
           icon: CupertinoIcons.person_fill,
           iconColor: Colors.white,
           backgroundColor: AppColors.primary,
@@ -53,37 +54,12 @@ class ActionIcons extends StatelessWidget {
     );
   }
 
-  _buildIcon({
-    bool isScrolled = false,
-    required IconData icon,
-    required Color iconColor,
-    required Color backgroundColor,
-    required VoidCallback onPressed,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(0),
-      height: isScrolled ? 35 * (1.0 - scrollProgress.clamp(0.0, 1.0)) : 35,
-      width: isScrolled ? 35 * (1.0 - scrollProgress.clamp(0.0, 1.0)) : 35,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ActionIconButton(
-        icon: icon,
-        color: iconColor,
-        onPressed: onPressed,
-        size: isScrolled
-            ? AppIconSize.xl * (1.0 - scrollProgress.clamp(0.0, 1.0))
-            : AppIconSize.xl,
-      ),
-    );
-  }
-
   Widget _buildCartIconWithBadge() {
     return Stack(
       alignment: Alignment.topRight,
       children: [
-        _buildIcon(
+        buildIcon(
+          scrollProgress: scrollProgress,
           icon: CupertinoIcons.cart_fill,
           iconColor: Colors.white,
           backgroundColor: Colors.green,

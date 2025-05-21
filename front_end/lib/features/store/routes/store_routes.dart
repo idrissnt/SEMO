@@ -1,8 +1,11 @@
 import 'package:go_router/go_router.dart';
-import 'package:semo/features/store/presentation/screens/product_screen.dart';
-import 'package:semo/features/store/presentation/screens/tabs/store_shop_tab.dart';
-import 'package:semo/features/store/presentation/screens/tabs/store_aisles_tab.dart';
-import 'package:semo/features/store/presentation/screens/tabs/store_buy_again_tab.dart';
+import 'package:semo/core/presentation/navigation/app_routes/app_router.dart';
+import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/presentation/screens/store_buy_again_tab/product_list_screen.dart';
+import 'package:semo/features/store/presentation/screens/store_aisles_tab/product_screen.dart';
+import 'package:semo/features/store/presentation/screens/store_shop_tab/store_shop_tab.dart';
+import 'package:semo/features/store/presentation/screens/store_aisles_tab/store_aisles_tab.dart';
+import 'package:semo/features/store/presentation/screens/store_buy_again_tab/store_buy_again_tab.dart';
 import 'package:semo/features/store/routes/navigation/store_navigation_shell.dart';
 import 'package:semo/features/store/routes/store_routes_const.dart';
 import 'package:semo/features/store/routes/transitions/no_transition_page.dart';
@@ -70,6 +73,7 @@ class StoreRouter {
               GoRoute(
                 path: StoreRoutesConst.storeProductForAisle,
                 name: StoreRoutesConst.storeProductForAisleName,
+                parentNavigatorKey: AppRouter.profileNavigatorKey,
                 builder: (context, state) => ProductScreen(
                   storeId: state.pathParameters['storeId']!,
                   aisleId: state.pathParameters['aisleId']!,
@@ -89,6 +93,23 @@ class StoreRouter {
                 storeId: state.pathParameters['storeId']!,
               ),
             ),
+            routes: [
+              // Product list route
+              GoRoute(
+                path: StoreRoutesConst.storeProductList,
+                name: StoreRoutesConst.storeProductListName,
+                parentNavigatorKey: AppRouter.profileNavigatorKey,
+                builder: (context, state) {
+                  // Get products from the navigation state
+                  final List<CategoryProduct> products =
+                      state.extra as List<CategoryProduct>;
+                  return ProductListScreen(
+                    products: products,
+                    storeId: state.pathParameters['storeId']!,
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
-import 'package:semo/features/order/presentation/widgets/app_bar/utils/action_icon_button.dart';
+import 'package:semo/core/presentation/widgets/icons/action_icon_button.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 
 final Logger _logger = Logger('StoreShopAppBar');
