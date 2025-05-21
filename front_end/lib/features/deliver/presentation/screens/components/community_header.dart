@@ -22,6 +22,15 @@ class CommunityHeader extends StatelessWidget {
           Row(
             children: [
               buildIcon(
+                radius: 24,
+                iconSize: 20,
+                iconColor: AppColors.iconColorFirstColor,
+                backgroundColor: AppColors.searchBarColor,
+                icon: CupertinoIcons.search,
+                onPressed: () {},
+              ),
+              const SizedBox(width: 8),
+              buildIcon(
                 iconColor: Colors.white,
                 backgroundColor: Colors.orange,
                 icon: CupertinoIcons.hourglass,

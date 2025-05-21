@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/deliver/presentation/screens/components/community_header.dart';
 import 'package:semo/features/deliver/presentation/screens/components/empty_orders_state.dart';
-import 'package:semo/features/deliver/presentation/screens/components/order_title_banner.dart';
 import 'package:semo/features/deliver/presentation/services/order_filter_service.dart';
 import 'package:semo/features/deliver/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/deliver/presentation/test_data/community_orders.dart';
@@ -87,9 +86,17 @@ class _CommunityShoppingScreenState extends State<CommunityShoppingScreen> {
                           return const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              OrderTitleBanner(
-                                titleOne:
-                                    'Vous allez au magasin? Prenez le panier de votre voisin',
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                child: Text(
+                                  'Vous allez au magasin? Prenez le panier de votre voisin',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ),
                               SizedBox(height: 8),
                             ],

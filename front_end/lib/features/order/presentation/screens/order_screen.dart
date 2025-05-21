@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/widgets/common_widgets/section_separator.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/features/order/domain/models/order_status.dart';
 import 'package:semo/features/order/presentation/bottom_sheets/address_app_bar/address_bottom_sheet.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -16,6 +17,8 @@ import 'package:semo/features/order/presentation/widgets/app_bar/order_app_bar.d
 import 'package:semo/features/order/presentation/widgets/sections/store_section.dart';
 import 'package:semo/features/order/presentation/widgets/promotions/first_order_banner.dart';
 import 'package:semo/features/order/presentation/widgets/products/popular_products_section.dart';
+import 'package:semo/features/order/presentation/widgets/order_tracking_card.dart';
+import 'package:semo/features/order/presentation/widgets/order_view_toggle.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 
 final AppLogger logger = AppLogger();
@@ -34,6 +37,12 @@ class _OrderScreenState extends State<OrderScreen> {
   bool _isScrolled = false;
   bool _checkedEmailVerification = false;
 
+  // Page controller for switching between promo and order tracking
+  late PageController _pageController;
+
+  // Sample order status for demonstration
+  late OrderStatus _sampleOrderStatus;
+
   // Sample data for popular products
   late List<StoreBrand> _storesWithPopularProducts;
   // Scroll progress value from 0.0 (not scrolled) to 1.0 (fully scrolled)
@@ -42,10 +51,22 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
+    // Initialize page controller
+    _pageController = PageController(initialPage: 0);
+
     // add listener to scroll controller
     _scrollController.addListener(_onScroll);
     // Initialize sample data
     _storesWithPopularProducts = StoreWithCategoryProducts.getMockStoreBrands();
+
+    // Initialize sample order status
+    _sampleOrderStatus = OrderStatus(
+      orderId: 'ORD-12345',
+      currentStage: OrderStage.confirmed,
+      estimatedDeliveryTime: DateTime.now().add(const Duration(minutes: 30)),
+      storeName: 'E.Leclerc',
+      storeLogo: stores.first.imageLogo,
+    );
 
     // Check email verification status after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -56,6 +77,7 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -99,7 +121,8 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   // For testing the first-time user banner
-  bool get _isFirstTimeUser => true;
+  bool get _isFirstTimeUser => false;
+  bool get _isOrderTracking => true;
 
   @override
   Widget build(BuildContext context) {
@@ -146,23 +169,17 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+  /// Builds the main content of the order screen
   Widget _buildMainContent() {
-    // In a real implementation, we would check the user's order count
-    // Here we're using a flag for demonstration purposes
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // First-time user promotion banner
-        if (_isFirstTimeUser)
-          const FirstOrderBanner(
-            promotionText: 'Livraison gratuite pour vos 3 premières commandes!',
-          ),
+        // Order and promo section
+        if (_buildDynamicPages().isNotEmpty) _buildPromotionAndOrderSection(),
 
         // Store section
         StoreSection(
           title: 'Choisissez un magasin',
-          // title: 'Passez vos commandes',
           stores: stores,
         ),
         const SectionSeparator(),
@@ -171,6 +188,66 @@ class _OrderScreenState extends State<OrderScreen> {
         ..._buildPopularProductsSections(),
         const SectionSeparator(),
       ],
+    );
+  }
+
+  /// Builds the promotion and order tracking section with PageView
+  Widget _buildPromotionAndOrderSection() {
+    final List<Widget> pages = _buildDynamicPages();
+
+    return Column(
+      children: [
+        // PageView for switching between promo and order tracking
+        SizedBox(
+          height: 170, // Adjust height as needed
+          child: PageView(
+            controller: _pageController,
+            children: pages,
+          ),
+        ),
+
+        // Only show pagination indicators if there's more than one page
+        if (pages.length > 1)
+          Center(
+            child: buildPaginationIndicators(
+              context,
+              _pageController,
+              pages.length,
+            ),
+          ),
+      ],
+    );
+  }
+
+  /// Builds the list of pages for the PageView dynamically based on conditions
+  List<Widget> _buildDynamicPages() {
+    final List<Widget> pages = [];
+
+    // Add promotional banner if user is eligible
+    if (_isFirstTimeUser) {
+      pages.add(_buildPromotionalBanner());
+    }
+
+    // Add order tracking if there's an active order
+    if (_isOrderTracking) {
+      pages.add(_buildOrderTrackingCard());
+    }
+
+    return pages;
+  }
+
+  /// Builds the promotional banner widget
+  Widget _buildPromotionalBanner() {
+    return const FirstOrderBanner(
+      promotionText: 'Livraison gratuite pour vos 3 premières commandes!',
+    );
+  }
+
+  /// Builds the order tracking card widget
+  Widget _buildOrderTrackingCard() {
+    return OrderTrackingCard(
+      orderStatus: _sampleOrderStatus,
+      onExpandDetails: _showOrderDetails,
     );
   }
 
@@ -187,5 +264,28 @@ class _OrderScreenState extends State<OrderScreen> {
     }
 
     return sections;
+  }
+
+  // Show order details - this would be expanded in a real implementation
+  void _showOrderDetails() {
+    // This could show a bottom sheet with more details or navigate to a detailed order screen
+    logger.debug('Showing order details');
+
+    // For demonstration purposes, we'll just update the order stage
+    // In a real app, this would be connected to backend data
+    setState(() {
+      // Cycle through order stages for demonstration
+      final currentIndex = _sampleOrderStatus.currentStage.index;
+      final nextIndex = (currentIndex + 1) % OrderStage.values.length;
+      final store = stores.first;
+
+      _sampleOrderStatus = OrderStatus(
+        orderId: _sampleOrderStatus.orderId,
+        currentStage: OrderStage.values[nextIndex],
+        estimatedDeliveryTime: _sampleOrderStatus.estimatedDeliveryTime,
+        storeName: _sampleOrderStatus.storeName,
+        storeLogo: store.imageLogo,
+      );
+    });
   }
 }
