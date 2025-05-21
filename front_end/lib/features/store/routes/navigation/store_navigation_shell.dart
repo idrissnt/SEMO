@@ -18,7 +18,7 @@ class StoreNavigationShell extends StatelessWidget {
   /// List of available tabs
   static const List<StoreTabItem> _tabs = [
     StoreTabItem(
-      icon: Icons.shopping_bag,
+      icon: Icons.store,
       label: 'Nom du magasin',
       route: '', // Base route
     ),

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/widgets/products/product_detail_bottom_sheet.dart';
+import 'package:semo/features/store/presentation/widgets/products/utils/quantity_controller.dart';
 import 'package:semo/features/store/presentation/widgets/store_buy_again_tab/add_to_cart_scaffold.dart';
-import 'package:vibration/vibration.dart';
 import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
 
 /// Screen that displays a list of products in a vertical scrollable way
@@ -27,6 +26,9 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
+  // Map to track quantity for each product
+  final Map<String, int> productQuantities = {};
+
   @override
   Widget build(BuildContext context) {
     return AddToCartScaffold(
@@ -52,10 +54,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
             scrollProgress: 0,
             icon: Icons.shopping_cart,
             iconColor: Colors.white,
-            backgroundColor: AppColors.primary,
+            backgroundColor: Colors.green,
             onPressed: () {},
           ),
-          const SizedBox(width: 34),
+          const SizedBox(width: 16),
         ],
       ),
       body: ListView.builder(
@@ -70,12 +72,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   Widget _buildProductItem(CategoryProduct product) {
+    // Get quantity for this product, default to 1 if not set
+    final quantity = productQuantities[product.id] ?? 1;
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
         // Main product card
         Padding(
-          padding: const EdgeInsets.only(bottom: 12, top: 12),
+          padding: const EdgeInsets.only(top: 12),
           child: InkWell(
             onTap: () {
               // Show product detail bottom sheet
@@ -104,9 +109,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       children: [
                         // Product image
                         ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            bottomLeft: Radius.circular(12),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(12),
                           ),
                           child: SizedBox(
                             width: 100,
@@ -151,13 +155,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Product name
                             Text(
                               product.name,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
                               ),
-                              maxLines: 2,
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 4),
@@ -197,12 +202,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ),
                       ),
                     ),
-
-                    // Add to cart button
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: _buildAddButton(),
-                    ),
                   ],
                 ),
               ),
@@ -210,24 +209,48 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
         ),
 
+        // Add to cart button
+        Positioned(
+          top: 16,
+          right: 4,
+          child: ProductQuantityController(
+            backgroundColor: Colors.grey[300],
+            iconColor: Colors.black,
+            width: 120,
+            height: 32,
+            iconSize: 28,
+            initialQuantity: quantity,
+            onQuantityChanged: (newQuantity) {
+              setState(() {
+                productQuantities[product.id] = newQuantity;
+              });
+            },
+          ),
+        ),
+
         // Quantity indicator at bottom outside the card
         Positioned(
-          right: 8,
+          right: 0,
           bottom: 0,
           child: Container(
-            width: 50,
+            width: 55,
             padding:
                 const EdgeInsets.only(right: 8, left: 16, top: 4, bottom: 4),
-            decoration: BoxDecoration(
-              // color: const Color(0xFFFFAE42),
-              color: const Color(0xFFFFDE21),
-              borderRadius: BorderRadius.circular(4),
+            decoration: const BoxDecoration(
+              // color: Color(0xFFFFDE21),
+              color: Colors.green,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(0),
+                bottomRight: Radius.circular(12),
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(0),
+              ),
             ),
-            child: const Text(
-              'x 2', // This would be dynamic based on cart quantity
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
+            child: Text(
+              'x $quantity', // This would be dynamic based on cart quantity
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
             ),
@@ -235,36 +258,5 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ),
       ],
     );
-  }
-
-  Widget _buildAddButton() {
-    return InkWell(
-      onTap: () {
-        _vibrateButton();
-        // Add to cart logic would go here
-      },
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Colors.blue,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 24,
-        ),
-      ),
-    );
-  }
-
-  /// Provides haptic feedback when buttons are pressed
-  void _vibrateButton() async {
-    // Check if device supports vibration
-    bool? hasVibrator = await Vibration.hasVibrator();
-    if (hasVibrator == true) {
-      Vibration.vibrate(duration: 20, amplitude: 80); // Short, light vibration
-    }
   }
 }

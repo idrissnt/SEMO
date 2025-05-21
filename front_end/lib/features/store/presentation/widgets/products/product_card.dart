@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
-import 'package:vibration/vibration.dart';
+import 'package:semo/features/store/presentation/widgets/products/utils/quantity_controller.dart';
 
 /// Widget that displays a product card
 class ProductCard extends StatefulWidget {
@@ -61,7 +61,10 @@ class _ProductCardState extends State<ProductCard> {
               Positioned(
                 top: 8,
                 right: 8,
-                child: _buildQuantityControl(),
+                left: quantity > 0 ? 8 : null,
+                child: ProductQuantityController(
+                  initialQuantity: quantity,
+                ),
               ),
             ],
           ),
@@ -112,104 +115,5 @@ class _ProductCardState extends State<ProductCard> {
         ),
       ],
     );
-  }
-
-  /// Builds the quantity control widget based on current quantity
-  Widget _buildQuantityControl() {
-    return quantity > 0
-        ? Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Minus button
-                _buildControlButton(
-                  icon: Icons.remove,
-                  onTap: () {
-                    _vibrateButton();
-                    setState(() {
-                      if (quantity > 0) quantity--;
-                    });
-                  },
-                ),
-                // Quantity
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    '$quantity',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                // Plus button
-                _buildControlButton(
-                  icon: Icons.add,
-                  onTap: () {
-                    _vibrateButton();
-                    setState(() {
-                      quantity++;
-                    });
-                  },
-                ),
-              ],
-            ),
-          )
-        : _buildControlButton(
-            icon: Icons.add,
-            size: 20,
-            isCircular: true,
-            padding: 4,
-            onTap: () {
-              _vibrateButton();
-              setState(() {
-                quantity = 1;
-              });
-            },
-          );
-  }
-
-  /// Builds a control button (plus or minus) with consistent styling
-  Widget _buildControlButton({
-    required IconData icon,
-    required VoidCallback onTap,
-    double size = 16,
-    bool isCircular = false,
-    double padding = 2,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(padding),
-        decoration: isCircular
-            ? const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              )
-            : null,
-        child: Icon(icon, size: size, color: Colors.black),
-      ),
-    );
-  }
-
-  /// Provides haptic feedback when buttons are pressed
-  void _vibrateButton() async {
-    // Check if device supports vibration
-    bool? hasVibrator = await Vibration.hasVibrator();
-    if (hasVibrator == true) {
-      Vibration.vibrate(duration: 20, amplitude: 80); // Short, light vibration
-    }
   }
 }

@@ -31,7 +31,7 @@ class AddToCartScaffold extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton(
                 onPressed: () {
-                  // Add all items to cart
+                  // Remove all items from cart
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -41,7 +41,7 @@ class AddToCartScaffold extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Ajouter les articles au panier',
+                  'Supprimer les articles du panier',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
