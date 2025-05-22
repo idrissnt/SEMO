@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/features/order/presentation/screens/order_screen.dart';
 import 'package:semo/features/order/presentation/screens/product_by_store_screen.dart';
 import 'package:semo/features/order/routes/const.dart';
+import 'package:semo/features/store/domain/entities/store.dart';
 
 class OrderRouter {
   // Get all routes for the Order feature
@@ -11,14 +12,19 @@ class OrderRouter {
       // Define the base route that matches the tab
       GoRoute(
         path: OrderRoutesConstants.order,
+        name: OrderRoutesConstants.orderName,
         builder: (_, __) => const OrderScreen(),
         routes: [
           // Nested routes within the Order tab
           GoRoute(
-            path: 'storeName/aisleName/categoryName/productName',
+            path: OrderRoutesConstants.productByStorePath,
+            name: OrderRoutesConstants.productByStoreName,
             builder: (_, state) => ProductByStoreScreen(
               storeId: state.pathParameters['storeName']!,
               aisleId: state.pathParameters['aisleName']!,
+              categoryId: state.pathParameters['categoryName'],
+              productId: state.pathParameters['productName'],
+              store: (state.extra as Map<String, dynamic>)['store'] as StoreBrand,
             ),
           ),
           // More nested routes...

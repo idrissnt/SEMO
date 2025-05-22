@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
+import 'package:semo/features/order/routes/const.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/widgets/products/product_card.dart';
 
-/// A section that displays popular products for a specific store
-///
-/// This widget is used in the OrderScreen to show popular products
-/// for each store, encouraging users to place orders.
 class PopularProductsSection extends StatelessWidget {
   final StoreBrand storeWithProducts;
 
@@ -34,9 +32,7 @@ class PopularProductsSection extends StatelessWidget {
     );
   }
 
-  /// Builds the section header with store logo, name, and "See all" button
   Widget _buildSectionHeader() {
-    // We'll use a Builder to get access to the context
     return Builder(builder: (context) {
       return Padding(
         padding: const EdgeInsets.only(left: 16, right: 4, top: 8, bottom: 8),
@@ -71,8 +67,19 @@ class PopularProductsSection extends StatelessWidget {
             // See all button
             TextButton(
               onPressed: () {
-                _logger.info(
-                    'Navigating to see all products for ${storeWithProducts.aisles?.first.name}');
+                context.goNamed(OrderRoutesConstants.productByStoreName,
+                    pathParameters: {
+                      'storeName': storeWithProducts.id,
+                      'aisleName': storeWithProducts.aisles?.first.id ?? '',
+                      'categoryName':
+                          storeWithProducts.aisles?.first.categories.first.id ??
+                              '',
+                      'productName':
+                          'all' // Using 'all' as a placeholder for showing all products
+                    },
+                    extra: {
+                      'store': storeWithProducts,
+                    });
               },
               child: const Row(
                 children: [
@@ -87,7 +94,6 @@ class PopularProductsSection extends StatelessWidget {
     });
   }
 
-  /// Builds the store logo with error handling
   Widget _buildStoreLogo() {
     return Container(
       width: 40,
@@ -111,10 +117,9 @@ class PopularProductsSection extends StatelessWidget {
     );
   }
 
-  /// Builds the horizontal list of product cards
   Widget _buildProductsList() {
     return SizedBox(
-      height: 210, // Fixed height for the product list
+      height: 210,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -124,7 +129,7 @@ class PopularProductsSection extends StatelessWidget {
           final product =
               storeWithProducts.aisles?.first.categories.first.products[index];
           return Container(
-            width: 140, // Fixed width for each product card
+            width: 140,
             margin: const EdgeInsets.only(right: 12),
             child:
                 ProductCard(product: product!, storeId: storeWithProducts.id),
