@@ -83,7 +83,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
           padding: const EdgeInsets.only(top: 12),
           child: InkWell(
             onTap: () {
-              // Show product detail bottom sheet
+              // Navigate to product detail using GoRouter
               showProductDetailBottomSheet(context, product);
             },
             borderRadius: BorderRadius.circular(12),

@@ -5,7 +5,7 @@ import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widg
 import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/presentation/widgets/products/product_card.dart';
-import 'package:semo/features/store/routes/store_routes_const.dart';
+import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 
 /// Tab that displays previously purchased items for a specific store
 class StoreBuyAgainTab extends StatefulWidget {
@@ -88,8 +88,7 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
             // Navigate to product list screen with Hero transition
             context.goNamed(
               StoreRoutesConst.storeProductListName,
-              pathParameters: {'storeId': widget.storeId},
-              extra: products,
+              extra: {'products': products, 'storeId': widget.storeId},
             );
           },
           borderRadius: BorderRadius.circular(12),
@@ -143,8 +142,10 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
                           onPressed: () {
                             context.goNamed(
                               StoreRoutesConst.storeProductListName,
-                              pathParameters: {'storeId': widget.storeId},
-                              extra: products,
+                              extra: {
+                                'products': products,
+                                'storeId': widget.storeId
+                              },
                             );
                           },
                           style: ElevatedButton.styleFrom(
@@ -165,13 +166,7 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
-                    onPressed: () {
-                      context.goNamed(
-                        StoreRoutesConst.storeProductListName,
-                        pathParameters: {'storeId': widget.storeId},
-                        extra: products,
-                      );
-                    },
+                    onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       minimumSize: const Size(double.infinity, 40),
@@ -221,7 +216,8 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
           mainAxisSpacing: 8,
         ),
         delegate: SliverChildBuilderDelegate(
-          (context, index) => ProductCard(product: products[index]),
+          (context, index) =>
+              ProductCard(product: products[index], storeId: widget.storeId),
           childCount: products.length,
         ),
       ),

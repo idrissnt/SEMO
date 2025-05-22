@@ -36,53 +36,55 @@ class PopularProductsSection extends StatelessWidget {
 
   /// Builds the section header with store logo, name, and "See all" button
   Widget _buildSectionHeader() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 4, top: 8, bottom: 8),
-      child: Row(
-        children: [
-          // Store logo
-          _buildStoreLogo(),
-          const SizedBox(width: 8),
-          // Section title with store name
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  storeWithProducts.aisles?.first.categories.first.name ?? '',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
+    // We'll use a Builder to get access to the context
+    return Builder(builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 16, right: 4, top: 8, bottom: 8),
+        child: Row(
+          children: [
+            // Store logo
+            _buildStoreLogo(),
+            const SizedBox(width: 8),
+            // Section title with store name
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    storeWithProducts.aisles?.first.categories.first.name ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  storeWithProducts.aisles?.first.name ?? '',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                  const SizedBox(height: 4),
+                  Text(
+                    storeWithProducts.aisles?.first.name ?? '',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          // See all button
-          TextButton(
-            onPressed: () {
-              _logger.info(
-                  'Navigating to see all products for ${storeWithProducts.aisles?.first.name}');
-              ();
-            },
-            child: const Row(
-              children: [
-                Text('Voir tout'),
-                Icon(Icons.arrow_forward_ios, size: 12),
-              ],
+            // See all button
+            TextButton(
+              onPressed: () {
+                _logger.info(
+                    'Navigating to see all products for ${storeWithProducts.aisles?.first.name}');
+              },
+              child: const Row(
+                children: [
+                  Text('Voir tout'),
+                  Icon(Icons.arrow_forward_ios, size: 12),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   /// Builds the store logo with error handling
@@ -124,7 +126,8 @@ class PopularProductsSection extends StatelessWidget {
           return Container(
             width: 140, // Fixed width for each product card
             margin: const EdgeInsets.only(right: 12),
-            child: ProductCard(product: product!),
+            child:
+                ProductCard(product: product!, storeId: storeWithProducts.id),
           );
         },
       ),

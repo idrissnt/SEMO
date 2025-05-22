@@ -35,7 +35,7 @@ class CategoryProductsList extends StatelessWidget {
               return Container(
                 width: 140, // Fixed width for each product card
                 margin: const EdgeInsets.only(right: 12),
-                child: ProductCard(product: product),
+                child: ProductCard(product: product, storeId: ''),
               );
             },
           ),

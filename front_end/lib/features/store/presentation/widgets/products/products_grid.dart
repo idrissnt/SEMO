@@ -42,8 +42,8 @@ class ProductsGrid extends StatelessWidget {
               mainAxisSpacing: 4,
             ),
             delegate: SliverChildBuilderDelegate(
-              (context, index) =>
-                  ProductCard(product: category.products[index]),
+              (context, index) => ProductCard(
+                  product: category.products[index], storeId: storeId),
               childCount: category.products.length,
             ),
           ),

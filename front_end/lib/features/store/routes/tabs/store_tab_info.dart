@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Represents a tab in the main navigation
 /// a tab represents each item in the bottom navigation bar
 
-class TabInfo {
+class StoreTabInfo {
   /// The route path for this tab
   final String route;
 
@@ -16,7 +16,7 @@ class TabInfo {
   /// The icon to display when this tab is selected
   final IconData activeIcon;
 
-  const TabInfo({
+  StoreTabInfo({
     required this.route,
     required this.label,
     required this.icon,

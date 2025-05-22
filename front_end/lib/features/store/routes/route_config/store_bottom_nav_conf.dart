@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_registry.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/store/routes/tabs/store_tab_registry.dart';
 
-class MainNavigationScaffold extends StatelessWidget {
+class StoreNavigationScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
   final List<Widget> children;
 
-  const MainNavigationScaffold({
+  const StoreNavigationScaffold({
     Key? key,
     required this.navigationShell,
     required this.children,
@@ -16,7 +16,7 @@ class MainNavigationScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = TabRegistry.tabs;
+    final tabs = StoreTabRegistry.tabs;
 
     return Scaffold(
       // Use the children in an IndexedStack

@@ -3,17 +3,15 @@ import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registra
 import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_registry.dart';
 import 'package:semo/features/message/presentation/constants/constant.dart';
 import 'package:semo/features/message/routes/const.dart';
-import 'package:semo/features/message/message_screen.dart';
 
 /// Registers the message tab in the tab registry
 void registerMessageTab() {
   TabRegistry.registerTab(
     const TabInfo(
-      route: MessageRoutes.message,
+      route: MessageRoutesConstants.message,
       label: MessageConstants.message,
       icon: CupertinoIcons.chat_bubble_text,
       activeIcon: CupertinoIcons.chat_bubble_text_fill,
-      screen: MessageScreen(),
     ),
   );
 }

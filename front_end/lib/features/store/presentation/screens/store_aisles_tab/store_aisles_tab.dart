@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
-import 'package:semo/features/store/routes/store_routes_const.dart';
+import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 
 /// Tab that displays the aisles content for a specific store
 class StoreAislesTab extends StatefulWidget {
@@ -146,10 +146,8 @@ class _StoreAislesTabState extends State<StoreAislesTab>
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: () {
         // Navigate to aisle detail
-        context.go(StoreRoutesConst.getStoreProductForAisleRoute(
-          widget.storeId,
-          aisle.id,
-        ));
+        context.goNamed(StoreRoutesConst.storeProductForAisleName,
+            extra: aisle);
       },
     );
   }

@@ -7,14 +7,14 @@ import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/presentation/widgets/category/category_products_list.dart';
 import 'package:semo/features/store/presentation/widgets/store_shop_tab/app_bar.dart';
-import 'package:semo/features/store/routes/store_routes_const.dart';
+import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 import 'package:logging/logging.dart';
 
 Logger _logger = Logger('StoreShopTab');
 
 /// Tab that displays the shop content for a specific store
 class StoreShopTab extends StatefulWidget {
-  /// The ID of the store
+  /// The ID of the store to display
   final String storeId;
 
   const StoreShopTab({

@@ -7,7 +7,7 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:semo/features/store/routes/store_routes_const.dart';
+import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 
 class StoreSection extends StatelessWidget {
   final String title;
@@ -76,9 +76,12 @@ class StoreSection extends StatelessWidget {
                           size: storeWidth,
                           store: store,
                           onTap: () {
-                            // Use standard navigation to preserve bottom nav bar
-                            context.go(
-                              StoreRoutesConst.getStoreDetailRoute(store.id),
+                            // Use standard navigation with path parameters for shareable links
+                            context.goNamed(
+                              StoreRoutesConst.storeName,
+                              pathParameters: {'storeId': store.id},
+                              extra:
+                                  store, // Still pass the store object for convenience
                             );
                           },
                           heroTag: StoreRoutesConst.getStoreHeroTag(store.id),

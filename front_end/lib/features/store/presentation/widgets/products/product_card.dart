@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/presentation/widgets/products/product_detail_bottom_sheet.dart';
 import 'package:semo/features/store/presentation/widgets/products/utils/quantity_controller.dart';
 
 /// Widget that displays a product card
 class ProductCard extends StatefulWidget {
   /// The product to display
-  final CategoryProduct? product;
+  final CategoryProduct product;
+
+  /// The store ID
+  final String storeId;
 
   /// Creates a new product card
   const ProductCard({
     Key? key,
     required this.product,
+    required this.storeId,
   }) : super(key: key);
 
   @override
@@ -42,18 +47,24 @@ class _ProductCardState extends State<ProductCard> {
           child: Stack(
             children: [
               // Product image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  widget.product?.imageUrl ?? '',
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+              InkWell(
+                onTap: () {
+                  // Navigate to product detail using the helper function
+                  showProductDetailBottomSheet(context, widget.product);
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    widget.product.imageUrl,
                     height: 120,
                     width: double.infinity,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.image, size: 40),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      height: 120,
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image, size: 40),
+                    ),
                   ),
                 ),
               ),
@@ -79,7 +90,7 @@ class _ProductCardState extends State<ProductCard> {
             children: [
               // Product name
               Text(
-                widget.product?.name ?? '',
+                widget.product.name,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -91,7 +102,7 @@ class _ProductCardState extends State<ProductCard> {
 
               // Price
               Text(
-                '\$${widget.product?.price.toStringAsFixed(2)} - ${widget.product?.productUnit}',
+                '\$${widget.product.price.toStringAsFixed(2)} - ${widget.product.productUnit}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -103,7 +114,7 @@ class _ProductCardState extends State<ProductCard> {
 
               // Product unit
               Text(
-                '${widget.product?.pricePerUnit.toStringAsFixed(2)}/${widget.product?.unit}',
+                '${widget.product.pricePerUnit.toStringAsFixed(2)}/${widget.product.unit}',
                 style: const TextStyle(
                   color: Colors.grey,
                 ),
