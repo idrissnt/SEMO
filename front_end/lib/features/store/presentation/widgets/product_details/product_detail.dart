@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 
 /// Shows a product detail modal that covers most of the screen
@@ -9,21 +10,79 @@ void showProductDetailBottomSheet(
   // Using a custom bottom sheet implementation for interactive drag-to-dismiss
   showInteractiveDismissibleBottomSheet(
     context: context,
-    builder: (context, controller, onDismiss) {
+    builder: (context, controller, onDismiss, physics) {
       return ProductDetailScreen(
         product: product,
         storeId: storeId,
         scrollController: controller,
         onClose: onDismiss,
+        customPhysics: physics,
       );
     },
   );
 }
 
+/// Builder function type for bottom sheet content
+typedef BottomSheetContentBuilder = Widget Function(
+  BuildContext context,
+  ScrollController controller,
+  VoidCallback onDismiss,
+  ScrollPhysics physics,
+);
+
+/// Custom scroll physics that allows dragging the parent container when overscrolling at the top
+class DismissibleScrollPhysics extends BouncingScrollPhysics {
+  final VoidCallback onDragDown;
+  final bool Function() isAtTopGetter;
+  final double dragStartThreshold;
+  
+  const DismissibleScrollPhysics({
+    required this.onDragDown,
+    required this.isAtTopGetter,
+    this.dragStartThreshold = 20.0,
+    ScrollPhysics? parent,
+  }) : super(parent: parent);
+  
+  @override
+  DismissibleScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return DismissibleScrollPhysics(
+      onDragDown: onDragDown,
+      isAtTopGetter: isAtTopGetter,
+      dragStartThreshold: dragStartThreshold,
+      parent: buildParent(ancestor),
+    );
+  }
+  
+  @override
+  double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
+    // If we're at the top and the user is dragging down
+    if (isAtTopGetter() && position.pixels <= 0 && offset > 0) {
+      // If the drag exceeds our threshold, trigger the parent drag
+      if (offset > dragStartThreshold) {
+        onDragDown();
+        // Return a smaller value to reduce the bounce effect in the ScrollView
+        return offset * 0.3;
+      }
+    }
+    
+    return super.applyPhysicsToUserOffset(position, offset);
+  }
+  
+  @override
+  double applyBoundaryConditions(ScrollMetrics position, double value) {
+    // Don't apply boundary conditions when we're handling the drag in the parent
+    if (isAtTopGetter() && position.pixels <= 0 && value < 0) {
+      return 0.0;
+    }
+    
+    return super.applyBoundaryConditions(position, value);
+  }
+}
+
 /// Shows a bottom sheet that can be interactively dismissed by dragging down
 void showInteractiveDismissibleBottomSheet({
   required BuildContext context,
-  required Widget Function(BuildContext, ScrollController, VoidCallback) builder,
+  required BottomSheetContentBuilder builder,
 }) {
   // Create scroll controller and calculate screen dimensions
   final scrollController = ScrollController();
@@ -60,7 +119,7 @@ class _DismissibleBottomSheetContent extends StatefulWidget {
   final double dismissThreshold;
   final ScrollController scrollController;
   final bool Function() isAtTopGetter;
-  final Widget Function(BuildContext, ScrollController, VoidCallback) builder;
+  final BottomSheetContentBuilder builder;
 
   const _DismissibleBottomSheetContent({
     required this.screenHeight,
@@ -74,23 +133,75 @@ class _DismissibleBottomSheetContent extends StatefulWidget {
   State<_DismissibleBottomSheetContent> createState() => _DismissibleBottomSheetContentState();
 }
 
-class _DismissibleBottomSheetContentState extends State<_DismissibleBottomSheetContent> {
+class _DismissibleBottomSheetContentState extends State<_DismissibleBottomSheetContent> with SingleTickerProviderStateMixin {
   bool isDragging = false;
   double dragDistance = 0.0;
+  late AnimationController _springBackController;
+  late Animation<double> _springBackAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _springBackController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _springBackAnimation = Tween<double>(begin: 0.0, end: 0.0).animate(
+      CurvedAnimation(parent: _springBackController, curve: Curves.easeOutBack)
+    );
+    
+    _springBackAnimation.addListener(() {
+      setState(() {
+        // Ensure we never set a negative value
+        dragDistance = _springBackAnimation.value.clamp(0.0, double.infinity);
+      });
+    });
+  }
+  
+  @override
+  void dispose() {
+    _springBackController.dispose();
+    super.dispose();
+  }
 
   // Dismiss the sheet
   void dismissSheet() => Navigator.of(context).pop();
 
-  // Reset drag state
+  // Reset drag state with spring animation
   void resetDrag() {
+    // Ensure we're not starting with a negative value
+    _springBackAnimation = Tween<double>(
+      begin: dragDistance.clamp(0.0, double.infinity),
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _springBackController,
+      curve: Curves.easeOutBack,
+    ));
+    
+    _springBackController.reset();
+    _springBackController.forward();
+    
     setState(() {
       isDragging = false;
-      dragDistance = 0;
     });
+  }
+  
+  // Start dragging from scroll physics
+  void startDragFromScroll() {
+    if (!isDragging) {
+      setState(() {
+        isDragging = true;
+        // Start with a small initial drag to provide immediate feedback
+        dragDistance = 10.0;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Create custom scroll physics for the content
+    final dismissiblePhysics = DismissibleScrollPhysics(
+      onDragDown: startDragFromScroll,
+      isAtTopGetter: widget.isAtTopGetter,
+    );
+    
     return AnimatedContainer(
       // Animate the position change with a smooth curve
       duration: const Duration(milliseconds: 100),
@@ -113,8 +224,12 @@ class _DismissibleBottomSheetContentState extends State<_DismissibleBottomSheetC
             if (details.delta.dy > 0) {
               dragDistance += details.delta.dy;
             } else {
-              dragDistance += details.delta.dy / 3; // More resistance
-              dragDistance = dragDistance.clamp(0.0, double.infinity);
+              // Only apply resistance if we're not already at 0
+              if (dragDistance > 0) {
+                dragDistance += details.delta.dy / 3; // More resistance
+                // Ensure we never go below 0 to avoid negative margin error
+                dragDistance = dragDistance.clamp(0.0, double.infinity);
+              }
             }
           });
         },
@@ -165,9 +280,14 @@ class _DismissibleBottomSheetContentState extends State<_DismissibleBottomSheetC
                 ),
               ),
 
-              // Content area
+              // Content area with custom physics
               Expanded(
-                child: widget.builder(context, widget.scrollController, dismissSheet),
+                child: widget.builder(
+                  context, 
+                  widget.scrollController, 
+                  dismissSheet,
+                  dismissiblePhysics,
+                ),
               ),
             ],
           ),
@@ -190,6 +310,9 @@ class ProductDetailScreen extends StatefulWidget {
 
   /// ScrollController for the draggable sheet
   final ScrollController scrollController;
+  
+  /// Custom scroll physics for the content
+  final ScrollPhysics? customPhysics;
 
   /// Creates a new product detail screen
   const ProductDetailScreen({
@@ -198,6 +321,7 @@ class ProductDetailScreen extends StatefulWidget {
     required this.storeId,
     required this.onClose,
     required this.scrollController,
+    this.customPhysics,
   }) : super(key: key);
 
   @override
@@ -207,6 +331,10 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    // Use custom physics if provided, otherwise use default
+    final scrollPhysics = widget.customPhysics ?? 
+        const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
+    
     return Column(
       children: [
         // Top navigation bar with close and share buttons
@@ -216,10 +344,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         Expanded(
           child: SingleChildScrollView(
             controller: widget.scrollController,
-            // This physics setting is important for allowing overscroll at the top
-            physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics(),
-            ),
+            // Use the custom physics that enables drag-to-dismiss from content area
+            physics: scrollPhysics,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
