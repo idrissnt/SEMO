@@ -9,8 +9,8 @@ import 'package:semo/features/order/presentation/widgets/sections/store_section.
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
-import 'package:semo/features/store/presentation/widgets/products/products_grid.dart';
 import 'package:semo/features/store/presentation/widgets/category/category_filters.dart';
+import 'package:semo/features/store/presentation/widgets/products/products_grid.dart';
 import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 
 /// Screen that displays a specific aisle and its categories

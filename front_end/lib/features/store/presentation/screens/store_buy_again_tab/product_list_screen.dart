@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
-import 'package:semo/features/store/presentation/widgets/products/product_detail_bottom_sheet.dart';
 import 'package:semo/features/store/presentation/widgets/products/utils/quantity_controller.dart';
 import 'package:semo/features/store/presentation/widgets/store_buy_again_tab/add_to_cart_scaffold.dart';
 import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
@@ -84,7 +83,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           child: InkWell(
             onTap: () {
               // Navigate to product detail using GoRouter
-              showProductDetailBottomSheet(context, product);
             },
             borderRadius: BorderRadius.circular(12),
             child: Container(

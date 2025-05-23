@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
-import 'package:semo/features/store/presentation/widgets/products/product_detail_bottom_sheet.dart';
-import 'package:semo/features/store/presentation/widgets/products/utils/quantity_controller.dart';
+import 'package:semo/features/store/presentation/widgets/product_details/product_detail.dart';
+import 'utils/quantity_controller.dart';
 
 /// Widget that displays a product card
 class ProductCard extends StatefulWidget {
@@ -49,8 +49,9 @@ class _ProductCardState extends State<ProductCard> {
               // Product image
               InkWell(
                 onTap: () {
-                  // Navigate to product detail using the helper function
-                  showProductDetailBottomSheet(context, widget.product);
+                  // Navigate to product detail using our custom card modal
+                  showProductDetailBottomSheet(
+                      context, widget.product, widget.storeId);
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),

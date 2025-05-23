@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
-import 'package:semo/features/store/presentation/widgets/products/product_card.dart';
+import 'product_card.dart';
 
 /// Widget that displays a grid of products for a subcategory
 class ProductsGrid extends StatelessWidget {
