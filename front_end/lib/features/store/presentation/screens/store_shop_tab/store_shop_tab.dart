@@ -134,7 +134,10 @@ class _StoreShopTabState extends State<StoreShopTab>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CategoryProductsList(aisle: aisle),
+              CategoryProductsList(
+                aisle: aisle,
+                storeBrand: _store,
+              ),
               const SizedBox(height: 2), // Add spacing between categories
             ],
           ),

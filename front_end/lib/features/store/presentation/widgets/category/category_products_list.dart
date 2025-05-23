@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/widgets/products/product_card.dart';
+import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 
 /// A horizontal scrollable list of products for a specific category
 class CategoryProductsList extends StatelessWidget {
   /// The aisle containing products to display
   final StoreAisle aisle;
 
+  /// The store brand
+  final StoreBrand storeBrand;
+
   /// Creates a new category products list
   const CategoryProductsList({
     Key? key,
     required this.aisle,
+    required this.storeBrand,
   }) : super(key: key);
 
   @override
@@ -97,6 +104,15 @@ class CategoryProductsList extends StatelessWidget {
           TextButton(
             onPressed: () {
               // Navigate to category detail
+              context.goNamed(
+                StoreRoutesConst.productsQuickViewName,
+                pathParameters: {
+                  'storeName': storeBrand.name,
+                  'aisleName': aisle.name,
+                  'categoryName': aisle.categories.first.name,
+                },
+                extra: storeBrand,
+              );
             },
             child: const Text('View all'),
           ),

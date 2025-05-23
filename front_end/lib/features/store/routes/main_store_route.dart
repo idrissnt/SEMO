@@ -1,7 +1,7 @@
 // Replace the single shell route with a StatefulShellRoute
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/routes/route_config/store_bottom_nav_conf.dart';
-import 'package:semo/features/store/routes/route_config/store_routes_screens_conf.dart';
+import 'package:semo/features/store/routes/route_config/store_routes_and_screens_conf.dart';
 
 class MainStoreRouter {
   static StatefulShellRoute getMainStoreRoute() => StatefulShellRoute(

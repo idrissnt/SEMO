@@ -18,7 +18,6 @@ class ProductByStoreScreen extends StatefulWidget {
   final String storeId;
   final String aisleId;
   final String? categoryId;
-  final String? productId;
   final StoreBrand store;
 
   const ProductByStoreScreen({
@@ -26,7 +25,6 @@ class ProductByStoreScreen extends StatefulWidget {
     required this.storeId,
     required this.aisleId,
     this.categoryId,
-    this.productId,
     required this.store,
   }) : super(key: key);
 
@@ -106,8 +104,9 @@ class _ProductByStoreScreenState extends State<ProductByStoreScreen>
         title: Container(
           margin: const EdgeInsets.only(
               right: 16), // Add right margin to match left side
-          child: const SearchBarWidget(
+          child: SearchBarWidget(
             isScrolled: false,
+            hintText: 'search in ${widget.store.aisles?.first.name}',
           ),
         ),
         actions: [

@@ -79,9 +79,7 @@ class StoreSection extends StatelessWidget {
                             // Use standard navigation with path parameters for shareable links
                             context.goNamed(
                               StoreRoutesConst.storeName,
-                              pathParameters: {'storeId': store.id},
-                              extra:
-                                  store, // Still pass the store object for convenience
+                              extra: store,
                             );
                           },
                           heroTag: StoreRoutesConst.getStoreHeroTag(store.id),

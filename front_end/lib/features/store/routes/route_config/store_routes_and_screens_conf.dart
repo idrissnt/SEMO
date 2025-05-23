@@ -1,9 +1,8 @@
 // Store routes configuration
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
-import 'package:semo/features/store/presentation/screens/store_aisles_tab/product_screen.dart';
+import 'package:semo/features/store/presentation/screens/product/product_screen.dart';
 import 'package:semo/features/store/presentation/screens/store_aisles_tab/store_aisles_tab.dart';
 import 'package:semo/features/store/presentation/screens/store_buy_again_tab/product_list_screen.dart';
 import 'package:semo/features/store/presentation/screens/store_buy_again_tab/store_buy_again_tab.dart';
@@ -32,25 +31,54 @@ class StoreShopRouter {
   // Get all routes for the Store Shop tab
   static List<RouteBase> getMainStoreRoutes() {
     return [
-      // Non-parameterized initial route for the StatefulShellBranch
       GoRoute(
         path: StoreRoutesConst.storeBase,
-        builder: (context, state) {
-          // This route is just a placeholder and will redirect
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
-        },
-      ),
-      // Parameterized route that will be used for actual navigation
-      GoRoute(
-        path: StoreRoutesConst.storeWithId,
         name: StoreRoutesConst.storeName,
         builder: (context, state) {
-          // Get storeId directly from path parameters
-          final storeId = state.pathParameters['storeId']!;
+          // Handle both direct URL navigation and navigation with extra data
+          String storeId;
+          
+          if (state.extra != null) {
+            // If we have extra data, extract the store ID
+            final store = state.extra as StoreBrand;
+            storeId = store.id;
+          } else {
+            // For direct URL navigation, use a default or extract from path parameters
+            storeId = state.pathParameters['storeName'] ?? 'default-store';
+          }
 
           return StoreShopTab(storeId: storeId);
         },
+        routes: [
+          GoRoute(
+            path: StoreRoutesConst.productsQuickView,
+            name: StoreRoutesConst.productsQuickViewName,
+            builder: (context, state) {
+              // Handle both direct URL navigation and navigation with extra data
+              String storeId;
+              String? aisleId;
+              
+              if (state.extra != null) {
+                // If we have extra data, extract IDs from the StoreBrand
+                final extraData = state.extra as StoreBrand;
+                storeId = extraData.id;
+                aisleId = extraData.aisles != null && extraData.aisles!.isNotEmpty ? extraData.aisles!.first.id : null;
+              } else {
+                // For direct URL navigation, extract from path parameters
+                storeId = state.pathParameters['storeName'] ?? 'default-store';
+                aisleId = state.pathParameters['aisleName'];
+              }
+              
+              // If aisleId is still null, use a default or handle appropriately
+              aisleId ??= 'default-aisle';
+              
+              return ProductScreen(
+                storeId: storeId,
+                aisleId: aisleId,
+              );
+            },
+          ),
+        ],
       ),
     ];
   }

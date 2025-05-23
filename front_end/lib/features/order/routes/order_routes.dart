@@ -23,8 +23,8 @@ class OrderRouter {
               storeId: state.pathParameters['storeName']!,
               aisleId: state.pathParameters['aisleName']!,
               categoryId: state.pathParameters['categoryName'],
-              productId: state.pathParameters['productName'],
-              store: (state.extra as Map<String, dynamic>)['store'] as StoreBrand,
+              store:
+                  (state.extra as Map<String, dynamic>)['store'] as StoreBrand,
             ),
           ),
           // More nested routes...

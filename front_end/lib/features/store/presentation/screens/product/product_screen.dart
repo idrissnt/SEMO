@@ -18,11 +18,13 @@ import 'package:semo/features/store/presentation/widgets/category/category_filte
 class ProductScreen extends StatefulWidget {
   final String storeId;
   final String aisleId;
+  final String? categoryId;
 
   const ProductScreen({
     Key? key,
     required this.storeId,
     required this.aisleId,
+    this.categoryId,
   }) : super(key: key);
 
   @override
@@ -105,7 +107,17 @@ class _ProductScreenState extends State<ProductScreen>
         _isLoading = false;
 
         // Auto-select the first category if available
-        if (aisle.categories.isNotEmpty) {
+        // If categoryId is provided, find and select that category
+        if (widget.categoryId != null) {
+          // Find the index of the category with the matching ID
+          final categoryIndex = aisle.categories.indexWhere(
+            (category) => category.id == widget.categoryId,
+          );
+
+          // If found, select it; otherwise default to the first category
+          _selectedCategoryIndex = categoryIndex != -1 ? categoryIndex : 0;
+        } else if (aisle.categories.isNotEmpty) {
+          // Default: select the first category if no specific category requested
           _selectedCategoryIndex = 0;
         }
       });

@@ -8,6 +8,28 @@ import 'package:semo/features/order/presentation/constant/constants.dart';
 import 'package:semo/features/order/routes/bottom_sheet/app_bar_address/routes_constants.dart';
 import 'package:semo/features/order/routes/bottom_sheet/app_bar_address/router_config.dart';
 
+void showAddressBottomSheet(BuildContext context) {
+  final logger = AppLogger();
+  logger.debug('Showing address bottom sheet');
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    enableDrag: true,
+    isDismissible: true,
+    useSafeArea: true,
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: 0.98,
+      minChildSize: 0.5,
+      maxChildSize: 0.98,
+      expand: false,
+      builder: (context, scrollController) =>
+          AddressBottomSheet(scrollController: scrollController),
+    ),
+  );
+}
+
 /// A bottom sheet that allows users to view and edit their address
 class AddressBottomSheet extends StatefulWidget {
   final ScrollController? scrollController;
@@ -302,26 +324,4 @@ class _AddressBottomSheetState extends State<AddressBottomSheet> {
       ),
     );
   }
-}
-
-void showAddressBottomSheet(BuildContext context) {
-  final logger = AppLogger();
-  logger.debug('Showing address bottom sheet');
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    enableDrag: true,
-    isDismissible: true,
-    useSafeArea: true,
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.98,
-      minChildSize: 0.5,
-      maxChildSize: 0.98,
-      expand: false,
-      builder: (context, scrollController) =>
-          AddressBottomSheet(scrollController: scrollController),
-    ),
-  );
 }
