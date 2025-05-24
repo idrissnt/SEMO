@@ -13,11 +13,11 @@ class ProductQuantityController extends StatefulWidget {
   const ProductQuantityController({
     Key? key,
     required this.initialQuantity,
-    this.width = 120,
-    this.height = 30,
+    this.width,
+    this.height,
     this.iconSize = 24,
     this.backgroundColor = Colors.white,
-    this.iconColor,
+    this.iconColor = Colors.black,
     this.onQuantityChanged,
   }) : super(key: key);
 
@@ -40,9 +40,10 @@ class _ProductQuantityControllerState extends State<ProductQuantityController> {
   Widget build(BuildContext context) {
     return quantity > 0
         ? Container(
+            // Use constraints from parent if width/height are null
             width: widget.width,
             height: widget.height,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               color: widget.backgroundColor,
               borderRadius: BorderRadius.circular(20),
@@ -57,10 +58,11 @@ class _ProductQuantityControllerState extends State<ProductQuantityController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min, // Take minimum space needed
               children: [
                 // Minus button
                 _buildControlButton(
-                  icon: Icons.remove,
+                  icon: quantity == 1 ? Icons.delete : Icons.remove,
                   iconColor: widget.iconColor,
                   onTap: () {
                     _vibrateButton();
@@ -76,12 +78,12 @@ class _ProductQuantityControllerState extends State<ProductQuantityController> {
                 ),
                 // Quantity
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(
                     '$quantity',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
                         color: widget.iconColor),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

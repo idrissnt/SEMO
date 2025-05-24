@@ -16,6 +16,7 @@ class ButtonFactory {
     required BuildContext context,
     required VoidCallback onPressed,
     required String text,
+    Widget? childText,
     required Color backgroundColor,
     required Color textColor,
     required Color splashColor,
@@ -62,16 +63,17 @@ class ButtonFactory {
       ),
       child: SizedBox(
         width: effectiveMinWidth,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: textStyle ??
-              TextStyle(
-                color: textColor,
-                fontSize: AppFontSize.large,
-                fontWeight: FontWeight.w800,
-              ),
-        ),
+        child: childText ??
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: textStyle ??
+                  TextStyle(
+                    color: textColor,
+                    fontSize: AppFontSize.large,
+                    fontWeight: FontWeight.w800,
+                  ),
+            ),
       ),
     );
   }

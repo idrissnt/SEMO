@@ -19,6 +19,7 @@ void showAddressBottomSheet(BuildContext context) {
     enableDrag: true,
     isDismissible: true,
     useSafeArea: true,
+    useRootNavigator: true,
     builder: (context) => DraggableScrollableSheet(
       initialChildSize: 0.98,
       minChildSize: 0.5,

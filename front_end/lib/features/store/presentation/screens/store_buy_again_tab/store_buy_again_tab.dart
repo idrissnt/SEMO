@@ -216,8 +216,10 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
           mainAxisSpacing: 8,
         ),
         delegate: SliverChildBuilderDelegate(
-          (context, index) =>
-              ProductCard(product: products[index], storeId: widget.storeId),
+          (context, index) => ProductCard(
+              product: products[index],
+              relatedProducts: products,
+              storeId: widget.storeId),
           childCount: products.length,
         ),
       ),

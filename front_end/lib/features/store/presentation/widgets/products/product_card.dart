@@ -8,6 +8,9 @@ class ProductCard extends StatefulWidget {
   /// The product to display
   final CategoryProduct product;
 
+  /// The related products
+  final List<CategoryProduct>? relatedProducts;
+
   /// The store ID
   final String storeId;
 
@@ -15,6 +18,7 @@ class ProductCard extends StatefulWidget {
   const ProductCard({
     Key? key,
     required this.product,
+    required this.relatedProducts,
     required this.storeId,
   }) : super(key: key);
 
@@ -51,7 +55,10 @@ class _ProductCardState extends State<ProductCard> {
                 onTap: () {
                   // Navigate to product detail using our custom card modal
                   showProductDetailBottomSheet(
-                      context, widget.product, widget.storeId);
+                      context: context,
+                      product: widget.product,
+                      storeId: widget.storeId,
+                      relatedProducts: widget.relatedProducts!);
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
@@ -76,6 +83,16 @@ class _ProductCardState extends State<ProductCard> {
                 left: quantity > 0 ? 8 : null,
                 child: ProductQuantityController(
                   initialQuantity: quantity,
+                  // Let the controller use the constraints from Positioned
+                  // No fixed width or height
+                  backgroundColor: Colors.white,
+                  iconColor: Colors.black,
+                  // Update quantity in the state
+                  onQuantityChanged: (newQuantity) {
+                    setState(() {
+                      quantity = newQuantity;
+                    });
+                  },
                 ),
               ),
             ],
@@ -101,7 +118,7 @@ class _ProductCardState extends State<ProductCard> {
 
               const SizedBox(height: 2),
 
-              // Price
+              // Price and unit
               Text(
                 '\$${widget.product.price.toStringAsFixed(2)} - ${widget.product.productUnit}',
                 style: const TextStyle(
@@ -113,7 +130,7 @@ class _ProductCardState extends State<ProductCard> {
               ),
               const SizedBox(height: 2),
 
-              // Product unit
+              // Product price per unit
               Text(
                 '${widget.product.pricePerUnit.toStringAsFixed(2)}/${widget.product.unit}',
                 style: const TextStyle(

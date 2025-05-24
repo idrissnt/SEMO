@@ -131,8 +131,11 @@ class PopularProductsSection extends StatelessWidget {
           return Container(
             width: 140,
             margin: const EdgeInsets.only(right: 12),
-            child:
-                ProductCard(product: product!, storeId: storeWithProducts.id),
+            child: ProductCard(
+                product: product!,
+                relatedProducts:
+                    storeWithProducts.aisles?.first.categories.first.products,
+                storeId: storeWithProducts.id),
           );
         },
       ),

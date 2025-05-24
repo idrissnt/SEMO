@@ -42,7 +42,10 @@ class CategoryProductsList extends StatelessWidget {
               return Container(
                 width: 140, // Fixed width for each product card
                 margin: const EdgeInsets.only(right: 12),
-                child: ProductCard(product: product, storeId: ''),
+                child: ProductCard(
+                    product: product,
+                    storeId: storeBrand.id,
+                    relatedProducts: aisle.categories.first.products),
               );
             },
           ),
