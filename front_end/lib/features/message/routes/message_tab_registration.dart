@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_info.dart';
-import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_registry.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/tab_registration/tab_info.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/tab_registration/tab_registry.dart';
 import 'package:semo/features/message/presentation/constants/constant.dart';
 import 'package:semo/features/message/routes/const.dart';
 

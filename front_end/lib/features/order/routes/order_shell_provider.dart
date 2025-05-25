@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:semo/core/di/injection_container.dart';
-import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/shell_provider.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/bloc_provider/shell_provider.dart';
 import 'package:semo/core/utils/logger.dart';
 
 import 'package:semo/features/order/presentation/bloc/email_verification/verify_email_code_bloc.dart';

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
-import 'package:semo/features/order/presentation/bottom_sheets/shared/bottom_sheet_navigator.dart';
+import 'package:semo/core/presentation/navigation/bottom_sheet_nav/bottom_sheet_navigator.dart';
 import 'package:semo/features/order/presentation/constant/constants.dart';
 import 'package:semo/features/order/routes/bottom_sheet/after_register/routes_constants.dart';
 

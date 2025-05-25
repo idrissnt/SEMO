@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:semo/core/di/injection_container.dart';
-import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/register_all_tabs.dart';
-import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/register_shell_providers.dart';
-import 'package:semo/core/presentation/navigation/app_routes/route_transition_observer.dart';
-import 'package:semo/core/presentation/navigation/main_statefull_route.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/tab_registration/register_all_tabs.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/bloc_provider/register_shell_providers.dart';
+import 'package:semo/core/presentation/navigation/config/route_transition_observer.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/main_statefull_route.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -19,9 +19,10 @@ import 'package:semo/features/order/routes/const.dart';
 
 import 'package:semo/features/profile/routes/profile_routes.dart';
 import 'package:semo/features/store/routes/main_store_route.dart';
+// import 'package:semo/features/store/routes/product_detail_deep_link.dart';
 import 'package:semo/features/store/routes/tabs/register_store_tabs.dart';
 
-import 'navigation_logger.dart';
+import '../../config/navigation_logger.dart';
 
 /// Central router configuration for the application
 class AppRouter {
@@ -70,6 +71,7 @@ class AppRouter {
       MainShellRouter.getMainShellRoute(),
       ...ProfileRouter.getProfileRoutes(),
       MainStoreRouter.getMainStoreRoute(),
+      // ProductDetailDeepLinkRouter.getProductDetailDeepLinkRoute(),
     ],
     observers: [
       NavigationLogger(),

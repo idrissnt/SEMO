@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/navigation/app_routes/app_router.dart';
-import 'package:semo/core/presentation/navigation/app_routes/routing_transitions.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
+import 'package:semo/core/presentation/navigation/config/routing_transitions.dart';
 import 'package:semo/features/profile/presentation/screens/personal_info_screen.dart';
 import 'package:semo/features/profile/presentation/screens/profile_settings_screen.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';

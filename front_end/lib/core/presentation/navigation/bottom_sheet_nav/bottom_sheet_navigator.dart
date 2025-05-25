@@ -13,10 +13,10 @@ class BottomSheetNavigator extends StatefulWidget {
 
   /// The initial route path for the navigator
   final String initialRoute;
-  
+
   /// Function that creates routes for this navigator
   final RouteCreator routeCreator;
-  
+
   /// ScrollController for the bottom sheet
   final ScrollController? scrollController;
 
@@ -94,11 +94,22 @@ class BottomSheetNavigatorState extends State<BottomSheetNavigator> {
           }
         }
       },
-      child: MaterialApp.router(
-        routerConfig: _router,
-        debugShowCheckedModeBanner: false,
-        theme: Theme.of(context),
-        builder: (context, child) => child!,
+      child: Builder(
+        builder: (context) {
+          // Get the theme from the parent context
+          final parentTheme = Theme.of(context);
+
+          return Theme(
+            // Use the parent theme data
+            data: parentTheme,
+            child: Router(
+              routerDelegate: _router.routerDelegate,
+              routeInformationParser: _router.routeInformationParser,
+              routeInformationProvider: _router.routeInformationProvider,
+              backButtonDispatcher: RootBackButtonDispatcher(),
+            ),
+          );
+        },
       ),
     );
   }

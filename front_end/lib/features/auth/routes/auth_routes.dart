@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports
-import 'package:semo/core/presentation/navigation/app_routes/routing_transitions.dart';
+import 'package:semo/core/presentation/navigation/config/routing_transitions.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/widgets/bottom_sheets/reusable_bottom_sheet.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/presentation/widgets/product_details/product_detail_bottom_sheet.dart';
 
 // Import component widgets
 import 'package:semo/features/store/presentation/widgets/product_details/components/bottom_and_top_bar/bottom_bar.dart';
@@ -16,27 +17,21 @@ import 'package:semo/features/store/presentation/widgets/product_details/utils/t
 
 final logger = AppLogger();
 
-/// Shows a bottom sheet with product details
+/// Shows a bottom sheet with product details that supports navigation
 void showProductDetailBottomSheet({
   required BuildContext context,
   required CategoryProduct product,
   required String storeId,
   required List<CategoryProduct> relatedProducts,
 }) {
-  // Create a shared close function to ensure consistent behavior
-  void closeSheet() {
-    Navigator.of(context, rootNavigator: true).pop();
-  }
-
-  // Use the reusable bottom sheet component
+  // Use the reusable bottom sheet component with navigator
   showReusableBottomSheet(
     context: context,
-    contentBuilder: (scrollController) => ProductDetailScreen(
-      product: product,
+    contentBuilder: (scrollController) => ProductDetailBottomSheetWithNavigator(
+      initialProduct: product,
       storeId: storeId,
-      scrollController: scrollController,
-      onClose: closeSheet,
       relatedProducts: relatedProducts,
+      scrollController: scrollController,
     ),
   );
 }
@@ -48,6 +43,8 @@ class ProductDetailScreen extends StatefulWidget {
   final VoidCallback onClose;
   final ScrollController scrollController;
   final List<CategoryProduct> relatedProducts;
+  final bool isBackButton;
+  
   const ProductDetailScreen({
     Key? key,
     required this.product,
@@ -55,6 +52,7 @@ class ProductDetailScreen extends StatefulWidget {
     required this.onClose,
     required this.scrollController,
     required this.relatedProducts,
+    this.isBackButton = false,
   }) : super(key: key);
 
   @override
@@ -182,7 +180,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ),
 
-          // Top navigation bar with close and share buttons
+          // Top navigation bar with close/back and share buttons
           Positioned(
             top: 0,
             left: 0,
@@ -191,6 +189,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               onClose: widget.onClose,
               productName: widget.product.name,
               showProductName: _showProductNameInAppBar,
+              isBackButton: widget.isBackButton,
+              storeId: widget.storeId,
+              productId: widget.product.id,
             ),
           ),
 

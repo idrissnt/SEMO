@@ -1,4 +1,4 @@
-import 'package:semo/core/presentation/navigation/bottom_navigation/bloc_provider/shell_provider.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/bloc_provider/shell_provider.dart';
 import 'package:semo/features/order/routes/order_shell_provider.dart';
 
 /// Registers all shell providers from all features

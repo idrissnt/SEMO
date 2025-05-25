@@ -8,7 +8,7 @@ import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_state.dart';
-import 'package:semo/features/order/presentation/bottom_sheets/shared/bottom_sheet_navigator.dart';
+import 'package:semo/core/presentation/navigation/bottom_sheet_nav/bottom_sheet_navigator.dart';
 import 'package:semo/features/order/routes/bottom_sheet/after_register/router_config.dart';
 import 'package:semo/features/order/routes/bottom_sheet/after_register/routes_constants.dart';
 

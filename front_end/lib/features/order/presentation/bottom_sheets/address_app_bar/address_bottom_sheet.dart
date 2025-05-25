@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
+import 'package:semo/core/presentation/widgets/bottom_sheets/reusable_bottom_sheet.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/order/presentation/bottom_sheets/shared/bottom_sheet_navigator.dart';
+import 'package:semo/core/presentation/navigation/bottom_sheet_nav/bottom_sheet_navigator.dart';
 import 'package:semo/features/order/presentation/constant/constants.dart';
 import 'package:semo/features/order/routes/bottom_sheet/app_bar_address/routes_constants.dart';
 import 'package:semo/features/order/routes/bottom_sheet/app_bar_address/router_config.dart';
@@ -12,21 +13,10 @@ void showAddressBottomSheet(BuildContext context) {
   final logger = AppLogger();
   logger.debug('Showing address bottom sheet');
 
-  showModalBottomSheet(
+  showReusableBottomSheet(
     context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    enableDrag: true,
-    isDismissible: true,
-    useSafeArea: true,
-    useRootNavigator: true,
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.98,
-      minChildSize: 0.5,
-      maxChildSize: 0.98,
-      expand: false,
-      builder: (context, scrollController) =>
-          AddressBottomSheet(scrollController: scrollController),
+    contentBuilder: (scrollController) => AddressBottomSheet(
+      scrollController: scrollController,
     ),
   );
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:semo/core/presentation/navigation/bottom_navigation/tab_registration/tab_registry.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/tab_registration/tab_registry.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 
 import 'package:semo/core/utils/logger.dart';

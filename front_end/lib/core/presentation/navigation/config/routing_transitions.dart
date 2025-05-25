@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Helper method to build a page with platform-appropriate transitions 
+/// Helper method to build a page with platform-appropriate transitions
 /// (iOS swipe gestures on iOS, Cupertino-style animations elsewhere).
 Page<dynamic> buildPageWithTransition({
   required BuildContext context,
@@ -21,7 +21,7 @@ Page<dynamic> buildPageWithTransition({
       fullscreenDialog: false,
       maintainState: true,
     );
-  } 
+  }
   // On other platforms, use CustomTransitionPage with Cupertino-style animations
   else {
     return CustomTransitionPage<void>(
@@ -36,8 +36,8 @@ Page<dynamic> buildPageWithTransition({
           child: child,
         );
       },
-      transitionDuration: const Duration(milliseconds: 300),
-      reverseTransitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 800),
+      reverseTransitionDuration: const Duration(milliseconds: 800),
     );
   }
 }

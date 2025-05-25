@@ -5,11 +5,9 @@ class ExpandableSection extends StatefulWidget {
   final String title;
   final String content;
 
-  const ExpandableSection({
-    Key? key, 
-    required this.title, 
-    required this.content
-  }) : super(key: key);
+  const ExpandableSection(
+      {Key? key, required this.title, required this.content})
+      : super(key: key);
 
   @override
   State<ExpandableSection> createState() => _ExpandableSectionState();
@@ -60,7 +58,8 @@ class _ExpandableSectionState extends State<ExpandableSection> {
         // The expandable content
         if (isExpanded)
           Padding(
-            padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
+            padding:
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
             child: Text(
               widget.content,
               style: TextStyle(

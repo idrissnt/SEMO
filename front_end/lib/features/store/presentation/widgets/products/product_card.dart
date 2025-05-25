@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:semo/core/presentation/navigation/bottom_sheet_nav/bottom_sheet_navigator.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/widgets/product_details/product_detail.dart';
+import 'package:semo/features/store/routes/bottom_sheet/product_detail/routes_constants.dart';
 import 'utils/quantity_controller.dart';
 
 /// Widget that displays a product card
@@ -53,12 +55,24 @@ class _ProductCardState extends State<ProductCard> {
               // Product image
               InkWell(
                 onTap: () {
-                  // Navigate to product detail using our custom card modal
-                  showProductDetailBottomSheet(
-                      context: context,
-                      product: widget.product,
-                      storeId: widget.storeId,
-                      relatedProducts: widget.relatedProducts!);
+                  // Check if we're inside a product detail navigator
+                  final navigatorState = context
+                      .findAncestorStateOfType<BottomSheetNavigatorState>();
+
+                  if (navigatorState != null) {
+                    // We're inside a bottom sheet navigator, navigate to the related product
+                    navigatorState.navigateTo(
+                      ProductDetailRoutesConstants.relatedProduct
+                          .replaceAll(':productId', widget.product.id),
+                    );
+                  } else {
+                    // We're not in a navigator, show the bottom sheet
+                    showProductDetailBottomSheet(
+                        context: context,
+                        product: widget.product,
+                        storeId: widget.storeId,
+                        relatedProducts: widget.relatedProducts!);
+                  }
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),

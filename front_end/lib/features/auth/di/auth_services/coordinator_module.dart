@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:semo/core/presentation/navigation/app_routes/app_router.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/coordinators/auth_flow_coordinator.dart';

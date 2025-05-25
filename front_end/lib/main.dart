@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 // Core imports
 import 'package:semo/core/app/app.dart';
 import 'package:semo/core/di/injection_container.dart'; //sl = service locator
-import 'package:semo/core/presentation/navigation/app_routes/app_router.dart';
+import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/app_bloc_observer.dart';
 
