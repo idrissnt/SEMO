@@ -6,12 +6,14 @@ import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 
 /// Widget for the add to cart button with price display
 class AddToCartButton extends StatelessWidget {
+  final IconData? icon;
   final String text;
   final String price;
   final VoidCallback? onPressed;
-  
+
   const AddToCartButton({
     Key? key,
+    this.icon,
     required this.text,
     required this.price,
     this.onPressed,
@@ -47,14 +49,25 @@ class AddToCartButton extends StatelessWidget {
       children: [
         // Left side - text
         Expanded(
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: AppFontSize.large,
-              fontWeight: FontWeight.w800,
-              color: AppColors.secondary,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                text,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: AppFontSize.large,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.secondary,
+                ),
+              ),
+              if (icon != null)
+                Icon(
+                  icon,
+                  color: AppColors.secondary,
+                  size: AppIconSize.large,
+                ),
+            ],
           ),
         ),
         // Right side - price

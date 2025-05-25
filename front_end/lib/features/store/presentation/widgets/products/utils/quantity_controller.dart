@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 
 class ProductQuantityController extends StatefulWidget {
+  final bool showRemoveButton;
   final int initialQuantity;
   final double? width;
   final double? height;
@@ -12,6 +13,7 @@ class ProductQuantityController extends StatefulWidget {
 
   const ProductQuantityController({
     Key? key,
+    this.showRemoveButton = false,
     required this.initialQuantity,
     this.width,
     this.height,
@@ -46,7 +48,7 @@ class _ProductQuantityControllerState extends State<ProductQuantityController> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               color: widget.backgroundColor,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(40),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.1),
@@ -63,18 +65,17 @@ class _ProductQuantityControllerState extends State<ProductQuantityController> {
                 // Minus button
                 _buildControlButton(
                   icon: quantity == 1 ? Icons.delete : Icons.remove,
-                  iconColor: widget.iconColor,
-                  onTap: () {
-                    _vibrateButton();
-                    setState(() {
-                      if (quantity > 0) {
-                        quantity--;
-                        if (widget.onQuantityChanged != null) {
-                          widget.onQuantityChanged!(quantity);
-                        }
-                      }
-                    });
-                  },
+                  // Gray out the button if it's disabled (quantity=1 in BottomBar)
+                  iconColor: _isMinusButtonDisabled()
+                      ? widget.iconColor?.withValues(alpha: 0.5)
+                      : widget.iconColor,
+                  // Disable the button if quantity=1 in BottomBar
+                  onTap: _isMinusButtonDisabled()
+                      ? null
+                      : () {
+                          _vibrateButton();
+                          _handleDecrement();
+                        },
                 ),
                 // Quantity
                 Padding(
@@ -125,13 +126,16 @@ class _ProductQuantityControllerState extends State<ProductQuantityController> {
   /// Builds a control button (plus or minus) with consistent styling
   Widget _buildControlButton({
     required IconData icon,
-    required VoidCallback onTap,
+    VoidCallback? onTap,
     bool isCircular = false,
     double padding = 2,
     Color? iconColor,
   }) {
     return InkWell(
       onTap: onTap,
+      // Disable the ripple effect when onTap is null
+      splashColor: onTap == null ? Colors.transparent : null,
+      highlightColor: onTap == null ? Colors.transparent : null,
       child: Container(
         padding: EdgeInsets.all(padding),
         decoration: isCircular
@@ -144,6 +148,29 @@ class _ProductQuantityControllerState extends State<ProductQuantityController> {
             Icon(icon, size: widget.iconSize, color: iconColor ?? Colors.black),
       ),
     );
+  }
+
+  /// Determines if the minus/delete button should be disabled
+  bool _isMinusButtonDisabled() {
+    return quantity == 1 && widget.showRemoveButton;
+  }
+
+  /// Handles the decrement/delete action based on current quantity and settings
+  void _handleDecrement() {
+    setState(() {
+      if (quantity == 1 && !widget.showRemoveButton) {
+        // Delete the item when quantity is 1 and we're not in BottomBar
+        quantity = 0;
+      } else if (quantity > 1) {
+        // Just decrement if quantity is greater than 1
+        quantity--;
+      }
+
+      // Notify about the change
+      if (widget.onQuantityChanged != null) {
+        widget.onQuantityChanged!(quantity);
+      }
+    });
   }
 
   /// Provides haptic feedback when buttons are pressed

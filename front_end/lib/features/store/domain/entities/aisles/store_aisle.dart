@@ -66,6 +66,9 @@ class CategoryProduct {
   final double pricePerUnit;
   final String unit;
   final String? ingredient;
+  final List<CategoryProduct>? productReplacements;
+  final List<String>? notes;
+  final List<CategoryProduct>? combo;
 
   CategoryProduct({
     required this.id,
@@ -76,5 +79,8 @@ class CategoryProduct {
     required this.pricePerUnit,
     required this.unit,
     this.ingredient,
+    this.productReplacements,
+    this.notes,
+    this.combo,
   });
 }

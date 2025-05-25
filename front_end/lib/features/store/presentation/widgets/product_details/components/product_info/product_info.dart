@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
-import 'package:semo/features/store/presentation/widgets/product_details/components/expandable_section.dart';
+import 'package:semo/features/store/presentation/widgets/product_details/components/product_info/expandable_section.dart';
 
 /// Widget to display the product information section
 class ProductInfo extends StatelessWidget {
   final CategoryProduct product;
-  
+
   const ProductInfo({
     Key? key,
     required this.product,
