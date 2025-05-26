@@ -9,7 +9,7 @@ class MainStoreRouter {
           return navigationShell;
         },
         navigatorContainerBuilder: (context, navigationShell, children) {
-          // Return your bottom navigation scaffold with the navigationShell
+          // Return our bottom navigation scaffold with the navigationShell
           return StoreNavigationScaffold(
             navigationShell: navigationShell,
             children: children,

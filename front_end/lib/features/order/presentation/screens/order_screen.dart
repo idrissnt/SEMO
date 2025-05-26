@@ -121,7 +121,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   // For testing the first-time user banner
-  bool get _isFirstTimeUser => false;
+  bool get _isFirstTimeUser => true;
   bool get _isOrderTracking => true;
 
   @override

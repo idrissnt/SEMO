@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/community_shop/presentation/screens/components/community_header.dart';
-import 'package:semo/features/community_shop/presentation/screens/components/empty_orders_state.dart';
+import 'package:semo/features/community_shop/presentation/screens/tab/components/community_header.dart';
+import 'package:semo/features/community_shop/presentation/screens/tab/components/empty_orders_state.dart';
 import 'package:semo/features/community_shop/presentation/services/order_filter_service.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';

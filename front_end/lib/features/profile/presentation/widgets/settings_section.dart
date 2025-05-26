@@ -4,11 +4,13 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 /// A section widget for grouping related settings
 class SettingsSection extends StatelessWidget {
   final String title;
+  final Widget? tag;
   final List<Widget> children;
 
   const SettingsSection({
     Key? key,
     required this.title,
+    this.tag,
     required this.children,
   }) : super(key: key);
 
@@ -19,14 +21,20 @@ class SettingsSection extends StatelessWidget {
       children: [
         // Section title
         Padding(
-          padding: const EdgeInsets.only(left: 16, bottom: 8),
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
+          padding: const EdgeInsets.only(left: 0, bottom: 8),
+          child: Row(
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
+              ),
+              const Spacer(),
+              if (tag != null) tag!,
+            ],
           ),
         ),
         // Section content

@@ -77,15 +77,9 @@ class StoreSection extends StatelessWidget {
                           store: store,
                           onTap: () {
                             // Use standard navigation with path parameters for shareable links
-                            // Include the current route as referrer for back navigation
-                            final currentLocation =
-                                GoRouterState.of(context).uri.toString();
                             context.goNamed(
                               StoreRoutesConst.storeName,
-                              extra: {
-                                'store': store,
-                                'referrer': currentLocation,
-                              },
+                              extra: store,
                             );
                           },
                           heroTag: StoreRoutesConst.getStoreHeroTag(store.id),

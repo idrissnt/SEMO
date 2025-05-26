@@ -16,6 +16,7 @@ class CommunityOrder {
   final String deliveryTime;
   final String deliveryAddress;
   final String notes;
+  final String storeAddress;
 
   CommunityOrder({
     required this.id,
@@ -32,6 +33,7 @@ class CommunityOrder {
     required this.deliveryTime,
     required this.deliveryAddress,
     this.notes = '',
+    required this.storeAddress,
   });
 }
 
@@ -47,9 +49,10 @@ List<CommunityOrder> getSampleCommunityOrders() {
       storeLogoUrl:
           'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/for-cart/carrefoures-log-for-cart.jpeg',
       productImageUrls: [
-        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/filets-poulet.png',
-        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/viandes+et+poissons/paves-de-saumon.png',
-        'https://semo-store-bucket.s3.eu-west-3.amazonaws.com/media/products/shared-product/fruits+et+legumes/tomates.png',
+        'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
       ],
       totalItems: 7,
       totalPrice: 35.50,
@@ -58,6 +61,7 @@ List<CommunityOrder> getSampleCommunityOrders() {
       deliveryTime: 'Aujourd\'hui, 18h-20h',
       deliveryAddress: '15 Rue des Fleurs, 75001 Paris',
       notes: 'Merci de sonner à l\'interphone',
+      storeAddress: '15 Rue des Fleurs, 75001 Paris',
     ),
     CommunityOrder(
       id: 'order2',
@@ -81,6 +85,7 @@ List<CommunityOrder> getSampleCommunityOrders() {
       isUrgent: false,
       deliveryTime: 'Demain, 10h-12h',
       deliveryAddress: '8 Avenue Victor Hugo, 75016 Paris',
+      storeAddress: '8 Avenue Victor Hugo, 75016 Paris',
     ),
     CommunityOrder(
       id: 'order3',
@@ -104,6 +109,7 @@ List<CommunityOrder> getSampleCommunityOrders() {
       deliveryTime: 'Aujourd\'hui, 16h-18h',
       deliveryAddress: '23 Rue de la Paix, 75002 Paris',
       notes: 'Laisser devant la porte si absence',
+      storeAddress: '23 Rue de la Paix, 75002 Paris',
     ),
     CommunityOrder(
       id: 'order4',
@@ -123,6 +129,7 @@ List<CommunityOrder> getSampleCommunityOrders() {
       isUrgent: false,
       deliveryTime: 'Demain, 14h-16h',
       deliveryAddress: '42 Boulevard Haussmann, 75009 Paris',
+      storeAddress: '42 Boulevard Haussmann, 75009 Paris',
     ),
     CommunityOrder(
       id: 'order5',
@@ -144,6 +151,7 @@ List<CommunityOrder> getSampleCommunityOrders() {
       deliveryTime: 'Aujourd\'hui, 19h-21h',
       deliveryAddress: '11 Rue Saint-Denis, 75001 Paris',
       notes: 'Appeler 10 minutes avant l\'arrivée',
+      storeAddress: '11 Rue Saint-Denis, 75001 Paris',
     ),
   ];
 }

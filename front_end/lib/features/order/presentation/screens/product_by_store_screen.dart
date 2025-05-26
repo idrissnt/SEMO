@@ -115,15 +115,9 @@ class _ProductByStoreScreenState extends State<ProductByStoreScreen>
             size: 40,
             store: widget.store,
             onTap: () {
-              // Include the current route as referrer for back navigation
-              final currentLocation = GoRouterState.of(context).uri.toString();
               context.goNamed(
                 StoreRoutesConst.storeName,
-                // pathParameters: {'storeId': widget.store.id},
-                extra: {
-                  'store': widget.store,
-                  'referrer': currentLocation,
-                },
+                extra: widget.store,
               );
             },
             heroTag: StoreRoutesConst.getStoreHeroTag(

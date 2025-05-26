@@ -7,12 +7,12 @@ import 'package:semo/features/community_shop/presentation/test_data/community_or
 /// Shows reward and action button
 class OrderCardFooter extends StatelessWidget {
   final CommunityOrder order;
-  final VoidCallback onAccept;
+  final VoidCallback? onAccept;
 
   const OrderCardFooter({
     Key? key,
     required this.order,
-    required this.onAccept,
+    this.onAccept,
   }) : super(key: key);
 
   @override
@@ -22,29 +22,7 @@ class OrderCardFooter extends StatelessWidget {
       child: Row(
         children: [
           // Reward
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.amber),
-            ),
-            child: Row(
-              children: [
-                const Icon(FontAwesomeIcons.sackDollar,
-                    size: 16, color: Colors.amber),
-                const SizedBox(width: 4),
-                Text(
-                  '${order.reward.toStringAsFixed(1)}€ pour vous',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          buildReward(),
           const Spacer(),
           // Accept button
           ElevatedButton(
@@ -69,5 +47,30 @@ class OrderCardFooter extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget buildReward() {
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.amber),
+        ),
+        child: Row(
+          children: [
+            const Icon(FontAwesomeIcons.sackDollar,
+                size: 16, color: Colors.amber),
+            const SizedBox(width: 4),
+            Text(
+              '${order.reward.toStringAsFixed(1)}€ pour vous',
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ));
   }
 }

@@ -60,7 +60,7 @@ class ProductInfo extends StatelessWidget {
                   title: 'Ingredients',
                   content: product.ingredient!,
                 ),
-                // Uncomment if you want to add nutrition info
+                // Uncomment if we want to add nutrition info
                 // ExpandableSection(
                 //   title: 'Nutrition',
                 //   content: 'Nutrition information will be displayed here.',

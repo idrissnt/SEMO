@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'package:semo/features/order/routes/const.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 import 'package:semo/core/presentation/widgets/icons/action_icon_button.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
@@ -158,35 +157,9 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
               left: 16,
               child: _buildActionIcons(
                 onPressed: () {
-                  // Log the current navigation state for debugging
-                  _logger.info('Navigating back from store');
-
-                  // Extract navigation data using pattern matching
-                  final (String? referrer, StoreBrand? store) =
-                      switch (GoRouterState.of(context).extra) {
-                    Map extraMap => (
-                        extraMap['referrer'] as String?,
-                        extraMap['store'] as StoreBrand?
-                      ),
-                    _ => (null, null)
-                  };
-
-                  // Navigate based on available data
-                  if (referrer?.isNotEmpty ?? false) {
-                    _logger.info('Going back to referrer: $referrer');
-
-                    // For order routes, pass the store data to maintain state
-                    final needsStoreData = store != null &&
-                        referrer!.contains(OrderRoutesConstants.order);
-                    context.go(
-                      referrer!, // Safe to use ! here since we've checked isNotEmpty
-                      extra: needsStoreData ? {'store': store} : null,
-                    );
-                  } else {
-                    _logger.info(
-                        'No referrer found, going to default route: ${widget.backRoute}');
-                    context.go(widget.backRoute);
-                  }
+                  _logger.info(
+                      'No referrer found, going to default route: ${widget.backRoute}');
+                  context.go(widget.backRoute);
                 },
                 icon: CupertinoIcons.back,
                 iconColor: Colors.black,

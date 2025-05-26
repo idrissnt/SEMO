@@ -41,7 +41,7 @@ class OrderDetailsSection extends StatelessWidget {
             Colors.blue,
           ),
           const SizedBox(height: 8),
-          if (order.isUrgent) _buildUrgentTag(),
+          if (order.isUrgent) buildUrgentTag(),
         ],
       ),
     );
@@ -70,7 +70,7 @@ class OrderDetailsSection extends StatelessWidget {
   }
 
   /// Builds the urgent tag
-  Widget _buildUrgentTag() {
+  Widget buildUrgentTag() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
