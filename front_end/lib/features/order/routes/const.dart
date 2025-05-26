@@ -8,4 +8,7 @@ class OrderRoutesConstants {
 
   static const String orderName = 'order';
   static const String productByStoreName = 'productByStoreName';
+
+  static const String notificationPath = 'notification';
+  static const String notificationName = 'notification';
 }

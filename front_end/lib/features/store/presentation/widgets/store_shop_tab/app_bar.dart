@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import 'package:semo/features/order/routes/const.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 import 'package:semo/core/presentation/widgets/icons/action_icon_button.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
+import 'package:semo/features/store/presentation/bottom_sheets/store_add_people/add_people.dart';
+import 'package:semo/features/store/presentation/bottom_sheets/store_info/store_info.dart';
+import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 
 final Logger _logger = Logger('StoreShopAppBar');
 
@@ -14,6 +18,7 @@ class StoreShopAppBar extends StatefulWidget {
   final bool isScrolled;
   final double scrollProgress;
   final String backRoute;
+  final bool canGoBack;
 
   const StoreShopAppBar({
     Key? key,
@@ -22,6 +27,7 @@ class StoreShopAppBar extends StatefulWidget {
     required this.isScrolled,
     required this.scrollProgress,
     required this.backRoute,
+    this.canGoBack = false,
   }) : super(key: key);
 
   @override
@@ -65,14 +71,27 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
     return SizedBox(
       height: appBarHeight,
       child: Container(
-        color: widget.store.name.toLowerCase().contains('lec')
-            ? Colors.blue.withValues(alpha: 0.4)
-            : widget.store.name.toLowerCase().contains('car')
-                ? const Color.fromARGB(255, 249, 47, 47).withValues(alpha: 0.4)
-                : const Color.fromARGB(255, 255, 196, 0).withValues(alpha: 0.4),
+        color: Colors.transparent,
         height: statusBarHeight + 160,
+        width: double.infinity,
         child: Stack(
           children: [
+            Hero(
+              tag: StoreRoutesConst.getStoreHeroTag(
+                  '${widget.store.id}_product_by_store'),
+              child: Container(
+                height: statusBarHeight + 160,
+                width: double.infinity,
+                color: widget.store.name.toLowerCase().contains('lec')
+                    ? Colors.blue.withValues(alpha: 0.4)
+                    : widget.store.name.toLowerCase().contains('car')
+                        ? const Color.fromARGB(255, 249, 47, 47)
+                            .withValues(alpha: 0.4)
+                        : const Color.fromARGB(255, 255, 196, 0)
+                            .withValues(alpha: 0.4),
+              ),
+            ),
+
             // Store banner image with rounded corners and white border
             Positioned(
               top: statusBarHeight + 10,
@@ -82,32 +101,37 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
                 // Fade out based on scroll progress
                 opacity: 1.0 - (widget.scrollProgress * 2).clamp(0.0, 1.0),
                 child: Center(
-                  child: Container(
-                    // Smoothly scale down based on scroll progress
-                    width: 120 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0)),
-                    height: 80 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0)),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+                  child: Hero(
+                    tag: StoreRoutesConst.getStoreHeroTag(widget.store.id),
+                    child: Container(
+                      // Smoothly scale down based on scroll progress
+                      width:
+                          120 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0)),
+                      height:
+                          80 * (1.0 - widget.scrollProgress.clamp(0.0, 1.0)),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          widget.store.imageBanner,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            _logger.log(Level.SEVERE, 'Error loading image',
+                                error, stackTrace);
+                            return const Icon(Icons.error);
+                          },
                         ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        widget.store.imageBanner,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          _logger.log(Level.SEVERE, 'Error loading image',
-                              error, stackTrace);
-                          return const Icon(Icons.error);
-                        },
                       ),
                     ),
                   ),
@@ -134,8 +158,35 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
               left: 16,
               child: _buildActionIcons(
                 onPressed: () {
-                  // Use GoRouter to navigate to the order screen
-                  context.go(widget.backRoute);
+                  // Log the current navigation state for debugging
+                  _logger.info('Navigating back from store');
+
+                  // Extract navigation data using pattern matching
+                  final (String? referrer, StoreBrand? store) =
+                      switch (GoRouterState.of(context).extra) {
+                    Map extraMap => (
+                        extraMap['referrer'] as String?,
+                        extraMap['store'] as StoreBrand?
+                      ),
+                    _ => (null, null)
+                  };
+
+                  // Navigate based on available data
+                  if (referrer?.isNotEmpty ?? false) {
+                    _logger.info('Going back to referrer: $referrer');
+
+                    // For order routes, pass the store data to maintain state
+                    final needsStoreData = store != null &&
+                        referrer!.contains(OrderRoutesConstants.order);
+                    context.go(
+                      referrer!, // Safe to use ! here since we've checked isNotEmpty
+                      extra: needsStoreData ? {'store': store} : null,
+                    );
+                  } else {
+                    _logger.info(
+                        'No referrer found, going to default route: ${widget.backRoute}');
+                    context.go(widget.backRoute);
+                  }
                 },
                 icon: CupertinoIcons.back,
                 iconColor: Colors.black,
@@ -155,7 +206,9 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
                   children: [
                     _buildActionIcons(
                       isScrolled: true,
-                      onPressed: () {},
+                      onPressed: () {
+                        showStoreInfoBottomSheet(context: context);
+                      },
                       icon: CupertinoIcons.info,
                       iconColor: Colors.white,
                       backgroundColor: Colors.red,
@@ -163,7 +216,9 @@ class _StoreShopAppBarState extends State<StoreShopAppBar>
                     const SizedBox(width: 10),
                     _buildActionIcons(
                       isScrolled: true,
-                      onPressed: () {},
+                      onPressed: () {
+                        showStoreAddPeopleBottomSheet(context: context);
+                      },
                       icon: CupertinoIcons.person_add,
                       iconColor: Colors.white,
                       backgroundColor: Colors.green,

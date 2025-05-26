@@ -3,11 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
+import 'package:semo/features/order/routes/const.dart';
 import 'package:semo/features/profile/routes/profile_routes_const.dart';
-
-/// //===========================================================================
-/// Widget that displays the action icons (cart, notifications, profile) in the app bar
-/// //===========================================================================
 
 // Action icons for the app bar
 
@@ -32,7 +29,7 @@ class ActionIcons extends StatelessWidget {
             iconColor: Colors.white,
             backgroundColor: Colors.red,
             onPressed: () {
-              // Handle notifications tap
+              context.pushNamed(OrderRoutesConstants.notificationName);
             },
           ),
         ),

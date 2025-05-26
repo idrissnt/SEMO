@@ -77,9 +77,15 @@ class StoreSection extends StatelessWidget {
                           store: store,
                           onTap: () {
                             // Use standard navigation with path parameters for shareable links
+                            // Include the current route as referrer for back navigation
+                            final currentLocation =
+                                GoRouterState.of(context).uri.toString();
                             context.goNamed(
                               StoreRoutesConst.storeName,
-                              extra: store,
+                              extra: {
+                                'store': store,
+                                'referrer': currentLocation,
+                              },
                             );
                           },
                           heroTag: StoreRoutesConst.getStoreHeroTag(store.id),
@@ -112,14 +118,14 @@ class StoreImageButton extends StatefulWidget {
   final double size;
   final StoreBrand store;
   final VoidCallback onTap;
-  final String heroTag;
+  final String? heroTag;
 
   const StoreImageButton({
     Key? key,
     required this.size,
     required this.store,
     required this.onTap,
-    required this.heroTag,
+    this.heroTag,
   }) : super(key: key);
 
   @override
@@ -158,9 +164,9 @@ class _StoreImageButtonState extends State<StoreImageButton>
     Widget content = _buildAnimatedImage();
 
     // Wrap with Hero if tag is provided
-    if (widget.heroTag.isNotEmpty) {
+    if (widget.heroTag != null) {
       content = Hero(
-        tag: widget.heroTag,
+        tag: widget.heroTag!,
         child: Material(
           color: Colors.transparent,
           child: content,

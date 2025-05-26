@@ -110,17 +110,24 @@ class _ProductByStoreScreenState extends State<ProductByStoreScreen>
           ),
         ),
         actions: [
+          // Use a simple hero approach with Material wrapping for reliable animations
           StoreImageButton(
             size: 40,
             store: widget.store,
             onTap: () {
+              // Include the current route as referrer for back navigation
+              final currentLocation = GoRouterState.of(context).uri.toString();
               context.goNamed(
                 StoreRoutesConst.storeName,
-                pathParameters: {'storeId': widget.store.id},
-                extra: widget.store,
+                // pathParameters: {'storeId': widget.store.id},
+                extra: {
+                  'store': widget.store,
+                  'referrer': currentLocation,
+                },
               );
             },
-            heroTag: StoreRoutesConst.getStoreHeroTag(widget.store.id),
+            heroTag: StoreRoutesConst.getStoreHeroTag(
+                '${widget.store.id}_product_by_store'),
           ),
           const SizedBox(width: 16),
         ],

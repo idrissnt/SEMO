@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/navigation/bottom_sheet_nav/bottom_sheet_navigator.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
-import 'package:semo/features/store/presentation/widgets/product_details/product_detail.dart';
+import 'package:semo/features/store/presentation/bottom_sheets/product_details/navigator.dart';
 import 'package:semo/features/store/routes/bottom_sheet/product_detail/routes_constants.dart';
 import 'utils/quantity_controller.dart';
 

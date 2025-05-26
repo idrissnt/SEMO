@@ -35,19 +35,7 @@ class StoreShopRouter {
         path: StoreRoutesConst.storeBase,
         name: StoreRoutesConst.storeName,
         builder: (context, state) {
-          // Handle both direct URL navigation and navigation with extra data
-          String storeId;
-          
-          if (state.extra != null) {
-            // If we have extra data, extract the store ID
-            final store = state.extra as StoreBrand;
-            storeId = store.id;
-          } else {
-            // For direct URL navigation, use a default or extract from path parameters
-            storeId = state.pathParameters['storeName'] ?? 'default-store';
-          }
-
-          return StoreShopTab(storeId: storeId);
+          return const StoreShopTab();
         },
         routes: [
           GoRoute(
@@ -57,21 +45,24 @@ class StoreShopRouter {
               // Handle both direct URL navigation and navigation with extra data
               String storeId;
               String? aisleId;
-              
+
               if (state.extra != null) {
                 // If we have extra data, extract IDs from the StoreBrand
                 final extraData = state.extra as StoreBrand;
                 storeId = extraData.id;
-                aisleId = extraData.aisles != null && extraData.aisles!.isNotEmpty ? extraData.aisles!.first.id : null;
+                aisleId =
+                    extraData.aisles != null && extraData.aisles!.isNotEmpty
+                        ? extraData.aisles!.first.id
+                        : null;
               } else {
                 // For direct URL navigation, extract from path parameters
                 storeId = state.pathParameters['storeName'] ?? 'default-store';
                 aisleId = state.pathParameters['aisleName'];
               }
-              
+
               // If aisleId is still null, use a default or handle appropriately
               aisleId ??= 'default-aisle';
-              
+
               return ProductScreen(
                 storeId: storeId,
                 aisleId: aisleId,

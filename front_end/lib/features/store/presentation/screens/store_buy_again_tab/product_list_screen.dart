@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:semo/core/presentation/navigation/bottom_sheet_nav/bottom_sheet_navigator.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
+import 'package:semo/features/store/presentation/bottom_sheets/product_details/navigator.dart';
 import 'package:semo/features/store/presentation/widgets/products/utils/quantity_controller.dart';
 import 'package:semo/features/store/presentation/widgets/store_buy_again_tab/add_to_cart_scaffold.dart';
 import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
+import 'package:semo/features/store/routes/bottom_sheet/product_detail/routes_constants.dart';
 
 /// Screen that displays a list of products in a vertical scrollable way
 class ProductListScreen extends StatefulWidget {
@@ -82,7 +85,26 @@ class _ProductListScreenState extends State<ProductListScreen> {
           padding: const EdgeInsets.only(top: 12),
           child: InkWell(
             onTap: () {
-              // Navigate to product detail using GoRouter
+              {
+                // Check if we're inside a product detail navigator
+                final navigatorState = context
+                    .findAncestorStateOfType<BottomSheetNavigatorState>();
+
+                if (navigatorState != null) {
+                  // We're inside a bottom sheet navigator, navigate to the related product
+                  navigatorState.navigateTo(
+                    ProductDetailRoutesConstants.relatedProduct
+                        .replaceAll(':productId', product.id),
+                  );
+                } else {
+                  // We're not in a navigator, show the bottom sheet
+                  showProductDetailBottomSheet(
+                      context: context,
+                      product: product,
+                      storeId: widget.storeId,
+                      relatedProducts: widget.products);
+                }
+              }
             },
             borderRadius: BorderRadius.circular(12),
             child: Container(

@@ -7,19 +7,14 @@ import 'package:semo/features/store/domain/entities/store.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
 import 'package:semo/features/store/presentation/widgets/category/category_products_list.dart';
 import 'package:semo/features/store/presentation/widgets/store_shop_tab/app_bar.dart';
-import 'package:semo/features/store/routes/route_config/store_routes_const.dart';
 import 'package:logging/logging.dart';
 
 Logger _logger = Logger('StoreShopTab');
 
 /// Tab that displays the shop content for a specific store
 class StoreShopTab extends StatefulWidget {
-  /// The ID of the store to display
-  final String storeId;
-
   const StoreShopTab({
     Key? key,
-    required this.storeId,
   }) : super(key: key);
 
   @override
@@ -32,8 +27,9 @@ class _StoreShopTabState extends State<StoreShopTab>
   // state variables that will change based on scroll position
   bool _isScrolled = false;
 
-  /// Sample store brand data
+  /// Store brand data
   final StoreBrand _store = storeBrandData;
+
   // Scroll progress value from 0.0 (not scrolled) to 1.0 (fully scrolled)
   double _scrollProgress = 0.0;
 
@@ -100,17 +96,13 @@ class _StoreShopTabState extends State<StoreShopTab>
   }
 
   Widget _buildAppBar() {
-    return Hero(
-        tag: StoreRoutesConst.getStoreHeroTag(widget.storeId),
-        child: Material(
-            color: Colors.transparent,
-            child: StoreShopAppBar(
-              store: _store,
-              scrollController: _scrollController,
-              isScrolled: _isScrolled,
-              scrollProgress: _scrollProgress,
-              backRoute: OrderRoutesConstants.order,
-            )));
+    return StoreShopAppBar(
+      store: _store,
+      scrollController: _scrollController,
+      isScrolled: _isScrolled,
+      scrollProgress: _scrollProgress,
+      backRoute: OrderRoutesConstants.order,
+    );
   }
 
   Widget _buildMainContent() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/config/routing_transitions.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
-import 'package:semo/features/store/presentation/widgets/product_details/product_detail.dart';
+import 'package:semo/features/store/presentation/bottom_sheets/product_details/bottom_sheet_content.dart';
 import 'package:semo/features/store/routes/bottom_sheet/product_detail/routes_constants.dart';
 
 /// This class is responsible for creating the routes for the product detail bottom sheet navigator.

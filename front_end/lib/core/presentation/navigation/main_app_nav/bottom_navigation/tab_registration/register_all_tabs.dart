@@ -1,4 +1,4 @@
-import 'package:semo/features/deliver/routes/deliver_tab_registration.dart';
+import 'package:semo/features/community_shop/routes/community_shop_tab_registration.dart';
 import 'package:semo/features/order/routes/order_tab_registration.dart';
 import 'package:semo/features/message/routes/message_tab_registration.dart';
 
@@ -7,6 +7,6 @@ import 'package:semo/features/message/routes/message_tab_registration.dart';
 void registerAllTabs() {
   // Register tabs in the order they should appear
   registerOrderTab();
-  registerDeliverTab();
+  registerCommunityShopTab();
   registerMessageTab();
 }
