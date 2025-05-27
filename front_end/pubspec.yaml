@@ -43,6 +43,9 @@ dependencies:
   flutter_cube: ^0.1.1
   flutter_sticky_header: ^0.7.0
   carousel_slider: ^5.0.0
+  google_maps_flutter: ^2.12.2
+  geocoding: ^3.0.0
+  flutter_map_marker_cluster: ^1.4.0
 
 dev_dependencies:
   flutter_test:

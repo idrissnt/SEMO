@@ -59,9 +59,9 @@ List<CommunityOrder> getSampleCommunityOrders() {
       reward: 5.0,
       isUrgent: true,
       deliveryTime: 'Aujourd\'hui, 18h-20h',
-      deliveryAddress: '15 Rue des Fleurs, 75001 Paris',
+      deliveryAddress: '11 avenue du charmois vandoeuvre les Nancy 54500',
       notes: 'Merci de sonner à l\'interphone',
-      storeAddress: '15 Rue des Fleurs, 75001 Paris',
+      storeAddress: '43 rue de Saurupt 54000 Nancy',
     ),
     CommunityOrder(
       id: 'order2',
@@ -107,9 +107,9 @@ List<CommunityOrder> getSampleCommunityOrders() {
       reward: 2.5,
       isUrgent: true,
       deliveryTime: 'Aujourd\'hui, 16h-18h',
-      deliveryAddress: '23 Rue de la Paix, 75002 Paris',
+      deliveryAddress: '11 avenue du charmois vandoeuvre les Nancy 54500',
       notes: 'Laisser devant la porte si absence',
-      storeAddress: '23 Rue de la Paix, 75002 Paris',
+      storeAddress: '43 rue de Saurupt 54000 Nancy',
     ),
     CommunityOrder(
       id: 'order4',
