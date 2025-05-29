@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// A reusable settings tile widget for profile settings
-class CommunityOrderDetailsTile extends StatefulWidget {
+class TileDetailsSection extends StatefulWidget {
   final Widget icon;
   final Color iconContainerColor;
   final String title;
@@ -10,7 +11,7 @@ class CommunityOrderDetailsTile extends StatefulWidget {
   final List<Map<String, String>> content;
   final Widget? tag;
 
-  const CommunityOrderDetailsTile({
+  const TileDetailsSection({
     Key? key,
     required this.icon,
     required this.iconContainerColor,
@@ -21,11 +22,10 @@ class CommunityOrderDetailsTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CommunityOrderDetailsTile> createState() =>
-      _CommunityOrderDetailsTileState();
+  State<TileDetailsSection> createState() => _TileDetailsSectionState();
 }
 
-class _CommunityOrderDetailsTileState extends State<CommunityOrderDetailsTile> {
+class _TileDetailsSectionState extends State<TileDetailsSection> {
   bool isExpanded = false;
 
   @override
@@ -119,13 +119,38 @@ class _CommunityOrderDetailsTileState extends State<CommunityOrderDetailsTile> {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            item['value']!,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
+                        if (!(item['label']
+                                ?.toLowerCase()
+                                .contains('adresse') ??
+                            false))
+                          Expanded(
+                            child: Text(
+                              item['value']!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
                           ),
-                        ),
+                        if (item['label']?.toLowerCase().contains('adresse') ??
+                            false)
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    item['value']!,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.copy, size: 20),
+                                  tooltip: 'Copier l\'adresse',
+                                  onPressed: () =>
+                                      _copyAddressToClipboard(item['value']!),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -135,5 +160,15 @@ class _CommunityOrderDetailsTileState extends State<CommunityOrderDetailsTile> {
           ),
       ],
     );
+  }
+
+  // Copy address to clipboard
+  void _copyAddressToClipboard(String address) {
+    Clipboard.setData(ClipboardData(text: address)).then((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Adresse copiée: $address')),
+      );
+    });
   }
 }

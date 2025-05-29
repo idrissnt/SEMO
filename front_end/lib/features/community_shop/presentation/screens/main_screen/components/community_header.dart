@@ -33,7 +33,7 @@ class CommunityHeader extends StatelessWidget {
               buildIcon(
                 iconColor: Colors.white,
                 backgroundColor: Colors.orange,
-                icon: CupertinoIcons.hourglass,
+                icon: Icons.shopping_bag,
                 onPressed: () {},
               ),
               const SizedBox(width: 8),

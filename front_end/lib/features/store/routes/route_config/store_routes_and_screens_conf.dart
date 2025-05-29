@@ -2,7 +2,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/domain/entities/store.dart';
-import 'package:semo/features/store/presentation/screens/product/product_screen.dart';
+import 'package:semo/features/store/presentation/screens/store_aisles_tab/product/product_screen.dart';
 import 'package:semo/features/store/presentation/screens/store_aisles_tab/store_aisles_tab.dart';
 import 'package:semo/features/store/presentation/screens/store_buy_again_tab/product_list_screen.dart';
 import 'package:semo/features/store/presentation/screens/store_buy_again_tab/store_buy_again_tab.dart';

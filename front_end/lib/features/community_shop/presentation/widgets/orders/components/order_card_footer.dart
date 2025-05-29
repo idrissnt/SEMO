@@ -60,14 +60,14 @@ class OrderCardFooter extends StatelessWidget {
         child: Row(
           children: [
             const Icon(FontAwesomeIcons.sackDollar,
-                size: 16, color: Colors.amber),
+                size: 20, color: Colors.amber),
             const SizedBox(width: 4),
             Text(
               '${order.reward.toStringAsFixed(1)}€ pour vous',
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 14,
               ),
             ),
           ],

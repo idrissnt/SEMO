@@ -50,21 +50,25 @@ class _OrderTrackingCardState extends State<OrderTrackingCard> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.only(top: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Stack(
               children: [
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                  decoration: const BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
                         'Commande en cours',
@@ -73,11 +77,22 @@ class _OrderTrackingCardState extends State<OrderTrackingCard> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        'Arrivée entre $startTime - $endTime',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
+                      Text.rich(
+                        TextSpan(
+                          text: 'Arrivée aujourd\'hui entre ',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: '$startTime - $endTime',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -97,7 +112,11 @@ class _OrderTrackingCardState extends State<OrderTrackingCard> {
               ],
             ),
             const SizedBox(height: 8),
-            _buildProgressTracker(),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
+              child: _buildProgressTracker(),
+            ),
           ],
         ),
       ),

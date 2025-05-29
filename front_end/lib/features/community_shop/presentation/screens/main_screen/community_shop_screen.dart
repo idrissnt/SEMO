@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/community_shop/presentation/screens/tab/components/community_header.dart';
-import 'package:semo/features/community_shop/presentation/screens/tab/components/empty_orders_state.dart';
+import 'package:semo/features/community_shop/presentation/screens/main_screen/components/community_header.dart';
+import 'package:semo/features/community_shop/presentation/screens/main_screen/components/empty_orders_state.dart';
 import 'package:semo/features/community_shop/presentation/services/order_filter_service.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
@@ -41,14 +41,6 @@ class _CommunityShopScreenState extends State<CommunityShopScreen> {
       _filterValues.clear();
       _filterValues.addAll(filters);
       _filteredOrders = OrderFilterService.filterOrders(_allOrders, filters);
-    });
-  }
-
-  /// Handle order acceptance
-  void _handleOrderAccepted(CommunityOrder order) {
-    setState(() {
-      _allOrders.removeWhere((o) => o.id == order.id);
-      _filterOrders(_filterValues);
     });
   }
 
@@ -110,12 +102,6 @@ class _CommunityShopScreenState extends State<CommunityShopScreen> {
                           order: order,
                           onTap: () => _orderInteractionService.handleOrderTap(
                               context, order),
-                          onAccept: () =>
-                              _orderInteractionService.handleOrderAccept(
-                            context,
-                            order,
-                            _handleOrderAccepted,
-                          ),
                         );
                       },
                     ),

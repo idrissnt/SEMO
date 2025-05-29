@@ -17,6 +17,16 @@ class OrderInteractionService {
     );
   }
 
+  void handleDeliveryTimeSelection(
+      BuildContext context, CommunityOrder order) {}
+
+  void handleOrderStart(BuildContext context, CommunityOrder order) {
+    context.pushNamed(
+      CommunityShopRoutesConstants.orderStartName,
+      extra: order,
+    );
+  }
+
   /// Handles accepting an order - removes it from available orders
   void handleOrderAccept(
     BuildContext context,

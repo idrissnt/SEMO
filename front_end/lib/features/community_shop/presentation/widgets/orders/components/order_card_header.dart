@@ -7,9 +7,15 @@ import 'package:semo/features/community_shop/presentation/test_data/community_or
 class OrderCardHeader extends StatelessWidget {
   final CommunityOrder order;
 
+  final VoidCallback onTap;
+
+  final bool? isSelected;
+
   const OrderCardHeader({
     Key? key,
     required this.order,
+    required this.onTap,
+    this.isSelected,
   }) : super(key: key);
 
   @override
@@ -76,6 +82,29 @@ class OrderCardHeader extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            height: 30,
+            width: 30,
+            decoration: BoxDecoration(
+              color: isSelected ?? false ? AppColors.primary : Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: (isSelected ?? false)
+                  ? const Icon(Icons.delete_rounded,
+                      size: 20, color: Colors.black)
+                  : const Icon(Icons.add, size: 20, color: AppColors.primary),
             ),
           ),
         ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// Widget for the top navigation bar with close/back and share buttons
 class TopBar extends StatelessWidget {
@@ -97,22 +96,22 @@ class TopBar extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              // Create a shareable link if we have both storeId and productId
-              if (storeId != null && productId != null) {
-                final shareableLink =
-                    'https://semo.win/store/$storeId/product/$productId';
+              // // Create a shareable link if we have both storeId and productId
+              // if (storeId != null && productId != null) {
+              //   final shareableLink =
+              //       'https://semo.win/store/$storeId/product/$productId';
 
-                // Copy to clipboard
-                Clipboard.setData(ClipboardData(text: shareableLink)).then((_) {
-                  // Show a snackbar to confirm
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Link copied to clipboard'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                });
-              }
+              //   // Copy to clipboard
+              //   Clipboard.setData(ClipboardData(text: shareableLink)).then((_) {
+              //     // Show a snackbar to confirm
+              //     ScaffoldMessenger.of(context).showSnackBar(
+              //       const SnackBar(
+              //         content: Text('Link copied to clipboard'),
+              //         duration: Duration(seconds: 2),
+              //       ),
+              //     );
+              //   });
+              // }
             },
           ),
         ],

@@ -15,7 +15,7 @@ class ProfileRouter {
       GoRoute(
         path: ProfileRoutesConstants.rootProfile,
         name: ProfileRouteNames.profile,
-        parentNavigatorKey: AppRouter.profileNavigatorKey,
+        parentNavigatorKey: AppRouter.rootNavigatorKey,
         pageBuilder: (context, state) => buildPageWithTransition(
           context: context,
           state: state,

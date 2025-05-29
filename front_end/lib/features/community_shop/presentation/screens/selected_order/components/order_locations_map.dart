@@ -83,9 +83,7 @@ class _OrderLocationsMapState extends State<OrderLocationsMap> {
           await _getCoordinatesFromAddress(widget.order.storeAddress);
 
       // Fallback to default coordinates if geocoding fails
-      if (storeCoordinates == null) {
-        storeCoordinates = const LatLng(48.8566, 2.3522);
-      }
+      storeCoordinates ??= const LatLng(48.8566, 2.3522);
       _storeLocation = storeCoordinates;
 
       debugPrint(
@@ -94,10 +92,8 @@ class _OrderLocationsMapState extends State<OrderLocationsMap> {
           await _getCoordinatesFromAddress(widget.order.deliveryAddress);
 
       // Fallback to default coordinates if geocoding fails
-      if (customerCoordinates == null) {
-        customerCoordinates = LatLng(
-            _storeLocation.latitude + 0.01, _storeLocation.longitude + 0.01);
-      }
+      customerCoordinates ??= LatLng(
+          _storeLocation.latitude + 0.01, _storeLocation.longitude + 0.01);
       _customerLocation = customerCoordinates;
 
       // If store and customer are at the same location, slightly offset the customer marker

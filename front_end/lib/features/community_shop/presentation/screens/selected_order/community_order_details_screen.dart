@@ -1,12 +1,14 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide SizedBox;
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/features/community_shop/presentation/screens/selected_order/components/datail_section.dart';
-import 'package:semo/features/community_shop/presentation/screens/selected_order/components/order_locations_map.dart';
+// import 'package:semo/features/community_shop/presentation/screens/selected_order/components/order_locations_map.dart';
 import 'package:semo/features/community_shop/presentation/screens/selected_order/components/product_carousel.dart';
 import 'package:semo/features/community_shop/presentation/screens/selected_order/components/reward_message.dart';
+import 'package:semo/features/community_shop/presentation/screens/selected_order/util/start_button.dart';
+import 'package:semo/features/community_shop/presentation/services/delivery_time_service.dart';
+import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 
 class CommunityOrderDetailsScreen extends StatelessWidget {
@@ -20,7 +22,10 @@ class CommunityOrderDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
           'Details de la commande',
@@ -31,40 +36,103 @@ class CommunityOrderDetailsScreen extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20),
+          icon: const Icon(Icons.arrow_back, size: 20),
           onPressed: () => context.pop(),
         ),
-        actions: [
-          buildIcon(
-            iconColor: Colors.white,
-            backgroundColor: Colors.orange,
-            icon: CupertinoIcons.hourglass,
-            onPressed: () {},
-          ),
-          const SizedBox(width: 16),
-        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Product Images Carousel
-            if (order.productImageUrls.isNotEmpty)
-              ProductCarousel(order: order),
-            const SizedBox(height: 24),
+      body: Stack(
+        children: [
+          Scrollbar(
+            controller: ScrollController(),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product Images Carousel
+                  if (order.productImageUrls.isNotEmpty)
+                    ProductCarousel(order: order),
+                  const SizedBox(height: 24),
 
-            DetailSection(order: order),
-            const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: DetailSection(order: order),
+                  ),
+                  const SizedBox(height: 12),
 
-            const RewardMessage(),
-            const SizedBox(height: 24),
+                  const RewardMessage(),
+                  const SizedBox(height: 12),
 
-            // Map showing locations of store and customer
-            OrderLocationsMap(order: order),
-            const SizedBox(height: 24),
-          ],
-        ),
+                  // Map showing locations of store and customer
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  //   child: OrderLocationsMap(order: order),
+                  // ),
+                  const SizedBox(height: 120),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 100,
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, bottom: 24, top: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 170,
+                    height: 55,
+                    child: StartButton(
+                      textColor: AppColors.textPrimaryColor,
+                      backgroundColor: AppColors.secondaryVariant,
+                      textSize: 16,
+                      text: 'Programmer',
+                      showIcon: true,
+                      onPressed: () {
+                        DeliveryTimeService().showDeliveryTimePicker(
+                          context: context,
+                          order: order,
+                        );
+                      },
+                    ),
+                  ),
+                  // Add to cart button
+                  SizedBox(
+                    width: 190,
+                    height: 55,
+                    child: StartButton(
+                      textColor: AppColors.textSecondaryColor,
+                      backgroundColor: AppColors.primary,
+                      textSize: AppFontSize.large,
+                      showIcon: false,
+                      text: 'Commencer',
+                      onPressed: () {
+                        OrderInteractionService().handleOrderStart(
+                          context,
+                          order,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

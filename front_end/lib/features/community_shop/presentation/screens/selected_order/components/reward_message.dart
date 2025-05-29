@@ -27,14 +27,12 @@ class RewardMessage extends StatelessWidget {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: const Center(
-                child: Expanded(
-                  child: Text(
-                    "Vous êtes notre Héros",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  "Vous êtes notre Héros",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

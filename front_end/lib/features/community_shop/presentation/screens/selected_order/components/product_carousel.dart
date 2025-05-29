@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
-import 'package:semo/features/community_shop/presentation/widgets/orders/components/order_card_footer.dart';
 
 class ProductCarousel extends StatefulWidget {
   final CommunityOrder order;
@@ -15,8 +14,8 @@ class ProductCarousel extends StatefulWidget {
 
 class _ProductCarouselState extends State<ProductCarousel> {
   // Initialize with the second image index if available
-  late int _currentIndex;  
-  
+  late int _currentIndex;
+
   @override
   void initState() {
     super.initState();
@@ -27,22 +26,19 @@ class _ProductCarouselState extends State<ProductCarousel> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const Text(
-              'Produits commandés',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimaryColor,
-              ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Text(
+            textAlign: TextAlign.start,
+            'Produits commandés : ${widget.order.totalItems} (11 unités)',
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimaryColor,
             ),
-            const Spacer(),
-            OrderCardFooter(
-              order: widget.order,
-            ).buildReward()
-          ],
+          ),
         ),
         const SizedBox(height: 12),
         Column(
@@ -50,7 +46,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
             CarouselSlider(
               options: CarouselOptions(
                 initialPage: widget.order.productImageUrls.length > 1 ? 1 : 0,
-                height: 220,
+                height: 275,
                 viewportFraction: 0.85,
                 enlargeCenterPage: true,
                 enableInfiniteScroll: false, // Disable infinite scrolling
@@ -71,36 +67,83 @@ class _ProductCarouselState extends State<ProductCarousel> {
                         fit: StackFit.expand,
                         children: [
                           // Product Image
-                          Card(
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
+                          Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 46,
+                                child: Card(
+                                  elevation: 3,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15),
+                                    ),
                                   ),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.grey[200],
-                                  child: const Center(child: Icon(Icons.error)),
-                                );
-                              },
-                            ),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        color: Colors.grey[200],
+                                        child: const Center(
+                                            child: Icon(Icons.error)),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                // top: 0,
+                                left: 4,
+                                right: 4,
+                                bottom: 0,
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[800],
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  child: const Center(
+                                    child: Text(
+                                      "Ici va s'afficher le nom du produit avec la quantité (kg, l, etc) ",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
 
                           // Favorite button
@@ -136,7 +179,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
             // Page indicator dots
             if (widget.order.productImageUrls.length > 1)
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: widget.order.productImageUrls

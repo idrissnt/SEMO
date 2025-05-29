@@ -46,6 +46,7 @@ dependencies:
   google_maps_flutter: ^2.12.2
   geocoding: ^3.0.0
   flutter_map_marker_cluster: ^1.4.0
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:

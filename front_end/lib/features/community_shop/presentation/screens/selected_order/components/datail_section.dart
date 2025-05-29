@@ -1,7 +1,7 @@
 // information section
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/features/community_shop/presentation/screens/selected_order/util/util.dart';
+import 'package:semo/features/community_shop/presentation/screens/selected_order/util/title_details_section.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/presentation/widgets/orders/components/order_details_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
@@ -21,7 +21,7 @@ class DetailSection extends StatelessWidget {
           ? OrderDetailsSection(order: order).buildUrgentTag()
           : null,
       children: [
-        CommunityOrderDetailsTile(
+        TileDetailsSection(
           tag: Row(
             children: [
               CircleAvatar(
@@ -58,7 +58,7 @@ class DetailSection extends StatelessWidget {
             const {'label': 'Temps estimé', 'value': '15 minutes'},
           ],
         ),
-        CommunityOrderDetailsTile(
+        TileDetailsSection(
           title: 'Le client',
           subtitle: 'Adresse, distance, temps estimé',
           icon: const Icon(
@@ -75,7 +75,7 @@ class DetailSection extends StatelessWidget {
             const {'label': 'Temps Estimé', 'value': '15 minutes'},
           ],
         ),
-        CommunityOrderDetailsTile(
+        TileDetailsSection(
           title: 'La commande',
           subtitle: 'Nombre de produits frais, date de livraison, note',
           icon: const Icon(

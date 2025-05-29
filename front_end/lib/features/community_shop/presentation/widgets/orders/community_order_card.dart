@@ -14,14 +14,10 @@ class CommunityOrderCard extends StatelessWidget {
   /// Callback when the card is tapped
   final VoidCallback onTap;
 
-  /// Callback when the user accepts the order
-  final VoidCallback onAccept;
-
   const CommunityOrderCard({
     Key? key,
     required this.order,
     required this.onTap,
-    required this.onAccept,
   }) : super(key: key);
 
   @override
@@ -71,7 +67,7 @@ class CommunityOrderCard extends StatelessWidget {
             child: Column(
               children: [
                 // Header section with store info and distance
-                OrderCardHeader(order: order),
+                OrderCardHeader(order: order, onTap: onTap),
 
                 // Main content section with product images and order details
                 Padding(
@@ -95,7 +91,7 @@ class CommunityOrderCard extends StatelessWidget {
                 // Footer section with reward and action button
                 OrderCardFooter(
                   order: order,
-                  onAccept: onAccept,
+                  onAccept: onTap,
                 ),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:semo/core/di/injection_container.dart';
+import 'package:semo/core/presentation/navigation/config/navigation_logger.dart';
 import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/tab_registration/register_all_tabs.dart';
 import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/bloc_provider/register_shell_providers.dart';
 import 'package:semo/core/presentation/navigation/config/route_transition_observer.dart';
@@ -22,12 +23,10 @@ import 'package:semo/features/store/routes/main_store_route.dart';
 // import 'package:semo/features/store/routes/product_detail_deep_link.dart';
 import 'package:semo/features/store/routes/tabs/register_store_tabs.dart';
 
-import '../../config/navigation_logger.dart';
-
 /// Central router configuration for the application
 class AppRouter {
-  /// Navigator key for profile routes
-  static final GlobalKey<NavigatorState> profileNavigatorKey =
+  /// Navigator key for root navigator
+  static final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>();
 
   static final routeTransitionObserver = RouteTransitionObserver();
@@ -47,7 +46,7 @@ class AppRouter {
   /// The main router for the app with navigation logging enabled
   static final GoRouter router = GoRouter(
     initialLocation: AuthRoutesConstants.splash,
-    navigatorKey: profileNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     redirect: (context, state) {
       // Skip redirection for splash screen
       if (state.uri.path == AuthRoutesConstants.splash) return null;
