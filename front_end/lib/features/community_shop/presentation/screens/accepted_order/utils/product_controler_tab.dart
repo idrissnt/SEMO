@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// Widget that displays Category filters at the top of the screen
-class ProductControlFilters extends StatelessWidget {
+class ProductControlTabs extends StatelessWidget {
   final List<String> categories;
   final int selectedIndex;
   final Function(int index) onCategoryTap;
   final List<int>? itemCounts; // Add counts for each category
 
-  const ProductControlFilters({
+  const ProductControlTabs({
     Key? key,
     required this.categories,
     required this.selectedIndex,

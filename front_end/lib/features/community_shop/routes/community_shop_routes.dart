@@ -3,6 +3,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/config/routing_transitions.dart';
 import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/item_confirm.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/order_item_detail.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/image_viewer_screen.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
 import 'package:semo/features/community_shop/routes/transitions.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/order_started_screen.dart';
 import 'package:semo/features/community_shop/presentation/screens/selected_order/community_order_details_screen.dart';
@@ -39,19 +43,85 @@ class CommunityShopRouter {
               name: 'CommunityOrderDetailsScreen',
             ),
           ),
+          // Order started route
           GoRoute(
-            path: CommunityShopRoutesConstants.orderStart,
-            name: CommunityShopRoutesConstants.orderStartName,
-            parentNavigatorKey: AppRouter.rootNavigatorKey,
-            pageBuilder: (context, state) => buildBottomToTopTransition(
-              context: context,
-              state: state,
-              child: CommunityOrderStartedScreen(
-                order: state.extra as CommunityOrder,
-              ),
-              name: 'CommunityOrderStartedScreen',
-            ),
-          ),
+              path: CommunityShopRoutesConstants.orderStart,
+              name: CommunityShopRoutesConstants.orderStartName,
+              parentNavigatorKey: AppRouter.rootNavigatorKey,
+              pageBuilder: (context, state) => buildBottomToTopTransition(
+                    context: context,
+                    state: state,
+                    child: CommunityOrderStartedScreen(
+                      order: state.extra as CommunityOrder,
+                    ),
+                    name: 'CommunityOrderStartedScreen',
+                  ),
+              routes: [
+                // Order item details route
+                GoRoute(
+                  path: CommunityShopRoutesConstants.orderItemDetails,
+                  name: CommunityShopRoutesConstants.orderItemDetailsName,
+                  parentNavigatorKey: AppRouter.rootNavigatorKey,
+                  pageBuilder: (context, state) {
+                    final Map<String, dynamic> extras =
+                        state.extra as Map<String, dynamic>;
+
+                    return buildPageWithTransition(
+                      context: context,
+                      state: state,
+                      child: CommunityOrderItemDetailsScreen(
+                        orderItem: extras['orderItem'] as OrderItem,
+                        order: extras['order'] as CommunityOrder,
+                      ),
+                      name: 'CommunityOrderItemDetailsScreen',
+                    );
+                  },
+                  routes: [
+                    // Image viewer route
+                    GoRoute(
+                      path: CommunityShopRoutesConstants.imageViewer,
+                      name: CommunityShopRoutesConstants.imageViewerName,
+                      parentNavigatorKey: AppRouter.rootNavigatorKey,
+                      pageBuilder: (context, state) {
+                        final Map<String, dynamic> extras =
+                            state.extra as Map<String, dynamic>;
+
+                        return buildPageWithTransition(
+                          context: context,
+                          state: state,
+                          child: ImageViewerScreen(
+                            imageUrl: extras['imageUrl'] as String,
+                            heroTag: extras['heroTag'] as String,
+                          ),
+                          name: 'ImageViewerScreen',
+                        );
+                      },
+                    ),
+                    // Order item details confirmation route
+                    GoRoute(
+                      path: CommunityShopRoutesConstants
+                          .orderItemDetailsConfirmation,
+                      name: CommunityShopRoutesConstants
+                          .orderItemDetailsConfirmationName,
+                      parentNavigatorKey: AppRouter.rootNavigatorKey,
+                      pageBuilder: (context, state) {
+                        final Map<String, dynamic> extras =
+                            state.extra as Map<String, dynamic>;
+
+                        return buildPageWithTransition(
+                          context: context,
+                          state: state,
+                          child: CommunityOrderItemDetailsConfirmationScreen(
+                            orderItem: extras['orderItem'] as OrderItem,
+                            order: extras['order'] as CommunityOrder,
+                          ),
+                          name: 'CommunityOrderItemDetailsConfirmationScreen',
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ]),
         ],
       ),
     ];

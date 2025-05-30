@@ -96,9 +96,9 @@ class CommunityOrderDetailsScreen extends StatelessWidget {
                   SizedBox(
                     width: 170,
                     height: 55,
-                    child: StartButton(
+                    child: CommunityOrderButton(
                       textColor: AppColors.textPrimaryColor,
-                      backgroundColor: AppColors.secondaryVariant,
+                      backgroundColor: AppColors.secondary,
                       textSize: 16,
                       text: 'Programmer',
                       showIcon: true,
@@ -114,7 +114,7 @@ class CommunityOrderDetailsScreen extends StatelessWidget {
                   SizedBox(
                     width: 190,
                     height: 55,
-                    child: StartButton(
+                    child: CommunityOrderButton(
                       textColor: AppColors.textSecondaryColor,
                       backgroundColor: AppColors.primary,
                       textSize: AppFontSize.large,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// Status of an order item in the shopping process
 enum OrderItemStatus {
@@ -51,6 +53,7 @@ class OrderItem {
         price: 4.50,
         position: 'Étage 1',
         aisle: 'Rayon fruits et légumes',
+        status: OrderItemStatus.customerReviewing,
       ),
       OrderItem(
         id: '2',
@@ -63,6 +66,7 @@ class OrderItem {
         price: 2.20,
         position: 'Étage 1',
         aisle: 'Rayon lait et produits laitiers',
+        status: OrderItemStatus.customerReviewing,
       ),
       OrderItem(
         id: '3',
@@ -114,14 +118,12 @@ class OrderItemCard extends StatelessWidget {
   final OrderItem item;
   final VoidCallback onViewDetails;
   final String storeName;
-  final int index; // Add index to track position in list
 
   const OrderItemCard({
     Key? key,
     required this.item,
     required this.storeName,
     required this.onViewDetails,
-    required this.index,
   }) : super(key: key);
 
   @override
@@ -159,15 +161,16 @@ class OrderItemCard extends StatelessWidget {
               padding:
                   const EdgeInsets.only(left: 2, right: 8, bottom: 2, top: 2),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Item image
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
                       item.imageUrl,
-                      width: 150,
-                      height: 180,
+                      width: 150.w,
+                      height: 180.h,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -175,11 +178,12 @@ class OrderItemCard extends StatelessWidget {
 
                   // Item details
                   Container(
-                    width: 200,
-                    height: 160,
+                    width: 185.w,
+                    height: 160.h,
                     margin: const EdgeInsets.only(
-                        top: 8, bottom: 8, left: 8, right: 0),
-                    padding: const EdgeInsets.all(8),
+                        top: 8, bottom: 8, left: 0, right: 0),
+                    padding: const EdgeInsets.only(
+                        left: 8, right: 4, bottom: 8, top: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: Colors.white,
@@ -234,6 +238,30 @@ class OrderItemCard extends StatelessWidget {
           ),
         ),
         Positioned(
+          right: 46.5.w,
+          top: -10.h,
+          child: IconButton(
+            onPressed: onViewDetails,
+            icon: Container(
+              // width: 55,
+              padding:
+                  const EdgeInsets.only(right: 8, left: 16, top: 4, bottom: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primaryVariant,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text(
+                'Voir details',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
           right: 8,
           bottom: 8,
           child: Container(
@@ -264,19 +292,20 @@ class OrderItemCard extends StatelessWidget {
           Positioned(
             top: 8,
             right: 8,
-            child: indicator(Icons.check_circle, Colors.green),
+            child: buildIndicatorItemStatus(Icons.check_circle, Colors.green),
           ),
         if (item.status == OrderItemStatus.customerReviewing)
           Positioned(
             top: 8,
             right: 8,
-            child: indicator(Icons.hourglass_top_rounded, Colors.orange),
+            child: buildIndicatorItemStatus(
+                Icons.hourglass_top_rounded, Colors.orange),
           ),
       ],
     );
   }
 
-  Widget indicator(IconData icon, Color color) {
+  Widget buildIndicatorItemStatus(IconData icon, Color color) {
     return Container(
       width: 30,
       height: 30,

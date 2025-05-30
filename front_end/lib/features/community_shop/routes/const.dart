@@ -8,4 +8,16 @@ class CommunityShopRoutesConstants {
 
   static const String orderStart = 'order-start';
   static const String orderStartName = 'order-start';
+
+  static const String orderItemDetails = 'order-item-details';
+  static const String orderItemDetailsName = 'order-item-details';
+
+  static const String imageViewer = 'image-viewer';
+  static const String imageViewerName = 'image-viewer';
+
+  static const String orderItemDetailsConfirmation =
+      'order-item-details-confirmation';
+
+  static const String orderItemDetailsConfirmationName =
+      'order-item-details-confirmation-name';
 }

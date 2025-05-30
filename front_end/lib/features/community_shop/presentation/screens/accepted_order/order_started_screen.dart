@@ -1,9 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/models.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/product_controler_tab.dart';
+import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
+import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
+import 'package:semo/core/utils/logger.dart';
+
+// Global logger instance
+final AppLogger _logger = AppLogger();
 
 /// Screen that displays a list of products in a vertical scrollable way
 class CommunityOrderStartedScreen extends StatefulWidget {
@@ -20,40 +27,105 @@ class CommunityOrderStartedScreen extends StatefulWidget {
       _CommunityOrderStartedScreenState();
 }
 
-class _CommunityOrderStartedScreenState
-    extends State<CommunityOrderStartedScreen> {
-  int _selectedCategoryIndex = -1;
-  final ScrollController _filtersScrollController = ScrollController();
-  bool _showGuidanceTitle = true; // Track if guidance title should be shown
+/// Represents the different tabs in the order screen
+enum OrderTab {
+  inProgress,
+  customerReviewing,
+  found,
+}
 
-  // Lists to hold order items in different states
-  late final List<OrderItem> _inProgressItems = [];
-  late final List<OrderItem> _customerReviewingItems = [];
-  late final List<OrderItem> _foundItems = [];
+/// Extension to get display names for order tabs
+extension OrderTabExtension on OrderTab {
+  String get displayName {
+    switch (this) {
+      case OrderTab.inProgress:
+        return 'En cours';
+      case OrderTab.customerReviewing:
+        return 'Le client examine';
+      case OrderTab.found:
+        return 'Trouvé';
+    }
+  }
+}
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedCategoryIndex = 0;
+/// Represents the state of the order items in the community shop
+class OrderItemsState {
+  final List<OrderItem> inProgressItems;
+  final List<OrderItem> customerReviewingItems;
+  final List<OrderItem> foundItems;
 
-    // Initialize with sample items for testing
-    // In a real app, these would come from the order or an API
+  const OrderItemsState({
+    required this.inProgressItems,
+    required this.customerReviewingItems,
+    required this.foundItems,
+  });
+
+  /// Factory method to create state from sample data
+  /// In a real app, this would be replaced by data from an API or BLoC
+  factory OrderItemsState.fromSampleData() {
+    final List<OrderItem> inProgressItems = [];
+    final List<OrderItem> customerReviewingItems = [];
+    final List<OrderItem> foundItems = [];
+
+    // Get sample items
     final allItems = OrderItem.getSampleItems();
 
     // Sort items into the appropriate lists based on their status
     for (var item in allItems) {
       switch (item.status) {
         case OrderItemStatus.inProgress:
-          _inProgressItems.add(item);
+          inProgressItems.add(item);
           break;
         case OrderItemStatus.customerReviewing:
-          _customerReviewingItems.add(item);
+          customerReviewingItems.add(item);
           break;
         case OrderItemStatus.found:
-          _foundItems.add(item);
+          foundItems.add(item);
           break;
       }
     }
+
+    return OrderItemsState(
+      inProgressItems: inProgressItems,
+      customerReviewingItems: customerReviewingItems,
+      foundItems: foundItems,
+    );
+  }
+
+  /// Get items based on the selected tab
+  List<OrderItem> getItemsByTab(OrderTab tab) {
+    switch (tab) {
+      case OrderTab.inProgress:
+        return inProgressItems;
+      case OrderTab.customerReviewing:
+        return customerReviewingItems;
+      case OrderTab.found:
+        return foundItems;
+    }
+  }
+}
+
+class _CommunityOrderStartedScreenState
+    extends State<CommunityOrderStartedScreen> {
+  // UI state
+  OrderTab _selectedTab = OrderTab.inProgress;
+  final ScrollController _filtersScrollController = ScrollController();
+  bool _showGuidanceOverlay = true; // Track if guidance overlay should be shown
+
+  // Data state
+  late final OrderItemsState _orderItemsState;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize state from sample data
+    // In a real app with BLoC, this would be replaced by a BLoC provider
+    _orderItemsState = OrderItemsState.fromSampleData();
+
+    // Log initialization
+    _logger.info(
+        'CommunityOrderStartedScreen initialized with ${widget.order.id}');
   }
 
   @override
@@ -66,72 +138,12 @@ class _CommunityOrderStartedScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Text(
-            'Commande de ${widget.order.customerName}',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        leading: IconButton(
-          icon: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.close, size: 20, color: Colors.black),
-            ),
-          ),
-          onPressed: () => context.pop(),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(CupertinoIcons.chat_bubble_text),
-            onPressed: () {
-              // Handle share action
-            },
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            ProductControlFilters(
-              categories: const [
-                'En cours',
-                'Le client examine',
-                'Trouvé',
-              ],
-              // Pass the counts of items in each category
-              itemCounts: [
-                _inProgressItems.length,
-                _customerReviewingItems.length,
-                _foundItems.length,
-              ],
-              selectedIndex: _selectedCategoryIndex,
-              onCategoryTap: (index) {
-                setState(() {
-                  _selectedCategoryIndex = index;
-                });
-              },
-            ),
+            _buildTabBar(),
             Expanded(
               child: _buildTabContent(),
             ),
@@ -141,102 +153,243 @@ class _CommunityOrderStartedScreenState
     );
   }
 
-  // Build the content for the selected tab
+  /// Builds the app bar with customer name and action buttons
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      title: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Text(
+          'Commande de ${widget.order.customerName}',
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      leading: IconButton(
+        icon: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(Icons.close, size: 20, color: Colors.black),
+          ),
+        ),
+        onPressed: () => context.pop(),
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(CupertinoIcons.chat_bubble_text),
+          onPressed: () {
+            // Handle message action
+            _logger.info('Message button tapped for order: ${widget.order.id}');
+          },
+        ),
+      ],
+    );
+  }
+
+  /// Builds the tab bar with category tabs
+  Widget _buildTabBar() {
+    final List<String> tabNames =
+        OrderTab.values.map((tab) => tab.displayName).toList();
+    final List<int> itemCounts = [
+      _orderItemsState.inProgressItems.length,
+      _orderItemsState.customerReviewingItems.length,
+      _orderItemsState.foundItems.length,
+    ];
+
+    return ProductControlTabs(
+      categories: tabNames,
+      itemCounts: itemCounts,
+      selectedIndex: _selectedTab.index,
+      onCategoryTap: (index) {
+        setState(() {
+          _selectedTab = OrderTab.values[index];
+        });
+      },
+    );
+  }
+
+  /// Build the content for the selected tab
   Widget _buildTabContent() {
-    List<OrderItem> items;
+    // Get items for the selected tab
+    final items = _orderItemsState.getItemsByTab(_selectedTab);
 
-    switch (_selectedCategoryIndex) {
-      case 0: // En cours
-        items = _inProgressItems;
-        break;
-      case 1: // Le client examine
-        items = _customerReviewingItems;
-        break;
-      case 2: // Trouvé
-        items = _foundItems;
-        break;
-      default:
-        items = [];
-    }
-
-    if (items.isEmpty) {
-      return _buildEmptyState();
-    }
-
-    // Add guidance title for the "En cours" tab
-    if (_selectedCategoryIndex == 0) {
-      return Column(
+    // Add guidance overlay for the "En cours" tab
+    if (_selectedTab == OrderTab.inProgress) {
+      return Stack(
         children: [
-          // Guidance title - only show if _showGuidanceTitle is true
-          if (_showGuidanceTitle)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              color: Colors.blue.withValues(alpha: 0.1),
-              child: Row(
-                children: [
-                  Expanded(
+          // Main content
+          Column(
+            children: [
+              Expanded(
+                child: items.isEmpty
+                    ? _buildEmptyState()
+                    : _buildAisleGroupedList(items),
+              ),
+            ],
+          ),
+
+          // Overlay - only show if _showGuidanceOverlay is true
+          if (_showGuidanceOverlay)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.7),
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Shopping list icon
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.shopping_cart,
+                            size: 36,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Title
                         const Text(
-                          'Voici les produits à acheter. Sélectionnez un article pour voir le détail et indiquer si vous l\'avez trouvé ou non',
+                          'Voici votre liste de courses',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromARGB(255, 1, 133, 242),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        IconButton(
-                          icon: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
+                        const SizedBox(height: 12),
+
+                        // Description
+                        RichText(
+                          text: const TextSpan(
+                            text:
+                                'Elle contient tous les articles de la commande du client. Marquez les articles comme trouvés au fur et à mesure en cliquant sur le bouton',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
                             ),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 16),
-                              child: Text(
-                                'Ok',
+                            children: [
+                              TextSpan(
+                                text: ' "Voir détails".',
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(255, 1, 133, 242),
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
                                 ),
                               ),
-                            ),
+                            ],
                           ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Got it button
+                        TextButton(
                           onPressed: () {
                             setState(() {
-                              _showGuidanceTitle = false;
+                              _showGuidanceOverlay = false;
                             });
                           },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text('Compris'),
                         ),
                       ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
 
-          // List content
-          Expanded(
-            child: _buildAisleGroupedList(items),
-          ),
+          // Bottom action bar
+          if (_selectedTab == OrderTab.inProgress && items.isEmpty)
+            _buildBottomActionBar(items),
         ],
       );
     }
 
-    // For other tabs, just show the aisle-grouped list
+    // For empty tabs, show the empty state
+    if (items.isEmpty) {
+      return _buildEmptyState();
+    }
+
+    // For other tabs with items, show the aisle-grouped list
     return _buildAisleGroupedList(items);
+  }
+
+  /// Builds the bottom action bar with either a continue button or time information
+  Widget _buildBottomActionBar(List<OrderItem> items) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Container(
+        height: 100,
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: 34,
+          top: 12,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: ButtonFactory.createAnimatedButton(
+          context: context,
+          onPressed: () {
+            // Handle continue button press
+            _logger
+                .info('Continue button pressed for order: ${widget.order.id}');
+          },
+          text: 'Continuer',
+          backgroundColor: AppColors.primary,
+          textColor: Colors.white,
+          splashColor: AppColors.primary,
+          highlightColor: AppColors.primary,
+          boxShadowColor: AppColors.primary,
+          minWidth: double.infinity,
+        ),
+      ),
+    );
   }
 
   // Build a list of items grouped by aisle
@@ -255,50 +408,61 @@ class _CommunityOrderStartedScreenState
     // Sort aisles alphabetically
     final sortedAisles = itemsByAisle.keys.toList()..sort();
 
-    // Track the global index for continuous color cycling across aisles
-    int globalItemIndex = 0;
+    // List of widgets to display
+    final List<Widget> allWidgets = [];
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 8, bottom: 100),
-      // Each aisle gets a header + its items
-      itemCount: sortedAisles.length,
-      itemBuilder: (context, aisleIndex) {
-        final aisle = sortedAisles[aisleIndex];
-        final aisleItems = itemsByAisle[aisle]!;
+    // Add all aisle sections
+    for (final aisle in sortedAisles) {
+      final aisleItems = itemsByAisle[aisle]!;
 
-        // Create a list of widgets for this aisle's items
-        final List<Widget> aisleItemWidgets = [];
+      // Create a list of widgets for this aisle's items
+      final List<Widget> aisleItemWidgets = [];
 
-        // Generate item cards with continuous color cycling
-        for (int i = 0; i < aisleItems.length; i++) {
-          aisleItemWidgets.add(
-            OrderItemCard(
-              storeName: widget.order.storeName,
-              item: aisleItems[i],
-              index:
-                  globalItemIndex++, // Use and increment global index for continuous color cycling
-              onViewDetails: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Détails de ${aisleItems[i].name}'),
-                  ),
-                );
-              },
-            ),
-          );
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Aisle header
-            _buildAisleHeader(aisle),
-
-            // Items in this aisle
-            ...aisleItemWidgets,
-          ],
+      // Generate item cards
+      for (int i = 0; i < aisleItems.length; i++) {
+        aisleItemWidgets.add(
+          OrderItemCard(
+            storeName: widget.order.storeName,
+            item: aisleItems[i],
+            onViewDetails: () {
+              OrderProcessingInteractionService().handleOrderItemTap(
+                context,
+                aisleItems[i],
+                widget.order,
+              );
+            },
+          ),
         );
-      },
+      }
+
+      // Add aisle header and items to the main list
+      allWidgets.add(_buildAisleHeader(aisle));
+      allWidgets.addAll(aisleItemWidgets);
+    }
+
+    // Add "Ajouter un nouveau produit" button if we're in the first tab
+    if (_selectedTab == OrderTab.inProgress) {
+      allWidgets.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          child: TextButton(
+            onPressed: () {
+              // Handle add new product button press
+              _logger.info(
+                  'Add new product button pressed for order: ${widget.order.id}');
+            },
+            child: const Text(
+              'Ajouter un nouveau produit',
+              style: TextStyle(color: AppColors.primary),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.only(top: 8, bottom: 100),
+      children: allWidgets,
     );
   }
 
@@ -326,39 +490,52 @@ class _CommunityOrderStartedScreenState
 
   // Build empty state
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            _selectedCategoryIndex == 2
-                ? Icons.check_circle
-                : Icons.shopping_basket,
-            size: 64,
-            color: Colors.green,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _getEmptyListMessage(),
-            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-            textAlign: TextAlign.center,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _selectedTab == OrderTab.found
+                  ? Icons.check_circle
+                  : Icons.shopping_basket,
+              size: 64,
+              color: Colors.green,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              _getEmptyListMessage(),
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+            if (_selectedTab == OrderTab.inProgress)
+              TextButton(
+                onPressed: () {
+                  // Handle add new product button press
+                  _logger.info(
+                      'Add new product button pressed from empty state for order: ${widget.order.id}');
+                },
+                child: const Text(
+                  'Ajouter un nouveau produit',
+                  style: TextStyle(color: AppColors.primary),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
 
   // Get the appropriate empty list message based on the selected tab
   String _getEmptyListMessage() {
-    switch (_selectedCategoryIndex) {
-      case 0:
-        return 'Tous les articles ont été traités';
-      case 1:
-        return 'Aucun article en attente de réponse du client';
-      case 2:
-        return 'Vous n\'avez pas encore trouvé d\'articles';
-      default:
-        return 'Aucun article à afficher';
+    switch (_selectedTab) {
+      case OrderTab.inProgress:
+        return 'Tous les articles ont été traités. Ajoutez les articles demandés par le client pendant vos achats ou continuez vers le paiement.';
+      case OrderTab.customerReviewing:
+        return 'Aucun article en attente de validation';
+      case OrderTab.found:
+        return 'Aucun article trouvé';
     }
   }
 }

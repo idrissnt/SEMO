@@ -4,7 +4,7 @@ import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 
 /// Widget for the add to cart button with price display
-class StartButton extends StatelessWidget {
+class CommunityOrderButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool showIcon;
@@ -12,7 +12,7 @@ class StartButton extends StatelessWidget {
   final double textSize;
   final Color textColor;
 
-  const StartButton({
+  const CommunityOrderButton({
     Key? key,
     required this.text,
     required this.onPressed,
