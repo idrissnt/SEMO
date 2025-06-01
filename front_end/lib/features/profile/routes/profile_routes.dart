@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
 import 'package:semo/core/presentation/navigation/config/routing_transitions.dart';
 import 'package:semo/features/profile/presentation/screens/personal_info_screen.dart';
 import 'package:semo/features/profile/presentation/screens/profile_settings_screen.dart';
@@ -15,7 +14,7 @@ class ProfileRouter {
       GoRoute(
         path: ProfileRoutesConstants.rootProfile,
         name: ProfileRouteNames.profile,
-        parentNavigatorKey: AppRouter.rootNavigatorKey,
+        // parentNavigatorKey: AppRouter.rootNavigatorKey,
         pageBuilder: (context, state) => buildPageWithTransition(
           context: context,
           state: state,

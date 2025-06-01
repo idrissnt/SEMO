@@ -55,4 +55,30 @@ class OrderProcessingInteractionService {
       },
     );
   }
+
+  void handleOrderStartCheckout(
+      BuildContext context, List<OrderItem> orderItems, String customerName) {
+    context.pushNamed(
+      CommunityShopRoutesConstants.orderStartCheckoutName,
+      extra: {
+        'orders': orderItems,
+      },
+    );
+  }
+
+  void handleCommunityShopRoutesConstants(
+      BuildContext context, CommunityOrder order) {
+    context.pushNamed(
+      CommunityShopRoutesConstants.firstOrderShopperMessageName,
+      extra: order,
+    );
+  }
+
+  void handleDeliveryOrderInformation(
+      BuildContext context, CommunityOrder order) {
+    context.pushNamed(
+      CommunityShopRoutesConstants.deliveryOrderInformationName,
+      extra: order,
+    );
+  }
 }

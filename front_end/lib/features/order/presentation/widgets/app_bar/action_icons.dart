@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
+import 'package:semo/features/message/routes/const.dart';
 import 'package:semo/features/order/routes/const.dart';
-import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 // Action icons for the app bar
 
@@ -40,11 +40,11 @@ class ActionIcons extends StatelessWidget {
         // Profile icon
         buildIcon(
           scrollProgress: scrollProgress,
-          icon: CupertinoIcons.person_fill,
+          icon: CupertinoIcons.chat_bubble_text_fill,
           iconColor: Colors.white,
-          backgroundColor: AppColors.primary,
+          backgroundColor: Colors.green,
           onPressed: () {
-            context.pushNamed(ProfileRouteNames.profile);
+            context.pushNamed(MessageRoutesConstants.message);
           },
         ),
       ],
@@ -59,7 +59,7 @@ class ActionIcons extends StatelessWidget {
           scrollProgress: scrollProgress,
           icon: CupertinoIcons.cart_fill,
           iconColor: Colors.white,
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.primary,
           onPressed: () {
             // Handle cart tap
           },

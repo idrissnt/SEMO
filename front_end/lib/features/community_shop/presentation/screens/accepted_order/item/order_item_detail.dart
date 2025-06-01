@@ -5,6 +5,7 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/screens/selected_order/util/start_button.dart';
+import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/const.dart';
@@ -61,51 +62,19 @@ class CommunityOrderItemDetailsScreen extends StatelessWidget {
                   top: MediaQuery.of(context).padding.top, // Status bar height
                   left: 16,
                   child: IconButton(
-                    icon: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.arrow_back_ios_new,
-                            size: 20, color: Colors.black),
-                      ),
-                    ),
+                    icon: buildIconButton(
+                        Icons.arrow_back_ios_new, Colors.black, Colors.white),
                     onPressed: () => context.pop(),
                   ),
                 ),
 
-                // Share button
+                // message button
                 Positioned(
                   top: MediaQuery.of(context).padding.top,
                   right: 16,
                   child: IconButton(
-                    icon: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(CupertinoIcons.chat_bubble_text,
-                            size: 20, color: Colors.black),
-                      ),
-                    ),
+                    icon: buildIconButton(CupertinoIcons.chat_bubble_text,
+                        Colors.black, Colors.white),
                     onPressed: () {
                       // Handle share action
                     },

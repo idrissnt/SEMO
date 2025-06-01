@@ -2,6 +2,7 @@
 class ProfileRoutesConstants {
   // Base path
   static const String rootProfile = '/profile';
+  static const String profileLabel = 'Profil';
 
   /// Account Tab Routes
   static const String accountPersonalInfo = 'personal-info';
@@ -35,7 +36,8 @@ class ProfileRouteNames {
   static const String publishedTasks = 'published-tasks';
   static const String performedTasks = 'performed-tasks';
   static const String taskPreferencesSkills = 'task-preferences-skills';
-  static const String taskPreferencesNotifications = 'task-preferences-notifications';
+  static const String taskPreferencesNotifications =
+      'task-preferences-notifications';
   static const String taskPreferencesVisibility = 'task-preferences-visibility';
 
   // Grocery tab route names

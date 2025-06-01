@@ -28,11 +28,11 @@ class OrderDetailsSection extends StatelessWidget {
             '${order.totalItems} articles (10 Unités)',
             Colors.green,
           ),
-          // _buildInfoRow(
-          //   Icons.euro,
-          //   '${order.totalPrice.toStringAsFixed(2)}€ de courses',
-          //   Colors.red,
-          // ),
+          _buildInfoRow(
+            Icons.euro,
+            '${order.totalPrice.toStringAsFixed(2)}€ de courses',
+            Colors.red,
+          ),
           const SizedBox(height: 8),
           _buildInfoRow(
             Icons.schedule,

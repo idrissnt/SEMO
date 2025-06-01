@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/dialogs/customer_reviewing_dialog.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/product_controler_tab.dart';
+import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
@@ -36,14 +38,17 @@ enum OrderTab {
 
 /// Extension to get display names for order tabs
 extension OrderTabExtension on OrderTab {
-  String get displayName {
+  /// Get the display name for the tab
+  /// If [itemCount] is provided, it will pluralize the 'Trouvé' tab when needed
+  String displayName({int? itemCount}) {
     switch (this) {
       case OrderTab.inProgress:
         return 'En cours';
       case OrderTab.customerReviewing:
-        return 'Le client examine';
+        return 'À valider';
       case OrderTab.found:
-        return 'Trouvé';
+        // Pluralize 'Trouvé' when there are multiple items
+        return itemCount != null && itemCount > 1 ? 'Trouvés' : 'Trouvé';
     }
   }
 }
@@ -170,41 +175,31 @@ class _CommunityOrderStartedScreenState
         ),
       ),
       leading: IconButton(
-        icon: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.close, size: 20, color: Colors.black),
-          ),
-        ),
+        icon: buildIconButton(Icons.close, Colors.black, Colors.white),
         onPressed: () => context.pop(),
       ),
       actions: [
         IconButton(
-          icon: const Icon(CupertinoIcons.chat_bubble_text),
+          icon: buildIconButton(
+              CupertinoIcons.chat_bubble_text, Colors.black, Colors.white),
           onPressed: () {
             // Handle message action
             _logger.info('Message button tapped for order: ${widget.order.id}');
           },
         ),
+        const SizedBox(width: 8),
       ],
     );
   }
 
   /// Builds the tab bar with category tabs
   Widget _buildTabBar() {
-    final List<String> tabNames =
-        OrderTab.values.map((tab) => tab.displayName).toList();
+    final List<String> tabNames = OrderTab.values.map((tab) {
+      // Pass the item count for pluralization when it's the 'found' tab
+      final itemCount =
+          tab == OrderTab.found ? _orderItemsState.foundItems.length : null;
+      return tab.displayName(itemCount: itemCount);
+    }).toList();
     final List<int> itemCounts = [
       _orderItemsState.inProgressItems.length,
       _orderItemsState.customerReviewingItems.length,
@@ -335,7 +330,7 @@ class _CommunityOrderStartedScreenState
 
           // Bottom action bar
           if (_selectedTab == OrderTab.inProgress && items.isEmpty)
-            _buildBottomActionBar(items),
+            _buildBottomActionBar(items, selectedTab: _selectedTab),
         ],
       );
     }
@@ -350,7 +345,8 @@ class _CommunityOrderStartedScreenState
   }
 
   /// Builds the bottom action bar with either a continue button or time information
-  Widget _buildBottomActionBar(List<OrderItem> items) {
+  Widget _buildBottomActionBar(List<OrderItem> items,
+      {required OrderTab selectedTab}) {
     return Positioned(
       bottom: 0,
       left: 0,
@@ -368,17 +364,62 @@ class _CommunityOrderStartedScreenState
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, -2),
+              spreadRadius: 0,
+              blurRadius: 10,
+              offset: const Offset(0, -4),
             ),
           ],
         ),
         child: ButtonFactory.createAnimatedButton(
           context: context,
           onPressed: () {
-            // Handle continue button press
-            _logger
-                .info('Continue button pressed for order: ${widget.order.id}');
+            _logger.info('Continue button pressed');
+
+            // If we're in the inProgress tab and it's empty, check if there are items in customerReviewing
+            final customerReviewingItems =
+                _orderItemsState.customerReviewingItems;
+
+            if (customerReviewingItems.isNotEmpty) {
+              // Show the customer reviewing dialog
+              showCustomerReviewingDialog(
+                      context: context,
+                      itemsCount:
+                          _orderItemsState.customerReviewingItems.length,
+                      customerName: widget.order.customerName)
+                  .then((result) {
+                if (result == null) {
+                  // User canceled the dialog
+                  return;
+                }
+
+                switch (result) {
+                  case CustomerReviewResponse.itemsExchanged:
+                    _logger.info('Items have been exchanged');
+                    // Handle items exchanged logic
+                    break;
+                  case CustomerReviewResponse.refundRequested:
+                    _logger.info(
+                        '${widget.order.customerName} requested a refund');
+                    // Handle refund request logic
+                    break;
+                  case CustomerReviewResponse.waitingForResponse:
+                    _logger.info(
+                        'Waiting for ${widget.order.customerName} response');
+                    // Handle waiting for response logic
+                    break;
+                  case CustomerReviewResponse.continueToPayment:
+                    _logger.info(
+                        'Continue to payment, ${widget.order.customerName} will be refunded');
+                    // Handle continue to payment logic
+                    break;
+                }
+                // If result is null, the user canceled the dialog
+              });
+              return; // Exit early to prevent default action
+            } else {
+              OrderProcessingInteractionService().handleOrderStartCheckout(
+                  context, items, widget.order.customerName);
+            }
           },
           text: 'Continuer',
           backgroundColor: AppColors.primary,
@@ -443,20 +484,7 @@ class _CommunityOrderStartedScreenState
     // Add "Ajouter un nouveau produit" button if we're in the first tab
     if (_selectedTab == OrderTab.inProgress) {
       allWidgets.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-          child: TextButton(
-            onPressed: () {
-              // Handle add new product button press
-              _logger.info(
-                  'Add new product button pressed for order: ${widget.order.id}');
-            },
-            child: const Text(
-              'Ajouter un nouveau produit',
-              style: TextStyle(color: AppColors.primary),
-            ),
-          ),
-        ),
+        _buildAddProductButton(),
       );
     }
 
@@ -506,21 +534,10 @@ class _CommunityOrderStartedScreenState
             const SizedBox(height: 16),
             Text(
               _getEmptyListMessage(),
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              style: const TextStyle(fontSize: 20, color: Colors.black),
               textAlign: TextAlign.center,
             ),
-            if (_selectedTab == OrderTab.inProgress)
-              TextButton(
-                onPressed: () {
-                  // Handle add new product button press
-                  _logger.info(
-                      'Add new product button pressed from empty state for order: ${widget.order.id}');
-                },
-                child: const Text(
-                  'Ajouter un nouveau produit',
-                  style: TextStyle(color: AppColors.primary),
-                ),
-              ),
+            if (_selectedTab == OrderTab.inProgress) _buildAddProductButton(),
           ],
         ),
       ),
@@ -531,11 +548,34 @@ class _CommunityOrderStartedScreenState
   String _getEmptyListMessage() {
     switch (_selectedTab) {
       case OrderTab.inProgress:
-        return 'Tous les articles ont été traités. Ajoutez les articles demandés par le client pendant vos achats ou continuez vers le paiement.';
+        return 'Ajoutez les articles demandés par le client pendant vos achats ou continuez vers le paiement.';
       case OrderTab.customerReviewing:
         return 'Aucun article en attente de validation';
       case OrderTab.found:
         return 'Aucun article trouvé';
     }
+  }
+
+  Widget _buildAddProductButton() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: IconButton(
+        icon: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              'Ajouter un nouveau produit',
+              style: TextStyle(color: AppColors.primary, fontSize: 20),
+            ),
+          ),
+        ),
+        onPressed: () => context.pop(),
+      ),
+    );
   }
 }

@@ -35,14 +35,7 @@ class ProductControlTabs extends StatelessWidget {
                   final category = categories[index];
                   final isSelected = index == selectedIndex;
 
-                  // Middle element gets more width (flex: 3) than others (flex: 2)
-                  final isMiddle =
-                      index == 1; // Index 1 is the middle element for 3 tabs
-
                   return Expanded(
-                    flex: isMiddle
-                        ? 3
-                        : 2, // Middle element gets 3 times the width
                     child: GestureDetector(
                       onTap: () => onCategoryTap(index),
                       child: Container(

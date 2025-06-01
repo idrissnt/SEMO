@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/config/routing_transitions.dart';
+import 'package:semo/core/presentation/screens/image_viewer_screen.dart';
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/bottom_sheets/product_details/bottom_sheet_content.dart';
 import 'package:semo/features/store/routes/bottom_sheet/product_detail/routes_constants.dart';
@@ -23,7 +24,7 @@ class ProductDetailRouterConfig {
     return [
       // Initial product route
       GoRoute(
-        path: ProductDetailRoutesConstants.root,
+        path: BottomSheetProductDetailRoutesConstants.root,
         pageBuilder: (context, state) => buildPageWithTransition(
           context: context,
           state: state,
@@ -33,7 +34,7 @@ class ProductDetailRouterConfig {
       ),
       // Related product route with product ID parameter
       GoRoute(
-        path: ProductDetailRoutesConstants.relatedProduct,
+        path: BottomSheetProductDetailRoutesConstants.relatedProduct,
         pageBuilder: (context, state) {
           final productId = state.pathParameters['productId']!;
           // Find the product in the related products list
@@ -54,6 +55,25 @@ class ProductDetailRouterConfig {
               isBackButton: true,
             ),
             name: 'RelatedProduct',
+          );
+        },
+      ),
+      // Image viewer route with image URL and hero tag parameters
+      GoRoute(
+        name: BottomSheetProductDetailRoutesConstants.name,
+        path: BottomSheetProductDetailRoutesConstants.imageViewer,
+        pageBuilder: (context, state) {
+          final String imageUrl;
+          imageUrl = (state.extra as Map)['imageUrl'] as String;
+
+          return buildPageWithTransition(
+            context: context,
+            state: state,
+            child: ImageViewerScreen(
+              imageUrl: imageUrl,
+              heroTag: BottomSheetProductDetailRoutesConstants.heroTag,
+            ),
+            name: BottomSheetProductDetailRoutesConstants.name,
           );
         },
       ),

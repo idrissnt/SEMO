@@ -81,7 +81,7 @@ class _StoreBuyAgainTabState extends State<StoreBuyAgainTab> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
+      itemCount: 4,
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {

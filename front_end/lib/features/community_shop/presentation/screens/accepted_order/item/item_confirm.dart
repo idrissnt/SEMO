@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/const.dart';
 
@@ -59,12 +60,13 @@ class _CommunityOrderItemDetailsConfirmationScreenState
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
           onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(CupertinoIcons.chat_bubble_text),
+            icon: buildIconButton(
+                CupertinoIcons.chat_bubble_text, Colors.black, Colors.white),
             onPressed: () {
               // Handle share action
             },

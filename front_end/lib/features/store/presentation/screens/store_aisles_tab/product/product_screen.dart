@@ -9,7 +9,7 @@ import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widg
 import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 import 'package:semo/features/store/presentation/animations/category_animation_manager.dart';
 import 'package:semo/features/store/presentation/test_data/store_aisles_data.dart';
-import 'package:semo/features/store/presentation/widgets/category/category_filters.dart';
+import 'package:semo/core/presentation/widgets/filters/category_filters.dart';
 import 'package:semo/features/store/presentation/widgets/products/products_grid.dart';
 
 // Logger _logger = Logger('ProductScreen');
@@ -226,11 +226,11 @@ class _ProductScreenState extends State<ProductScreen>
       return const SizedBox.shrink();
     }
 
-    return CategoryFilters(
-      categories: _aisle!.categories,
+    return TopFilters(
+      filters: _aisle!.categories.map((category) => category.name).toList(),
       selectedIndex: _selectedCategoryIndex,
       scrollController: _filtersScrollController,
-      onCategoryTap: (index) {
+      onFilterTap: (index) {
         setState(() {
           _selectedCategoryIndex = index;
         });

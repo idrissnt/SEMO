@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/features/store/domain/entities/aisles/store_aisle.dart';
 
 /// Widget that displays Category filters at the top of the screen
-class CategoryFilters extends StatelessWidget {
-  /// The list of Categories
-  final List<AisleCategory> categories;
+class TopFilters extends StatelessWidget {
+  /// The list of filters to display
+  final List<String> filters;
 
-  /// The currently selected Category index
+  /// The currently selected filter index
   final int selectedIndex;
 
-  /// Callback when a Category filter is tapped
-  final Function(int index) onCategoryTap;
+  /// Callback when a filter is tapped
+  final Function(int index) onFilterTap;
 
   /// Scroll controller for the filters
   final ScrollController scrollController;
 
   /// Creates a new Category filters widget
-  const CategoryFilters({
+  const TopFilters({
     Key? key,
-    required this.categories,
+    required this.filters,
     required this.selectedIndex,
-    required this.onCategoryTap,
+    required this.onFilterTap,
     required this.scrollController,
   }) : super(key: key);
 
@@ -47,13 +46,13 @@ class CategoryFilters extends StatelessWidget {
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.only(left: 8, right: 8),
-                itemCount: categories.length,
+                itemCount: filters.length,
                 itemBuilder: (context, index) {
-                  final category = categories[index];
+                  final filter = filters[index];
                   final isSelected = index == selectedIndex;
 
                   return GestureDetector(
-                    onTap: () => onCategoryTap(index),
+                    onTap: () => onFilterTap(index),
                     child: Container(
                       height: buttonHeight,
                       margin: const EdgeInsets.only(right: rightMargin),
@@ -71,7 +70,7 @@ class CategoryFilters extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            category.name,
+                            filter,
                             style: TextStyle(
                               color: isSelected
                                   ? Colors.white

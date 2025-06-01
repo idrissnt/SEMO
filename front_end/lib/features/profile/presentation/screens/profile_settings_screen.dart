@@ -98,13 +98,10 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
       elevation: 0,
       automaticallyImplyLeading: false,
       titleSpacing: 0,
-      title: Row(
+      title: const Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.pop(),
-          ),
-          const Text(
+          SizedBox(width: 16),
+          Text(
             'User Name',
             style: TextStyle(
               fontSize: 24,

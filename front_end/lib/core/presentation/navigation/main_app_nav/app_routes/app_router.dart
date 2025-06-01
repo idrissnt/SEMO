@@ -16,9 +16,9 @@ import 'package:semo/features/auth/presentation/coordinators/auth_flow_coordinat
 import 'package:semo/features/auth/routes/auth_routes.dart';
 import 'package:semo/features/auth/routes/auth_routes_const.dart';
 import 'package:semo/features/auth/routes/initial_route.dart';
+import 'package:semo/features/message/routes/message_routes.dart';
 import 'package:semo/features/order/routes/const.dart';
 
-import 'package:semo/features/profile/routes/profile_routes.dart';
 import 'package:semo/features/store/routes/main_store_route.dart';
 // import 'package:semo/features/store/routes/product_detail_deep_link.dart';
 import 'package:semo/features/store/routes/tabs/register_store_tabs.dart';
@@ -68,7 +68,7 @@ class AppRouter {
       ...getInitialRoutes(),
       ...AuthRouter.getAuthRoutes(),
       MainShellRouter.getMainShellRoute(),
-      ...ProfileRouter.getProfileRoutes(),
+      ...MessageRouter.getMessageRoutes(),
       MainStoreRouter.getMainStoreRoute(),
       // ProductDetailDeepLinkRouter.getProductDetailDeepLinkRoute(),
     ],

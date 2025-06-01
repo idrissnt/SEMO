@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation/tab_registration/tab_registry.dart';
@@ -29,6 +30,7 @@ class MainNavigationScaffold extends StatelessWidget {
         children: children,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed, // Ensure labels are always visible
         currentIndex: navigationShell.currentIndex,
         onTap: (index) {
           // Check if user is tapping the current tab
@@ -82,6 +84,9 @@ class MainNavigationScaffold extends StatelessWidget {
           navigationShell.goBranch(index);
         },
         // Customize bottom navigation bar colors
+        selectedFontSize: 14.sp,
+        unselectedFontSize: 14.sp,
+        iconSize: 24.sp,
         backgroundColor: AppColors.bottomNavigationColor, // Background color
         selectedItemColor: AppColors.primary, // Active item color
         unselectedItemColor: AppColors.textPrimaryColor, // Inactive item color

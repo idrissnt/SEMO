@@ -17,7 +17,17 @@ class CommunityShopRoutesConstants {
 
   static const String orderItemDetailsConfirmation =
       'order-item-details-confirmation';
-
   static const String orderItemDetailsConfirmationName =
       'order-item-details-confirmation-name';
+
+  static const String firstOrderShopperMessage = 'first-order-shopper-message';
+  static const String firstOrderShopperMessageName =
+      'first-order-shopper-message-name';
+
+  static const String orderStartCheckout = 'order-start-checkout';
+  static const String orderStartCheckoutName = 'orderStartCheckoutName';
+
+  static const String deliveryOrderInformation = 'delivery-order-information';
+  static const String deliveryOrderInformationName =
+      'delivery-order-information-name';
 }

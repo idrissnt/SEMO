@@ -93,7 +93,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 if (navigatorState != null) {
                   // We're inside a bottom sheet navigator, navigate to the related product
                   navigatorState.navigateTo(
-                    ProductDetailRoutesConstants.relatedProduct
+                    BottomSheetProductDetailRoutesConstants.relatedProduct
                         .replaceAll(':productId', product.id),
                   );
                 } else {

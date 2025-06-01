@@ -62,7 +62,7 @@ class _ProductCardState extends State<ProductCard> {
                   if (navigatorState != null) {
                     // We're inside a bottom sheet navigator, navigate to the related product
                     navigatorState.navigateTo(
-                      ProductDetailRoutesConstants.relatedProduct
+                      BottomSheetProductDetailRoutesConstants.relatedProduct
                           .replaceAll(':productId', widget.product.id),
                     );
                   } else {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:semo/core/presentation/theme/app_colors.dart';
 
 /// Status of an order item in the shopping process
 enum OrderItemStatus {
@@ -53,7 +52,7 @@ class OrderItem {
         price: 4.50,
         position: 'Étage 1',
         aisle: 'Rayon fruits et légumes',
-        status: OrderItemStatus.customerReviewing,
+        status: OrderItemStatus.found,
       ),
       OrderItem(
         id: '2',
@@ -66,7 +65,7 @@ class OrderItem {
         price: 2.20,
         position: 'Étage 1',
         aisle: 'Rayon lait et produits laitiers',
-        status: OrderItemStatus.customerReviewing,
+        status: OrderItemStatus.found,
       ),
       OrderItem(
         id: '3',
@@ -79,7 +78,7 @@ class OrderItem {
         price: 3.80,
         position: 'Étage 1',
         aisle: 'Rayon fruits et légumes',
-        status: OrderItemStatus.customerReviewing,
+        status: OrderItemStatus.found,
         shopperNote:
             'Je ne trouve pas cette variété, voulez-vous des tomates cerises? lkjbsdfg kubdsg iubvz gdiubgsajdcbvgz ',
       ),
@@ -131,7 +130,7 @@ class OrderItemCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -237,30 +236,24 @@ class OrderItemCard extends StatelessWidget {
             ),
           ),
         ),
+        // if (item.status != OrderItemStatus.customerReviewing)
         Positioned(
           right: 46.5.w,
-          top: -10.h,
+          top: -6.h,
           child: IconButton(
             onPressed: onViewDetails,
-            icon: Container(
-              // width: 55,
-              padding:
-                  const EdgeInsets.only(right: 8, left: 16, top: 4, bottom: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primaryVariant,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Text(
-                'Voir details',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
-              ),
-            ),
+            icon: _buildActionButtons('Voir details'),
           ),
         ),
+        if (item.status == OrderItemStatus.customerReviewing)
+          Positioned(
+            left: 104.w,
+            bottom: -6.h,
+            child: IconButton(
+              onPressed: onViewDetails,
+              icon: _buildActionButtons('Remplacer', color: Colors.red),
+            ),
+          ),
         Positioned(
           right: 8,
           bottom: 8,
@@ -351,6 +344,25 @@ class OrderItemCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildActionButtons(String text, {Color color = Colors.blue}) {
+    return Container(
+      // width: 55,
+      padding: const EdgeInsets.only(right: 16, left: 16, top: 4, bottom: 4),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          fontSize: 14,
+        ),
+      ),
     );
   }
 

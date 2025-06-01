@@ -61,7 +61,7 @@ class _ProductDetailBottomSheetWithNavigatorState
     return BottomSheetNavigator(
       key: _navigatorKey,
       initialPage: _buildProductDetailPage(),
-      initialRoute: ProductDetailRoutesConstants.root,
+      initialRoute: BottomSheetProductDetailRoutesConstants.root,
       routeCreator: (initialPage) => ProductDetailRouterConfig.createRoutes(
         initialPage: initialPage,
         storeId: widget.storeId,
