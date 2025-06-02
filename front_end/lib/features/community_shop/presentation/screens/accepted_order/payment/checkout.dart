@@ -1,10 +1,17 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/shared/note.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/button.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/view_image_take.dart';
+import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
+import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 
-class CommunityOrderCheckoutScreen extends StatelessWidget {
+class CommunityOrderCheckoutScreen extends StatefulWidget {
   const CommunityOrderCheckoutScreen({
     Key? key,
     required this.orders,
@@ -13,42 +20,179 @@ class CommunityOrderCheckoutScreen extends StatelessWidget {
   final List<CommunityOrder> orders;
 
   @override
+  State<CommunityOrderCheckoutScreen> createState() =>
+      _CommunityOrderCheckoutScreenState();
+}
+
+class _CommunityOrderCheckoutScreenState
+    extends State<CommunityOrderCheckoutScreen> {
+  bool isExpanded = false;
+
+  // Store the captured image
+  File? _receiptImage;
+
+  // Method to open the camera
+  Future<void> _openCamera() async {
+    // Show feedback when camera button is tapped
+    HapticFeedback.mediumImpact();
+
+    try {
+      // Initialize image picker
+      final ImagePicker picker = ImagePicker();
+
+      // Capture image from camera
+      final XFile? photo = await picker.pickImage(
+        source: ImageSource.camera,
+        preferredCameraDevice: CameraDevice.rear,
+        imageQuality: 80, // Reduce image size/quality to save space
+      );
+
+      // If user took a photo (didn't cancel)
+      if (photo != null) {
+        setState(() {
+          _receiptImage = File(photo.path);
+        });
+
+        // Here we would typically upload the image to the server
+        // or process it further
+        _showReceiptImagePreview();
+      }
+    } catch (e) {
+      // Show error message if camera fails
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erreur: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  // Show a preview of the captured receipt image
+  void _showReceiptImagePreview() {
+    if (_receiptImage == null) return;
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (BuildContext context) {
+          return viewImageTake(
+            image: _receiptImage!,
+            context: context,
+            onRetake: _openCamera,
+            onConfirm: () {
+              // Here you would typically save or upload the image
+              // or process it further
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Photo enregistrée'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              _receiptImage = null;
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Review Order'),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        title: const Text('Paiement'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, size: 20),
+          icon: const Icon(Icons.arrow_back_ios_new,
+              size: 20, color: Colors.black),
           onPressed: () => context.pop(),
         ),
         actions: [
-          if (orders.isNotEmpty)
-            IconButton(
-              icon: const Icon(CupertinoIcons.chat_bubble_text),
-              onPressed: () {
-                // Handle message action
-              },
-            ),
+          IconButton(
+            icon: buildIconButton(
+                CupertinoIcons.chat_bubble_text, Colors.black, Colors.white),
+            onPressed: () {
+              // Handle message action
+            },
+          ),
+          const SizedBox(width: 8),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                const Text('Resumé'),
-                _buildRecentOrders(orders),
-              ],
-            ),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    // Ticket note with camera button
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Ticket note (expanded to take most of the space)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: _buildTicketNote(context),
+                          ),
+                        ),
+                        // Camera button
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, right: 16),
+                          child: FloatingActionButton(
+                            onPressed: _openCamera,
+                            heroTag: 'cameraButton',
+                            backgroundColor: Colors.green,
+                            mini: true,
+                            child: const Icon(Icons.camera_alt,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: _buildOrdersSummary(widget.orders),
+                    ),
+                    const SizedBox(height: 200),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          buildBottomActionBar(
+            context,
+            'Continuer',
+            onPressed: () => OrderProcessingInteractionService()
+                .handleDeliveryOrderInformation(context, widget.orders),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildRecentOrders(List<CommunityOrder> orders) {
+  Widget _buildTicketNote(BuildContext context) {
+    return Note(
+      title: 'Le ticket de caisse',
+      description:
+          'Recupérez le ticket de caisse, prenez le en photo, envoyer le nous et gardez le pour environ 2 semaines au cas où il faudra retourner les articles.',
+      iconBackgroundColor: const Color.fromARGB(255, 240, 198, 11),
+      icon: const Icon(Icons.document_scanner_sharp, color: Colors.white),
+      onCameraTap: _openCamera,
+    );
+  }
+
+  Widget _buildOrdersSummary(List<CommunityOrder> orders) {
     // Mock recent orders
-    return SliverList.builder(
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: orders.length,
       itemBuilder: (context, index) {
         return InkWell(
@@ -70,6 +214,12 @@ class CommunityOrderCheckoutScreen extends StatelessWidget {
                     children: [
                       Text(
                         '${orders[index].totalItems} articles • ${(orders[index].totalPrice).toStringAsFixed(2)}€',
+                      ),
+                      Text(
+                        orders[index].customerName,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -116,14 +266,14 @@ class CommunityOrderCheckoutScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: Colors.blue,
                       minimumSize: const Size(double.infinity, 40),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
                     ),
                     child: const Text(
-                      'Paiement effectuer',
+                      'Paiement effectué',
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),

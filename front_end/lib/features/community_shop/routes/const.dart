@@ -24,8 +24,8 @@ class CommunityShopRoutesConstants {
   static const String firstOrderShopperMessageName =
       'first-order-shopper-message-name';
 
-  static const String orderStartCheckout = 'order-start-checkout';
-  static const String orderStartCheckoutName = 'orderStartCheckoutName';
+  static const String orderCheckout = 'order-checkout';
+  static const String orderCheckoutName = 'orderCheckoutName';
 
   static const String deliveryOrderInformation = 'delivery-order-information';
   static const String deliveryOrderInformationName =

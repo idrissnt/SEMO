@@ -37,7 +37,7 @@ class OrderCardFooter extends StatelessWidget {
               ),
             ),
             child: const Text(
-              'Je m\'en charge',
+              'Plus de détails',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,

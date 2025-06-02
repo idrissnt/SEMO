@@ -135,8 +135,8 @@ class CommunityShopRouter {
               // order finished, start start checkout route
               //
               GoRoute(
-                path: CommunityShopRoutesConstants.orderStartCheckout,
-                name: CommunityShopRoutesConstants.orderStartCheckoutName,
+                path: CommunityShopRoutesConstants.orderCheckout,
+                name: CommunityShopRoutesConstants.orderCheckoutName,
                 parentNavigatorKey: AppRouter.rootNavigatorKey,
                 pageBuilder: (context, state) {
                   final Map<String, dynamic> extras =
@@ -179,13 +179,15 @@ class CommunityShopRouter {
                 name: CommunityShopRoutesConstants.deliveryOrderInformationName,
                 parentNavigatorKey: AppRouter.rootNavigatorKey,
                 pageBuilder: (context, state) {
-                  // final Map<String, dynamic> extras =
-                  //     state.extra as Map<String, dynamic>;
+                  final Map<String, dynamic> extras =
+                      state.extra as Map<String, dynamic>;
 
                   return buildPageWithTransition(
                     context: context,
                     state: state,
-                    child: const DeliveryOrderInformationScreen(),
+                    child: DeliveryOrderInformationScreen(
+                      orders: extras['orders'] as List<CommunityOrder>,
+                    ),
                     name: 'DeliveryOrderInformationScreen',
                   );
                 },

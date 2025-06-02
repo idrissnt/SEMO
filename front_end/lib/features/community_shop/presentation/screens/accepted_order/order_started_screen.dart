@@ -418,7 +418,9 @@ class _CommunityOrderStartedScreenState
               return; // Exit early to prevent default action
             } else {
               OrderProcessingInteractionService().handleOrderStartCheckout(
-                  context, items, widget.order.customerName);
+                  context,
+                  [widget.order, widget.order],
+                  widget.order.customerName);
             }
           },
           text: 'Continuer',

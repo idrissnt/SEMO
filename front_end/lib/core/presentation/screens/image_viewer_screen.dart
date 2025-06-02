@@ -16,7 +16,7 @@ class ImageViewerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -25,7 +25,7 @@ class ImageViewerScreen extends StatelessWidget {
         leading: IconButton(
           icon: Container(
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: Color.fromARGB(255, 238, 235, 235),
               shape: BoxShape.circle,
             ),
             child: const Padding(
@@ -59,7 +59,7 @@ class ImageViewerScreen extends StatelessWidget {
                             ? loadingProgress.cumulativeBytesLoaded /
                                 loadingProgress.expectedTotalBytes!
                             : null,
-                        color: Colors.white,
+                        color: Colors.grey,
                       ),
                     );
                   },
@@ -67,7 +67,7 @@ class ImageViewerScreen extends StatelessWidget {
                     return const Center(
                       child: Icon(
                         Icons.error_outline,
-                        color: Colors.white,
+                        color: Colors.grey,
                         size: 48,
                       ),
                     );

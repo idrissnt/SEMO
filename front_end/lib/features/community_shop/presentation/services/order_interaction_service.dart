@@ -57,16 +57,16 @@ class OrderProcessingInteractionService {
   }
 
   void handleOrderStartCheckout(
-      BuildContext context, List<OrderItem> orderItems, String customerName) {
+      BuildContext context, List<CommunityOrder> orders, String customerName) {
     context.pushNamed(
-      CommunityShopRoutesConstants.orderStartCheckoutName,
+      CommunityShopRoutesConstants.orderCheckoutName,
       extra: {
-        'orders': orderItems,
+        'orders': orders,
       },
     );
   }
 
-  void handleCommunityShopRoutesConstants(
+  void firstOrderShopperMessageName(
       BuildContext context, CommunityOrder order) {
     context.pushNamed(
       CommunityShopRoutesConstants.firstOrderShopperMessageName,
@@ -75,10 +75,10 @@ class OrderProcessingInteractionService {
   }
 
   void handleDeliveryOrderInformation(
-      BuildContext context, CommunityOrder order) {
+      BuildContext context, List<CommunityOrder> orders) {
     context.pushNamed(
       CommunityShopRoutesConstants.deliveryOrderInformationName,
-      extra: order,
+      extra: {'orders': orders},
     );
   }
 }
