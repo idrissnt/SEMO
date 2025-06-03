@@ -8,7 +8,7 @@ import 'package:semo/features/community_shop/presentation/screens/selected_order
 import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
-import 'package:semo/features/community_shop/routes/const.dart';
+import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 
 class CommunityOrderItemDetailsScreen extends StatelessWidget {
   final OrderItem orderItem;
@@ -37,7 +37,11 @@ class CommunityOrderItemDetailsScreen extends StatelessWidget {
                   onTap: () {
                     // Navigate to full-screen image viewer
                     context.pushNamed(
-                      CommunityShopRoutesConstants.imageViewerName,
+                      RouteConstants.imageViewerName,
+                      pathParameters: {
+                        'orderId': order.id,
+                        'itemId': orderItem.id,
+                      },
                       extra: {
                         'imageUrl': orderItem.imageUrl,
                         'heroTag': 'product-image-${orderItem.id}',
@@ -165,7 +169,7 @@ class CommunityOrderItemDetailsScreen extends StatelessWidget {
                           context: context,
                           onPressed: () {
                             OrderProcessingInteractionService()
-                                .handleOrderItemConfirm(
+                                .handleOrderItemFound(
                                     context, orderItem, order);
                           },
                           text: 'Produit trouvé',
@@ -183,7 +187,11 @@ class CommunityOrderItemDetailsScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ButtonFactory.createAnimatedButton(
                           context: context,
-                          onPressed: () {},
+                          onPressed: () {
+                            OrderProcessingInteractionService()
+                                .handleOrderItemNotFound(
+                                    context, orderItem, order);
+                          },
                           text: 'Produit indisponible',
                           backgroundColor: AppColors.secondary,
                           textColor: Colors.black,

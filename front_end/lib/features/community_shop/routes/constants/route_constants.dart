@@ -1,0 +1,56 @@
+/// Constants for all community shop routes
+class RouteConstants {
+  // Main routes
+  static const String communityShop = '/community-shop';
+  static const String communityShopName = 'community-shop-name';
+
+  // 1 - Order details flow
+  static const String orderDetails = 'order-details/:orderId';
+  static const String orderDetailsName = 'order-details-name';
+
+  // 2 - Order started flow
+  //
+  static const String orderStart = 'order-start/:orderId';
+  static const String orderStartName = 'order-start-name';
+
+  // 2-1 Item details flow
+  static const String orderItemDetails = 'item/:itemId';
+  static const String orderItemDetailsName = 'order-item-details';
+
+  // 2-1-1 Image viewer
+  static const String imageViewer = 'image-viewer';
+  static const String imageViewerName = 'image-viewer';
+
+  // 2-1-2 Item found
+  static const String orderItemDetailsFound = 'found';
+  static const String orderItemDetailsFoundName =
+      'order-item-details-found-name';
+
+  // 2-1-3 Item not found
+  static const String orderItemDetailsNotFound = 'not-found';
+  static const String orderItemDetailsNotFoundName =
+      'order-item-details-not-found-name';
+
+  // 3 - Checkout flow
+  static const String orderCheckout = 'checkout';
+  static const String orderCheckoutName = 'orderCheckoutName';
+
+  // 4 - Shopper message
+  static const String firstOrderShopperMessage = 'first-order-shopper-message';
+  static const String firstOrderShopperMessageName =
+      'first-order-shopper-message-name';
+
+  // 5 - Delivery information
+  static const String deliveryOrderInformation = 'delivery-order-information';
+  static const String deliveryOrderInformationName =
+      'delivery-order-information-name';
+
+  // Helper methods for path parameters
+  static String getOrderDetailsPath(String orderId) => 'order-details/$orderId';
+  static String getOrderStartPath(String orderId) => 'order-start/$orderId';
+  static String getOrderItemDetailsPath(String itemId) => 'item/$itemId';
+
+  // Helper method for constructing the full item details path with both parameters
+  static String getFullOrderItemDetailsPath(String orderId, String itemId) =>
+      '${getOrderStartPath(orderId)}/${getOrderItemDetailsPath(itemId)}';
+}

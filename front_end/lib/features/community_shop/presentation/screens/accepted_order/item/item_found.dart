@@ -6,25 +6,25 @@ import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
-import 'package:semo/features/community_shop/routes/const.dart';
+import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 
-class CommunityOrderItemDetailsConfirmationScreen extends StatefulWidget {
+class CommunityOrderItemDetailsFoundScreen extends StatefulWidget {
   final OrderItem orderItem;
   final CommunityOrder order;
 
-  const CommunityOrderItemDetailsConfirmationScreen({
+  const CommunityOrderItemDetailsFoundScreen({
     Key? key,
     required this.orderItem,
     required this.order,
   }) : super(key: key);
 
   @override
-  State<CommunityOrderItemDetailsConfirmationScreen> createState() =>
-      _CommunityOrderItemDetailsConfirmationScreenState();
+  State<CommunityOrderItemDetailsFoundScreen> createState() =>
+      _CommunityOrderItemDetailsFoundScreenState();
 }
 
-class _CommunityOrderItemDetailsConfirmationScreenState
-    extends State<CommunityOrderItemDetailsConfirmationScreen> {
+class _CommunityOrderItemDetailsFoundScreenState
+    extends State<CommunityOrderItemDetailsFoundScreen> {
   // Text controller for the quantity input
   final TextEditingController _quantityController = TextEditingController();
 
@@ -245,10 +245,12 @@ class _CommunityOrderItemDetailsConfirmationScreenState
                     onPressed: _canConfirm
                         ? () {
                             // Navigate to order started screen with the order data
-                            // Using goNamed with rootNavigator: true will close all screens and go to the target
+                            // Using goNamed with path parameters for shareable URLs
                             context.goNamed(
-                              CommunityShopRoutesConstants.orderStartName,
-                              extra: widget.order,
+                              RouteConstants.orderStartName,
+                              pathParameters: {'orderId': widget.order.id},
+                              extra: widget
+                                  .order, // Still passing the order object for now until BLoC is implemented
                             );
                           }
                         : null,
