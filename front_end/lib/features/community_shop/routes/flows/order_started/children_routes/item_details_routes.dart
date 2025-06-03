@@ -43,6 +43,7 @@ class ItemDetailsRoutes {
             parentNavigatorKey: AppRouter.rootNavigatorKey,
             pageBuilder: _buildItemNotFoundScreen,
           ),
+
         ],
       ),
     ];
@@ -159,7 +160,7 @@ class ItemDetailsRoutes {
       name: 'CommunityOrderItemDetailsFoundScreen',
     );
   }
-  
+
   /// Build the item not found screen
   static Page<dynamic> _buildItemNotFoundScreen(
     BuildContext context,
@@ -170,7 +171,8 @@ class ItemDetailsRoutes {
     final order =
         app_routes.RouteBuilder.getExtraParam<CommunityOrder>(state, 'order');
     final replacementItems =
-        app_routes.RouteBuilder.getExtraParam<List<OrderItem>>(state, 'replacementItems');
+        app_routes.RouteBuilder.getExtraParam<List<OrderItem>>(
+            state, 'replacementItems');
 
     if (orderItem == null || order == null) {
       return app_routes.RouteBuilder.errorPage(
@@ -191,4 +193,6 @@ class ItemDetailsRoutes {
       name: 'CommunityOrderItemNotFoundScreen',
     );
   }
+  
+
 }

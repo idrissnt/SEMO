@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:semo/core/presentation/screens/image_viewer_screen.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-// We're using local font size constants instead of app_dimensions.dart
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
-
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
@@ -28,54 +28,31 @@ class CommunityOrderItemNotFoundScreen extends StatefulWidget {
 
 class _CommunityOrderItemNotFoundScreenState
     extends State<CommunityOrderItemNotFoundScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocusNode = FocusNode();
   final AppLogger _logger = AppLogger();
 
-  // Font size constants
-  static const double _fontSizeXSmall = 10.0;
-  static const double _fontSizeSmall = 12.0;
-  static const double _fontSizeMedium = 14.0;
+  ScrollController scrollController = ScrollController();
 
-  List<OrderItem> _searchResults = [];
+  // Get sample items
+  // Replace with actual items from the replacementItems
+  late final List<OrderItem> replacementItems;
+
+  // Search functionality
+  final TextEditingController _searchController = TextEditingController();
+  List<OrderItem> _filteredItems = [];
   bool _isSearching = false;
 
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(_onSearchChanged);
+    replacementItems = widget.replacementItems ?? OrderItem.getSampleItems();
+    _filteredItems = List.from(replacementItems);
   }
 
   @override
   void dispose() {
-    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
-    _searchFocusNode.dispose();
+    scrollController.dispose();
     super.dispose();
-  }
-
-  void _onSearchChanged() {
-    if (_searchController.text.length > 2) {
-      _performSearch(_searchController.text);
-    } else if (_searchController.text.isEmpty) {
-      setState(() {
-        _searchResults = [];
-        _isSearching = false;
-      });
-    }
-  }
-
-  void _performSearch(String query) {
-    // In a real app, this would be a repository call
-    // For now, we'll just filter the sample items
-    setState(() {
-      _isSearching = true;
-      _searchResults = OrderItem.getSampleItems()
-          .where((item) =>
-              item.name.toLowerCase().contains(query.toLowerCase()) &&
-              item.id != widget.orderItem.id)
-          .toList();
-    });
   }
 
   void _selectReplacementItem(OrderItem item) {
@@ -98,68 +75,240 @@ class _CommunityOrderItemNotFoundScreenState
     );
   }
 
+  void _showSearchModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Column(
+              children: [
+                // Handle bar
+                Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  height: 4,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                // Search bar
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            hintText: 'Rechercher un produit...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[200],
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            prefixIcon: const Icon(Icons.search),
+                            suffixIcon: _searchController.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      _filterItems('', setModalState);
+                                    },
+                                  )
+                                : null,
+                          ),
+                          onChanged: (value) =>
+                              _filterItems(value, setModalState),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Search results
+                Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.8,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: _filteredItems.length,
+                    itemBuilder: (context, index) {
+                      final item = _filteredItems[index];
+                      return GestureDetector(
+                        onTap: () {
+                          // Select this item and close the modal
+                          Navigator.pop(context);
+
+                          // If you want to select this item as a replacement
+                          // Uncomment the following line:
+                          // _selectReplacementItem(item);
+
+                          // Or if you just want to show it in the main screen
+                          setState(() {
+                            _isSearching = true;
+                            _filteredItems = [item];
+                          });
+                        },
+                        child: _buildProductImageCard(
+                          context,
+                          item.imageUrl,
+                          item.name,
+                          item.quantity,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    ).then((_) {
+      // Reset search when modal is closed if no item was selected
+      if (!_isSearching) {
+        setState(() {
+          _searchController.clear();
+          _filteredItems = List.from(replacementItems);
+        });
+      }
+    });
+  }
+
+  void _filterItems(String query, StateSetter setModalState) {
+    if (query.isEmpty) {
+      setModalState(() {
+        _filteredItems = List.from(replacementItems);
+      });
+      return;
+    }
+
+    final lowercaseQuery = query.toLowerCase();
+    setModalState(() {
+      _filteredItems = replacementItems.where((item) {
+        return item.name.toLowerCase().contains(lowercaseQuery) ||
+            item.aisle.toLowerCase().contains(lowercaseQuery);
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Produit non trouvé',
-          style: TextStyle(
-            fontSize: _fontSizeXSmall,
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
+          title: const Text('Remplacement',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              )),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+            onPressed: () => context.pop(),
           ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          onPressed: () => context.pop(),
-        ),
-      ),
+          actions: [
+            IconButton(
+              icon: const Icon(CupertinoIcons.search, color: Colors.black),
+              onPressed: () {
+                // Handle search action
+                _logger
+                    .info('Search button tapped for order: ${widget.order.id}');
+                _showSearchModal(context);
+              },
+            ),
+            const SizedBox(width: 8),
+          ]),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Original item card
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _buildOriginalItemCard(),
-          ),
-
-          // Divider with text
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Divider(thickness: 1, color: Colors.grey),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    'Produit non disponible',
-                    style: TextStyle(
-                      fontSize: _fontSizeSmall,
-                      color: Colors.grey[600],
+          // Original item card (pinned)
+          _buildOriginalItemCard(),
+          // Scrollable content
+          Expanded(
+            child: CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 16,
+                    ),
+                    child: Text(
+                      'Produits de remplacement suggérés',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-                const Expanded(
-                  child: Divider(thickness: 1, color: Colors.grey),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: _isSearching
+                          ? _filteredItems.length
+                          : replacementItems.length,
+                      itemBuilder: (context, index) {
+                        final item = _isSearching
+                            ? _filteredItems[index]
+                            : replacementItems[index];
+                        return _buildProductImageCard(
+                          context,
+                          item.imageUrl,
+                          item.name,
+                          item.quantity,
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-
-          // Replacement items or search
-          Expanded(
-            child: widget.replacementItems != null &&
-                    widget.replacementItems!.isNotEmpty
-                ? _buildReplacementsList()
-                : _buildSearchSection(),
-          ),
-
-          // Bottom action bar
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(
+              left: 24.0,
+              right: 24.0,
+              bottom: 24.0,
+              top: 16,
+            ),
             child: SizedBox(
               width: double.infinity,
               height: 50,
@@ -175,9 +324,7 @@ class _CommunityOrderItemNotFoundScreenState
                 ),
                 child: const Text(
                   'Continuer sans remplacement',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),
             ),
@@ -202,7 +349,10 @@ class _CommunityOrderItemNotFoundScreenState
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: 2.0,
+          horizontal: 16.0,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -228,7 +378,7 @@ class _CommunityOrderItemNotFoundScreenState
                   Text(
                     widget.orderItem.name,
                     style: const TextStyle(
-                      fontSize: _fontSizeMedium,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                     maxLines: 2,
@@ -238,7 +388,7 @@ class _CommunityOrderItemNotFoundScreenState
                   Text(
                     '${widget.orderItem.quantity} ${widget.orderItem.unit}',
                     style: TextStyle(
-                      fontSize: _fontSizeSmall,
+                      fontSize: 12,
                       color: Colors.grey[600],
                     ),
                   ),
@@ -246,7 +396,7 @@ class _CommunityOrderItemNotFoundScreenState
                   Text(
                     '${widget.orderItem.price.toStringAsFixed(2)} €',
                     style: const TextStyle(
-                      fontSize: _fontSizeSmall,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
                     ),
@@ -265,7 +415,7 @@ class _CommunityOrderItemNotFoundScreenState
                 'Non trouvé',
                 style: TextStyle(
                   color: Colors.red,
-                  fontSize: _fontSizeXSmall,
+                  fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -276,209 +426,109 @@ class _CommunityOrderItemNotFoundScreenState
     );
   }
 
-  Widget _buildReplacementsList() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Produits de remplacement suggérés',
-            style: TextStyle(
-              fontSize: _fontSizeMedium,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            itemCount: widget.replacementItems?.length ?? 0,
-            separatorBuilder: (context, index) => const Divider(height: 1),
-            itemBuilder: (context, index) {
-              final item = widget.replacementItems![index];
-              return _buildReplacementItemCard(item);
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  Widget _buildProductImageCard(
+      BuildContext context, String imageUrl, String name, int quantity) {
+    final String heroTag = 'product-image-$imageUrl-$quantity';
 
-  Widget _buildReplacementItemCard(OrderItem item) {
-    return InkWell(
-      onTap: () => _selectReplacementItem(item),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Product image
-            Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: NetworkImage(item.imageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
+    return GestureDetector(
+      onTap: () {
+        // Navigate to full-screen image viewer
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImageViewerScreen(
+              imageUrl: imageUrl,
+              heroTag: heroTag,
             ),
-            const SizedBox(width: 12),
-            // Product details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+          ),
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              child: Stack(
                 children: [
-                  Text(
-                    item.name,
-                    style: const TextStyle(
-                      fontSize: _fontSizeMedium,
-                      fontWeight: FontWeight.bold,
+                  // Product image with Hero animation
+                  Hero(
+                    tag: heroTag,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${item.quantity} ${item.unit}',
-                    style: TextStyle(
-                      fontSize: _fontSizeSmall,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${item.price.toStringAsFixed(2)} €',
-                    style: const TextStyle(
-                      fontSize: _fontSizeSmall,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                  // add badge
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: GestureDetector(
+                      onTap: () {
+                        // Find the item from replacementItems that matches this imageUrl
+                        final matchingItem = replacementItems.firstWhere(
+                          (item) => item.imageUrl == imageUrl,
+                          orElse: () => replacementItems.first,
+                        );
+                        _selectReplacementItem(matchingItem);
+                      },
+                      child: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: const Icon(Icons.add, size: 24),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            // Select button
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: const Text(
-                'Sélectionner',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: _fontSizeXSmall,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Rechercher un produit de remplacement',
-                style: TextStyle(
-                  fontSize: _fontSizeMedium,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Search bar
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  focusNode: _searchFocusNode,
-                  decoration: const InputDecoration(
-                    hintText: 'Rechercher un produit...',
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  ),
-                  onSubmitted: _performSearch,
-                ),
-              ),
-            ],
           ),
-        ),
-        // Search results or empty state
-        Expanded(
-          child: _isSearching
-              ? _searchResults.isNotEmpty
-                  ? ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      itemCount: _searchResults.length,
-                      separatorBuilder: (context, index) =>
-                          const Divider(height: 1),
-                      itemBuilder: (context, index) {
-                        return _buildReplacementItemCard(_searchResults[index]);
-                      },
-                    )
-                  : Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.search_off,
-                            size: 48,
-                            color: Colors.grey[400],
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Aucun résultat trouvé',
-                            style: TextStyle(
-                              fontSize: _fontSizeMedium,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-              : Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.search,
-                        size: 48,
-                        color: Colors.grey[400],
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Recherchez un produit de remplacement',
-                        style: TextStyle(
-                          fontSize: _fontSizeMedium,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
+          // Product title
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0, left: 12.0, right: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                ),
+                // Since we don't have price and unit as parameters, we'll show just the quantity
+                Text(
+                  '$quantity unité(s)',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-        ),
-      ],
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

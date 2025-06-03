@@ -576,7 +576,10 @@ class _CommunityOrderStartedScreenState
             ),
           ),
         ),
-        onPressed: () => context.pop(),
+        onPressed: () {
+          _logger.info('Add new product button tapped for order: ${widget.order.id}');
+          OrderProcessingInteractionService().handleAddNewItem(context, widget.order);
+        },
       ),
     );
   }

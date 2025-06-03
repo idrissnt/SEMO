@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/add_item.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/order_started_screen.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
-import 'package:semo/features/community_shop/routes/flows/order_started/routes/item_details_routes.dart';
-import 'package:semo/features/community_shop/routes/flows/order_started/routes/checkout_routes.dart';
+import 'package:semo/features/community_shop/routes/flows/order_started/children_routes/item_details_routes.dart';
+import 'package:semo/features/community_shop/routes/flows/order_started/children_routes/checkout_routes.dart';
 import 'package:semo/features/community_shop/routes/utils/route_builder.dart'
     as app_routes;
 
@@ -22,6 +23,13 @@ class OrderStartedRoutes {
         routes: [
           ...ItemDetailsRoutes.getRoutes(),
           ...CheckoutRoutes.getRoutes(),
+          // Add new item route
+          GoRoute(
+            path: RouteConstants.orderAddItem,
+            name: RouteConstants.orderAddItemName,
+            parentNavigatorKey: AppRouter.rootNavigatorKey,
+            pageBuilder: _buildAddItemScreen,
+          ),
         ],
       ),
     ];
@@ -66,6 +74,49 @@ class OrderStartedRoutes {
       state: state,
       child: CommunityOrderStartedScreen(order: order),
       name: 'CommunityOrderStartedScreen',
+    );
+  }
+
+  /// Build the add item screen
+  static Page<dynamic> _buildAddItemScreen(
+    BuildContext context,
+    GoRouterState state,
+  ) {
+    // First try to get the order from state.extra
+    CommunityOrder? order =
+        app_routes.RouteBuilder.getExtraParam<CommunityOrder>(state, 'order');
+
+    // If order is null, try to fetch it based on the orderId parameter
+    if (order == null) {
+      final orderId = state.pathParameters['orderId'];
+      if (orderId != null) {
+        try {
+          // Find the order by ID
+          order = getSampleCommunityOrders().firstWhere((o) => o.id == orderId);
+        } catch (e) {
+          // Order not found in test data
+          return app_routes.RouteBuilder.errorPage(
+            context,
+            state,
+            'Order not found: $orderId',
+          );
+        }
+      } else {
+        return app_routes.RouteBuilder.errorPage(
+          context,
+          state,
+          'Order ID not provided',
+        );
+      }
+    }
+
+    return app_routes.RouteBuilder.buildPage(
+      context: context,
+      state: state,
+      child: AddItemScreen(
+        order: order,
+      ),
+      name: 'AddItemScreen',
     );
   }
 }

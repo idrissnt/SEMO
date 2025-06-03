@@ -129,4 +129,31 @@ class OrderProcessingInteractionService {
       extra: {'orders': orders},
     );
   }
+
+  /// Handle navigation to add a new item to the order
+  void handleAddNewItem(BuildContext context, CommunityOrder order) {
+    _logger.info('Adding new item to order: ${order.id}');
+
+    context.pushNamed(
+      RouteConstants.orderAddItemName,
+      pathParameters: {
+        'orderId': order.id, // Include orderId parameter for the parent route
+      },
+      extra: {
+        'order': order,
+      },
+    ).then((newItem) {
+      // Handle the returned item if any
+      if (newItem != null && newItem is OrderItem) {
+        _logger.info('New item added: ${newItem.name}');
+        // In a real app with BLoC, this would dispatch an event to add the item
+        // For now, we'll just show a snackbar
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Produit ajouté: ${newItem.name}')),
+          );
+        }
+      }
+    });
+  }
 }

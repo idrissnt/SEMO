@@ -242,7 +242,7 @@ class OrderItemCard extends StatelessWidget {
           top: -6.h,
           child: IconButton(
             onPressed: onViewDetails,
-            icon: _buildActionButtons('Voir details'),
+            icon: _buildActionButtons('Voir les details'),
           ),
         ),
         if (item.status == OrderItemStatus.customerReviewing)

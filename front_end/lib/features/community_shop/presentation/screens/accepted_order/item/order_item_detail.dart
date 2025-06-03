@@ -203,7 +203,7 @@ class CommunityOrderItemDetailsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Nous ferons savoir à ${order.customerName} que le produit est disponible',
+                        'Nous ferons savoir à ${order.customerName} que le produit est indisponible.',
                         style: TextStyle(
                           color: Colors.grey[600],
                         ),

@@ -30,6 +30,10 @@ class RouteConstants {
   static const String orderItemDetailsNotFound = 'not-found';
   static const String orderItemDetailsNotFoundName =
       'order-item-details-not-found-name';
+      
+  // 2-1-4 Add new item
+  static const String orderAddItem = 'add-item';
+  static const String orderAddItemName = 'order-add-item-name';
 
   // 3 - Checkout flow
   static const String orderCheckout = 'checkout';
@@ -53,4 +57,8 @@ class RouteConstants {
   // Helper method for constructing the full item details path with both parameters
   static String getFullOrderItemDetailsPath(String orderId, String itemId) =>
       '${getOrderStartPath(orderId)}/${getOrderItemDetailsPath(itemId)}';
+      
+  // Helper method for constructing the add item path
+  static String getOrderAddItemPath(String orderId) =>
+      '${getOrderStartPath(orderId)}/$orderAddItem';
 }
