@@ -1,6 +1,8 @@
 /// This file contains dummy data for testing the community shopping feature
 
 /// A model representing a community shopping order
+import 'package:semo/features/community_shop/domain/enums/order_state.dart';
+
 class CommunityOrder {
   final String id;
   final String customerName;
@@ -18,6 +20,9 @@ class CommunityOrder {
   final String notes;
   final String storeAddress;
 
+  // New field for order state - not final so it can be changed
+  OrderState state;
+
   CommunityOrder({
     required this.id,
     required this.customerName,
@@ -34,7 +39,30 @@ class CommunityOrder {
     required this.deliveryAddress,
     this.notes = '',
     required this.storeAddress,
+    this.state = OrderState.enAttente,
   });
+
+  // Method to create a copy with updated state
+  CommunityOrder copyWith({OrderState? state}) {
+    return CommunityOrder(
+      id: id,
+      customerName: customerName,
+      customerImageUrl: customerImageUrl,
+      distanceKm: distanceKm,
+      storeName: storeName,
+      storeLogoUrl: storeLogoUrl,
+      productImageUrls: productImageUrls,
+      totalItems: totalItems,
+      totalPrice: totalPrice,
+      reward: reward,
+      isUrgent: isUrgent,
+      deliveryTime: deliveryTime,
+      deliveryAddress: deliveryAddress,
+      notes: notes,
+      storeAddress: storeAddress,
+      state: state ?? this.state,
+    );
+  }
 }
 
 /// Get sample community orders for testing

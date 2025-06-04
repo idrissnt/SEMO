@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/initial_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 

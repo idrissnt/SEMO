@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_group_orders/utils/address_raw.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 
 /// Widget that builds the header section of a community order card
@@ -23,9 +24,11 @@ class OrderCardHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Store logo and name
           Expanded(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -54,59 +57,69 @@ class OrderCardHeader extends StatelessWidget {
                     ),
                   ],
                 ),
+                buildAddressRow(
+                  order.storeAddress,
+                  context,
+                ),
               ],
             ),
           ),
           // Distance
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.primary),
-            ),
+          Expanded(
+            flex: 3,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Icon(
-                  Icons.place,
-                  size: 14,
-                  color: AppColors.primary,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.primary),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.place,
+                        size: 14,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        '${order.distanceKm.toStringAsFixed(1)} km de vous',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 2),
-                Text(
-                  '${order.distanceKm.toStringAsFixed(1)} km de vous',
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 12,
+                const SizedBox(width: 8),
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Icon(Icons.add, size: 20, color: AppColors.primary),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            height: 30,
-            width: 30,
-            decoration: BoxDecoration(
-              color: isSelected ?? false ? AppColors.primary : Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: (isSelected ?? false)
-                  ? const Icon(Icons.delete_rounded,
-                      size: 20, color: Colors.black)
-                  : const Icon(Icons.add, size: 20, color: AppColors.primary),
-            ),
-          ),
+          )
         ],
       ),
     );

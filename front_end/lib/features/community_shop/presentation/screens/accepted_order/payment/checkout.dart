@@ -10,7 +10,7 @@ import 'package:semo/features/community_shop/presentation/screens/accepted_order
 import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/initial_screen/utils/models.dart';
 
 class CommunityOrderCheckoutScreen extends StatefulWidget {
   const CommunityOrderCheckoutScreen({

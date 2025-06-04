@@ -8,34 +8,38 @@ class RouteConstants {
   static const String orderDetails = 'order-details/:orderId';
   static const String orderDetailsName = 'order-details-name';
 
-  // 2 - Order started flow
+  // 2 - Group orders
+  static const String groupOrders = 'group-orders';
+  static const String groupOrdersName = 'group-orders-name';
+
+  // 3 - Order started flow
   //
   static const String orderStart = 'order-start/:orderId';
   static const String orderStartName = 'order-start-name';
 
-  // 2-1 Item details flow
+  // 3-1 Item details flow
   static const String orderItemDetails = 'item/:itemId';
   static const String orderItemDetailsName = 'order-item-details';
 
-  // 2-1-1 Image viewer
+  // 3-1-1 Image viewer
   static const String imageViewer = 'image-viewer';
   static const String imageViewerName = 'image-viewer';
 
-  // 2-1-2 Item found
+  // 3-1-2 Item found
   static const String orderItemDetailsFound = 'found';
   static const String orderItemDetailsFoundName =
       'order-item-details-found-name';
 
-  // 2-1-3 Item not found
+  // 3-1-3 Item not found
   static const String orderItemDetailsNotFound = 'not-found';
   static const String orderItemDetailsNotFoundName =
       'order-item-details-not-found-name';
 
-  // 2-1-4 Add new item
+  // 3-1-4 Add new item
   static const String orderAddItem = 'add-item';
   static const String orderAddItemName = 'order-add-item-name';
 
-  // 3 - Checkout flow
+  // 4 - Checkout flow
   static const String orderCheckout = 'checkout';
   static const String orderCheckoutName = 'orderCheckoutName';
 

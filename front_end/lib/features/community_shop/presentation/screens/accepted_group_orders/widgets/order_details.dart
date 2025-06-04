@@ -1,0 +1,105 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
+import 'package:semo/features/community_shop/presentation/widgets/shared/for_card.dart';
+
+Widget buildOrderInformation({required CommunityOrder order, int flex = 3}) {
+  return Expanded(
+    flex: flex, // Takes 3 parts of the available space (more than left column)
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Reward row and remove button
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // Reward row
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.primary),
+              ),
+              child: Row(
+                children: [
+                  const Icon(FontAwesomeIcons.sackDollar,
+                      size: 18, color: Colors.amber),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${order.reward.toStringAsFixed(1)}€',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 8),
+            // Remove button
+            Container(
+              height: 28,
+              width: 28,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Icon(Icons.delete,
+                    size: 24, color: Colors.black.withValues(alpha: 0.5)),
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 8),
+        // Order details
+        Container(
+          padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.textPrimaryColor),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildInfoRow(
+                Icons.shopping_basket,
+                '${order.totalItems} articles (10 Unités)',
+                Colors.green,
+              ),
+              buildInfoRow(
+                Icons.euro,
+                '${order.totalPrice.toStringAsFixed(2)}€ de courses',
+                Colors.red,
+              ),
+              const SizedBox(height: 8),
+              buildInfoRow(
+                Icons.schedule,
+                order.deliveryTime,
+                Colors.blue,
+              ),
+              const SizedBox(height: 8),
+              if (order.isUrgent) buildUrgentTag(),
+            ],
+          ),
+        )
+      ],
+    ),
+  );
+}

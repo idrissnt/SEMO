@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/initial_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 
@@ -29,6 +29,12 @@ class OrderInteractionService {
       pathParameters: {'orderId': order.id},
       extra:
           order, // Still passing the order object for now until BLoC is implemented
+    );
+  }
+
+  void handleGroupOrders(BuildContext context) {
+    context.pushNamed(
+      RouteConstants.groupOrdersName,
     );
   }
 }

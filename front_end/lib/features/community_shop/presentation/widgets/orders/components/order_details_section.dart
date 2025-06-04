@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
+import 'package:semo/features/community_shop/presentation/widgets/shared/for_card.dart';
 
 /// Widget that displays order details information
 class OrderDetailsSection extends StatelessWidget {
@@ -23,18 +24,19 @@ class OrderDetailsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow(
+          buildInfoRow(
             Icons.shopping_basket,
             '${order.totalItems} articles (10 Unités)',
             Colors.green,
           ),
-          _buildInfoRow(
+          const SizedBox(height: 4),
+          buildInfoRow(
             Icons.euro,
             '${order.totalPrice.toStringAsFixed(2)}€ de courses',
             Colors.red,
           ),
-          const SizedBox(height: 8),
-          _buildInfoRow(
+          const SizedBox(height: 4),
+          buildInfoRow(
             Icons.schedule,
             order.deliveryTime,
             Colors.blue,
@@ -43,28 +45,6 @@ class OrderDetailsSection extends StatelessWidget {
           if (order.isUrgent) buildUrgentTag(),
         ],
       ),
-    );
-  }
-
-  /// Builds an information row with an icon and text
-  Widget _buildInfoRow(IconData icon, String text, Color iconColor) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 16,
-          color: iconColor,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          text,
-          style: const TextStyle(
-            color: AppColors.textPrimaryColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
     );
   }
 

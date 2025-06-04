@@ -5,7 +5,7 @@ import 'package:semo/core/presentation/screens/image_viewer_screen.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/item_found.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/item_not_found.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/order_item_detail.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/initial_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 import 'package:semo/features/community_shop/routes/utils/route_builder.dart'

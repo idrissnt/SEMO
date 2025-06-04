@@ -19,32 +19,40 @@ class OrderCardFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          // Reward
-          buildReward(),
-          const Spacer(),
-          // Accept button
-          ElevatedButton(
-            onPressed: onAccept,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-                side: const BorderSide(color: AppColors.primary),
+      child: Expanded(
+        child: Row(
+          children: [
+            // Reward
+            Expanded(
+              flex: 4,
+              child: buildReward(),
+            ),
+            const Spacer(),
+            // Accept button
+            Expanded(
+              flex: 5,
+              child: ElevatedButton(
+                onPressed: onAccept,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    side: const BorderSide(color: AppColors.primary),
+                  ),
+                ),
+                child: const Text(
+                  'Plus de détails',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ),
-            child: const Text(
-              'Plus de détails',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -60,14 +68,16 @@ class OrderCardFooter extends StatelessWidget {
         child: Row(
           children: [
             const Icon(FontAwesomeIcons.sackDollar,
-                size: 20, color: Colors.amber),
+                size: 16, color: Colors.amber),
             const SizedBox(width: 4),
-            Text(
-              '${order.reward.toStringAsFixed(1)}€ pour vous',
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+            Expanded(
+              child: Text(
+                '${order.reward.toStringAsFixed(1)}€ pour vous',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
             ),
           ],

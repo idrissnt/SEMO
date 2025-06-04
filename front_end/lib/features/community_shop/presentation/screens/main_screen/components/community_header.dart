@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/widgets/icons/icon_with_container.dart';
+import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/message/routes/const.dart';
 import 'package:semo/features/order/presentation/widgets/app_bar/location_section.dart';
 
@@ -22,21 +22,14 @@ class CommunityHeader extends StatelessWidget {
           Row(
             children: [
               buildIcon(
-                radius: 24,
-                iconSize: 20,
-                iconColor: AppColors.iconColorFirstColor,
-                backgroundColor: AppColors.searchBarColor,
-                icon: CupertinoIcons.search,
-                onPressed: () {},
-              ),
-              const SizedBox(width: 8),
-              buildIcon(
                 iconColor: Colors.white,
                 backgroundColor: Colors.orange,
                 icon: Icons.shopping_bag,
-                onPressed: () {},
+                onPressed: () {
+                  OrderInteractionService().handleGroupOrders(context);
+                },
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               buildIcon(
                 iconColor: Colors.white,
                 backgroundColor: Colors.green,

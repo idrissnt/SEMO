@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/deliveries/order_information.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/payment/checkout.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/initial_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 import 'package:semo/features/community_shop/routes/utils/route_builder.dart'
