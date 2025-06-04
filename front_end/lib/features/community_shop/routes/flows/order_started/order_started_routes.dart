@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/add_item.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/order_started_screen.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/order_started_screen.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 import 'package:semo/features/community_shop/routes/flows/order_started/children_routes/item_details_routes.dart';

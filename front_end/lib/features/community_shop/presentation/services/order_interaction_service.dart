@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 
@@ -92,8 +92,24 @@ class OrderProcessingInteractionService {
     );
   }
 
+  void handleImageViewer(
+      BuildContext context, OrderItem orderItem, CommunityOrder order,
+      {String? heroTag}) {
+    context.pushNamed(
+      RouteConstants.imageViewerName,
+      pathParameters: {
+        'orderId': order.id,
+        'itemId': orderItem.id,
+      },
+      extra: {
+        'imageUrl': orderItem.imageUrl,
+        'heroTag': heroTag,
+      },
+    );
+  }
+
   void handleOrderStartCheckout(
-      BuildContext context, List<CommunityOrder> orders, String customerName) {
+      BuildContext context, List<CommunityOrder> orders, OrderItem orderItem) {
     // Get the orderId from the first order in the list
     final orderId = orders.isNotEmpty ? orders.first.id : '';
 
@@ -103,22 +119,13 @@ class OrderProcessingInteractionService {
       pathParameters: {'orderId': orderId},
       extra: {
         'orders': orders,
+        'orderItem': orderItem,
       },
     );
   }
 
-  void firstOrderShopperMessageName(
-      BuildContext context, CommunityOrder order) {
-    context.pushNamed(
-      RouteConstants.firstOrderShopperMessageName,
-      extra: {
-        'orders': [order],
-      }, // Updating to match the expected parameter format in the route
-    );
-  }
-
   void handleDeliveryOrderInformation(
-      BuildContext context, List<CommunityOrder> orders) {
+      BuildContext context, List<CommunityOrder> orders, OrderItem orderItem) {
     // Get the orderId from the first order in the list
     final orderId = orders.isNotEmpty ? orders.first.id : '';
 
@@ -126,7 +133,7 @@ class OrderProcessingInteractionService {
     context.pushNamed(
       RouteConstants.deliveryOrderInformationName,
       pathParameters: {'orderId': orderId},
-      extra: {'orders': orders},
+      extra: {'orders': orders, 'orderItem': orderItem},
     );
   }
 

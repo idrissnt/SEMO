@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:semo/core/presentation/screens/image_viewer_screen.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
-import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/item/utils/image_card.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 import 'package:semo/core/utils/logger.dart';
@@ -53,16 +52,6 @@ class _CommunityOrderItemNotFoundScreenState
     _searchController.dispose();
     scrollController.dispose();
     super.dispose();
-  }
-
-  void _selectReplacementItem(OrderItem item) {
-    _logger.info('Replacement item selected: ${item.id}');
-    // Navigate to the item found screen with the selected replacement
-    OrderProcessingInteractionService().handleOrderItemFound(
-      context,
-      item,
-      widget.order,
-    );
   }
 
   void _continueWithoutReplacement() {
@@ -175,12 +164,7 @@ class _CommunityOrderItemNotFoundScreenState
                             _filteredItems = [item];
                           });
                         },
-                        child: _buildProductImageCard(
-                          context,
-                          item.imageUrl,
-                          item.name,
-                          item.quantity,
-                        ),
+                        child: ImageCard(item: item, order: widget.order),
                       );
                     },
                   ),
@@ -289,12 +273,7 @@ class _CommunityOrderItemNotFoundScreenState
                         final item = _isSearching
                             ? _filteredItems[index]
                             : replacementItems[index];
-                        return _buildProductImageCard(
-                          context,
-                          item.imageUrl,
-                          item.name,
-                          item.quantity,
-                        );
+                        return ImageCard(item: item, order: widget.order);
                       },
                     ),
                   ),
@@ -357,14 +336,17 @@ class _CommunityOrderItemNotFoundScreenState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Product image
-            Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: NetworkImage(widget.orderItem.imageUrl),
-                  fit: BoxFit.cover,
+            Hero(
+              tag: 'product-image-${widget.orderItem.id}_item_details',
+              child: Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.orderItem.imageUrl),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -422,112 +404,6 @@ class _CommunityOrderItemNotFoundScreenState
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildProductImageCard(
-      BuildContext context, String imageUrl, String name, int quantity) {
-    final String heroTag = 'product-image-$imageUrl-$quantity';
-
-    return GestureDetector(
-      onTap: () {
-        // Navigate to full-screen image viewer
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ImageViewerScreen(
-              imageUrl: imageUrl,
-              heroTag: heroTag,
-            ),
-          ),
-        );
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: Stack(
-                children: [
-                  // Product image with Hero animation
-                  Hero(
-                    tag: heroTag,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    ),
-                  ),
-                  // add badge
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: GestureDetector(
-                      onTap: () {
-                        // Find the item from replacementItems that matches this imageUrl
-                        final matchingItem = replacementItems.firstWhere(
-                          (item) => item.imageUrl == imageUrl,
-                          orElse: () => replacementItems.first,
-                        );
-                        _selectReplacementItem(matchingItem);
-                      },
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black),
-                        ),
-                        child: const Icon(Icons.add, size: 24),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Product title
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0, left: 12.0, right: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                ),
-                // Since we don't have price and unit as parameters, we'll show just the quantity
-                Text(
-                  '$quantity unité(s)',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

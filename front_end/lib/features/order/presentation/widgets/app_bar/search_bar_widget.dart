@@ -10,6 +10,7 @@ class SearchBarWidget extends StatelessWidget {
   final Color? iconColor;
   final Color? hintColor;
   final String? hintText;
+  final TextEditingController? searchController;
 
   const SearchBarWidget({
     Key? key,
@@ -18,6 +19,7 @@ class SearchBarWidget extends StatelessWidget {
     this.iconColor,
     this.hintColor,
     this.hintText,
+    this.searchController,
   }) : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class SearchBarWidget extends StatelessWidget {
           SizedBox(width: AppDimensionsWidth.xSmall),
           Expanded(
             child: TextField(
+              controller: searchController,
               decoration: InputDecoration(
                 hintText: hintText ?? OrderConstants.searchHintText,
                 hintStyle:

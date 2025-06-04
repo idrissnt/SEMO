@@ -4,20 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/shared/note.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/button.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/view_image_take.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/payment/utils/note.dart';
+import 'package:semo/features/community_shop/presentation/widgets/shared/button.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/payment/utils/view_image_took.dart';
 import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 
 class CommunityOrderCheckoutScreen extends StatefulWidget {
   const CommunityOrderCheckoutScreen({
     Key? key,
     required this.orders,
+    required this.orderItem,
   }) : super(key: key);
 
   final List<CommunityOrder> orders;
+  final OrderItem orderItem;
 
   @override
   State<CommunityOrderCheckoutScreen> createState() =>
@@ -26,6 +29,7 @@ class CommunityOrderCheckoutScreen extends StatefulWidget {
 
 class _CommunityOrderCheckoutScreenState
     extends State<CommunityOrderCheckoutScreen> {
+  bool _showGuidanceOverlay = true; // Track if guidance overlay should be shown
   bool isExpanded = false;
 
   // Store the captured image
@@ -170,8 +174,10 @@ class _CommunityOrderCheckoutScreenState
             context,
             'Continuer',
             onPressed: () => OrderProcessingInteractionService()
-                .handleDeliveryOrderInformation(context, widget.orders),
+                .handleDeliveryOrderInformation(
+                    context, widget.orders, widget.orderItem),
           ),
+          if (_showGuidanceOverlay) _buildGuidanceOverlay(),
         ],
       ),
     );
@@ -283,6 +289,73 @@ class _CommunityOrderCheckoutScreenState
           ),
         );
       },
+    );
+  }
+
+  Widget _buildGuidanceOverlay() {
+    return Positioned.fill(
+      child: Container(
+        color: Colors.black.withValues(alpha: 0.7),
+        child: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Shopping list icon
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.credit_card,
+                    size: 36,
+                    color: Colors.blue,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                const Text(
+                  'Veuillez utiliser votre carte SEMO pour effectuer le paiement.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 24),
+
+                // Got it button
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _showGuidanceOverlay = false;
+                    });
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Compris'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

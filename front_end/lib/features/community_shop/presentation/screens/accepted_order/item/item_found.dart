@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
@@ -94,15 +94,18 @@ class _CommunityOrderItemDetailsFoundScreenState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Product image
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  height: 50,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                      image: NetworkImage(widget.orderItem.imageUrl),
-                      fit: BoxFit.cover,
+                Hero(
+                  tag: 'product-image-${widget.orderItem.id}_item_details',
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    height: 50,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: NetworkImage(widget.orderItem.imageUrl),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

@@ -71,7 +71,7 @@ class ProductDetailRouterConfig {
             state: state,
             child: ImageViewerScreen(
               imageUrl: imageUrl,
-              heroTag: BottomSheetProductDetailRoutesConstants.heroTag,
+              heroTag: 'product_image_$imageUrl',
             ),
             name: BottomSheetProductDetailRoutesConstants.name,
           );

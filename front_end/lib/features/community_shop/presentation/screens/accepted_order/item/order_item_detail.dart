@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/screens/selected_order/util/start_button.dart';
 import 'package:semo/features/community_shop/presentation/screens/widgets/icon_button.dart';
 import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
-import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 
 class CommunityOrderItemDetailsScreen extends StatelessWidget {
   final OrderItem orderItem;
@@ -25,6 +24,7 @@ class CommunityOrderItemDetailsScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
 
+    final heroTag = 'product-image-${orderItem.id}_item_details';
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -36,23 +36,18 @@ class CommunityOrderItemDetailsScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     // Navigate to full-screen image viewer
-                    context.pushNamed(
-                      RouteConstants.imageViewerName,
-                      pathParameters: {
-                        'orderId': order.id,
-                        'itemId': orderItem.id,
-                      },
-                      extra: {
-                        'imageUrl': orderItem.imageUrl,
-                        'heroTag': 'product-image-${orderItem.id}',
-                      },
+                    OrderProcessingInteractionService().handleImageViewer(
+                      context,
+                      orderItem,
+                      order,
+                      heroTag: heroTag,
                     );
                   },
                   child: SizedBox(
                     width: size.width,
                     height: size.height * 0.4, // 40% of screen height
                     child: Hero(
-                      tag: 'product-image-${orderItem.id}',
+                      tag: heroTag,
                       child: Image.network(
                         orderItem.imageUrl,
                         fit: BoxFit.cover,

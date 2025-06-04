@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/shared/note_content.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/payment/utils/note_content.dart';
 
 class Note extends StatefulWidget {
   final String title;

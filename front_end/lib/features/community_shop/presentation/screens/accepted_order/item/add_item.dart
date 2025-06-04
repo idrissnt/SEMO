@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/utils/logger.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
+import 'package:semo/features/order/presentation/widgets/app_bar/search_bar_widget.dart';
 
 /// Screen for adding a new product to the order
 class AddItemScreen extends StatefulWidget {
   final CommunityOrder order;
-  
+
   const AddItemScreen({
     Key? key,
     required this.order,
@@ -27,19 +27,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final TextEditingController _aisleController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _unitController = TextEditingController();
-  
-  // Sample products for search results
-  List<OrderItem> _allProducts = [];
-  List<OrderItem> _filteredProducts = [];
-  bool _isManualEntry = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize with sample products
-    _allProducts = OrderItem.getSampleItems();
-    _filteredProducts = List.from(_allProducts);
-  }
 
   @override
   void dispose() {
@@ -52,44 +39,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
     super.dispose();
   }
 
-  void _filterProducts(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        _filteredProducts = List.from(_allProducts);
-      });
-      return;
-    }
-
-    final lowercaseQuery = query.toLowerCase();
-    setState(() {
-      _filteredProducts = _allProducts.where((product) {
-        return product.name.toLowerCase().contains(lowercaseQuery) ||
-            product.aisle.toLowerCase().contains(lowercaseQuery);
-      }).toList();
-    });
-  }
-
-  void _selectProduct(OrderItem product) {
-    _logger.info('Product selected: ${product.name}');
-    
-    // Create a new item with status set to inProgress
-    final newItem = OrderItem(
-      id: DateTime.now().millisecondsSinceEpoch.toString(), // Generate a unique ID
-      name: product.name,
-      imageUrl: product.imageUrl,
-      quantity: 1, // Default quantity
-      unit: product.unit,
-      valueUnit: product.valueUnit,
-      price: product.price,
-      position: product.position,
-      aisle: product.aisle,
-      status: OrderItemStatus.inProgress,
-    );
-    
-    // Return the new item to the previous screen
-    context.pop(newItem);
-  }
-
   void _addManualItem() {
     // Validate inputs
     if (_nameController.text.isEmpty) {
@@ -100,13 +49,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
 
     final quantity = int.tryParse(_quantityController.text) ?? 1;
-    final price = double.tryParse(_priceController.text.replaceAll(',', '.')) ?? 0.0;
-    
+    final price =
+        double.tryParse(_priceController.text.replaceAll(',', '.')) ?? 0.0;
+
     // Create a new item with manually entered details
     final newItem = OrderItem(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       name: _nameController.text,
-      imageUrl: 'https://via.placeholder.com/150', // Default placeholder image
+      imageUrl: '', // Default placeholder image
       quantity: quantity,
       unit: _unitController.text.isEmpty ? 'unité' : _unitController.text,
       valueUnit: 1.0, // Default value
@@ -115,36 +65,60 @@ class _AddItemScreenState extends State<AddItemScreen> {
       aisle: _aisleController.text.isEmpty ? 'Autre' : _aisleController.text,
       status: OrderItemStatus.inProgress,
     );
-    
+
     _logger.info('Manual product added: ${newItem.name}');
-    context.pop(newItem);
+    // Close the bottom sheet and return the new item
+    Navigator.pop(context, newItem);
+  }
+
+  void _showManualEntryBottomSheet() async {
+    // Clear form fields before showing the bottom sheet
+    _nameController.clear();
+    _quantityController.clear();
+    _unitController.clear();
+    _priceController.clear();
+    _aisleController.clear();
+
+    final OrderItem? result = await showModalBottomSheet<OrderItem>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          top: 8,
+          left: 8,
+          right: 8,
+        ),
+        child: _buildManualEntryForm(),
+      ),
+    );
+
+    // If an item was added, return it to the previous screen
+    if (result != null) {
+      _logger.info('Returning manually added item: ${result.name}');
+      if (mounted) {
+        context.pop(result);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         title: const Text('Ajouter un produit'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => context.pop(),
         ),
-        actions: [
-          if (!_isManualEntry)
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _isManualEntry = true;
-                });
-              },
-              child: const Text(
-                'Saisie manuelle',
-                style: TextStyle(color: AppColors.primary),
-              ),
-            ),
-        ],
       ),
-      body: _isManualEntry ? _buildManualEntryForm() : _buildSearchScreen(),
+      body: _buildSearchScreen(),
     );
   }
 
@@ -153,138 +127,44 @@ class _AddItemScreenState extends State<AddItemScreen> {
       children: [
         // Search bar
         Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              hintText: 'Rechercher un produit...',
-              prefixIcon: const Icon(CupertinoIcons.search),
-              suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          _searchController.clear();
-                          _filterProducts('');
-                        });
-                      },
-                    )
-                  : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-            onChanged: _filterProducts,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+          child: SearchBarWidget(
+            isScrolled: false,
+            hintText: 'Rechercher un produit...',
+            searchController: _searchController,
           ),
         ),
-        
-        // Results
-        Expanded(
-          child: _filteredProducts.isEmpty
-              ? const Center(
-                  child: Text(
-                    'Aucun produit trouvé',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
-              : GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.8,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: _filteredProducts.length,
-                  itemBuilder: (context, index) {
-                    final product = _filteredProducts[index];
-                    return _buildProductCard(product);
-                  },
+        const SizedBox(height: 16),
+        TextButton(
+          onPressed: () {
+            _showManualEntryBottomSheet();
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Ajouter un produit manuellement',
+                style: TextStyle(color: AppColors.primary, fontSize: 16),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                height: 24,
+                width: 24,
+                padding: const EdgeInsets.all(2),
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
                 ),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildProductCard(OrderItem product) {
-    return GestureDetector(
-      onTap: () => _selectProduct(product),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Product image
-            Expanded(
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-                      image: DecorationImage(
-                        image: NetworkImage(product.imageUrl),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // Add button overlay
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Product info
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${product.price.toStringAsFixed(2)} €',
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  Text(
-                    product.aisle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -302,7 +182,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Name field
           TextField(
             controller: _nameController,
@@ -312,7 +192,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Quantity and Unit in a row
           Row(
             children: [
@@ -342,7 +222,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          
+
           // Price field
           TextField(
             controller: _priceController,
@@ -352,45 +232,26 @@ class _AddItemScreenState extends State<AddItemScreen> {
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
-          const SizedBox(height: 16),
-          
-          // Aisle field
-          TextField(
-            controller: _aisleController,
-            decoration: const InputDecoration(
-              labelText: 'Rayon',
-              hintText: 'ex: Fruits et légumes',
-              border: OutlineInputBorder(),
-            ),
-          ),
           const SizedBox(height: 32),
-          
+
           // Add button
           ElevatedButton(
             onPressed: _addManualItem,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
             child: const Text(
               'Ajouter le produit',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
           const SizedBox(height: 16),
-          
-          // Cancel button
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _isManualEntry = false;
-              });
-            },
-            child: const Text('Revenir à la recherche'),
-          ),
         ],
       ),
     );

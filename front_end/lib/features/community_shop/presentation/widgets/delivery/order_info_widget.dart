@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/presentation/widgets/delivery/product_images_widget.dart';
 
 class OrderInfoWidget extends StatelessWidget {
   final CommunityOrder order;
+  final OrderItem orderItem;
 
   const OrderInfoWidget({
     Key? key,
     required this.order,
+    required this.orderItem,
   }) : super(key: key);
 
   @override
@@ -23,7 +26,7 @@ class OrderInfoWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        ProductImagesWidget(order: order),
+        ProductImagesWidget(order: order, orderItem: orderItem),
         const SizedBox(height: 12),
         _buildInfoItem(
           icon: Icons.access_time,

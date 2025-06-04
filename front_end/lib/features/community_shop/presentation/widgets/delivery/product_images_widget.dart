@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:semo/core/presentation/screens/image_viewer_screen.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
+import 'package:semo/features/community_shop/presentation/services/order_interaction_service.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 
 class ProductImagesWidget extends StatelessWidget {
   final CommunityOrder order;
+  final OrderItem orderItem;
 
   const ProductImagesWidget({
     Key? key,
     required this.order,
+    required this.orderItem,
   }) : super(key: key);
 
   @override
@@ -135,8 +138,10 @@ class ProductImagesWidget extends StatelessWidget {
                   return _buildProductImageCard(
                     context,
                     order.productImageUrls[index],
-                    'Ici va s\'afficher le nom du produit avec la quantité (kg, l, etc)',
-                    index + 1,
+                    orderItem.name,
+                    orderItem.quantity,
+                    orderItem
+                        .id, // Pass the orderItem.id for consistent hero tag
                   );
                 },
               ),
@@ -147,9 +152,10 @@ class ProductImagesWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildProductImageCard(
-      BuildContext context, String imageUrl, String description, int quantity) {
-    final String heroTag = 'product-image-$imageUrl-$quantity';
+  Widget _buildProductImageCard(BuildContext context, String imageUrl,
+      String description, int quantity, String itemId) {
+    // Use a consistent hero tag format that matches what's used in handleImageViewer
+    final String heroTag = 'product-image-${itemId}_product_image_delivery';
 
     return GestureDetector(
       onTap: () {
@@ -157,14 +163,11 @@ class ProductImagesWidget extends StatelessWidget {
         HapticFeedback.mediumImpact();
 
         // Navigate to full-screen image viewer
-        Navigator.push(
+        OrderProcessingInteractionService().handleImageViewer(
           context,
-          MaterialPageRoute(
-            builder: (context) => ImageViewerScreen(
-              imageUrl: imageUrl,
-              heroTag: heroTag,
-            ),
-          ),
+          orderItem,
+          order,
+          heroTag: heroTag,
         );
       },
       child: Card(

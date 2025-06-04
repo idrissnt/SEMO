@@ -3,10 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_router.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/deliveries/order_information.dart';
 import 'package:semo/features/community_shop/presentation/screens/accepted_order/payment/checkout.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_order/payment/first_shopper_message.dart';
+import 'package:semo/features/community_shop/presentation/screens/accepted_order/init_screen/utils/models.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
-import 'package:semo/features/community_shop/routes/utils/route_builder.dart' as app_routes;
+import 'package:semo/features/community_shop/routes/utils/route_builder.dart'
+    as app_routes;
 
 /// Routes for the checkout and delivery flow
 class CheckoutRoutes {
@@ -20,13 +21,7 @@ class CheckoutRoutes {
         parentNavigatorKey: AppRouter.rootNavigatorKey,
         pageBuilder: _buildCheckoutScreen,
       ),
-      // First order shopper message route
-      GoRoute(
-        path: RouteConstants.firstOrderShopperMessage,
-        name: RouteConstants.firstOrderShopperMessageName,
-        parentNavigatorKey: AppRouter.rootNavigatorKey,
-        pageBuilder: _buildFirstOrderShopperMessageScreen,
-      ),
+
       // Delivery order information route
       GoRoute(
         path: RouteConstants.deliveryOrderInformation,
@@ -42,44 +37,27 @@ class CheckoutRoutes {
     BuildContext context,
     GoRouterState state,
   ) {
-    final orders = app_routes.RouteBuilder.getExtraParam<List<CommunityOrder>>(state, 'orders');
-    
-    if (orders == null) {
-      return app_routes.RouteBuilder.errorPage(
-        context, 
-        state, 
-        'Orders not provided for checkout',
-      );
-    }
-    
-    return app_routes.RouteBuilder.buildPage(
-      context: context,
-      state: state,
-      child: CommunityOrderCheckoutScreen(orders: orders),
-      name: 'CommunityOrderCheckoutScreen',
-    );
-  }
+    final orders = app_routes.RouteBuilder.getExtraParam<List<CommunityOrder>>(
+        state, 'orders');
+    final orderItem =
+        app_routes.RouteBuilder.getExtraParam<OrderItem>(state, 'orderItem');
 
-  /// Build the first order shopper message screen
-  static Page<dynamic> _buildFirstOrderShopperMessageScreen(
-    BuildContext context,
-    GoRouterState state,
-  ) {
-    final orders = app_routes.RouteBuilder.getExtraParam<List<CommunityOrder>>(state, 'orders');
-    
-    if (orders == null) {
+    if (orders == null || orderItem == null) {
       return app_routes.RouteBuilder.errorPage(
-        context, 
-        state, 
-        'Orders not provided for shopper message',
+        context,
+        state,
+        'Orders or order item not provided for checkout',
       );
     }
-    
+
     return app_routes.RouteBuilder.buildPage(
       context: context,
       state: state,
-      child: FirstOrderShopperMessageScreen(orders: orders),
-      name: 'FirstOrderShopperMessageScreen',
+      child: CommunityOrderCheckoutScreen(
+        orders: orders,
+        orderItem: orderItem,
+      ),
+      name: 'CommunityOrderCheckoutScreen',
     );
   }
 
@@ -88,20 +66,24 @@ class CheckoutRoutes {
     BuildContext context,
     GoRouterState state,
   ) {
-    final orders = app_routes.RouteBuilder.getExtraParam<List<CommunityOrder>>(state, 'orders');
-    
-    if (orders == null) {
+    final orders = app_routes.RouteBuilder.getExtraParam<List<CommunityOrder>>(
+        state, 'orders');
+    final orderItem =
+        app_routes.RouteBuilder.getExtraParam<OrderItem>(state, 'orderItem');
+
+    if (orders == null || orderItem == null) {
       return app_routes.RouteBuilder.errorPage(
-        context, 
-        state, 
+        context,
+        state,
         'Orders not provided for delivery information',
       );
     }
-    
+
     return app_routes.RouteBuilder.buildPage(
       context: context,
       state: state,
-      child: DeliveryOrderInformationScreen(orders: orders),
+      child:
+          DeliveryOrderInformationScreen(orders: orders, orderItem: orderItem),
       name: 'DeliveryOrderInformationScreen',
     );
   }
