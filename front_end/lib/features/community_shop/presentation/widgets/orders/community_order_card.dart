@@ -24,6 +24,7 @@ class CommunityOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return buildCard(
+      onTap: () {},
       storeName: order.storeName,
       child: Column(
         children: [
@@ -52,7 +53,7 @@ class CommunityOrderCard extends StatelessWidget {
           // Footer section with reward and action button
           OrderCardFooter(
             order: order,
-            onAccept: onTap,
+            onPress: onTap,
           ),
         ],
       ),

@@ -25,7 +25,7 @@ void showReusableBottomSheet({
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    backgroundColor: Colors.white,
     isDismissible: isDismissible,
     enableDrag: enableDrag,
     useRootNavigator: useRootNavigator,

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../core/utils/logger.dart';
+import 'package:semo/core/utils/logger.dart';
+
+// TODO: Implement actual AI message sending logic
+// this will take as input the request of user
+//  (which can be : i want to eat bla bla ...)
+// and will return a response like :
+// here is your cart with  all items needed for bla bla bla ...
+// and will update the ui with the response
 
 class SemoAIScreen extends StatefulWidget {
   const SemoAIScreen({Key? key}) : super(key: key);

@@ -9,8 +9,8 @@ class RouteConstants {
   static const String orderDetailsName = 'order-details-name';
 
   // 2 - Group orders
-  static const String groupOrders = 'group-orders';
-  static const String groupOrdersName = 'group-orders-name';
+  static const String shopperDelivery = 'shopper-delivery';
+  static const String shopperDeliveryName = 'shopper-delivery-name';
 
   // 3 - Order started flow
   //

@@ -10,7 +10,7 @@ PreferredSizeWidget buildAppBar(BuildContext context) => AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
       elevation: 0,
-      title: const Text('Vos livraisons'),
+      title: const Text('Mes commandes'),
       actions: [
         buildIcon(
           iconColor: Colors.white,
@@ -23,7 +23,7 @@ PreferredSizeWidget buildAppBar(BuildContext context) => AppBar(
         const SizedBox(width: 16),
       ],
       leading: IconButton(
-        icon: buildIconButton(Icons.close, Colors.black, Colors.white),
+        icon: buildIconButton(Icons.arrow_back, Colors.black, Colors.white),
         onPressed: () => context.pop(),
       ),
     );

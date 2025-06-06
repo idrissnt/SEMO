@@ -77,7 +77,7 @@ class CommunityOrderDetailsScreen extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              height: 100,
+              height: 150,
               padding: const EdgeInsets.only(
                   left: 16, right: 16, bottom: 24, top: 12),
               decoration: BoxDecoration(
@@ -90,40 +90,41 @@ class CommunityOrderDetailsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // Add to cart button
                   SizedBox(
-                    width: 170,
-                    height: 55,
+                    // width: 190,
+                    height: 50,
+                    child: CommunityOrderButton(
+                      textColor: AppColors.textSecondaryColor,
+                      backgroundColor: AppColors.primary,
+                      textSize: AppFontSize.large,
+                      showIcon: false,
+                      text: 'Commencer maintenant',
+                      onPressed: () {
+                        OrderInteractionService().handleOrderStart(
+                          context,
+                          [order],
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    // width: 170,
+                    height: 50,
                     child: CommunityOrderButton(
                       textColor: AppColors.textPrimaryColor,
                       backgroundColor: AppColors.secondary,
-                      textSize: 16,
+                      textSize: AppFontSize.large,
                       text: 'Programmer',
                       showIcon: true,
                       onPressed: () {
                         DeliveryTimeService().showDeliveryTimePicker(
                           context: context,
                           order: order,
-                        );
-                      },
-                    ),
-                  ),
-                  // Add to cart button
-                  SizedBox(
-                    width: 190,
-                    height: 55,
-                    child: CommunityOrderButton(
-                      textColor: AppColors.textSecondaryColor,
-                      backgroundColor: AppColors.primary,
-                      textSize: AppFontSize.large,
-                      showIcon: false,
-                      text: 'Commencer',
-                      onPressed: () {
-                        OrderInteractionService().handleOrderStart(
-                          context,
-                          order,
                         );
                       },
                     ),

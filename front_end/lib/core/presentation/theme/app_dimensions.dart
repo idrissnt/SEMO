@@ -52,6 +52,7 @@ class AppFontSize {
   static double get xxSmall => 4.sp;
   static double get xSmall => 8.sp;
   static double get small => 12.sp;
+  static double get xMedium => 14.sp;
   static double get medium => 16.sp;
   static double get large => 20.sp;
   static double get xl => 24.sp;

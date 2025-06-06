@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/features/community_shop/presentation/screens/main_screen/community_shop_screen.dart';
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
-import 'package:semo/features/community_shop/routes/flows/groupe_orders/group_orders.dart';
+import 'package:semo/features/community_shop/routes/flows/delivery/delivery_route.dart';
 import 'package:semo/features/community_shop/routes/flows/order_details/order_details_routes.dart';
 import 'package:semo/features/community_shop/routes/flows/order_started/order_started_routes.dart';
 import 'package:semo/features/community_shop/routes/utils/route_builder.dart'
@@ -20,7 +20,7 @@ class MainShopRoutes {
         routes: [
           ...OrderDetailsRoutes.getRoutes(),
           ...OrderStartedRoutes.getRoutes(),
-          ...GroupOrdersRoutes.getRoutes(),
+          ...DeliveryRoutes.getRoutes(),
         ],
       ),
     ];

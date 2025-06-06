@@ -9,6 +9,10 @@ import 'package:semo/features/community_shop/routes/flows/order_started/children
 import 'package:semo/features/community_shop/routes/flows/order_started/children_routes/checkout_routes.dart';
 import 'package:semo/features/community_shop/routes/utils/route_builder.dart'
     as app_routes;
+import 'package:semo/core/utils/logger.dart';
+
+// Global logger instance
+final AppLogger _logger = AppLogger();
 
 /// Routes for the order started flow
 class OrderStartedRoutes {
@@ -41,17 +45,28 @@ class OrderStartedRoutes {
     GoRouterState state,
   ) {
     // First try to get the order from state.extra (for backward compatibility)
-    CommunityOrder? order =
-        app_routes.RouteBuilder.getExtraParam<CommunityOrder>(state, 'order');
+    List<CommunityOrder>? orders;
+
+    // Check if state.extra is directly a List<CommunityOrder>
+    if (state.extra is List<CommunityOrder>) {
+      orders = state.extra as List<CommunityOrder>;
+      _logger.info(
+          'Found orders directly in state.extra: ${orders.length} orders');
+    } else {
+      // Try to get it as a named parameter
+      orders = app_routes.RouteBuilder.getExtraParam<List<CommunityOrder>>(
+          state, 'orders');
+    }
 
     // If order is null, try to fetch it based on the orderId parameter
-    if (order == null) {
+    if (orders == null) {
       final orderId = state.pathParameters['orderId'];
       if (orderId != null) {
         // In a real app with BLoC, this would be a repository call
         // For now, we'll use the test data
         try {
-          order = getSampleCommunityOrders().firstWhere((o) => o.id == orderId);
+          orders =
+              getSampleCommunityOrders().where((o) => o.id == orderId).toList();
         } catch (e) {
           // Order not found in test data
           return app_routes.RouteBuilder.errorPage(
@@ -72,7 +87,7 @@ class OrderStartedRoutes {
     return app_routes.RouteBuilder.buildBottomToTopPage(
       context: context,
       state: state,
-      child: CommunityOrderStartedScreen(order: order),
+      child: CommunityOrderStartedScreen(orders: orders),
       name: 'CommunityOrderStartedScreen',
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semo/features/community_shop/presentation/screens/accepted_group_orders/utils/address_raw.dart';
+import 'package:semo/features/community_shop/presentation/screens/shopper_delivery_screen/utils/address_raw.dart';
 import 'package:semo/features/community_shop/presentation/test_data/community_orders.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
 

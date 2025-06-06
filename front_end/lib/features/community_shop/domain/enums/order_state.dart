@@ -1,28 +1,23 @@
 enum OrderState {
-  enAttente,
-  programmer,
-  enCours,
+  scheduled,
+  inProgress,
 }
 
 extension OrderStateExtension on OrderState {
   String get displayName {
     switch (this) {
-      case OrderState.enAttente:
-        return 'En attente';
-      case OrderState.programmer:
+      case OrderState.scheduled:
         return 'Programmé';
-      case OrderState.enCours:
+      case OrderState.inProgress:
         return 'En cours';
     }
   }
-  
+
   String get description {
     switch (this) {
-      case OrderState.enAttente:
-        return 'Commande en attente de programmation';
-      case OrderState.programmer:
+      case OrderState.scheduled:
         return 'Commande programmée pour livraison';
-      case OrderState.enCours:
+      case OrderState.inProgress:
         return 'Livraison en cours';
     }
   }

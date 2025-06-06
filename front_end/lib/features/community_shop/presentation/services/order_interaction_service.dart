@@ -23,18 +23,21 @@ class OrderInteractionService {
   void handleDeliveryTimeSelection(
       BuildContext context, CommunityOrder order) {}
 
-  void handleOrderStart(BuildContext context, CommunityOrder order) {
+  void handleOrderStart(BuildContext context, List<CommunityOrder> orders) {
+    //
+    _logger.info('list all orders: $orders');
+
     context.pushNamed(
       RouteConstants.orderStartName,
-      pathParameters: {'orderId': order.id},
+      pathParameters: {'orderId': orders.map((e) => e.id).join(",")},
       extra:
-          order, // Still passing the order object for now until BLoC is implemented
+          orders, // Still passing the order object for now until BLoC is implemented
     );
   }
 
-  void handleGroupOrders(BuildContext context) {
+  void handleShopperDelivery(BuildContext context) {
     context.pushNamed(
-      RouteConstants.groupOrdersName,
+      RouteConstants.shopperDeliveryName,
     );
   }
 }

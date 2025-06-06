@@ -32,11 +32,14 @@ Widget buildUrgentTag() {
   );
 }
 
-Widget buildCard({required String storeName, required Widget child}) {
+Widget buildCard(
+    {required String storeName,
+    required Widget child,
+    required VoidCallback onTap}) {
   return Column(
     children: [
       GestureDetector(
-        onTap: () {},
+        onTap: onTap,
         child: Container(
           width: double.infinity,
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

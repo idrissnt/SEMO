@@ -16,12 +16,12 @@ final AppLogger _logger = AppLogger();
 
 /// Screen that displays a list of products in a vertical scrollable way
 class CommunityOrderStartedScreen extends StatefulWidget {
-  final CommunityOrder order;
+  final List<CommunityOrder> orders;
 
   /// Creates a new product list screen
   const CommunityOrderStartedScreen({
     Key? key,
-    required this.order,
+    required this.orders,
   }) : super(key: key);
 
   @override
@@ -130,7 +130,7 @@ class _CommunityOrderStartedScreenState
 
     // Log initialization
     _logger.info(
-        'CommunityOrderStartedScreen initialized with ${widget.order.id}');
+        'CommunityOrderStartedScreen initialized with ${widget.orders[0].id}');
   }
 
   @override
@@ -167,7 +167,7 @@ class _CommunityOrderStartedScreenState
       title: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Text(
-          'Commande de ${widget.order.customerName}',
+          'Commande de ${widget.orders[0].customerName}',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -184,7 +184,8 @@ class _CommunityOrderStartedScreenState
               CupertinoIcons.chat_bubble_text, Colors.black, Colors.white),
           onPressed: () {
             // Handle message action
-            _logger.info('Message button tapped for order: ${widget.order.id}');
+            _logger.info(
+                'Message button tapped for order: ${widget.orders[0].id}');
           },
         ),
         const SizedBox(width: 8),
@@ -291,7 +292,7 @@ class _CommunityOrderStartedScreenState
                             ),
                             children: [
                               TextSpan(
-                                text: ' "Voir détails".',
+                                text: ' "Voir les détails".',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primary,
@@ -385,7 +386,7 @@ class _CommunityOrderStartedScreenState
                       context: context,
                       itemsCount:
                           _orderItemsState.customerReviewingItems.length,
-                      customerName: widget.order.customerName)
+                      customerName: widget.orders[0].customerName)
                   .then((result) {
                 if (result == null) {
                   // User canceled the dialog
@@ -399,17 +400,17 @@ class _CommunityOrderStartedScreenState
                     break;
                   case CustomerReviewResponse.refundRequested:
                     _logger.info(
-                        '${widget.order.customerName} requested a refund');
+                        '${widget.orders[0].customerName} requested a refund');
                     // Handle refund request logic
                     break;
                   case CustomerReviewResponse.waitingForResponse:
                     _logger.info(
-                        'Waiting for ${widget.order.customerName} response');
+                        'Waiting for ${widget.orders[0].customerName} response');
                     // Handle waiting for response logic
                     break;
                   case CustomerReviewResponse.continueToPayment:
                     _logger.info(
-                        'Continue to payment, ${widget.order.customerName} will be refunded');
+                        'Continue to payment, ${widget.orders[0].customerName} will be refunded');
                     // Handle continue to payment logic
                     break;
                 }
@@ -419,7 +420,7 @@ class _CommunityOrderStartedScreenState
             } else {
               OrderProcessingInteractionService().handleOrderStartCheckout(
                   context,
-                  [widget.order, widget.order],
+                  [widget.orders[0], widget.orders[0]],
                   OrderItem.getSampleItems().first);
             }
           },
@@ -465,13 +466,13 @@ class _CommunityOrderStartedScreenState
       for (int i = 0; i < aisleItems.length; i++) {
         aisleItemWidgets.add(
           OrderItemCard(
-            storeName: widget.order.storeName,
+            storeName: widget.orders[0].storeName,
             item: aisleItems[i],
             onViewDetails: () {
               OrderProcessingInteractionService().handleOrderItemTap(
                 context,
                 aisleItems[i],
-                widget.order,
+                widget.orders[0],
               );
             },
           ),
@@ -578,9 +579,9 @@ class _CommunityOrderStartedScreenState
         ),
         onPressed: () {
           _logger.info(
-              'Add new product button tapped for order: ${widget.order.id}');
+              'Add new product button tapped for order: ${widget.orders[0].id}');
           OrderProcessingInteractionService()
-              .handleAddNewItem(context, widget.order);
+              .handleAddNewItem(context, widget.orders[0]);
         },
       ),
     );

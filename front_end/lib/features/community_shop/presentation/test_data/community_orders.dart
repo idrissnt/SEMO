@@ -39,7 +39,7 @@ class CommunityOrder {
     required this.deliveryAddress,
     this.notes = '',
     required this.storeAddress,
-    this.state = OrderState.enAttente,
+    this.state = OrderState.scheduled,
   });
 
   // Method to create a copy with updated state
