@@ -81,7 +81,7 @@ class _ShopperDeliveryMainScreenState extends State<ShopperDeliveryMainScreen>
     final scheduledOrders = _getOrdersByState(OrderState.scheduled);
 
     _logger.info(
-        'Orders by state: En cours: ${inProgressOrders.length}, Programmées: ${scheduledOrders.length}');
+        'Orders by state: in progress: ${inProgressOrders.length}, scheduled: ${scheduledOrders.length}');
 
     return Scaffold(
       appBar: buildAppBar(context),

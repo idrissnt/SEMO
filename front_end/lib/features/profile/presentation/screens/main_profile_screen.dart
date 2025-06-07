@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 // Core imports
 import 'package:semo/core/presentation/theme/app_colors.dart';
@@ -10,6 +9,7 @@ import 'package:semo/core/utils/logger.dart';
 import 'package:semo/features/profile/presentation/tabs/account_tab.dart';
 import 'package:semo/features/profile/presentation/tabs/grocery_tab.dart';
 import 'package:semo/features/profile/presentation/tabs/settings_tab.dart';
+import 'package:semo/features/profile/presentation/widgets/utils/edit_pic.dart';
 
 /// A screen that displays user profile settings with multiple tabs for different sections.
 ///
@@ -17,15 +17,15 @@ import 'package:semo/features/profile/presentation/tabs/settings_tab.dart';
 
 final AppLogger logger = AppLogger();
 
-class ProfileSettingsScreen extends StatefulWidget {
+class MainProfileScreen extends StatefulWidget {
   /// Creates a profile settings screen.
-  const ProfileSettingsScreen({Key? key}) : super(key: key);
+  const MainProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileSettingsScreen> createState() => _ProfileSettingsScreenState();
+  State<MainProfileScreen> createState() => _MainProfileScreenState();
 }
 
-class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
+class _MainProfileScreenState extends State<MainProfileScreen>
     with SingleTickerProviderStateMixin {
   /// Controller for managing tab navigation
   late TabController _tabController;
@@ -33,17 +33,17 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
   /// Tab configuration data
   static final List<_TabItem> _tabItems = [
     _TabItem(
-      title: 'Account',
+      title: 'Mon compte',
       iconBuilder: (color) => AppIcons.person(size: 24, color: color),
       originalColor: AppColors.primary,
     ),
     _TabItem(
-      title: 'Grocery',
+      title: 'Commandes',
       iconBuilder: (color) => AppIcons.shoppingBagFill(size: 24, color: color),
       originalColor: Colors.orange,
     ),
     _TabItem(
-      title: 'Settings',
+      title: 'Paramètres',
       iconBuilder: (color) => AppIcons.settings(size: 24, color: color),
       originalColor: Colors.green,
     ),
@@ -80,36 +80,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: _buildAppBar(context),
-      body: Column(
-        children: [
-          _buildHeaderSection(),
-          _buildTabContent(),
-        ],
-      ),
-    );
-  }
-
-  /// Builds the app bar with back button and title
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      foregroundColor: AppColors.textPrimaryColor,
-      elevation: 0,
-      automaticallyImplyLeading: false,
-      titleSpacing: 0,
-      title: const Row(
-        children: [
-          SizedBox(width: 16),
-          Text(
-            'User Name',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildHeaderSection(),
+            _buildTabContent(),
+          ],
+        ),
       ),
     );
   }
@@ -122,10 +99,94 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildProfileHeader(context),
+          Stack(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: _buildProfileHeader(context),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child:
+                    _buildUserName(context, 'User Name kdahsijhbviuyjhaervzuv'),
+              ),
+            ],
+          ),
           const SizedBox(height: 4),
           _buildTabBar(),
         ],
+      ),
+    );
+  }
+
+  /// Builds the profile header with avatar and edit button
+  Widget _buildProfileHeader(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        // Profile image
+        InkWell(
+          onTap: () {
+            showImageSourceDialog(context, _hasExistingProfilePicture());
+          },
+          child: CircleAvatar(
+            radius: 36,
+            backgroundColor: Colors.grey[200],
+            backgroundImage: const NetworkImage(''),
+            onBackgroundImageError: (exception, stackTrace) {},
+            child: const Icon(
+              Icons.person,
+              size: 36,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        // Edit button
+        InkWell(
+          onTap: () {
+            showImageSourceDialog(context, _hasExistingProfilePicture());
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(3.0),
+              child: Icon(
+                Icons.camera_alt,
+                size: 12,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  //  build user name
+  Widget _buildUserName(BuildContext context, String userName) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: SizedBox(
+        width: 140,
+        child: Text(
+          userName,
+          textAlign: TextAlign.start,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
     );
   }
@@ -150,7 +211,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
         labelPadding: const EdgeInsets.symmetric(horizontal: 4),
         indicatorPadding: const EdgeInsets.symmetric(horizontal: 4),
         padding: EdgeInsets.zero,
-        // No animation duration parameter for TabBar
       ),
     );
   }
@@ -209,57 +269,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen>
     // Use Color.lerp which handles the properties correctly
     return Color.lerp(color1, color2, ratio) ?? color1;
   }
-
-  /// Builds the profile header with avatar and edit button
-  Widget _buildProfileHeader(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        // Profile image
-        InkWell(
-          onTap: () {
-            _showImageSourceDialog(context);
-          },
-          child: CircleAvatar(
-            radius: 36,
-            backgroundColor: Colors.grey[200],
-            backgroundImage:
-                const AssetImage('assets/images/default_profile.png'),
-            onBackgroundImageError: (exception, stackTrace) {},
-            child: const Icon(
-              Icons.person,
-              size: 36,
-              color: Colors.grey,
-            ),
-          ),
-        ),
-        // Edit button
-        InkWell(
-          onTap: () {
-            _showImageSourceDialog(context);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(3.0),
-              child: Icon(
-                Icons.camera_alt,
-                size: 12,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 /// Data class to hold tab item configuration
@@ -272,60 +281,6 @@ class _TabItem {
       {required this.title,
       required this.iconBuilder,
       required this.originalColor});
-}
-
-void _showImageSourceDialog(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) => Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            'Change Profile Picture',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimaryColor,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ListTile(
-            leading: const Icon(Icons.photo_camera, color: AppColors.primary),
-            title: const Text('Take a photo'),
-            onTap: () {
-              // Handle camera option
-              context.pop();
-              // Implement camera functionality
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.photo_library, color: AppColors.primary),
-            title: const Text('Choose from gallery'),
-            onTap: () {
-              // Handle gallery option
-              context.pop();
-              // Implement gallery functionality
-            },
-          ),
-          if (_hasExistingProfilePicture())
-            ListTile(
-              leading: const Icon(Icons.delete_outline, color: Colors.red),
-              title: const Text('Remove current photo'),
-              onTap: () {
-                // Handle remove option
-                context.pop();
-                // Implement remove functionality
-              },
-            ),
-        ],
-      ),
-    ),
-  );
 }
 
 bool _hasExistingProfilePicture() {

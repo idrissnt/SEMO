@@ -6,7 +6,7 @@ import 'package:semo/core/presentation/navigation/main_app_nav/bottom_navigation
 
 import 'package:semo/features/community_shop/routes/community_shop_router.dart';
 import 'package:semo/features/order/routes/order_routes.dart';
-import 'package:semo/features/profile/routes/profile_routes.dart';
+import 'package:semo/features/profile/routes/profile_router.dart';
 
 class MainShellRouter {
   static StatefulShellRoute getMainShellRoute() => StatefulShellRoute(
@@ -33,7 +33,7 @@ class MainShellRouter {
           ),
 
           StatefulShellBranch(
-            routes: ProfileRouter.getProfileRoutes(),
+            routes: ProfileRouter.getRoutes(),
           ),
         ],
       );

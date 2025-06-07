@@ -7,7 +7,7 @@ import 'package:semo/features/community_shop/presentation/test_data/community_or
 import 'package:semo/features/community_shop/routes/constants/route_constants.dart';
 import 'package:semo/features/community_shop/routes/flows/order_started/children_routes/item_details_routes.dart';
 import 'package:semo/features/community_shop/routes/flows/order_started/children_routes/checkout_routes.dart';
-import 'package:semo/features/community_shop/routes/utils/route_builder.dart'
+import 'package:semo/core/presentation/navigation/config/route_builder.dart'
     as app_routes;
 import 'package:semo/core/utils/logger.dart';
 

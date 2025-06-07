@@ -76,42 +76,47 @@ class _ProductCarouselState extends State<ProductCarousel> {
                                 right: 0,
                                 bottom: 46,
                                 child: Card(
-                                  elevation: 3,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15),
+                                    elevation: 3,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
+                                      ),
                                     ),
-                                  ),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        color: Colors.grey[200],
-                                        child: const Center(
-                                            child: Icon(Icons.error)),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Container(
+                                            color: Colors.grey[200],
+                                            child: const Center(
+                                                child: Icon(Icons.error)),
+                                          );
+                                        },
+                                      ),
+                                    )),
                               ),
                               Positioned(
                                 // top: 0,
@@ -146,7 +151,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
                             ],
                           ),
 
-                          // Favorite button
+                          // quantity buttons
                           Positioned(
                             top: 10,
                             right: 10,

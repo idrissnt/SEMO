@@ -5,7 +5,7 @@ import 'package:semo/features/community_shop/routes/constants/route_constants.da
 import 'package:semo/features/community_shop/routes/flows/delivery/delivery_route.dart';
 import 'package:semo/features/community_shop/routes/flows/order_details/order_details_routes.dart';
 import 'package:semo/features/community_shop/routes/flows/order_started/order_started_routes.dart';
-import 'package:semo/features/community_shop/routes/utils/route_builder.dart'
+import 'package:semo/core/presentation/navigation/config/route_builder.dart'
     as app_routes;
 
 /// Routes for the main community shop screen

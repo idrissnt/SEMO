@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
-import 'package:semo/core/presentation/theme/app_icons.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
-import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// Tab for grocery-related settings and history
-class GroceryTab extends StatelessWidget {
+class GroceryTab extends StatefulWidget {
   const GroceryTab({Key? key}) : super(key: key);
 
   @override
+  State<GroceryTab> createState() => _GroceryTabState();
+}
+
+class _GroceryTabState extends State<GroceryTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -23,28 +31,14 @@ class GroceryTab extends StatelessWidget {
 
           // My Orders
           SettingsSection(
-            title: 'My Orders',
+            title: 'Mode acheteur',
             children: [
               SettingsTile(
-                icon: AppIcons.shoppingBagFill(size: 24, color: Colors.white),
-                iconContainerColor: Colors.orange,
-                title: 'Active Orders',
-                subtitle: 'Orders currently in progress',
-                routeName: ProfileRouteNames.groceryOrders,
-              ),
-              SettingsTile(
-                icon: AppIcons.checkCircle(size: 24, color: Colors.white),
+                icon: const Icon(Icons.shopping_basket, color: Colors.white),
                 iconContainerColor: Colors.green,
-                title: 'Completed Orders',
-                subtitle: 'Orders that have been delivered',
-                routeName: ProfileRouteNames.groceryOrders,
-              ),
-              SettingsTile(
-                icon: AppIcons.history(size: 24, color: Colors.white),
-                iconContainerColor: Colors.grey,
-                title: 'Order History',
-                subtitle: 'All your past grocery orders',
-                routeName: ProfileRouteNames.groceryOrders,
+                title: 'Commandes',
+                subtitle: 'En cours, programmées, livrées',
+                onTap: () {},
               ),
             ],
           ),
@@ -53,78 +47,24 @@ class GroceryTab extends StatelessWidget {
 
           // My Deliveries
           SettingsSection(
-            title: 'My Deliveries',
+            title: 'Mode livreur',
             children: [
               SettingsTile(
-                icon: AppIcons.delivery(size: 24, color: Colors.white),
-                iconContainerColor: Colors.orange,
-                title: 'Current Deliveries',
-                subtitle: 'Deliveries you\'re currently handling',
-                routeName: ProfileRouteNames.groceryDeliveries,
-              ),
-              SettingsTile(
-                icon: AppIcons.checkCircle(size: 24, color: Colors.white),
-                iconContainerColor: Colors.green,
-                title: 'Completed Deliveries',
-                subtitle: 'Deliveries you\'ve finished',
-                routeName: ProfileRouteNames.groceryDeliveries,
-              ),
-              SettingsTile(
-                icon: AppIcons.history(size: 24, color: Colors.white),
-                iconContainerColor: Colors.grey,
-                title: 'Delivery History',
-                subtitle: 'All deliveries you\'ve made',
-                routeName: ProfileRouteNames.groceryDeliveries,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          // Time availability
-          SettingsSection(
-            title: 'Time Availability',
-            children: [
-              SettingsTile(
-                icon: AppIcons.calendar(size: 24, color: Colors.white),
+                icon: const Icon(Icons.local_shipping, color: Colors.white),
                 iconContainerColor: Colors.red,
-                title: 'Available Times',
-                subtitle: 'When do you go to the grocery ?',
-                routeName: ProfileRouteNames.groceryDeliveries,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          // Favorites & Preferences
-          SettingsSection(
-            title: 'Favorites & Preferences',
-            children: [
-              SettingsTile(
-                icon: AppIcons.favorite(size: 24, color: Colors.white),
-                iconContainerColor: Colors.red,
-                title: 'Favorite Stores',
-                subtitle: 'Stores you frequently order from',
-                routeName: ProfileRouteNames.favoriteStores,
+                title: 'Commandes',
+                subtitle: 'En cours, programmées, livrées',
+                onTap: () {},
               ),
               SettingsTile(
-                icon: AppIcons.shoppingCart(size: 24, color: Colors.white),
+                icon: const Icon(Icons.euro, color: Colors.white),
                 iconContainerColor: Colors.orange,
-                title: 'Favorite Products',
-                subtitle: 'Products you frequently order',
-                routeName: ProfileRouteNames.favoriteProducts,
-              ),
-              SettingsTile(
-                icon: AppIcons.car(size: 24, color: Colors.white),
-                iconContainerColor: Colors.blue,
-                title: 'Delivery Preferences',
-                subtitle: 'Vehicle details, availability, areas',
-                routeName: ProfileRouteNames.deliveryPreferences,
+                title: 'Remunération',
+                subtitle: 'Mes revenus',
+                onTap: () {},
               ),
             ],
           ),
-
           const SizedBox(height: 40),
         ],
       ),
@@ -150,7 +90,7 @@ class GroceryTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Grocery Statistics',
+            'Statistiques de mes commandes',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -159,14 +99,20 @@ class GroceryTab extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildStatItem('24', 'Orders',
-                  AppIcons.shoppingBag(size: 24, color: Colors.white)),
-              _buildStatItem('18', 'Deliveries',
-                  AppIcons.delivery(size: 24, color: Colors.white)),
-              _buildStatItem('4.9', 'Rating',
-                  AppIcons.star(size: 24, color: Colors.white)),
+              _buildStatItem(
+                  '0',
+                  'Mode acheteur',
+                  const Icon(Icons.shopping_basket, color: Colors.white),
+                  Colors.green),
+              _buildStatItem(
+                  '0',
+                  'Mode livreur',
+                  const Icon(Icons.local_shipping, color: Colors.white),
+                  Colors.red),
+              _buildStatItem('0', 'Note reçue',
+                  const Icon(Icons.star, color: Colors.white), Colors.amber),
             ],
           ),
         ],
@@ -174,13 +120,14 @@ class GroceryTab extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String value, String label, Widget icon) {
+  Widget _buildStatItem(
+      String value, String label, Widget icon, Color backgroundColor) {
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            color: AppColors.primary,
+          decoration: BoxDecoration(
+            color: backgroundColor,
             shape: BoxShape.circle,
           ),
           child: icon,
@@ -191,15 +138,15 @@ class GroceryTab extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: AppColors.primary,
+            color: AppColors.textPrimaryColor,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
-            color: Colors.grey[600],
+            color: AppColors.textPrimaryColor,
           ),
         ),
       ],

@@ -48,16 +48,16 @@ class RouteConstants {
   static const String deliveryOrderInformationName =
       'delivery-order-information-name';
 
-  // Helper methods for path parameters
-  static String getOrderDetailsPath(String orderId) => 'order-details/$orderId';
-  static String getOrderStartPath(String orderId) => 'order-start/$orderId';
-  static String getOrderItemDetailsPath(String itemId) => 'item/$itemId';
+  // // Helper methods for path parameters
+  // static String getOrderDetailsPath(String orderId) => 'order-details/$orderId';
+  // static String getOrderStartPath(String orderId) => 'order-start/$orderId';
+  // static String getOrderItemDetailsPath(String itemId) => 'item/$itemId';
 
-  // Helper method for constructing the full item details path with both parameters
-  static String getFullOrderItemDetailsPath(String orderId, String itemId) =>
-      '${getOrderStartPath(orderId)}/${getOrderItemDetailsPath(itemId)}';
+  // // Helper method for constructing the full item details path with both parameters
+  // static String getFullOrderItemDetailsPath(String orderId, String itemId) =>
+  //     '${getOrderStartPath(orderId)}/${getOrderItemDetailsPath(itemId)}';
 
-  // Helper method for constructing the add item path
-  static String getOrderAddItemPath(String orderId) =>
-      '${getOrderStartPath(orderId)}/$orderAddItem';
+  // // Helper method for constructing the add item path
+  // static String getOrderAddItemPath(String orderId) =>
+  //     '${getOrderStartPath(orderId)}/$orderAddItem';
 }

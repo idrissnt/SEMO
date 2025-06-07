@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/navigation/config/routing_transitions.dart';
-import 'package:semo/features/community_shop/routes/transitions.dart';
 
 /// Utility class for building routes with consistent transitions and parameter handling
 class RouteBuilder {

@@ -29,7 +29,7 @@ class LoadingStateWidget extends StatelessWidget {
           CircularProgressIndicator(
             strokeWidth: 4.r,
             backgroundColor: AppColors.secondary,
-            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
           if (message != null) ...[
             SizedBox(height: AppDimensionsHeight.medium),

@@ -2,100 +2,110 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/theme/app_colors.dart';
+import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
+import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_tile.dart';
-import 'package:semo/features/profile/routes/profile_routes_const.dart';
 
 /// Tab for app settings and support
-class SettingsTab extends StatelessWidget {
+class SettingsTab extends StatefulWidget {
   const SettingsTab({Key? key}) : super(key: key);
 
   @override
+  State<SettingsTab> createState() => _SettingsTabState();
+}
+
+class _SettingsTabState extends State<SettingsTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Support & About
+          SettingsSection(
+            title: 'Support & à propos',
+            children: [
+              SettingsTile(
+                icon: AppIcons.star(size: 24, color: Colors.white),
+                iconContainerColor: Colors.amber,
+                title: 'Notez l\'application',
+                subtitle: 'Dites-nous ce que vous pensez',
+                onTap: () {},
+              ),
+              SettingsTile(
+                icon: AppIcons.share(size: 24, color: Colors.white),
+                iconContainerColor: Colors.orange,
+                title: 'Partagez l\'application',
+                subtitle: 'Invitez d\'autres à rejoindre',
+                onTap: () {},
+              ),
+              SettingsTile(
+                icon: AppIcons.help(size: 24, color: Colors.white),
+                iconContainerColor: Colors.green,
+                title: 'Aide',
+                subtitle: 'FAQs, contactez-nous',
+                onTap: () {},
+              ),
+              SettingsTile(
+                icon: AppIcons.info(size: 24, color: Colors.white),
+                iconContainerColor: Colors.blue,
+                title: 'À propos',
+                subtitle:
+                    'Version de l\'app, termes, politique de confidentialité',
+                onTap: () {},
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
           // App Settings
           SettingsSection(
-            title: 'App Settings',
+            title: 'Paramètres de l\'app',
             children: [
               SettingsTile(
                 icon: AppIcons.notifications(size: 24, color: Colors.white),
                 iconContainerColor: Colors.green,
                 title: 'Notifications',
-                subtitle: 'Push, email, in-app notifications',
-                routeName: ProfileRouteNames.notifications,
-              ),
-              SettingsTile(
-                icon: AppIcons.language(size: 24, color: Colors.white),
-                iconContainerColor: Colors.blue,
-                title: 'Language',
-                subtitle: 'Change app language',
-                routeName: ProfileRouteNames.language,
-              ),
-              SettingsTile(
-                icon: AppIcons.darkMode(size: 24, color: Colors.white),
-                iconContainerColor: Colors.grey,
-                title: 'Appearance',
-                subtitle: 'Dark mode, theme settings',
-                routeName: ProfileRouteNames.appearance,
+                subtitle:
+                    'Notifications push, email, notifications dans l\'app',
+                onTap: () {},
               ),
               SettingsTile(
                 icon: AppIcons.privacy(size: 24, color: Colors.white),
                 iconContainerColor: Colors.orange,
-                title: 'Privacy',
-                subtitle: 'Control your data and privacy settings',
-                routeName: ProfileRouteNames.privacy,
+                title: 'Confidentialité',
+                subtitle:
+                    'Contrôlez vos données et vos paramètres de confidentialité',
+                onTap: () {},
               ),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          // Support & About
-          SettingsSection(
-            title: 'Support & About',
-            children: [
-              SettingsTile(
-                icon: AppIcons.help(size: 24, color: Colors.white),
-                iconContainerColor: Colors.green,
-                title: 'Help Center',
-                subtitle: 'FAQs, contact support',
-                routeName: ProfileRouteNames.help,
-              ),
-              SettingsTile(
-                icon: AppIcons.info(size: 24, color: Colors.white),
-                iconContainerColor: Colors.blue,
-                title: 'About',
-                subtitle: 'App version, terms, privacy policy',
-                routeName: ProfileRouteNames.about,
-              ),
-              SettingsTile(
-                icon: AppIcons.star(size: 24, color: Colors.white),
-                iconContainerColor: Colors.amber,
-                title: 'Rate the App',
-                subtitle: 'Tell us what you think',
-                routeName: ProfileRouteNames.rate,
-              ),
-              SettingsTile(
-                icon: AppIcons.share(size: 24, color: Colors.white),
-                iconContainerColor: Colors.orange,
-                title: 'Share with Friends',
-                subtitle: 'Invite others to join',
-                routeName: ProfileRouteNames.share,
-              ),
-            ],
-          ),
+          // logout
+          _buildAccountButton(context, 'Se deconnecter', false, () {
+            // Close the dialog
+            context.pop();
+            // Dispatch logout event to the AuthBloc
+            context.read<AuthBloc>().add(const AuthLogoutRequested());
+          }),
+          const SizedBox(height: 16),
 
-          const SizedBox(height: 24),
-
-          _buildLogoutButton(context),
-
+          // delete account
+          _buildAccountButton(context, 'Supprimer mon compte', true, () {
+            context.pop();
+          }),
           const SizedBox(height: 24),
 
           // Version info
@@ -107,46 +117,84 @@ class SettingsTab extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
+  Widget _buildAccountButton(
+    BuildContext context,
+    String title,
+    bool isDelete,
+    Function onConfirm,
+  ) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
           // Handle logout
-          showDialog(
+
+          showModalBottomSheet(
+            backgroundColor: Colors.white,
+            useRootNavigator: true,
+            useSafeArea: true,
             context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    context.pop();
-                    // Dispatch logout event to the AuthBloc
-                    context.read<AuthBloc>().add(const AuthLogoutRequested());
-                  },
-                  child: const Text('Logout'),
-                ),
-              ],
+            builder: (context) => Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(isDelete ? 'Supprimer mon compte' : 'Se déconnecter',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  const SizedBox(height: 8),
+                  Text(isDelete
+                      ? 'Êtes-vous sûr de vouloir supprimer votre compte ?'
+                      : 'Êtes-vous sûr de vouloir vous déconnecter ?'),
+                  const SizedBox(height: 16),
+                  ButtonFactory.createAnimatedButton(
+                    context: context,
+                    onPressed: () => onConfirm(),
+                    text: isDelete ? 'Supprimer' : 'Se déconnecter',
+                    backgroundColor: AppColors.primary,
+                    textColor: AppColors.textSecondaryColor,
+                    splashColor: AppColors.primary,
+                    highlightColor: AppColors.primary,
+                    boxShadowColor: AppColors.primary,
+                    minWidth: AppButtonDimensions.minWidth,
+                    minHeight: AppButtonDimensions.minHeight,
+                    verticalPadding: AppDimensionsWidth.xSmall,
+                    horizontalPadding: AppDimensionsHeight.small,
+                  ),
+                  const SizedBox(height: 12),
+                  ButtonFactory.createAnimatedButton(
+                    context: context,
+                    onPressed: () => context.pop(),
+                    text: 'Annuler',
+                    backgroundColor: AppColors.secondary,
+                    textColor: AppColors.textPrimaryColor,
+                    splashColor: AppColors.secondary,
+                    highlightColor: AppColors.secondary,
+                    boxShadowColor: AppColors.secondary,
+                    minWidth: AppButtonDimensions.minWidth,
+                    minHeight: AppButtonDimensions.minHeight,
+                    verticalPadding: AppDimensionsWidth.xSmall,
+                    horizontalPadding: AppDimensionsHeight.small,
+                  ),
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
           );
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red[50],
+          backgroundColor: Colors.white,
           foregroundColor: Colors.red,
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        child: const Text(
-          'Logout',
-          style: TextStyle(
+        child: Text(
+          isDelete ? 'Supprimer mon compte' : 'Se déconnecter',
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -170,7 +218,7 @@ class SettingsTab extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'SEMO',
             style: TextStyle(
               fontSize: 18,

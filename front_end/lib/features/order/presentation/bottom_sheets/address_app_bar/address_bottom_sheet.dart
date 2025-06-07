@@ -173,7 +173,7 @@ class _AddressBottomSheetState extends State<AddressBottomSheet> {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Rechercher une adresse',
+                hintText: 'Adresse ou code postal',
                 hintStyle: const TextStyle(color: AppColors.searchBarHintColor),
                 border: InputBorder.none,
                 isDense: true,
