@@ -14,10 +14,26 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
   bool _isSubmitting = false;
 
   final List<Map<String, dynamic>> _vehicles = [
-    {'id': 'bike', 'name': 'Vélo / Trottinette', 'icon': Icons.pedal_bike},
-    {'id': 'car', 'name': 'Voiture citadine / Vélo cargo', 'icon': Icons.directions_car},
-    {'id': 'suv', 'name': 'SUV', 'icon': Icons.directions_car_filled},
-    {'id': 'van', 'name': 'Camionnette', 'icon': Icons.airport_shuttle},
+    {
+      'id': 'bike',
+      'name': 'Vélo / Scooter',
+      'icon': const Icon(Icons.pedal_bike, color: Colors.blue),
+    },
+    {
+      'id': 'car',
+      'name': 'Voiture citadine / Vélo cargo',
+      'icon': const Icon(Icons.directions_car, color: Colors.blue),
+    },
+    {
+      'id': 'suv',
+      'name': 'SUV',
+      'icon': const Icon(Icons.directions_car_filled, color: Colors.orange),
+    },
+    {
+      'id': 'van',
+      'name': 'Camionnette',
+      'icon': const Icon(Icons.airport_shuttle, color: Colors.green),
+    },
   ];
 
   Future<void> _submitSelection() async {
@@ -84,12 +100,12 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // Vehicle options
                   ..._vehicles.map((vehicle) => _buildVehicleOption(vehicle)),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Submit button
                   Center(
                     child: createVerificationButton(
@@ -106,7 +122,7 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
 
   Widget _buildVehicleOption(Map<String, dynamic> vehicle) {
     final bool isSelected = _selectedVehicle == vehicle['id'];
-    
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: InkWell(
@@ -127,18 +143,15 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
           ),
           child: Row(
             children: [
-              Icon(
-                vehicle['icon'] as IconData,
-                color: isSelected ? Colors.blue : Colors.grey,
-                size: 32,
-              ),
+              vehicle['icon'],
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
                   vehicle['name'] as String,
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),

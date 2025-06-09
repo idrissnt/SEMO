@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import GoogleMaps
+// Import the ApiKeys file that will be created from the template
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -8,8 +9,8 @@ import GoogleMaps
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // Add your Google Maps API key here
-    GMSServices.provideAPIKey("AIzaSyBITKwCLMLk5zvKxSCSYVLGuv9BnQWCSMk")
+    // Use API key from ApiKeys.swift
+    GMSServices.provideAPIKey(ApiKeys.googleMapsApiKey)
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

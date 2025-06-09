@@ -41,3 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# API Keys and sensitive information
+/lib/config/api_keys.dart
+/android/app/src/main/res/values/api_keys.xml
+/ios/Runner/ApiKeys.swift

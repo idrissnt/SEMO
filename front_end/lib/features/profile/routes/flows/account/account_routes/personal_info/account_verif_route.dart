@@ -4,7 +4,7 @@ import 'package:semo/core/presentation/navigation/main_app_nav/app_routes/app_ro
 import 'package:semo/core/presentation/navigation/config/route_builder.dart'
     as app_routes;
 import 'package:semo/features/profile/presentation/screens/account_screens/personal_informations/account_verification.dart';
-import 'package:semo/features/profile/presentation/screens/account_screens/personal_informations/verification_screens/verification_screens.dart';
+import 'package:semo/features/profile/presentation/screens/account_screens/personal_informations/account_verification_screens/verification_screens.dart';
 import 'package:semo/features/profile/routes/constant/account_route_const.dart';
 
 /// Routes for account verification flow

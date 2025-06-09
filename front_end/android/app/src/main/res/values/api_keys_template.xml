@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TEMPLATE FILE: Copy to api_keys.xml and add the actual API keys -->
+<resources>
+    <string name="google_maps_api_key">AIzaSyBITKwCLMLk5zvKxSCSYVLGuv9BnQWCSMk</string>
+</resources>

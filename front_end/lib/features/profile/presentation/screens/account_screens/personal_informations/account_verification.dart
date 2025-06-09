@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:semo/core/presentation/widgets/buttons/back_button.dart';
+import 'package:semo/features/profile/presentation/screens/account_screens/utils/section_list.dart';
 import 'package:semo/features/profile/presentation/services/profile_interactions/account_interaction/personal_info/account_verification_interactions.dart';
 
 class AccountVerificationScreen extends StatefulWidget {
@@ -52,58 +53,6 @@ class _AccountVerificationScreenState extends State<AccountVerificationScreen> {
     }
   }
 
-  Widget _buildSection(List<Widget> children) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(children: children),
-    );
-  }
-
-  Widget _buildListItem({
-    required String title,
-    required IconData icon,
-    required bool isVerified,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Color(0xFFE0E0E0), width: 0.5),
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.blue),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-            if (isVerified)
-              const Row(
-                children: [
-                  Icon(Icons.check_circle, color: Colors.green),
-                  SizedBox(width: 8),
-                  Icon(Icons.edit, color: Colors.black),
-                ],
-              )
-            else
-              const Icon(Icons.chevron_right, color: Colors.grey),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,36 +71,40 @@ class _AccountVerificationScreenState extends State<AccountVerificationScreen> {
           const SizedBox(height: 35),
 
           // First section
-          _buildSection([
-            _buildListItem(
+          buildSection([
+            buildListItem(
               title: 'Nom complet',
               icon: Icons.person,
               isVerified: _verificationStatus['name'] ?? false,
               onTap: () => _navigateToVerificationScreen('name'),
+              iconColor: Colors.green,
             ),
-            _buildListItem(
+            buildListItem(
               title: 'Adresse email',
               icon: Icons.email,
               isVerified: _verificationStatus['email'] ?? false,
               onTap: () => _navigateToVerificationScreen('email'),
+              iconColor: Colors.blue,
             ),
           ]),
 
           const SizedBox(height: 35),
 
           // Second section
-          _buildSection([
-            _buildListItem(
+          buildSection([
+            buildListItem(
               title: 'Numéro de téléphone',
               icon: Icons.phone,
               isVerified: _verificationStatus['phone'] ?? false,
               onTap: () => _navigateToVerificationScreen('phone'),
+              iconColor: Colors.green,
             ),
-            _buildListItem(
+            buildListItem(
               title: 'Pièce d\'identité',
               icon: Icons.badge,
               isVerified: _verificationStatus['id_card'] ?? false,
               onTap: () => _navigateToVerificationScreen('id_card'),
+              iconColor: Colors.blue,
             ),
           ]),
         ],

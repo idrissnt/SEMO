@@ -1,1 +1,4 @@
 # SEMO
+
+An app that would allow someone to do their neighbors’ grocery shopping while doing their own, without making any extra trips, and get paid for it. For example, if I’m going grocery shopping, I can use the app to pick up an order from a neighbor who shops at the same store. I do both our shopping at once, and on my way back home, I drop off their groceries before heading to my place. Simple, useful, and time-efficient.
+Anyone can use the app—either to place an order and have it delivered, or to deliver groceries for others while doing their own shopping. It’s a flexible, community-driven solution that benefits both sides.
