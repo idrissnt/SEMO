@@ -1,5 +1,7 @@
 // No need for these imports as we're using dependency injection
 
+import 'package:semo/core/config/app_config.dart';
+import 'package:semo/core/services/mock/mock_auth_service.dart';
 import 'package:semo/core/utils/logger.dart';
 import 'package:semo/core/utils/result.dart';
 import 'package:semo/features/auth/domain/exceptions/auth/auth_exception_mapper.dart';
@@ -34,6 +36,21 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
     required String email,
     required String password,
   }) async {
+    // In offline mode, return mock auth tokens
+    if (AppConfig.useOfflineMode) {
+      final mockResult = MockAuthService.mockLogin();
+      return mockResult.fold(
+        (tokens) => Result.success(AuthTokens(
+          accessToken: tokens['access'] as String,
+          refreshToken: tokens['refresh'] as String,
+          userId: 'mock-user-id-123',
+          email: email,
+          firstName: 'Test',
+        )),
+        (error) => Result.failure(error),
+      );
+    }
+    
     try {
       final authTokens =
           await _authService.login(email: email, password: password);
@@ -52,6 +69,21 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
     String? phoneNumber,
     String? profilePhotoUrl,
   }) async {
+    // In offline mode, return mock auth tokens
+    if (AppConfig.useOfflineMode) {
+      final mockResult = MockAuthService.mockLogin(); // Reuse the same mock login result
+      return mockResult.fold(
+        (tokens) => Result.success(AuthTokens(
+          accessToken: tokens['access'] as String,
+          refreshToken: tokens['refresh'] as String,
+          userId: 'mock-user-id-123',
+          email: email,
+          firstName: firstName,
+        )),
+        (error) => Result.failure(error),
+      );
+    }
+    
     try {
       final authTokens = await _authService.register(
         email: email,
@@ -71,6 +103,11 @@ class UserAuthRepositoryImpl implements UserAuthRepository {
   Future<Result<bool, AuthenticationException>> logout({
     required String email,
   }) async {
+    // In offline mode, always return success
+    if (AppConfig.useOfflineMode) {
+      return Result.success(true);
+    }
+    
     try {
       await _authService.logout(email);
       return Result.success(true);

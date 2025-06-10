@@ -27,7 +27,7 @@ class StoreAisleData {
       // Fresh Produce Category
       StoreAisle(
         id: 'cat-001',
-        name: 'Fresh Produce',
+        name: 'Fruits et légumes',
         imageUrl:
             'https://images.unsplash.com/photo-1610348725531-843dff563e2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         description: 'Fresh fruits and vegetables',

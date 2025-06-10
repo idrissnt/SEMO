@@ -5,6 +5,7 @@ import 'package:semo/core/presentation/theme/app_colors.dart';
 import 'package:semo/core/presentation/theme/app_dimensions.dart';
 import 'package:semo/core/presentation/theme/app_icons.dart';
 import 'package:semo/core/presentation/widgets/buttons/button_factory.dart';
+import 'package:semo/core/presentation/widgets/offline_mode_toggle.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:semo/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:semo/features/profile/presentation/widgets/settings_section.dart';
@@ -87,6 +88,23 @@ class _SettingsTabState extends State<SettingsTab>
                 subtitle:
                     'Contrôlez vos données et vos paramètres de confidentialité',
                 onTap: () {},
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: const OfflineModeToggle(),
               ),
             ],
           ),

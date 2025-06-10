@@ -2,5 +2,5 @@
 import Foundation
 
 struct ApiKeys {
-    static let googleMapsApiKey = "AIzaSyBITKwCLMLk5zvKxSCSYVLGuv9BnQWCSMk"
+    static let googleMapsApiKey = ""
 }
